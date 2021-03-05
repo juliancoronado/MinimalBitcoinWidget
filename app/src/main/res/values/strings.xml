@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BTC Widget</string>
+    <string name="bitcoin_title">Bitcoin (BTC)</string>
+    <string name="loading_text1">Loading…</string>
+    <string name="loading_text2">24h:</string>
+    <string name="add_widget">Add widget</string>
+</resources>
