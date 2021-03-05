@@ -36,9 +36,6 @@ internal fun updateAppWidget(
 
     // TO DO -- WORK IN PROGRESS
 
-    // views.setTextViewText(R.id.appwidget_text, dService.data.price())
-    // views.setTextViewText(R.id.day_change, dService.data.change24h())
-
     // button
     val intentUpdate = Intent(context, PriceWidget::class.java)
     intentUpdate.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
