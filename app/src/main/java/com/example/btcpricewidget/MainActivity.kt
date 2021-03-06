@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                println("Main Activity : GET request successful.")
+                println("Main Activity: GET request successful.")
 
                 // converts response into string
                 val body = response.body?.string()
