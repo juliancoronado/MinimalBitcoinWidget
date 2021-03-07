@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         setContentView(R.layout.activity_main)
 
-        val changeTv : TextView = findViewById(R.id.percent24h)
-        val priceTv : TextView = findViewById(R.id.current_price)
+        val priceTv : TextView = findViewById(R.id.main_price_text)
+        val changeTv : TextView = findViewById(R.id.main_day_change)
 
         priceTv.text = getString(R.string.loading_text1)
         changeTv.text = getString(R.string.loading_text1)
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         fetchData()
 
         // when update button gets pressed
-        val updateButton : ImageButton = findViewById(R.id.update_button)
+        val updateButton : ImageButton = findViewById(R.id.main_refresh_button)
         updateButton.setOnClickListener {
             println("Main Activity: Update button pressed!")
 
@@ -50,8 +50,8 @@ class MainActivity : AppCompatActivity() {
     // function called from background thread
     private fun updateLayout(values: Data) {
 
-        val priceTv : TextView = findViewById(R.id.current_price)
-        val changeTv : TextView = findViewById(R.id.percent24h)
+        val priceTv : TextView = findViewById(R.id.main_price_text)
+        val changeTv : TextView = findViewById(R.id.main_day_change)
 
         runOnUiThread {
             priceTv.text = values.price()

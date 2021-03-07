@@ -41,9 +41,9 @@ internal fun updateAppWidget(
     // create remote view
     val views = RemoteViews(context.packageName, R.layout.price_widget)
 
-    views.setTextViewText(R.id.appwidget_text, "Loading...")
-    views.setTextViewText(R.id.day_change, "Loading...")
-    views.setTextColor(R.id.day_change, Color.BLACK)
+    views.setTextViewText(R.id.widget_text_price, "Loading...")
+    views.setTextViewText(R.id.widget_day_change, "Loading...")
+    views.setTextColor(R.id.widget_day_change, Color.BLACK)
 
     println("Homescreen Widget: Refresh button pressed!")
     // first update call to set loading text
@@ -57,7 +57,7 @@ internal fun updateAppWidget(
     intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray)
 
     val pendingUpdate = PendingIntent.getBroadcast(context, appWidgetId, intentUpdate, PendingIntent.FLAG_UPDATE_CURRENT)
-    views.setOnClickPendingIntent(R.id.refresh_button, pendingUpdate)
+    views.setOnClickPendingIntent(R.id.widget_refresh_button, pendingUpdate)
 
     // function call to fetch data from HTTP GET request
     fetchData(appWidgetManager, appWidgetId, views)
@@ -83,15 +83,15 @@ fun fetchData(appWidgetManager: AppWidgetManager, appWidgetId: Int, views: Remot
 
             // post execute here
             // update widget with new data
-            views.setTextViewText(R.id.appwidget_text, data.price())
-            views.setTextViewText(R.id.day_change, data.change24h())
+            views.setTextViewText(R.id.widget_text_price, data.price())
+            views.setTextViewText(R.id.widget_day_change, data.change24h())
 
             if (data.change24h().contains('+')) {
                 // green color
-                views.setTextColor(R.id.day_change, Color.parseColor("#1f6d00"))
+                views.setTextColor(R.id.widget_day_change, Color.parseColor("#1f6d00"))
             } else {
                 // red color
-                views.setTextColor(R.id.day_change, Color.parseColor("#b50f04"))
+                views.setTextColor(R.id.widget_day_change, Color.parseColor("#b50f04"))
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

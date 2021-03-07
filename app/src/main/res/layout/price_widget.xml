@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/layout_bg"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin">
@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="18dp"
+            android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:src="@drawable/bitcoin_icon" />
@@ -35,20 +35,21 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/appwidget_text"
+            android:id="@+id/widget_text_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/manrope_bold"
             android:text="@string/loading_text1"
             android:textColor="@color/black"
-            android:textSize="32sp" />
+            android:textSize="30sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -69,7 +70,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/day_change"
+                android:id="@+id/widget_day_change"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/manrope_regular"
@@ -80,12 +81,19 @@
 
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/refresh_button"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#00000000"
-            android:src="@drawable/refresh_icon" />
+            android:layout_weight="0"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/widget_refresh_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:src="@drawable/icon_refresh_black"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
