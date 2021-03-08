@@ -4,4 +4,6 @@
         <attr name="appWidgetTextColor" format="color" />
     </declare-styleable>
 
+    <attr name="colorControlNormal" format="color" />
+
 </resources>

@@ -17,7 +17,7 @@
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="?attr/textAppearanceBody1"
         android:textStyle="bold" />
 
     <!-- Bitcoin Price CardView -->
@@ -56,7 +56,7 @@
                     android:layout_marginLeft="10dp"
                     android:fontFamily="@font/manrope_regular"
                     android:text="@string/bitcoin_title"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textAppearanceBody1"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/manrope_bold"
                     android:text="@string/loading_text1"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/textAppearanceBody1"
                     android:textSize="48sp" />
 
             </LinearLayout>
@@ -102,7 +102,7 @@
                         android:fontFamily="@font/manrope_regular"
                         android:gravity="center_vertical"
                         android:text="@string/string_24h"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textAppearanceBody1"
                         android:textSize="20sp" />
 
                     <TextView
@@ -112,7 +112,7 @@
                         android:fontFamily="@font/manrope_regular"
                         android:gravity="center_vertical"
                         android:text="@string/loading_text1"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textAppearanceBody1"
                         android:textSize="20sp" />
 
                 </LinearLayout>
@@ -163,7 +163,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
                 android:fontFamily="@font/manrope_regular"
-                android:textColor="@color/black"
+                android:textColor="?attr/textAppearanceBody1"
                 android:layout_height="match_parent"
                 android:textSize="16sp"
                 android:text="Info"/>
@@ -186,7 +186,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
                 android:fontFamily="@font/manrope_regular"
-                android:textColor="@color/black"
+                android:textColor="?attr/textAppearanceBody1"
                 android:layout_height="match_parent"
                 android:textSize="16sp"
                 android:text="Donate"/>
@@ -209,7 +209,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
                 android:fontFamily="@font/manrope_regular"
-                android:textColor="@color/black"
+                android:textColor="?attr/textAppearanceBody1"
                 android:layout_height="match_parent"
                 android:textSize="16sp"
                 android:text="Settings"/>

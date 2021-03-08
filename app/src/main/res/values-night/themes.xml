@@ -14,6 +14,8 @@
         <!-- Customize your theme here. -->
         <item name="cardBackgroundColor">@color/card_night</item>
         <item name="textAppearanceBody1">@color/white</item>
+
+        <item name="colorControlNormal">@color/white</item>
     </style>
 
     <style name="ThemeOverlay.BTCPriceWidget.AppWidgetContainer" parent="">
