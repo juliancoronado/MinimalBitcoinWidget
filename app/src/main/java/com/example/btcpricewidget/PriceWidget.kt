@@ -7,8 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.widget.RemoteViews
+import android.widget.TextView
 import com.google.gson.Gson
 import okhttp3.*
+import org.w3c.dom.Text
 import java.io.IOException
 
 /**
@@ -43,9 +45,9 @@ internal fun updateAppWidget(
 
     views.setTextViewText(R.id.widget_text_price, "Loading...")
     views.setTextViewText(R.id.widget_day_change, "Loading...")
-    views.setTextColor(R.id.widget_day_change, Color.BLACK)
+    // views.setTextColor(R.id.widget_day_change, R.attr.appWidgetTextColor)
 
-    println("Homescreen Widget: Refresh button pressed!")
+    println("Home screen Widget: Refresh button pressed!")
     // first update call to set loading text
     appWidgetManager.updateAppWidget(appWidgetId, views) // continues after this
 
@@ -56,7 +58,12 @@ internal fun updateAppWidget(
     val idArray = intArrayOf(appWidgetId)
     intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray)
 
-    val pendingUpdate = PendingIntent.getBroadcast(context, appWidgetId, intentUpdate, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingUpdate = PendingIntent.getBroadcast(
+        context,
+        appWidgetId,
+        intentUpdate,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
     views.setOnClickPendingIntent(R.id.widget_refresh_button, pendingUpdate)
 
     // function call to fetch data from HTTP GET request
@@ -72,7 +79,7 @@ fun fetchData(appWidgetManager: AppWidgetManager, appWidgetId: Int, views: Remot
 
     client.newCall(request).enqueue(object : Callback {
         override fun onResponse(call: Call, response: Response) {
-            println("Homescreen Widget: GET request successful.")
+            println("Home screen Widget: GET request successful.")
 
             // converts response into string
             val body = response.body?.string()
@@ -99,7 +106,7 @@ fun fetchData(appWidgetManager: AppWidgetManager, appWidgetId: Int, views: Remot
         }
 
         override fun onFailure(call: Call, e: IOException) {
-            println("Homescreen Widget: Failed to execute GET request.")
+            println("Home screen Widget: Failed to execute GET request.")
         }
     })
 }

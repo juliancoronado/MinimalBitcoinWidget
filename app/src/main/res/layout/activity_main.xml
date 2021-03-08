@@ -16,8 +16,8 @@
         android:fontFamily="@font/manrope_regular"
         android:text="@string/app_name"
         android:textAlignment="center"
-        android:textSize="20sp"
         android:textColor="?attr/textAppearanceBody1"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <!-- Bitcoin Price CardView -->
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/widget_margin">
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,7 +45,6 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
                     android:contentDescription="@string/description1"
                     android:src="@drawable/bitcoin_icon" />
 
@@ -53,7 +52,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:fontFamily="@font/manrope_regular"
                     android:text="@string/bitcoin_title"
                     android:textColor="?attr/textAppearanceBody1"
@@ -64,9 +62,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
@@ -81,9 +79,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -98,7 +96,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="4dp"
-                        android:layout_marginRight="4dp"
                         android:fontFamily="@font/manrope_regular"
                         android:gravity="center_vertical"
                         android:text="@string/string_24h"
@@ -129,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:background="#00000000"
                         android:contentDescription="@string/description2"
-                        android:src="@drawable/icon_refresh_black" />
+                        android:src="@drawable/icon_refresh" />
 
                 </LinearLayout>
 
@@ -142,82 +139,77 @@
     <!-- Outside of CardView -->
 
     <LinearLayout
-        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_info_black"/>
+                android:src="@drawable/icon_info" />
 
             <TextView
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
-                android:fontFamily="@font/manrope_regular"
-                android:textColor="?attr/textAppearanceBody1"
                 android:layout_height="match_parent"
-                android:textSize="16sp"
-                android:text="Info"/>
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/manrope_regular"
+                android:text="Info"
+                android:textColor="?attr/textAppearanceBody1"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_heart_black"/>
+                android:src="@drawable/icon_heart" />
 
             <TextView
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
-                android:fontFamily="@font/manrope_regular"
-                android:textColor="?attr/textAppearanceBody1"
                 android:layout_height="match_parent"
-                android:textSize="16sp"
-                android:text="Donate"/>
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/manrope_regular"
+                android:text="Donate"
+                android:textColor="?attr/textAppearanceBody1"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_settings_black"/>
+                android:src="@drawable/icon_settings" />
 
             <TextView
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
-                android:fontFamily="@font/manrope_regular"
-                android:textColor="?attr/textAppearanceBody1"
                 android:layout_height="match_parent"
-                android:textSize="16sp"
-                android:text="Settings"/>
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/manrope_regular"
+                android:text="Settings"
+                android:textColor="?attr/textAppearanceBody1"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 </LinearLayout>

@@ -3,7 +3,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/layout_bg"
     android:orientation="vertical"
-    android:padding="@dimen/widget_margin">
+    android:padding="@dimen/widget_margin"
+    android:theme="@style/ThemeOverlay.BTCPriceWidget.AppWidgetContainer">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,10 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:fontFamily="@font/manrope_regular"
             android:text="@string/bitcoin_title"
-            android:textColor="@color/black"
+            android:textColor="?attr/appWidgetTextColor"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/manrope_bold"
             android:text="@string/loading_text1"
-            android:textColor="@color/black"
+            android:textColor="?attr/appWidgetTextColor"
             android:textSize="30sp" />
 
     </LinearLayout>
@@ -48,8 +48,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -62,11 +62,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp"
                 android:fontFamily="@font/manrope_regular"
                 android:gravity="center_vertical"
                 android:text="@string/string_24h"
-                android:textColor="@color/black"
+                android:textColor="?attr/appWidgetTextColor"
                 android:textSize="12sp" />
 
             <TextView
@@ -76,22 +75,22 @@
                 android:fontFamily="@font/manrope_regular"
                 android:gravity="center_vertical"
                 android:text="@string/loading_text1"
-                android:textColor="@color/black"
+                android:textColor="?attr/appWidgetTextColor"
                 android:textSize="12sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_weight="0"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="0">
 
             <ImageButton
                 android:id="@+id/widget_refresh_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
-                android:src="@drawable/icon_refresh_black"/>
+                android:src="@drawable/icon_refresh" />
 
         </LinearLayout>
 

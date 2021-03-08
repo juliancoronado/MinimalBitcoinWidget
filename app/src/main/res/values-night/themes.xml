@@ -14,12 +14,13 @@
         <!-- Customize your theme here. -->
         <item name="cardBackgroundColor">@color/card_night</item>
         <item name="textAppearanceBody1">@color/white</item>
-
         <item name="colorControlNormal">@color/white</item>
+
     </style>
 
     <style name="ThemeOverlay.BTCPriceWidget.AppWidgetContainer" parent="">
-        <item name="appWidgetBackgroundColor">@color/light_blue_900</item>
-        <item name="appWidgetTextColor">@color/light_blue_200</item>
+        <item name="appWidgetBackgroundColor">@color/card_night</item>
+        <item name="appWidgetTextColor">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
 </resources>
