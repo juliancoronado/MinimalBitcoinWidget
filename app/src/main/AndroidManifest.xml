@@ -11,6 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BTCPriceWidget">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8494094746252926~4240163531"/>
+
         <activity
             android:theme="@style/Theme.AppCompat.DayNight"
             android:parentActivityName=".MainActivity"
