@@ -6,11 +6,10 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.widget.RemoteViews
-import android.widget.TextView
 import com.google.gson.Gson
 import okhttp3.*
-import org.w3c.dom.Text
 import java.io.IOException
 
 /**
@@ -19,6 +18,7 @@ import java.io.IOException
 
 // global variable to hold data from GET request
 var data = Data()
+private val TAG = "Widget"
 
 class PriceWidget : AppWidgetProvider() {
 
@@ -47,7 +47,7 @@ internal fun updateAppWidget(
     views.setTextViewText(R.id.widget_day_change, "Loading...")
     // views.setTextColor(R.id.widget_day_change, R.attr.appWidgetTextColor)
 
-    println("Home screen Widget: Refresh button pressed!")
+   Log.i(TAG, "Refresh button pressed.")
     // first update call to set loading text
     appWidgetManager.updateAppWidget(appWidgetId, views) // continues after this
 
@@ -79,7 +79,7 @@ fun fetchData(appWidgetManager: AppWidgetManager, appWidgetId: Int, views: Remot
 
     client.newCall(request).enqueue(object : Callback {
         override fun onResponse(call: Call, response: Response) {
-            println("Home screen Widget: GET request successful.")
+            Log.i(TAG, "GET request successful.")
 
             // converts response into string
             val body = response.body?.string()
@@ -106,7 +106,7 @@ fun fetchData(appWidgetManager: AppWidgetManager, appWidgetId: Int, views: Remot
         }
 
         override fun onFailure(call: Call, e: IOException) {
-            println("Home screen Widget: Failed to execute GET request.")
+            Log.i(TAG, "Failed to execute GET request.")
         }
     })
 }

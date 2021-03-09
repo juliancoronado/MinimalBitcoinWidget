@@ -1,8 +1,11 @@
 package com.example.btcpricewidget
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
@@ -13,6 +16,7 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
     // global variable for all functions to use
     var data = Data()
+    private val TAG = "Main Activity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,24 +36,43 @@ class MainActivity : AppCompatActivity() {
         // when update button gets pressed
         val updateButton: ImageButton = findViewById(R.id.main_refresh_button)
         updateButton.setOnClickListener {
-            println("Main Activity: Update button pressed!")
+            Log.i(TAG, "Refresh button pressed.")
 
             // temp changes to show price is loading
             runOnUiThread {
-
                 // changeTv.setTextColor(R.attr.appWidgetTextColor)
                 priceTv.text = getString(R.string.loading_text1)
                 changeTv.text = getString(R.string.loading_text1)
-
             }
 
             // make HTTP GET request
             fetchData()
         }
 
+        val infoButton: Button = findViewById(R.id.info_button)
+        infoButton.setOnClickListener {
+            Log.i(TAG, "Info button pressed.")
+            val intent = Intent(this, InfoPageActivity::class.java)
+            startActivity(intent)
+        }
+
+        val donateButton: Button = findViewById(R.id.donate_button)
+        donateButton.setOnClickListener {
+            Log.i(TAG, "Donate button pressed.")
+            val intent = Intent(this, DonatePageActivity::class.java)
+            startActivity(intent)
+        }
+
+        val settingsButton: Button = findViewById(R.id.settings_button)
+        settingsButton.setOnClickListener {
+            Log.i(TAG, "Settings button pressed.")
+            val intent = Intent(this, SettingsPageActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
-    // function called from background thread
+    // function called from background thread to update main_activity layout
     private fun updateLayout(values: Data) {
 
         val priceTv: TextView = findViewById(R.id.main_price_text)
@@ -79,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                println("Main Activity: GET request successful.")
+                Log.i(TAG, "GET request successful.")
 
                 // converts response into string
                 val body = response.body?.string()
@@ -91,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                println("Main Activity: Failed to execute GET request.")
+                Log.i(TAG, "Failed to execute GET request.")
             }
         })
     }

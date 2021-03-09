@@ -153,21 +153,27 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="Info icon"
                 android:src="@drawable/icon_info" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <Button
+                android:id="@+id/info_button"
+                style="?android:borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/manrope_regular"
-                android:text="Info"
+                android:text="@string/info_text"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
                 android:textColor="?attr/textAppearanceBody1"
                 android:textSize="16sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:orientation="horizontal">
@@ -175,21 +181,27 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="Donate icon"
                 android:src="@drawable/icon_heart" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <Button
+                android:id="@+id/donate_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/manrope_regular"
-                android:text="Donate"
+                android:text="@string/donate_text"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
                 android:textColor="?attr/textAppearanceBody1"
                 android:textSize="16sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:orientation="horizontal">
@@ -197,14 +209,20 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="Settings icon"
                 android:src="@drawable/icon_settings" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <Button
+                android:id="@+id/settings_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/manrope_regular"
-                android:text="Settings"
+                android:text="@string/settings_text"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
                 android:textColor="?attr/textAppearanceBody1"
                 android:textSize="16sp" />
 
