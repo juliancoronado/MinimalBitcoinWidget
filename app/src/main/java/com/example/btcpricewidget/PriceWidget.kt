@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.util.Log
 import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
@@ -67,10 +68,15 @@ internal fun updateAppWidget(
     views.setOnClickPendingIntent(R.id.widget_refresh_button, pendingUpdate)
 
     // function call to fetch data from HTTP GET request
-    fetchData(appWidgetManager, appWidgetId, views)
+    fetchData(appWidgetManager, appWidgetId, views, context)
 }
 
-fun fetchData(appWidgetManager: AppWidgetManager, appWidgetId: Int, views: RemoteViews) {
+fun fetchData(
+    appWidgetManager: AppWidgetManager,
+    appWidgetId: Int,
+    views: RemoteViews,
+    context: Context
+) {
 
     val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin"
     val request = Request.Builder().url(url).build()
@@ -95,10 +101,10 @@ fun fetchData(appWidgetManager: AppWidgetManager, appWidgetId: Int, views: Remot
 
             if (data.change24h().contains('+')) {
                 // green color
-                views.setTextColor(R.id.widget_day_change, Color.parseColor("#1f6d00"))
+                views.setTextColor(R.id.widget_day_change, ContextCompat.getColor(context, R.color.positive_green))
             } else {
                 // red color
-                views.setTextColor(R.id.widget_day_change, Color.parseColor("#b50f04"))
+                views.setTextColor(R.id.widget_day_change, ContextCompat.getColor(context, R.color.negative_red))
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

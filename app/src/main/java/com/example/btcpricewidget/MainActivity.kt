@@ -1,7 +1,6 @@
 package com.example.btcpricewidget
 
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         MobileAds.initialize(this) {}
-        var mAdView : AdView = findViewById(R.id.adView)
+        var mAdView: AdView = findViewById(R.id.adView)
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
 
@@ -64,13 +64,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val donateButton: Button = findViewById(R.id.donate_button)
-        donateButton.setOnClickListener {
-            Log.i(TAG, "Donate button pressed.")
-            val intent = Intent(this, DonatePageActivity::class.java)
-            startActivity(intent)
-        }
-
         val settingsButton: Button = findViewById(R.id.settings_button)
         settingsButton.setOnClickListener {
             Log.i(TAG, "Settings button pressed.")
@@ -92,10 +85,10 @@ class MainActivity : AppCompatActivity() {
 
             if (values.change24h().contains('+')) {
                 // green color
-                changeTv.setTextColor(Color.parseColor("#1f6d00"))
+                changeTv.setTextColor(ContextCompat.getColor(this, R.color.positive_green))
             } else {
                 // red color
-                changeTv.setTextColor(Color.parseColor("#b50f04"))
+                changeTv.setTextColor(ContextCompat.getColor(this, R.color.negative_red))
             }
 
         }

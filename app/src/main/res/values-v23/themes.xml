@@ -19,4 +19,16 @@
         <item name="colorControlNormal">@color/black</item>
 
     </style>
+
+    <style name="ThemeOverlay.BTCPriceWidget.AppWidgetContainer" parent="">
+        <item name="appWidgetBackgroundColor">@color/light_widget</item>
+        <item name="appWidgetTextColor">@color/black</item>
+        <item name="colorControlNormal">@color/black</item>
+    </style>
+
+    <style name="PreferenceScreen" parent="Theme.AppCompat.DayNight">
+        <item name="android:textColor">@color/black</item>
+        <item name="colorAccent">@color/blue_500</item>
+    </style>
+
 </resources>

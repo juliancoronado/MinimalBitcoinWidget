@@ -10,8 +10,9 @@
     <!-- Custom colors -->
     <color name="card_night">#474747</color>
     <color name="card_day">#F6F6F6</color>
-    <color name="light_blue_50">#FFE1F5FE</color>
-    <color name="light_blue_200">#FF81D4FA</color>
-    <color name="light_blue_600">#FF039BE5</color>
-    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_widget">@color/white</color>
+    <color name="dark_widget">@color/black</color>
+    <color name="positive_green">#26BF2C</color>
+    <color name="negative_red">#DC2323</color>
+
 </resources>

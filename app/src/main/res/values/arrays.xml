@@ -1,12 +1,26 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
+
+    <string-array name="theme_entries">
+        <item>Follow system theme</item>
+        <item>Light mode</item>
+        <item>Dark mode</item>
     </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="theme_values">
+        <item>Follow system theme</item>
+        <item>Light mode</item>
+        <item>Dark mode</item>
+    </string-array>
+
+    <string-array name="source_entries">
+        <item>CoinGecko</item>
+        <item>Source 2</item>
+        <item>Source 3</item>
+    </string-array>
+
+    <string-array name="source_values">
+        <item>CoinGecko</item>
+        <item>Source 2</item>
+        <item>Source 3</item>
     </string-array>
 </resources>

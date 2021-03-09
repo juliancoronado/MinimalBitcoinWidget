@@ -10,7 +10,7 @@
     <string name="info_text">Info</string>
     <string name="donate_text">Donate</string>
     <string name="settings_text">Settings</string>
-    <string name="title_activity_settings_page">SettingsPageActivity</string>
+    <string name="title_activity_settings_page">Settings</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
