@@ -1,6 +1,7 @@
 package com.example.btcpricewidget
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
             // temp changes to show price is loading
             runOnUiThread {
-                // changeTv.setTextColor(R.attr.appWidgetTextColor)
+                changeTv.setTextColor(priceTv.currentTextColor)
                 priceTv.text = getString(R.string.loading_text1)
                 changeTv.text = getString(R.string.loading_text1)
             }

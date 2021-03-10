@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColor
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException

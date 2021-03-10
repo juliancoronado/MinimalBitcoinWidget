@@ -11,7 +11,9 @@
         <item name="colorOnSecondary">@color/positive_green</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#7A7A7A</item>
+
         <!-- Customize your theme here. -->
+        <item name="backgroundColor">@color/white</item>
         <item name="cardBackgroundColor">@color/card_day</item>
         <item name="textAppearanceBody1">@color/black</item>
         <item name="colorControlNormal">@color/black</item>
@@ -26,7 +28,7 @@
 
     <style name="PreferenceScreen" parent="Theme.AppCompat.DayNight">
         <item name="android:textColor">@color/black</item>
-        <item name="colorAccent">@color/blue_500</item>
+        <item name="android:colorAccent">@color/blue_500</item>
     </style>
 
 </resources>
