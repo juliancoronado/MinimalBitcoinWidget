@@ -26,9 +26,4 @@
         <item name="colorControlNormal">@color/white</item>
     </style>
 
-    <style name="PreferenceScreen" parent="Theme.AppCompat.DayNight">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:colorAccent">@color/blue_500</item>
-    </style>
-
 </resources>

@@ -138,68 +138,146 @@
 
     <!-- Outside of CardView -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="vertical">
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/manrope_bold"
+        android:text="Data Provided by CoinGecko"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:autoLink="web"
+        android:fontFamily="@font/manrope_regular"
+        android:text="https://coingecko.com/"
+        android:textColorLink="@color/blue_500"
+        android:textSize="14sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="Info icon"
-                android:src="@drawable/icon_info" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/manrope_bold"
+        android:text="License"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/info_button"
-                style="?android:borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/manrope_regular"
-                android:text="@string/info_text"
-                android:textAlignment="textStart"
-                android:textAllCaps="false"
-                android:textColor="?attr/textAppearanceBody1"
-                android:textSize="16sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:textColor="?attr/textAppearanceBody1"
+        android:fontFamily="@font/manrope_regular"
+        android:text="GNU General Public License v2.0"
+        android:textSize="14sp" />
 
-        </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/manrope_bold"
+        android:text="App Version"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:textColor="?attr/textAppearanceBody1"
+        android:fontFamily="@font/manrope_regular"
+        android:text="1.0"
+        android:textSize="14sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="Settings icon"
-                android:src="@drawable/icon_settings" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/manrope_bold"
+        android:text="Developer"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/settings_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/manrope_regular"
-                android:text="@string/settings_text"
-                android:textAlignment="textStart"
-                android:textAllCaps="false"
-                android:textColor="?attr/textAppearanceBody1"
-                android:textSize="16sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:textColor="?attr/textAppearanceBody1"
+        android:fontFamily="@font/manrope_regular"
+        android:text="Julian Coronado"
+        android:textSize="14sp" />
 
-        </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/manrope_bold"
+        android:text="Source Code"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:autoLink="web"
+        android:fontFamily="@font/manrope_regular"
+        android:text="https://github.com/juliancoronado/Bitcoin-Price-Widget"
+        android:textColorLink="@color/blue_500"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/manrope_bold"
+        android:text="Contact"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:autoLink="web"
+        android:fontFamily="@font/manrope_regular"
+        android:text="https://jcoronado.dev"
+        android:textColorLink="@color/blue_500"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/manrope_regular"
+        android:text="Thank you for downloading my app! "
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:gravity="bottom"

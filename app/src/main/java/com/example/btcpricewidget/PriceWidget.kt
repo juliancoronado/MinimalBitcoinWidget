@@ -5,11 +5,9 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.toColor
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
@@ -49,7 +47,7 @@ internal fun updateAppWidget(
     views.setTextViewText(R.id.widget_day_change, "Loading...")
     // views.setTextColor(R.id.widget_day_change, R.attr.appWidgetTextColor)
 
-   Log.i(TAG, "Refresh button pressed.")
+    Log.i(TAG, "Refresh button pressed.")
     // first update call to set loading text
     appWidgetManager.updateAppWidget(appWidgetId, views) // continues after this
 
@@ -102,10 +100,16 @@ fun fetchData(
 
             if (data.change24h().contains('+')) {
                 // green color
-                views.setTextColor(R.id.widget_day_change, ContextCompat.getColor(context, R.color.positive_green))
+                views.setTextColor(
+                    R.id.widget_day_change,
+                    ContextCompat.getColor(context, R.color.positive_green)
+                )
             } else {
                 // red color
-                views.setTextColor(R.id.widget_day_change, ContextCompat.getColor(context, R.color.negative_red))
+                views.setTextColor(
+                    R.id.widget_day_change,
+                    ContextCompat.getColor(context, R.color.negative_red)
+                )
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

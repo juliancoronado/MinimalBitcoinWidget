@@ -1,11 +1,8 @@
 package com.example.btcpricewidget
 
-import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
@@ -53,25 +50,9 @@ class MainActivity : AppCompatActivity() {
                 priceTv.text = getString(R.string.loading_text1)
                 changeTv.text = getString(R.string.loading_text1)
             }
-
             // make HTTP GET request
             fetchData()
         }
-
-        val infoButton: Button = findViewById(R.id.info_button)
-        infoButton.setOnClickListener {
-            Log.i(TAG, "Info button pressed.")
-            val intent = Intent(this, InfoPageActivity::class.java)
-            startActivity(intent)
-        }
-
-        val settingsButton: Button = findViewById(R.id.settings_button)
-        settingsButton.setOnClickListener {
-            Log.i(TAG, "Settings button pressed.")
-            val intent = Intent(this, SettingsPageActivity::class.java)
-            startActivity(intent)
-        }
-
     }
 
     // function called from background thread to update main_activity layout

@@ -16,18 +16,6 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-8494094746252926~4240163531"/>
 
-        <activity
-            android:theme="@style/PreferenceScreen"
-            android:parentActivityName=".MainActivity"
-            android:name=".SettingsPageActivity"
-            android:label="@string/title_activity_settings_page" />
-
-        <activity
-            android:label="Info"
-            android:name=".InfoPageActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
         <receiver android:name=".PriceWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
