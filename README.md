@@ -9,6 +9,12 @@ New features will be added as I work on them! Thank you for the support!
 
 ## Screenshots
 
+<p>
+  <img src="screenshots/listing1_v2.png" width="30%">
+  <img src="screenshots/listing2_v2.png" width="30%">
+  <img src="screenshots/listing3_v2.png" width="30%">
+</p>
+
 ## Built With
 * [OkHttp](https://square.github.io/okhttp/) - HTTP client
 * [Gson](https://github.com/google/gson) - Gson is a Java library that can be used to convert Java Objects into their JSON representation
