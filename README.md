@@ -31,9 +31,7 @@ New features will be added as I work on them! Thank you for the support!
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details
 
 ## Developer
-Julian Coronado
-
-[jcoronado.dev](https://jcoronado.dev)
+Julian Coronado - [jcoronado.dev](https://jcoronado.dev)
 
 If you'd like to donate, feel free to do so! Not required. Always appreciated!
 
