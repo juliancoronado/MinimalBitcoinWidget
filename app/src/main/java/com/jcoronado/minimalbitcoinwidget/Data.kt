@@ -1,4 +1,4 @@
-package com.example.btcpricewidget
+package com.jcoronado.minimalbitcoinwidget
 
 data class Data(
     // all values initialized to null

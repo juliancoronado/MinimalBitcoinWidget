@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.btcpricewidget">
+    package="com.jcoronado.minimalbitcoinwidget">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,13 +10,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BTCPriceWidget">
+        android:theme="@style/Theme.MinimalBitcoinWidget">
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8494094746252926~4240163531"/>
+            android:value="ca-app-pub-8494094746252926~4240163531" />
 
-        <receiver android:name=".PriceWidget">
+        <receiver android:name="com.jcoronado.minimalbitcoinwidget.PriceWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -26,7 +26,7 @@
                 android:resource="@xml/price_widget_info" />
         </receiver>
 
-        <activity android:name=".MainActivity">
+        <activity android:name="com.jcoronado.minimalbitcoinwidget.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

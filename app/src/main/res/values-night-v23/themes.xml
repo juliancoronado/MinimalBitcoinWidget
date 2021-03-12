@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.BTCPriceWidget" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.MinimalBitcoinWidget" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_500</item>
         <!-- Status bar color. -->
@@ -14,7 +14,7 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="ThemeOverlay.BTCPriceWidget.AppWidgetContainer" parent="">
+    <style name="ThemeOverlay.MinimalBitcoinWidget.AppWidgetContainer" parent="">
         <item name="appWidgetBackgroundColor">@color/dark_widget</item>
         <item name="appWidgetTextColor">@color/white</item>
         <item name="colorControlNormal">@color/white</item>

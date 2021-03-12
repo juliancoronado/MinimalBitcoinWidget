@@ -1,4 +1,4 @@
-package com.example.btcpricewidget
+package com.jcoronado.minimalbitcoinwidget
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

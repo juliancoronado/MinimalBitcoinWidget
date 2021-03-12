@@ -1,4 +1,4 @@
-package com.example.btcpricewidget
+package com.jcoronado.minimalbitcoinwidget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
