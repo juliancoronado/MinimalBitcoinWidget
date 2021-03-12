@@ -1,11 +1,22 @@
-# Bitcoin-Price-Widget
+# Simple Bitcoin Widget
 
-Developed by Julian Coronado
+A simple Bitcoin price widget for your home screen 📈
 
-Language: Kotlin, XML
+This Android application allows you to place a sleek and minimal Bitcoin price widget on your home screen! Simple Bitcoin Widget sources price information from the CoinGecko API.
+The widget conforms to your current system device theme - light and dark mode!
 
-Libraries: OkHttp, Gson
+New features will be added as I work on them! Thank you for the support!
 
-Icons: Material IO (https://material.io/resources/icons/)
+## Screenshots
 
-Font: Manrope (https://manropefont.com/)
+## Built With
+* [OkHttp](https://square.github.io/okhttp/) - HTTP client
+* [Gson](https://github.com/google/gson) - Gson is a Java library that can be used to convert Java Objects into their JSON representation
+* [Material Icons](https://material.io/resources/icons/) - Material IO Icons
+* [Manrope Font](https://manropefont.com/) - Manrope Font used for text
+
+## License
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details
+
+## Developer
+Julian Coronado
