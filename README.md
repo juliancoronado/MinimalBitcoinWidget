@@ -16,7 +16,7 @@ New features will be added as I work on them! Thank you for the support!
 * [Manrope Font](https://manropefont.com/) - Manrope Font used for text
 
 ## License
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details
 
 ## Developer
 Julian Coronado
