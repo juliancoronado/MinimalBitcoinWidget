@@ -10,9 +10,9 @@ New features will be added as I work on them! Thank you for the support!
 ## Screenshots
 
 <p>
-  <img src="screenshots/listing1_v2.png" width="30%">
-  <img src="screenshots/listing2_v2.png" width="30%">
-  <img src="screenshots/listing3_v2.png" width="30%">
+  <img src="screenshots/image1.png" width="30%">
+  <img src="screenshots/image2.png" width="30%">
+  <img src="screenshots/image3.png" width="30%">
 </p>
 
 ## Built With
