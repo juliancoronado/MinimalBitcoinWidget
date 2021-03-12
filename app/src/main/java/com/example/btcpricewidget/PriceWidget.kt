@@ -16,8 +16,9 @@ import java.io.IOException
  * Implementation of App Widget functionality.
  */
 
-// global variable to hold data from GET request
+// var data will hold the information received from the HTTP Request
 var data = Data()
+// val TAG for Log.i() calls
 private val TAG = "Widget"
 
 class PriceWidget : AppWidgetProvider() {
@@ -43,11 +44,13 @@ internal fun updateAppWidget(
     // create remote view
     val views = RemoteViews(context.packageName, R.layout.price_widget)
 
+    // set textview's text to loading string
     views.setTextViewText(R.id.widget_text_price, "Loading...")
     views.setTextViewText(R.id.widget_day_change, "Loading...")
+
+    // line 52 does not work
     // views.setTextColor(R.id.widget_day_change, R.attr.appWidgetTextColor)
 
-    Log.i(TAG, "Refresh button pressed.")
     // first update call to set loading text
     appWidgetManager.updateAppWidget(appWidgetId, views) // continues after this
 
@@ -64,6 +67,7 @@ internal fun updateAppWidget(
         intentUpdate,
         PendingIntent.FLAG_UPDATE_CURRENT
     )
+    Log.i(TAG, "Refresh button pressed.")
     views.setOnClickPendingIntent(R.id.widget_refresh_button, pendingUpdate)
 
     // function call to fetch data from HTTP GET request
@@ -77,13 +81,17 @@ fun fetchData(
     context: Context
 ) {
 
+    // current CoinGecko url to send GET request
     val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin"
+
+    // OkHttp
     val request = Request.Builder().url(url).build()
 
     val client = OkHttpClient()
 
     client.newCall(request).enqueue(object : Callback {
         override fun onResponse(call: Call, response: Response) {
+            // successful GET request
             Log.i(TAG, "GET request successful.")
 
             // converts response into string
@@ -112,11 +120,13 @@ fun fetchData(
                 )
             }
 
+            // makes final call to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
 
         }
 
         override fun onFailure(call: Call, e: IOException) {
+            // failed GET request
             Log.i(TAG, "Failed to execute GET request.")
         }
     })

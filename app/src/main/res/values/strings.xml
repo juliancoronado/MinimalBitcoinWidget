@@ -1,10 +1,32 @@
 <resources>
     <string name="app_name">Minimal Bitcoin Widget</string>
+
+    <!-- information for the cardView -->
     <string name="bitcoin_title">Bitcoin (BTC)</string>
-    <string name="loading_text1">Loading…</string>
-    <string name="string_24h">24h:</string>
-    <string name="add_widget">Add widget</string>
+    <string name="loading_text">Loading…</string>
+    <string name="str_24h">24h:</string>
     <string name="description1">Bitcoin logo</string>
     <string name="description2">Refresh button</string>
+
+    <!-- MainActivity info (below cardView) -->
+    <string name="coingecko">Data Provided by CoinGecko</string>
+    <string name="coingecko_link">https://coingecko.com/</string>
+
+    <string name="license_title">License</string>
+    <string name="license_info">GNU General Public License v3.0</string>
+
+    <string name="appversion_title">App Version</string>
+    <string name="appversion_number">1.0</string>
+
+    <string name="dev_title">Developer</string>
+    <string name="dev_name">Julian Coronado</string>
+
+    <string name="sourcecode_title">Source Code</string>
+    <string name="sourcecode_link">https://github.com/juliancoronado/MinimalBitcoinWidget</string>
+
+    <string name="contact_title">Contact</string>
+    <string name="contact_link">https://jcoronado.dev</string>
+
+    <string name="thankyou">Thank you for downloading my app!</string>
 
 </resources>

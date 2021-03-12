@@ -15,26 +15,31 @@ import okhttp3.*
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
-    // global variable for all functions to use
+    // var data will hold the information received from the HTTP Request
     var data = Data()
+    // val TAG for Log.i() calls
     private val TAG = "Main Activity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // follow system theme
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         setContentView(R.layout.activity_main)
 
+        // Google AdMod code snippet
         MobileAds.initialize(this) {}
         val mAdView: AdView = findViewById(R.id.adView)
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
 
+        // create TextView objects that contain reference to layout objects
         val priceTv: TextView = findViewById(R.id.main_price_text)
         val changeTv: TextView = findViewById(R.id.main_day_change)
 
-        priceTv.text = getString(R.string.loading_text1)
-        changeTv.text = getString(R.string.loading_text1)
+        // set TextView's text to loading string
+        priceTv.text = getString(R.string.loading_text)
+        changeTv.text = getString(R.string.loading_text)
 
         // initial HTTP GET request
         fetchData()
@@ -47,8 +52,8 @@ class MainActivity : AppCompatActivity() {
             // temp changes to show price is loading
             runOnUiThread {
                 changeTv.setTextColor(priceTv.currentTextColor)
-                priceTv.text = getString(R.string.loading_text1)
-                changeTv.text = getString(R.string.loading_text1)
+                priceTv.text = getString(R.string.loading_text)
+                changeTv.text = getString(R.string.loading_text)
             }
             // make HTTP GET request
             fetchData()
@@ -58,13 +63,16 @@ class MainActivity : AppCompatActivity() {
     // function called from background thread to update main_activity layout
     private fun updateLayout(values: Data) {
 
+        // create TextView objects that contain reference to layout objects
         val priceTv: TextView = findViewById(R.id.main_price_text)
         val changeTv: TextView = findViewById(R.id.main_day_change)
 
         runOnUiThread {
+            // update the layout with new data
             priceTv.text = values.price()
             changeTv.text = values.change24h()
 
+            // check for positive or negative change to set color accordingly
             if (values.change24h().contains('+')) {
                 // green color
                 changeTv.setTextColor(ContextCompat.getColor(this, R.color.positive_green))
@@ -93,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                 // extracts object from JSON
                 val tempList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
                 data = tempList[0]
+                // update the activity_main layout with the new data
                 updateLayout(data)
             }
 

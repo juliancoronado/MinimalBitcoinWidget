@@ -30,6 +30,7 @@ data class Data(
     var last_updated: String? = null
 ) {
 
+    // returns string on the 24 hour change including the + or - symbol
     fun change24h(): String {
 
         val change = "%.2f".format(price_change_percentage_24h).toDouble()
@@ -43,6 +44,7 @@ data class Data(
         }
     }
 
+    // returns string with price adjusted with two decimal places (USD cents)
     fun price(): String {
         var tempPrice = current_price.toString()
         val n = tempPrice.length
@@ -52,8 +54,9 @@ data class Data(
         // check to add extra zero if needed
 
         if (tempPrice[n - 3] == '.') {
-            // nothing
+            // do nothing
         } else {
+            // adds extra 0
             tempPrice += "0"
         }
 

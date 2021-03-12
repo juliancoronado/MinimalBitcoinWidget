@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/manrope_bold"
-                    android:text="@string/loading_text1"
+                    android:text="@string/loading_text"
                     android:textColor="?attr/textAppearanceBody1"
                     android:textSize="50sp" />
 
@@ -98,7 +98,7 @@
                         android:layout_marginEnd="4dp"
                         android:fontFamily="@font/manrope_regular"
                         android:gravity="center_vertical"
-                        android:text="@string/string_24h"
+                        android:text="@string/str_24h"
                         android:textColor="?attr/textAppearanceBody1"
                         android:textSize="20sp" />
 
@@ -108,7 +108,7 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/manrope_regular"
                         android:gravity="center_vertical"
-                        android:text="@string/loading_text1"
+                        android:text="@string/loading_text"
                         android:textColor="?attr/textAppearanceBody1"
                         android:textSize="20sp" />
 
@@ -144,7 +144,7 @@
         android:layout_gravity="start"
         android:layout_margin="8dp"
         android:fontFamily="@font/manrope_bold"
-        android:text="Data Provided by CoinGecko"
+        android:text="@string/coingecko"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -156,7 +156,7 @@
         android:layout_marginStart="8dp"
         android:autoLink="web"
         android:fontFamily="@font/manrope_regular"
-        android:text="https://coingecko.com/"
+        android:text="@string/coingecko_link"
         android:textColorLink="@color/blue_500"
         android:textSize="14sp" />
 
@@ -166,7 +166,7 @@
         android:layout_gravity="start"
         android:layout_margin="8dp"
         android:fontFamily="@font/manrope_bold"
-        android:text="License"
+        android:text="@string/license_title"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -178,7 +178,7 @@
         android:layout_marginStart="8dp"
         android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/manrope_regular"
-        android:text="GNU General Public License v2.0"
+        android:text="@string/license_info"
         android:textSize="14sp" />
 
     <TextView
@@ -187,7 +187,7 @@
         android:layout_gravity="start"
         android:layout_margin="8dp"
         android:fontFamily="@font/manrope_bold"
-        android:text="App Version"
+        android:text="@string/appversion_title"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -199,7 +199,7 @@
         android:layout_marginStart="8dp"
         android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/manrope_regular"
-        android:text="1.0"
+        android:text="@string/appversion_number"
         android:textSize="14sp" />
 
     <TextView
@@ -208,7 +208,7 @@
         android:layout_gravity="start"
         android:layout_margin="8dp"
         android:fontFamily="@font/manrope_bold"
-        android:text="Developer"
+        android:text="@string/dev_title"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -220,7 +220,7 @@
         android:layout_marginStart="8dp"
         android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/manrope_regular"
-        android:text="Julian Coronado"
+        android:text="@string/dev_name"
         android:textSize="14sp" />
 
     <TextView
@@ -229,7 +229,7 @@
         android:layout_gravity="start"
         android:layout_margin="8dp"
         android:fontFamily="@font/manrope_bold"
-        android:text="Source Code"
+        android:text="@string/sourcecode_title"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -241,7 +241,7 @@
         android:layout_marginStart="8dp"
         android:autoLink="web"
         android:fontFamily="@font/manrope_regular"
-        android:text="https://github.com/juliancoronado/Bitcoin-Price-Widget"
+        android:text="@string/sourcecode_link"
         android:textColorLink="@color/blue_500"
         android:textSize="14sp" />
 
@@ -251,7 +251,7 @@
         android:layout_gravity="start"
         android:layout_margin="8dp"
         android:fontFamily="@font/manrope_bold"
-        android:text="Contact"
+        android:text="@string/contact_title"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -263,7 +263,7 @@
         android:layout_marginStart="8dp"
         android:autoLink="web"
         android:fontFamily="@font/manrope_regular"
-        android:text="https://jcoronado.dev"
+        android:text="@string/contact_link"
         android:textColorLink="@color/blue_500"
         android:textSize="14sp" />
 
@@ -274,7 +274,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/manrope_regular"
-        android:text="Thank you for downloading my app! "
+        android:text="@string/thankyou"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="16sp"
         android:textStyle="bold" />

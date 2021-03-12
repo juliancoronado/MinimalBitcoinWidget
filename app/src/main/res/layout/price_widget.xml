@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/manrope_bold"
-            android:text="@string/loading_text1"
+            android:text="@string/loading_text"
             android:textColor="?attr/appWidgetTextColor"
             android:textSize="30sp" />
 
@@ -64,7 +64,7 @@
                 android:layout_marginEnd="3dp"
                 android:fontFamily="@font/manrope_regular"
                 android:gravity="center_vertical"
-                android:text="@string/string_24h"
+                android:text="@string/str_24h"
                 android:textColor="?attr/appWidgetTextColor"
                 android:textSize="12sp" />
 
@@ -74,7 +74,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/manrope_regular"
                 android:gravity="center_vertical"
-                android:text="@string/loading_text1"
+                android:text="@string/loading_text"
                 android:textColor="?attr/appWidgetTextColor"
                 android:textSize="12sp" />
 

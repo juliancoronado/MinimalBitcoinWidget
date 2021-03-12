@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- background color for the app icon -->
+
 <resources>
     <color name="ic_launcher_background">#F7931E</color>
 </resources>
