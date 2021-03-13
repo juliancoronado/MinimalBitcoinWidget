@@ -12,10 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MinimalBitcoinWidget">
 
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8494094746252926~4240163531" />
-
         <receiver android:name="com.jcoronado.minimalbitcoinwidget.PriceWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

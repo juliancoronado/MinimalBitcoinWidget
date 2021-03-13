@@ -7,9 +7,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
@@ -26,12 +23,6 @@ class MainActivity : AppCompatActivity() {
         // follow system theme
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         setContentView(R.layout.activity_main)
-
-        // Google AdMod code snippet
-        MobileAds.initialize(this) {}
-        val mAdView: AdView = findViewById(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
 
         // create TextView objects that contain reference to layout objects
         val priceTv: TextView = findViewById(R.id.main_price_text)
