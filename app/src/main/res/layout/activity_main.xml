@@ -31,10 +31,10 @@
         app:cardCornerRadius="10dp">
 
         <LinearLayout
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -176,9 +176,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="8dp"
-        android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/manrope_regular"
         android:text="@string/license_info"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp" />
 
     <TextView
@@ -197,9 +197,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="8dp"
-        android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/manrope_regular"
         android:text="@string/appversion_number"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp" />
 
     <TextView
@@ -218,9 +218,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="8dp"
-        android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/manrope_regular"
         android:text="@string/dev_name"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp" />
 
     <TextView
@@ -280,11 +280,13 @@
         android:textStyle="bold" />
 
     <LinearLayout
-        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginBottom="5dp">
+        android:layout_marginBottom="5dp"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <!-- Google AdView -->
 
     </LinearLayout>
 
