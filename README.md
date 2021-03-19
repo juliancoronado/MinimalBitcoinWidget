@@ -28,8 +28,9 @@ Google Play and the Google Play logo are trademarks of Google LLC.
 
 ## Known Issues
 * Home screen widget will not refresh when Low Power Mode setting is ON (manually or automatically)
-* Widget will occasionally get stuck on "Loading..." text, manually refreshing still updates the price
+* Widget will occasionally stay on "Loading..." text, manually refreshing updates the price
 * "Loading..." text color for widget next to "24h:" should be the default widget text color, not green/red
+* On shorter displays, the widget is not displayed properly
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details
