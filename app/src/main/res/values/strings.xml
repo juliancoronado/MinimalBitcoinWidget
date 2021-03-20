@@ -16,7 +16,7 @@
     <string name="license_info">GNU General Public License v3.0</string>
 
     <string name="appversion_title">App Version</string>
-    <string name="appversion_number">1.0</string>
+    <string name="appversion_number">1.04</string>
 
     <string name="dev_title">Developer</string>
     <string name="dev_name">Julian Coronado</string>
@@ -28,5 +28,7 @@
     <string name="contact_link">https://jcoronado.dev</string>
 
     <string name="thankyou">Thank you for downloading my app!</string>
+
+    <string name="currency_key"></string>
 
 </resources>

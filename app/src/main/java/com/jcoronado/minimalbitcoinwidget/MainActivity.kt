@@ -1,5 +1,7 @@
 package com.jcoronado.minimalbitcoinwidget
 
+import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +14,9 @@ import okhttp3.*
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
+
+    private val sharedPrefFile = "com.jcoronado.minimalbitcoinwidget.PREFERENCE_FILE_KEY"
+
     // var data will hold the information received from the HTTP Request
     var data = Data()
     // val TAG for Log.i() calls
@@ -19,6 +24,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check if first time launching app
+        val isFirstRun = getSharedPreferences(sharedPrefFile, MODE_PRIVATE).getBoolean("isFirstRun", true)
+
+        if (isFirstRun) {
+            // show start activity
+            val intent = Intent(this, FirstLaunch::class.java)
+            startActivity(intent)
+        }
+
+        getSharedPreferences(sharedPrefFile, MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply()
+        //
 
         // follow system theme
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
