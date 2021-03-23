@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.jcoronado.minimalbitcoinwidget"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 4
         versionName "1.04"
@@ -33,6 +33,7 @@ android {
 
 dependencies {
 
+    // default libraries
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -43,7 +44,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    // my own added libraries
+    // added libraries
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.cardview:cardview:1.0.0'

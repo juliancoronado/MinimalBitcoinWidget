@@ -1,0 +1,20 @@
+<resources>
+    <!-- Currency List Preference -->
+    <string-array name="currency_entries">
+        <item>US Dollar ($)</item>
+        <item>British Pound (£)</item>
+        <item>Euro (€)</item>
+        <item>Canadian Dollar ($)</item>
+        <item>Mexican Peso ($)</item>
+        <item>Australian Dollar ($)</item>
+    </string-array>
+
+    <string-array name="currency_values">
+        <item>usd</item>
+        <item>gbp</item>
+        <item>eur</item>
+        <item>cad</item>
+        <item>mxn</item>
+        <item>aud</item>
+    </string-array>
+</resources>

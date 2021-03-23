@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Minimal Bitcoin Widget</string>
+    <string name="settings">Settings</string>
+    <string name="version_info">Version Info</string>
+
+    <string name="content_description_version_info">Version Info</string>
+    <string name="content_description_settings">Settings</string>
 
     <!-- information for the cardView -->
     <string name="bitcoin_title">Bitcoin (BTC)</string>
@@ -27,8 +32,15 @@
     <string name="contact_title">Contact</string>
     <string name="contact_link">https://jcoronado.dev</string>
 
-    <string name="thankyou">Thank you for downloading my app!</string>
+    <string name="thank_you">Thank you for downloading my app!</string>
 
-    <string name="currency_key"></string>
+    <!-- Activity Titles -->
+    <string name="title_activity_info">InfoActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Currency Preferences -->
+    <string name="currency_title">Currency</string>
+    <string name="currency_header">Local Currency</string>
+
 
 </resources>

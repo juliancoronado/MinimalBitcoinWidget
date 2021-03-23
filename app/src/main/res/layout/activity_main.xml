@@ -4,31 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- Title above CardView -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/manrope_regular"
-        android:text="@string/app_name"
-        android:textAlignment="center"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <!-- Bitcoin Price CardView -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="?attr/cardBackgroundColor"
-        app:cardCornerRadius="10dp">
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/m_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar"
+            app:title="@string/app_name"
+            app:titleTextColor="?attr/colorOnPrimary" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,7 +52,6 @@
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/manrope_regular"
                     android:text="@string/bitcoin_title"
-                    android:textColor="?attr/textAppearanceBody1"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -74,7 +70,6 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/manrope_bold"
                     android:text="@string/loading_text"
-                    android:textColor="?attr/textAppearanceBody1"
                     android:textSize="50sp" />
 
             </LinearLayout>
@@ -99,7 +94,6 @@
                         android:fontFamily="@font/manrope_regular"
                         android:gravity="center_vertical"
                         android:text="@string/str_24h"
-                        android:textColor="?attr/textAppearanceBody1"
                         android:textSize="20sp" />
 
                     <TextView
@@ -109,7 +103,6 @@
                         android:fontFamily="@font/manrope_regular"
                         android:gravity="center_vertical"
                         android:text="@string/loading_text"
-                        android:textColor="?attr/textAppearanceBody1"
                         android:textSize="20sp" />
 
                 </LinearLayout>
@@ -134,150 +127,7 @@
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-
-    <!-- Outside of CardView -->
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="8dp"
-        android:fontFamily="@font/manrope_bold"
-        android:text="@string/coingecko"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="8dp"
-        android:autoLink="web"
-        android:fontFamily="@font/manrope_regular"
-        android:text="@string/coingecko_link"
-        android:textColorLink="@color/blue_500"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="8dp"
-        android:fontFamily="@font/manrope_bold"
-        android:text="@string/license_title"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/manrope_regular"
-        android:text="@string/license_info"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="8dp"
-        android:fontFamily="@font/manrope_bold"
-        android:text="@string/appversion_title"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/manrope_regular"
-        android:text="@string/appversion_number"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="8dp"
-        android:fontFamily="@font/manrope_bold"
-        android:text="@string/dev_title"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/manrope_regular"
-        android:text="@string/dev_name"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="8dp"
-        android:fontFamily="@font/manrope_bold"
-        android:text="@string/sourcecode_title"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="8dp"
-        android:autoLink="web"
-        android:fontFamily="@font/manrope_regular"
-        android:text="@string/sourcecode_link"
-        android:textColorLink="@color/blue_500"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="8dp"
-        android:fontFamily="@font/manrope_bold"
-        android:text="@string/contact_title"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="8dp"
-        android:autoLink="web"
-        android:fontFamily="@font/manrope_regular"
-        android:text="@string/contact_link"
-        android:textColorLink="@color/blue_500"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/manrope_regular"
-        android:text="@string/thankyou"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
         android:layout_width="match_parent"
