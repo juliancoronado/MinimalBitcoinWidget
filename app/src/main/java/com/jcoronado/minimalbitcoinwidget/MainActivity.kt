@@ -25,18 +25,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Check if first time launching app
-        val isFirstRun = getSharedPreferences(sharedPrefFile, MODE_PRIVATE).getBoolean("isFirstRun", true)
-
-        if (isFirstRun) {
-            // show start activity
-            val intent = Intent(this, FirstLaunch::class.java)
-            startActivity(intent)
-        }
-
-        getSharedPreferences(sharedPrefFile, MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply()
-        //
-
         // follow system theme
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         setContentView(R.layout.activity_main)

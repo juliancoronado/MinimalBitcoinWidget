@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MinimalBitcoinWidget"
         tools:ignore="AllowBackup">
-        <activity android:name=".FirstLaunch" />
 
         <receiver android:name=".PriceWidget">
             <intent-filter>
