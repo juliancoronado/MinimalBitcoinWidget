@@ -7,11 +7,14 @@
     <string name="content_description_settings">Settings</string>
 
     <!-- information for the cardView -->
-    <string name="bitcoin_title">Bitcoin (BTC)</string>
+    <string name="bitcoin_title">Bitcoin /</string>
     <string name="loading_text">Loading…</string>
     <string name="str_24h">24h:</string>
     <string name="description1">Bitcoin logo</string>
     <string name="description2">Refresh button</string>
+
+    <string name="iso_code">USD</string>
+    <string name="symbol">$</string>
 
     <!-- MainActivity info (below cardView) -->
     <string name="coingecko">Data Provided by CoinGecko</string>

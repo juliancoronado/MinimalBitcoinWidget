@@ -38,10 +38,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         // create TextView objects that contain reference to layout objects
         val priceTv: TextView = findViewById(R.id.main_price_text)
         val changeTv: TextView = findViewById(R.id.main_day_change)
+        val symbolTv: TextView = findViewById(R.id.main_symbol)
 
         // set TextView's text to loading string
         priceTv.text = getString(R.string.loading_text)
         changeTv.text = getString(R.string.loading_text)
+        symbolTv.text = ""
 
         // initial HTTP GET request
         fetchData()
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 changeTv.setTextColor(priceTv.currentTextColor)
                 priceTv.text = getString(R.string.loading_text)
                 changeTv.text = getString(R.string.loading_text)
+                symbolTv.text = ""
             }
             // make HTTP GET request
             fetchData()
@@ -85,16 +88,21 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     // function called from background thread to update main_activity layout
-    private fun updateLayout(values: Data) {
+    private fun updateLayout(values: Data, symbol: String, isoCode: String) {
 
         // create TextView objects that contain reference to layout objects
         val priceTv: TextView = findViewById(R.id.main_price_text)
         val changeTv: TextView = findViewById(R.id.main_day_change)
+        val isoCodeTv: TextView = findViewById(R.id.main_iso_code)
+        val symbolTv: TextView = findViewById(R.id.main_symbol)
 
         runOnUiThread {
             // update the layout with new data
+
             priceTv.text = values.price()
             changeTv.text = values.change24h()
+            isoCodeTv.text = isoCode
+            symbolTv.text = symbol
 
             // check for positive or negative change to set color accordingly
             if (values.change24h() == "0.0%") {
@@ -121,6 +129,41 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         // store current currency selection
         val currency = prefs.getString("currency", "usd")
 
+        var symbol = ""
+        var isoCode = ""
+
+        when (currency) {
+            "usd" -> {
+                symbol = "$"
+                isoCode = "USD"
+            }
+
+            "gbp" -> {
+                symbol = "£"
+                isoCode = "GBP"
+            }
+
+            "eur" -> {
+                symbol = "€"
+                isoCode = "EUR"
+            }
+
+            "cad" -> {
+                symbol = "$"
+                isoCode = "CAD"
+            }
+
+            "mxn" -> {
+                symbol = "$"
+                isoCode = "MXN"
+            }
+
+            "aud" -> {
+                symbol = "$"
+                isoCode = "AUD"
+            }
+        }
+
         // build API url string with selected currency
         val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=$currency&ids=bitcoin"
         val request = Request.Builder().url(url).build()
@@ -138,7 +181,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 val tempList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
                 data = tempList[0]
                 // update the activity_main layout with the new price data
-                updateLayout(data)
+                updateLayout(data, symbol, isoCode)
             }
 
             override fun onFailure(call: Call, e: IOException) {

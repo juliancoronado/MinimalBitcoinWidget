@@ -44,33 +44,54 @@ data class Data(
         }
     }
 
-    // returns string with price adjusted with two decimal places (USD cents)
+    // returns string with price adjusted with two decimal places
+    // and adds commas where necessary
     fun price(): String {
         var tempPrice = current_price.toString()
-        val n = tempPrice.length
+        var n = tempPrice.length
 
         // API returns cents with only 1 int if ending in 0
         // example: 12,345.9 (not .90)
-        // check to add extra zero if needed
+        // check to add extra zero(s) if needed
 
-        if (tempPrice[n - 3] == '.') {
-            // do nothing
+        // string already contains a period
+        if (tempPrice.contains('.')) {
+            // if the decimal is followed by two integers, do nothing
+            if (tempPrice[n - 3] == '.') {
+                // do nothing
+            } else {
+                // add a zero to the end
+                tempPrice += "0"
+            }
         } else {
-            // adds extra 0
-            tempPrice += "0"
+            // string contains no period
+            // adds extra zeros
+            tempPrice += ".00"
         }
+
+        // update value of n
+        n = tempPrice.length
 
         var returnStr = ""
 
-        if (tempPrice.length > 6) {
-            returnStr = "$${tempPrice.subSequence(0, tempPrice.length - 6)},${
+        if (n > 6) {
+            // over $1,000 (for example)
+            returnStr = "${tempPrice.subSequence(0, tempPrice.length - 6)},${
                 tempPrice.subSequence(
                     tempPrice.length - 6,
                     tempPrice.length
                 )
             }"
-        }
 
+            val x = returnStr.length
+
+            if (n > 9) {
+                // over $1,000,000 (for example)
+                returnStr =
+                    "${returnStr.subSequence(0, x - 10)},${returnStr.subSequence(x - 10, x)}"
+            }
+
+        }
         return returnStr
     }
 }
