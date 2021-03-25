@@ -16,6 +16,7 @@
         <item name="android:fontFamily">@font/manrope_bold</item>
         <item name="colorControlNormal">@color/black</item>
         <item name="alertDialogTheme">@style/AlertDialogStyle</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="ThemeOverlay.MinimalBitcoinWidget.AppWidgetContainer" parent="">

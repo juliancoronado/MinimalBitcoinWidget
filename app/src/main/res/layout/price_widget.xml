@@ -26,6 +26,16 @@
             android:textColor="?attr/appWidgetTextColor"
             android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/widget_iso_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:fontFamily="@font/manrope_regular"
+            android:text="@string/iso_code"
+            android:textColor="?attr/appWidgetTextColor"
+            android:textSize="12sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -33,6 +43,18 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/widget_symbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="20sp"
+            android:layout_marginEnd="5dp"
+            android:textColor="?attr/appWidgetTextColor"
+            android:gravity="center"
+            android:text="@string/symbol"
+            />
 
         <TextView
             android:id="@+id/widget_text_price"

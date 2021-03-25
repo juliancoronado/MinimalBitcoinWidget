@@ -1,5 +1,7 @@
 package com.jcoronado.minimalbitcoinwidget
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -137,27 +139,22 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 symbol = "$"
                 isoCode = "USD"
             }
-
             "gbp" -> {
                 symbol = "£"
                 isoCode = "GBP"
             }
-
             "eur" -> {
                 symbol = "€"
                 isoCode = "EUR"
             }
-
             "cad" -> {
                 symbol = "$"
                 isoCode = "CAD"
             }
-
             "mxn" -> {
                 symbol = "$"
                 isoCode = "MXN"
             }
-
             "aud" -> {
                 symbol = "$"
                 isoCode = "AUD"
@@ -193,5 +190,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         // HTTP GET the new data using new currency selection
         fetchData()
+
+        // update homescreen widget
+        val intent = Intent(this, PriceWidget::class.java)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+
+        val ids: IntArray = AppWidgetManager.getInstance(application).getAppWidgetIds(
+            ComponentName(application, PriceWidget::class.java)
+        )
+
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        sendBroadcast(intent)
     }
 }

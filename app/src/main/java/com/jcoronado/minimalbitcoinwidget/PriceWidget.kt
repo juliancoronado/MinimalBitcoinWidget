@@ -5,9 +5,11 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
@@ -18,6 +20,7 @@ import java.io.IOException
 
 // var data will hold the information received from the HTTP Request
 var data = Data()
+
 // val TAG for Log.i() calls
 private val TAG = "Widget"
 
@@ -44,9 +47,13 @@ internal fun updateAppWidget(
     // create remote view
     val views = RemoteViews(context.packageName, R.layout.price_widget)
 
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    val currency = prefs.getString("currency", "usd")
+
     // set textview's text to loading string
     views.setTextViewText(R.id.widget_text_price, "Loading...")
     views.setTextViewText(R.id.widget_day_change, "Loading...")
+    views.setTextViewText(R.id.widget_symbol, "")
 
     // line 52 does not work
     // views.setTextColor(R.id.widget_day_change, R.attr.appWidgetTextColor)
@@ -71,18 +78,54 @@ internal fun updateAppWidget(
     views.setOnClickPendingIntent(R.id.widget_refresh_button, pendingUpdate)
 
     // function call to fetch data from HTTP GET request
-    fetchData(appWidgetManager, appWidgetId, views, context)
+    fetchData(appWidgetManager, appWidgetId, views, context, currency)
 }
 
 fun fetchData(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int,
     views: RemoteViews,
-    context: Context
+    context: Context,
+    currency: String?
 ) {
 
     // current CoinGecko url to send GET request
-    val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin"
+    val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=$currency&ids=bitcoin"
+
+    var symbol = ""
+    var isoCode = ""
+
+    when (currency) {
+        "usd" -> {
+            symbol = "$"
+            isoCode = "USD"
+        }
+
+        "gbp" -> {
+            symbol = "£"
+            isoCode = "GBP"
+        }
+
+        "eur" -> {
+            symbol = "€"
+            isoCode = "EUR"
+        }
+
+        "cad" -> {
+            symbol = "$"
+            isoCode = "CAD"
+        }
+
+        "mxn" -> {
+            symbol = "$"
+            isoCode = "MXN"
+        }
+
+        "aud" -> {
+            symbol = "$"
+            isoCode = "AUD"
+        }
+    }
 
     // OkHttp
     val request = Request.Builder().url(url).build()
@@ -105,6 +148,8 @@ fun fetchData(
             // update widget with new data
             views.setTextViewText(R.id.widget_text_price, data.price())
             views.setTextViewText(R.id.widget_day_change, data.change24h())
+            views.setTextViewText(R.id.widget_iso_code, isoCode)
+            views.setTextViewText(R.id.widget_symbol, symbol)
 
             if (data.change24h().contains('+')) {
                 // green color

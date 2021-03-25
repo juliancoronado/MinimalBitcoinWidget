@@ -76,11 +76,10 @@
                 <TextView
                     android:id="@+id/main_symbol"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/manrope_bold"
                     android:textSize="35sp"
                     android:layout_marginEnd="5dp"
-                    android:textAlignment="center"
                     android:gravity="center"
                     android:text="@string/symbol"
                     />
