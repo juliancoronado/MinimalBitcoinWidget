@@ -1,51 +1,51 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="Data Information">
+    <PreferenceCategory app:title="@string/pref_data">
 
         <Preference
-            app:summary="coingecko.com"
-            app:title="Provided By CoinGecko">
+            app:summary="@string/coingecko_summary"
+            app:title="@string/coingecko_title">
 
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://coingecko.com/" />
+                android:data="@string/coingecko_link" />
 
         </Preference>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="App Information">
+    <PreferenceCategory app:title="@string/pref_info">
 
         <Preference
-            app:summary="1.0"
-            app:title="App Version" />
+            app:summary="@string/version_summary"
+            app:title="@string/version_title" />
 
         <Preference
-            app:summary="GNU General Public License v3.0"
-            app:title="License" />
+            app:summary="@string/license_summary"
+            app:title="@string/license_title" />
 
         <Preference
-            app:summary="github.com/juliancoronado/MinimalBitcoinWidget"
-            app:title="Source Code">
+            app:summary="@string/source_code_summary"
+            app:title="@string/source_code_title">
 
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/juliancoronado/MinimalBitcoinWidget/" />
+                android:data="@string/source_code_link" />
 
         </Preference>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Developer">
+    <PreferenceCategory app:title="@string/pref_developer">
 
         <Preference
-            app:summary="jcoronado.dev"
-            app:title="Julian Coronado">
+            app:summary="@string/dev_summary"
+            app:title="@string/dev_title">
 
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://jcoronado.dev/" />
+                android:data="@string/dev_link" />
 
         </Preference>
 

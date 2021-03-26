@@ -18,13 +18,13 @@ import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
 
+// val TAG for Log.i() calls
+private const val TAG = "Main Activity"
+
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     // var data will hold the information received from the HTTP Request
     var data = Data()
-
-    // val TAG for Log.i() calls
-    private val TAG = "Main Activity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val changeTv: TextView = findViewById(R.id.main_day_change)
         val symbolTv: TextView = findViewById(R.id.main_symbol)
 
-        // set TextView's text to loading string
+        // set TextViews text to loading string
         priceTv.text = getString(R.string.loading_text)
         changeTv.text = getString(R.string.loading_text)
         symbolTv.text = ""
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         // when update button gets pressed
         val updateButton: ImageButton = findViewById(R.id.main_refresh_button)
         updateButton.setOnClickListener {
-            Log.i(TAG, "Refresh button pressed.")
+            Log.i(TAG, "Refreshing price layout.")
 
             // temp changes to show price is loading
             runOnUiThread {
@@ -134,6 +134,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         var symbol = ""
         var isoCode = ""
 
+        // set symbol and isoCode depending on selected currency
         when (currency) {
             "usd" -> {
                 symbol = "$"
@@ -189,9 +190,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         // HTTP GET the new data using new currency selection
+        Log.i(TAG, "Currency preference changed.")
         fetchData()
 
-        // update homescreen widget
+        // update home screen widget
         val intent = Intent(this, PriceWidget::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
 

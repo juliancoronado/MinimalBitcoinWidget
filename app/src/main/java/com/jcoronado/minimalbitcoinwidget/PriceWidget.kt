@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
@@ -22,7 +21,7 @@ import java.io.IOException
 var data = Data()
 
 // val TAG for Log.i() calls
-private val TAG = "Widget"
+private const val TAG = "Widget"
 
 class PriceWidget : AppWidgetProvider() {
 
@@ -47,15 +46,16 @@ internal fun updateAppWidget(
     // create remote view
     val views = RemoteViews(context.packageName, R.layout.price_widget)
 
+    // set up shared preferences
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     val currency = prefs.getString("currency", "usd")
 
-    // set textview's text to loading string
+    // set widget's text to loading string
     views.setTextViewText(R.id.widget_text_price, "Loading...")
     views.setTextViewText(R.id.widget_day_change, "Loading...")
     views.setTextViewText(R.id.widget_symbol, "")
 
-    // line 52 does not work
+    // line below does not work :/
     // views.setTextColor(R.id.widget_day_change, R.attr.appWidgetTextColor)
 
     // first update call to set loading text
@@ -68,13 +68,14 @@ internal fun updateAppWidget(
     val idArray = intArrayOf(appWidgetId)
     intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray)
 
+    // set up pending intent
     val pendingUpdate = PendingIntent.getBroadcast(
         context,
         appWidgetId,
         intentUpdate,
         PendingIntent.FLAG_UPDATE_CURRENT
     )
-    Log.i(TAG, "Refresh button pressed.")
+    Log.i(TAG, "Refreshing widget.")
     views.setOnClickPendingIntent(R.id.widget_refresh_button, pendingUpdate)
 
     // function call to fetch data from HTTP GET request

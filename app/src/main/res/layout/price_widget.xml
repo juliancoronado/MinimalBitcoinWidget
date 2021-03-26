@@ -30,7 +30,7 @@
             android:id="@+id/widget_iso_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
+            android:layout_marginStart="2dp"
             android:fontFamily="@font/manrope_regular"
             android:text="@string/iso_code"
             android:textColor="?attr/appWidgetTextColor"
@@ -47,14 +47,14 @@
         <TextView
             android:id="@+id/widget_symbol"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
             android:fontFamily="@font/manrope_bold"
-            android:textSize="20sp"
-            android:layout_marginEnd="5dp"
-            android:textColor="?attr/appWidgetTextColor"
             android:gravity="center"
             android:text="@string/symbol"
-            />
+            android:textAlignment="center"
+            android:textColor="?attr/appWidgetTextColor"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/widget_text_price"

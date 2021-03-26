@@ -21,7 +21,9 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
 
-        <receiver android:name=".PriceWidget">
+        <receiver
+            android:name=".PriceWidget"
+            android:label="@string/widget_picker_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
