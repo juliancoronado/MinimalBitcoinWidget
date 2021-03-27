@@ -33,14 +33,14 @@ data class Data(
     // returns string on the 24 hour change including the + or - symbol
     fun change24h(): String {
 
-        val change = "%.2f".format(price_change_percentage_24h).toDouble()
+        // format change percent with two decimal places
+        // and using LOCALE information (by default)
+        val changeStr = "%.2f".format(price_change_percentage_24h)
 
-        return if (change > 0) {
-            // positive change
-            "+$change%"
+        if (price_change_percentage_24h!! > 0) {
+            return "+$changeStr%"
         } else {
-            // negative change
-            "$change%"
+            return "$changeStr%"
         }
     }
 
@@ -49,6 +49,10 @@ data class Data(
     fun price(): String {
         var tempPrice = current_price.toString()
         var n = tempPrice.length
+
+//        val tempStr = "%.2f".format(current_price)
+//
+//        println("TEMP STRING: $tempStr")
 
         // API returns cents with only 1 int if ending in 0
         // example: 12,345.9 (not .90)
