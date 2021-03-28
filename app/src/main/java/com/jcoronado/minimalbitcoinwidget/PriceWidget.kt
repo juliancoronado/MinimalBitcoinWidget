@@ -147,12 +147,12 @@ fun fetchData(
 
             // post execute here
             // update widget with new data
-            views.setTextViewText(R.id.widget_text_price, data.price())
-            views.setTextViewText(R.id.widget_day_change, data.change24h())
+            views.setTextViewText(R.id.widget_text_price, data.priceString())
+            views.setTextViewText(R.id.widget_day_change, data.dayChangeString())
             views.setTextViewText(R.id.widget_iso_code, isoCode)
             views.setTextViewText(R.id.widget_symbol, symbol)
 
-            if (data.change24h().contains('+')) {
+            if (data.dayChangeString().contains('+')) {
                 // green color
                 views.setTextColor(
                     R.id.widget_day_change,

@@ -18,7 +18,7 @@ import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
 
-// val TAG for Log.i() calls
+// val TAG for Log information
 private const val TAG = "Main Activity"
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         // initial HTTP GET request
         fetchData()
 
-        // when update button gets pressed
+        // when update button gets pressed or activity restarted
         val updateButton: ImageButton = findViewById(R.id.main_refresh_button)
         updateButton.setOnClickListener {
             Log.i(TAG, "Refreshing price layout.")
@@ -89,7 +89,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         return true
     }
 
-    // function called from background thread to update main_activity layout
+    /**
+     * Updates the price information layout
+     */
     private fun updateLayout(values: Data, symbol: String, isoCode: String) {
 
         // create TextView objects that contain reference to layout objects
@@ -99,18 +101,18 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val symbolTv: TextView = findViewById(R.id.main_symbol)
 
         runOnUiThread {
-            // update the layout with new data
 
-            priceTv.text = values.price()
-            changeTv.text = values.change24h()
+            // update the layout with new data
+            priceTv.text = values.priceString()
+            changeTv.text = values.dayChangeString()
             isoCodeTv.text = isoCode
             symbolTv.text = symbol
 
             // check for positive or negative change to set color accordingly
-            if (values.change24h() == "0.0%") {
+            if (values.dayChangeString() == "0.0%") {
                 // no change
                 changeTv.setTextColor(priceTv.currentTextColor)
-            } else if (values.change24h().contains('+')) {
+            } else if (values.dayChangeString().contains('+')) {
                 // green color
                 changeTv.setTextColor(ContextCompat.getColor(this, R.color.positive_green))
             } else {
@@ -121,7 +123,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    // HTTP GET request using OkHttp library
+    /**
+     * HTTP GET request using the OkHttp library
+     */
     private fun fetchData() {
 
         // set up shared preferences
@@ -194,6 +198,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         fetchData()
 
         // update home screen widget
+        // build intent to call opUpdate()
         val intent = Intent(this, PriceWidget::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
 

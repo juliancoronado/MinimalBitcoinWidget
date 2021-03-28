@@ -30,25 +30,36 @@ data class Data(
     var last_updated: String? = null
 ) {
 
-    // returns string on the 24 hour change including the + or - symbol
-    fun change24h(): String {
+    /**
+     *  Formats the 24-hour price change information to a string
+     *  in the users' locale and adds a '+' symbol if the
+     *  change is positive (and '-' symbol if negative)
+     *
+     *  @return the 24-hour price change percentage as a String
+     */
+    fun dayChangeString(): String {
 
         // format change percent with two decimal places
         // and using LOCALE information (by default)
+
         val changeStr = "%.2f".format(price_change_percentage_24h)
 
-        if (price_change_percentage_24h!! > 0) {
-            return "+$changeStr%"
+        return if (price_change_percentage_24h!! > 0) {
+            "+$changeStr%"
         } else {
-            return "$changeStr%"
+            "$changeStr%"
         }
     }
 
-    // returns string with price adjusted with two decimal places
-    // and adds commas where necessary
-    fun price(): String {
-        var tempPrice = current_price.toString()
-        var n = tempPrice.length
+    /**
+     * Formats the price information to a string
+     * and adds a decimal or comma where needed.
+     *
+     * @return the current price as a String
+     */
+    fun priceString(): String {
+        var priceString = current_price.toString()
+        var length = priceString.length
 
 //        val tempStr = "%.2f".format(current_price)
 //
@@ -59,43 +70,48 @@ data class Data(
         // check to add extra zero(s) if needed
 
         // string already contains a period
-        if (tempPrice.contains('.')) {
+        if (priceString.contains('.')) {
             // if the decimal is followed by two integers, do nothing
-            if (tempPrice[n - 3] == '.') {
+            if (priceString[length - 3] == '.') {
                 // do nothing
             } else {
                 // add a zero to the end
-                tempPrice += "0"
+                priceString += "0"
             }
         } else {
             // string contains no period
             // adds extra zeros
-            tempPrice += ".00"
+            priceString += ".00"
         }
 
-        // update value of n
-        n = tempPrice.length
+        // update value of length
+        length = priceString.length
 
-        var returnStr = ""
+        var resultString = ""
 
-        if (n > 6) {
+        if (length > 6) {
             // over $1,000 (for example)
-            returnStr = "${tempPrice.subSequence(0, tempPrice.length - 6)},${
-                tempPrice.subSequence(
-                    tempPrice.length - 6,
-                    tempPrice.length
+            resultString = "${priceString.subSequence(0, priceString.length - 6)},${
+                priceString.subSequence(
+                    priceString.length - 6,
+                    priceString.length
                 )
             }"
 
-            val x = returnStr.length
+            val newLength = resultString.length
 
-            if (n > 9) {
+            if (length > 9) {
                 // over $1,000,000 (for example)
-                returnStr =
-                    "${returnStr.subSequence(0, x - 10)},${returnStr.subSequence(x - 10, x)}"
+                resultString =
+                    "${resultString.subSequence(0, newLength - 10)},${
+                        resultString.subSequence(
+                            newLength - 10,
+                            newLength
+                        )
+                    }"
             }
 
         }
-        return returnStr
+        return resultString
     }
 }
