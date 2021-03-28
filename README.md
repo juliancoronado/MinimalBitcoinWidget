@@ -14,9 +14,10 @@ Google Play and the Google Play logo are trademarks of Google LLC.
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/image1.png" width="30%">
-  <img src="screenshots/image2.png" width="30%">
-  <img src="screenshots/image3.png" width="30%">
+  <img src="screenshots/image1.png" width="20%">
+  <img src="screenshots/image2.png" width="20%">
+  <img src="screenshots/image3.png" width="20%">
+  <img src="screenshots/image4.png" width="20%">
 </p>
 
 ## Built With
