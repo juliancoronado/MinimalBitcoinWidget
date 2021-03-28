@@ -2,8 +2,7 @@
 
 A minimal Bitcoin price widget for your home screen 📈
 
-This Android application allows you to place a sleek and minimal Bitcoin price widget on your home screen! Minimal Bitcoin Widget sources price information from the CoinGecko API.
-The widget conforms to your current system device theme - light and dark mode!
+Price information is sourced from CoinGecko. The widget conforms to your current system device theme - light and dark mode! And you can select your preferred currency to view the price in!
 
 New features will be added as I work on them! Thank you for the support!
 
