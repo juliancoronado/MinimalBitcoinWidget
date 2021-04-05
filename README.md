@@ -1,8 +1,13 @@
 # Minimal Bitcoin Widget
 
-A minimal Bitcoin price widget for your home screen 📈
+A minimal Bitcoin price widget for your home screen!
 
-Price information is sourced from CoinGecko. The widget conforms to your current system device theme - light and dark mode! And you can select your preferred currency to view the price in!
+Are you looking for a clean and simple way to view the price of Bitcoin? 
+I've designed this app so you can place a widget on your home screen!
+
+The widget conforms to your current system device theme and you can select which currency to view the price in (USD, GBP, EUR, MXN, and AUD).
+
+Price information provided by CoinGecko.
 
 New features will be added as I work on them! Thank you for the support!
 
