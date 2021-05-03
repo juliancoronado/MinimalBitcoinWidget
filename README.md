@@ -47,4 +47,4 @@ If you'd like to donate, feel free to do so! Not required. Always appreciated!
 
 Bitcoin Address: bc1qgl229q3d929ten6ydtszs46tru845e9uk8lmje
 
-Tip me via Strike: [strike.me/jcoronado](https://strike.me/jcoronado)
+Tip me via Strike (Bitcoin & LN-BTC): [strike.me/jcoronado](https://strike.me/jcoronado)
