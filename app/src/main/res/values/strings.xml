@@ -33,7 +33,7 @@
     <string name="pref_info">App Information</string>
 
     <string name="version_title">App Version</string>
-    <string name="version_summary">2.1</string>
+    <string name="version_summary">3.0</string>
 
     <string name="license_title">License</string>
     <string name="license_summary">GNU General Public License v3.0</string>

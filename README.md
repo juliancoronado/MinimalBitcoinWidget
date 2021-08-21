@@ -32,7 +32,7 @@ Google Play and the Google Play logo are trademarks of Google LLC.
 * [Android Studio](https://developer.android.com/studio) - Official IDE for Android app development
 
 ## Known Issues
-* Home screen widget will not refresh when Low Power Mode setting is ON (manually or automatically)
+* Home screen widget will not refresh when Low Power Mode setting is ON
 * Widget will occasionally stay on "Loading..." text, manually refreshing updates the price
 * "Loading..." text color for widget next to "24h:" should be the default widget text color, not green/red
 * On shorter displays, the widget is not displayed properly
@@ -45,4 +45,4 @@ Julian Coronado - [jcoronado.dev](https://jcoronado.dev)
 
 If you'd like to donate, feel free to do so! Not required. Always appreciated!
 
-Donate via Strike (Bitcoin & LN-BTC): [strike.me/jcoronado](https://strike.me/jcoronado)
+Donate via Strike (Bitcoin & Lightning): [strike.me/jcoronado](https://strike.me/jcoronado)
