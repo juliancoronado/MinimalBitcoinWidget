@@ -33,7 +33,7 @@
     <string name="pref_info">App Information</string>
 
     <string name="version_title">App Version</string>
-    <string name="version_summary">3.0</string>
+    <string name="version_summary">2.2</string>
 
     <string name="license_title">License</string>
     <string name="license_summary">GNU General Public License v3.0</string>
@@ -56,4 +56,8 @@
     <string name="currency_title">Currency</string>
     <string name="currency_header">Local Currency</string>
 
+    <string name="api31message">With the release of Android 12 (API 31), Google decided to remove custom fonts from being used in home screen widgets.
+        You should only notice this if your device is running Android 12. This was a key design choice of the app so I\'m sad to see it go.
+        I will update the widget in the future if anything changes. Thank you for downloading! </string>
+    <string name="note">NOTE:</string>
 </resources>

@@ -73,7 +73,7 @@ internal fun updateAppWidget(
         context,
         appWidgetId,
         intentUpdate,
-        PendingIntent.FLAG_UPDATE_CURRENT
+        PendingIntent.FLAG_IMMUTABLE
     )
     Log.i(TAG, "Refreshing widget.")
     views.setOnClickPendingIntent(R.id.widget_refresh_button, pendingUpdate)
