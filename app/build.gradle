@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.jcoronado.minimalbitcoinwidget"
         minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 6
-        versionName "2.2"
+        targetSdkVersion 33
+        versionCode 7
+        versionName "2.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
