@@ -4,5 +4,9 @@
         <item>USD</item>
         <item>GBP</item>
         <item>EUR</item>
+        <item>CAD</item>
+        <item>MXN</item>
+        <item>AUD</item>
+        <item>BRL</item>
     </string-array>
 </resources>

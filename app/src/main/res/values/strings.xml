@@ -20,8 +20,6 @@
     <string name="iso_code">USD</string>
     <string name="symbol">$</string>
 
-    <!-- Info Preferences -->
-
     <!-- Data Info Category -->
     <string name="pref_data">Data Information</string>
 
@@ -32,18 +30,23 @@
     <!-- App Info Category -->
     <string name="pref_info">App Information</string>
 
+    <!-- + App Version -->
     <string name="version_title">App Version</string>
-    <string name="version_summary">2.2</string>
+    <string name="version_summary">2.4</string>
 
+    <!-- + License -->
     <string name="license_title">License</string>
     <string name="license_summary">GNU General Public License v3.0</string>
 
+    <!-- + Source Code -->
     <string name="source_code_title">Source Code</string>
     <string name="source_code_summary">github.com/juliancoronado/MinimalBitcoinWidget</string>
     <string name="source_code_link">https://github.com/juliancoronado/MinimalBitcoinWidget</string>
 
     <!-- Developer Category -->
     <string name="pref_developer">Developer</string>
+
+    <!-- + Julian Coronado (link) -->
     <string name="dev_title">Julian Coronado</string>
     <string name="dev_summary">jcoronado.dev</string>
     <string name="dev_link">https://jcoronado.dev</string>
@@ -53,11 +56,7 @@
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Currency Preferences -->
-    <string name="currency_title">Currency</string>
     <string name="currency_header">Local Currency</string>
+    <string name="currency_title">Currency Selected</string>
 
-    <string name="api31message">With the release of Android 12 (API 31), Google decided to remove custom fonts from being used in home screen widgets.
-        You should only notice this if your device is running Android 12. This was a key design choice of the app so I\'m sad to see it go.
-        I will update the widget in the future if anything changes. Thank you for downloading! </string>
-    <string name="note">NOTE:</string>
 </resources>

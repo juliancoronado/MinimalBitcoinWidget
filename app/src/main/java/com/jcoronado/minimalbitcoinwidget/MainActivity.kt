@@ -164,6 +164,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 symbol = "$"
                 isoCode = "AUD"
             }
+            "brl" -> {
+                symbol = "R$"
+                isoCode = "BRL"
+            }
         }
 
         // build API url string with selected currency
