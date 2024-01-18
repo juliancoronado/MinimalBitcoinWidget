@@ -4,6 +4,7 @@ package com.jcoronado.minimalbitcoinwidget
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -28,12 +29,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.doublePreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.NavHost
@@ -44,12 +52,17 @@ import com.google.gson.Gson
 import com.jcoronado.minimalbitcoinwidget.ui.theme.BTCPriceWidgetTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
 
 // val TAG for Log information
 private const val TAG = "Main Activity"
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "stored_price")
+val PRICE_KEY = doublePreferencesKey("btc_price")
+val CHANGE_KEY = floatPreferencesKey("btc_change")
 
 class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -317,7 +330,7 @@ fun RunApp() {
 fun MainPage(onSettingsButtonPressed: () -> Unit, onVersionInfoButtonPressed: () -> Unit) {
     var showMenu by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
-    val btcPriceViewModel = BTCPriceViewModel()
+    val btcPriceViewModel = BTCPriceViewModel(DataStoreManager(LocalContext.current))
 
     BTCPriceWidgetTheme {
         Scaffold(
@@ -381,7 +394,9 @@ fun MainPage(onSettingsButtonPressed: () -> Unit, onVersionInfoButtonPressed: ()
 fun PriceCard(btcPriceViewModel: BTCPriceViewModel) {
     // Fetch price data when Composable is created
     LaunchedEffect(Unit) {
-        btcPriceViewModel.fetchBitcoinPrice()
+        btcPriceViewModel.startHere()
+        // this solution takes too long though
+        // the value remains as zero for a while
     }
 
     Card(
@@ -428,11 +443,24 @@ fun CardHeader(selectedCurrency: String) {
 }
 
 // ViewModel to fetch the Bitcoin Price from CoinGecko API
-class BTCPriceViewModel : ViewModel() {
+class BTCPriceViewModel(private val dataStoreManager: DataStoreManager) : ViewModel() {
     var priceValue by mutableStateOf(0.00) // price state
     var changeValue by mutableStateOf(0.00f) // change state
     var loading = mutableStateOf(false) // loading state
     var error = mutableStateOf("")
+
+    // init here is causing issues I think? trying another method
+    suspend fun startHere() {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchBitcoinPrice()
+        }
+        loading.value = true
+        val price = dataStoreManager.getPrice() // Fetch from DataStore
+        val change = dataStoreManager.getChange()
+        priceValue = price // Update state
+        changeValue = change
+        loading.value = false
+    }
 
     fun fetchBitcoinPrice() {
 
@@ -458,6 +486,8 @@ class BTCPriceViewModel : ViewModel() {
                     priceValue = data.bitcoin.usd
                     changeValue = data.bitcoin.usd_24h_change
                     loading.value = false
+                    dataStoreManager.savePrice(data.bitcoin.usd)
+                    dataStoreManager.saveChange(data.bitcoin.usd_24h_change)
                 } else if (response.code == 429) {
                     error.value = "Too many requests, try again later"
                     priceValue = existingPriceValue
@@ -469,6 +499,38 @@ class BTCPriceViewModel : ViewModel() {
                 Log.e("CoinGecko Error", e.toString())
                 loading.value = false
             }
+        }
+    }
+}
+
+class DataStoreManager(context: Context) {
+    private val dataStore: DataStore<Preferences> = context.dataStore
+
+    suspend fun getPrice(): Double {
+        val preferences = dataStore.data.first()
+        val price = preferences[PRICE_KEY] ?: 0.0
+        Log.d("Stored Price", price.toString())
+        return price
+    }
+
+    suspend fun savePrice(newPrice: Double) {
+        Log.d("Price To Be Saved", newPrice.toString())
+        dataStore.edit { preferences ->
+            preferences[PRICE_KEY] = newPrice
+        }
+    }
+
+    suspend fun getChange(): Float {
+        val preferences = dataStore.data.first()
+        val change = preferences[CHANGE_KEY] ?: 0.0f
+        Log.d("Stored Change", change.toString())
+        return change
+    }
+
+    suspend fun saveChange(newChange: Float) {
+        Log.d("Change To Be Saved", newChange.toString())
+        dataStore.edit { preferences ->
+            preferences[CHANGE_KEY] = newChange
         }
     }
 }
@@ -510,7 +572,7 @@ fun CardPrice(symbol: String, price: Double) {
 fun CardDetails(change: Float, btcPriceViewModel: BTCPriceViewModel) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
     ) {
