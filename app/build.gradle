@@ -4,8 +4,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 34
-    buildToolsVersion "30.0.3"
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.jcoronado.minimalbitcoinwidget"
@@ -55,7 +54,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
@@ -70,7 +69,7 @@ dependencies {
 
     // added libraries
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10'
     implementation 'androidx.cardview:cardview:1.0.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
@@ -83,7 +82,7 @@ dependencies {
 
     // Choose one of the following:
     // Material Design 3
-    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material3:material3:1.1.2'
 
     // For AppWidgets support
     implementation "androidx.glance:glance-appwidget:1.0.0"

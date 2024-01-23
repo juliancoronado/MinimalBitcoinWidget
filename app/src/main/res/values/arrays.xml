@@ -1,7 +1,7 @@
 <resources>
     <!-- Currency List Preference -->
     <string-array name="currency_entries">
-        <item>US Dollar ($)</item>
+        <item>U.S. Dollar ($)</item>
         <item>British Pound (£)</item>
         <item>Euro (€)</item>
         <item>Canadian Dollar ($)</item>

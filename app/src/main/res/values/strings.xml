@@ -5,7 +5,6 @@
 
     <!-- Action Bar Items -->
     <string name="settings">Settings</string>
-    <string name="version_info">Version Info</string>
 
     <!-- Content Descriptions -->
     <string name="content_description_version_info">Version Info</string>
@@ -31,8 +30,8 @@
     <string name="pref_info">App Information</string>
 
     <!-- + App Version -->
-    <string name="version_title">App Version</string>
-    <string name="version_summary">2.4</string>
+    <string name="version_title">Version</string>
+    <string name="version_summary">2.4.0</string>
 
     <!-- + License -->
     <string name="license_title">License</string>

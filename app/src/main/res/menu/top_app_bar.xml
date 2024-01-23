@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/version_info"
-        android:title="@string/version_info"
+        android:title=""
         android:contentDescription="@string/content_description_version_info"
         app:showAsAction="never" />
 

@@ -13,13 +13,6 @@
         android:theme="@style/Theme.MinimalBitcoinWidget"
         tools:ignore="AllowBackup">
 
-        <activity
-            android:name=".InfoActivity"
-            android:label="@string/title_activity_info" />
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
-
         <receiver
             android:name=".PriceWidget"
             android:label="@string/widget_picker_name"
@@ -45,7 +38,6 @@
 
         <activity android:name=".MainActivity"
             android:exported="true">
-w
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

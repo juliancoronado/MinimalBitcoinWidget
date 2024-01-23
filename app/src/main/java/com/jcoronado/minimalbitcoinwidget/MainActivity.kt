@@ -1,29 +1,20 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.jcoronado.minimalbitcoinwidget
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,6 +22,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,110 +56,13 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "st
 val PRICE_KEY = doublePreferencesKey("btc_price")
 val CHANGE_KEY = floatPreferencesKey("btc_change")
 
-class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
-
-    // var data will hold the information received from the HTTP Request
-    // var data = Data()
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         enableEdgeToEdge()
         setContent {
             RunApp()
-        }
-
-//        // follow system theme
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-//        setContentView(R.layout.activity_main)
-//
-//        // inflate toolbar
-//        val mToolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.m_toolbar)
-//        setSupportActionBar(mToolbar)
-//
-//        // create TextView objects that contain reference to layout objects
-//        val priceTv: TextView = findViewById(R.id.main_price_text)
-//        val changeTv: TextView = findViewById(R.id.main_day_change)
-//        val symbolTv: TextView = findViewById(R.id.main_symbol)
-//
-//        // set TextViews text to loading string
-//        priceTv.text = getString(R.string.loading_text)
-//        changeTv.text = getString(R.string.loading_text)
-//        symbolTv.text = ""
-//
-//        // initial HTTP GET request
-//        fetchData()
-//
-//        // when update button gets pressed or activity restarted
-//        val updateButton: ImageButton = findViewById(R.id.main_refresh_button)
-//        updateButton.setOnClickListener {
-//            Log.i(TAG, "Refreshing price layout.")
-//
-//            // temp changes to show price is loading
-//            runOnUiThread {
-//                changeTv.setTextColor(priceTv.currentTextColor)
-//                priceTv.text = getString(R.string.loading_text)
-//                changeTv.text = getString(R.string.loading_text)
-//                symbolTv.text = ""
-//            }
-//            // make HTTP GET request
-//            fetchData()
-//        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.top_app_bar, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.version_info -> {
-                val intent = Intent(this, InfoActivity::class.java)
-                startActivity(intent)
-            }
-
-//            R.id.settings -> {
-//                val intent = Intent(this, SettingsActivity::class.java)
-//                startActivity(intent)
-//            }
-        }
-
-        return true
-    }
-
-    /**
-     * Updates the price information layout
-     */
-    private fun updateLayout(values: Data, symbol: String, isoCode: String) {
-
-        // create TextView objects that contain reference to layout objects
-        val priceTv: TextView = findViewById(R.id.main_price_text)
-        val changeTv: TextView = findViewById(R.id.main_day_change)
-        val isoCodeTv: TextView = findViewById(R.id.main_iso_code)
-        val symbolTv: TextView = findViewById(R.id.main_symbol)
-
-        runOnUiThread {
-
-            // update the layout with new data
-            priceTv.text = values.priceString()
-            changeTv.text = values.dayChangeString()
-            isoCodeTv.text = isoCode
-            symbolTv.text = symbol
-
-            // check for positive or negative change to set color accordingly
-            if (values.dayChangeString() == "0.0%") {
-                // no change
-                changeTv.setTextColor(priceTv.currentTextColor)
-            } else if (values.dayChangeString().contains('+')) {
-                // green color
-                changeTv.setTextColor(ContextCompat.getColor(this, R.color.positive_green))
-            } else {
-                // red color
-                changeTv.setTextColor(ContextCompat.getColor(this, R.color.negative_red))
-            }
-
         }
     }
 
@@ -178,7 +73,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 
         // set up shared preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        prefs.registerOnSharedPreferenceChangeListener(this)
 
         // store current currency selection
         val currency = prefs.getString("currency", "usd")
@@ -192,26 +86,32 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
                 symbol = "$"
                 isoCode = "USD"
             }
+
             "gbp" -> {
                 symbol = "£"
                 isoCode = "GBP"
             }
+
             "eur" -> {
                 symbol = "€"
                 isoCode = "EUR"
             }
+
             "cad" -> {
                 symbol = "$"
                 isoCode = "CAD"
             }
+
             "mxn" -> {
                 symbol = "$"
                 isoCode = "MXN"
             }
+
             "aud" -> {
                 symbol = "$"
                 isoCode = "AUD"
             }
+
             "brl" -> {
                 symbol = "R$"
                 isoCode = "BRL"
@@ -235,7 +135,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
                 val tempList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
                 data = tempList[0]
                 // update the activity_main layout with the new price data
-                updateLayout(data, symbol, isoCode)
+                // updateLayout(data, symbol, isoCode)
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -243,47 +143,43 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         })
     }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        // HTTP GET the new data using new currency selection
-        Log.i(TAG, "Currency preference changed.")
-        fetchData()
-
-        // update home screen widget
-        // build intent to call opUpdate()
-        val intent = Intent(this, PriceWidget::class.java)
-        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-
-        val ids: IntArray = AppWidgetManager.getInstance(application).getAppWidgetIds(
-            ComponentName(application, PriceWidget::class.java)
-        )
-
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-        sendBroadcast(intent)
-    }
 }
 
 @Composable
 fun RunApp() {
     val navController = rememberNavController()
 
-    // TODO is there a simpler way to open a new page? Launch a new activity?
     NavHost(
         navController = navController,
-        startDestination = "start",
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None },
-        popExitTransition = { ExitTransition.None },
+        startDestination = "main",
+        enterTransition = {
+            EnterTransition.None
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.End,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.End,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioNoBouncy,
+                stiffness = Spring.StiffnessMedium
+            )
+            )
+        },
     ) {
         composable(
-            "start",
+            "main",
         ) {
             MainPage(
                 onSettingsButtonPressed = {
                     navController.navigate("settings")
-                },
-                onVersionInfoButtonPressed = {
-                    // TODO navigate to version info page
                 }
             )
         }
@@ -298,24 +194,6 @@ fun RunApp() {
                     )
                 )
             },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.End,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMedium
-                    )
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.End,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMedium
-                    )
-                )
-            }
         ) {
             SettingsPage(
                 onBackButtonPressed = {
@@ -326,9 +204,9 @@ fun RunApp() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPage(onSettingsButtonPressed: () -> Unit, onVersionInfoButtonPressed: () -> Unit) {
-    var showMenu by remember { mutableStateOf(false) }
+fun MainPage(onSettingsButtonPressed: () -> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
     val btcPriceViewModel = BTCPriceViewModel(DataStoreManager(LocalContext.current))
 
@@ -341,34 +219,15 @@ fun MainPage(onSettingsButtonPressed: () -> Unit, onVersionInfoButtonPressed: ()
                 TopAppBar(
                     title = {
                         Text(
-                            text = "Minimal Bitcoin Widget", // TODO move to strings.xml
+                            text = stringResource(id = R.string.app_name),
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold)
                         )
                     },
                     actions = {
-                        IconButton(onClick = { showMenu = true }) {
+                        IconButton(onClick = onSettingsButtonPressed) {
                             Icon(
-                                imageVector = Icons.Default.MoreVert,
-                                contentDescription = "More",
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = showMenu,
-                            onDismissRequest = { showMenu = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(text = "Settings") },
-                                onClick = {
-                                    showMenu = false
-                                    onSettingsButtonPressed()
-                                },
-                            )
-                            DropdownMenuItem(
-                                text = { Text(text = "Version Info") },
-                                onClick = {
-                                    showMenu = false
-                                    onVersionInfoButtonPressed()
-                                },
+                                imageVector = Icons.Outlined.Settings,
+                                contentDescription = "Open Settings Page"
                             )
                         }
                     }
@@ -382,7 +241,10 @@ fun MainPage(onSettingsButtonPressed: () -> Unit, onVersionInfoButtonPressed: ()
                     PriceCard(btcPriceViewModel)
                     // display snackbar in case of an error
                     if (btcPriceViewModel.error.value.isNotEmpty()) {
-                        SnackbarWidget(message = btcPriceViewModel.error.value, actionLabel = "Dismiss")
+                        SnackbarWidget(
+                            message = btcPriceViewModel.error.value,
+                            actionLabel = "Dismiss"
+                        )
                     }
                 }
             }
@@ -390,13 +252,14 @@ fun MainPage(onSettingsButtonPressed: () -> Unit, onVersionInfoButtonPressed: ()
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PriceCard(btcPriceViewModel: BTCPriceViewModel) {
     // Fetch price data when Composable is created
     LaunchedEffect(Unit) {
         btcPriceViewModel.startHere()
-        // this solution takes too long though
-        // the value remains as zero for a while
+        // this code takes too long,
+        // the value remains zero for a few seconds
     }
 
     Card(
@@ -432,10 +295,15 @@ fun PriceCard(btcPriceViewModel: BTCPriceViewModel) {
 
 @Composable
 fun CardHeader(selectedCurrency: String) {
-    Row(verticalAlignment = CenterVertically
+    Row(
+        verticalAlignment = CenterVertically
     ) {
         Box(modifier = Modifier.height(16.dp)) {
-            Image(modifier = Modifier.padding(1.dp), painter = painterResource(id = R.drawable.bitcoin_icon), contentDescription = "")
+            Image(
+                modifier = Modifier.padding(1.dp),
+                painter = painterResource(id = R.drawable.bitcoin_icon),
+                contentDescription = ""
+            )
         }
         Box(modifier = Modifier.size(2.dp))
         Text("Bitcoin / $selectedCurrency")
@@ -444,8 +312,8 @@ fun CardHeader(selectedCurrency: String) {
 
 // ViewModel to fetch the Bitcoin Price from CoinGecko API
 class BTCPriceViewModel(private val dataStoreManager: DataStoreManager) : ViewModel() {
-    var priceValue by mutableStateOf(0.00) // price state
-    var changeValue by mutableStateOf(0.00f) // change state
+    var priceValue by mutableDoubleStateOf(0.00) // price state
+    var changeValue by mutableFloatStateOf(0.00f) // change state
     var loading = mutableStateOf(false) // loading state
     var error = mutableStateOf("")
 
@@ -469,7 +337,8 @@ class BTCPriceViewModel(private val dataStoreManager: DataStoreManager) : ViewMo
 
         viewModelScope.launch(Dispatchers.IO) {
             error.value = "" // reset error value before new api call
-            val url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&precision=2"
+            val url =
+                "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&precision=2"
             val client = OkHttpClient()
 
             val request = Request.Builder().url(url).get().build()
