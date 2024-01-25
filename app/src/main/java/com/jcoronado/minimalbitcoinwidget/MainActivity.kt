@@ -3,20 +3,49 @@ package com.jcoronado.minimalbitcoinwidget
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -27,7 +56,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.doublePreferencesKey
@@ -39,20 +67,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.jcoronado.minimalbitcoinwidget.ui.theme.BTCPriceWidgetTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import okhttp3.*
-import java.io.IOException
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
-// val TAG for Log information
-private const val TAG = "Main Activity"
-
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "stored_price")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "stored_data")
 val PRICE_KEY = doublePreferencesKey("btc_price")
 val CHANGE_KEY = floatPreferencesKey("btc_change")
 
@@ -65,84 +89,6 @@ class MainActivity : ComponentActivity() {
             RunApp()
         }
     }
-
-    /**
-     * HTTP GET request using the OkHttp library
-     */
-    private fun fetchData() {
-
-        // set up shared preferences
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        // store current currency selection
-        val currency = prefs.getString("currency", "usd")
-
-        var symbol = ""
-        var isoCode = ""
-
-        // set symbol and isoCode depending on selected currency
-        when (currency) {
-            "usd" -> {
-                symbol = "$"
-                isoCode = "USD"
-            }
-
-            "gbp" -> {
-                symbol = "£"
-                isoCode = "GBP"
-            }
-
-            "eur" -> {
-                symbol = "€"
-                isoCode = "EUR"
-            }
-
-            "cad" -> {
-                symbol = "$"
-                isoCode = "CAD"
-            }
-
-            "mxn" -> {
-                symbol = "$"
-                isoCode = "MXN"
-            }
-
-            "aud" -> {
-                symbol = "$"
-                isoCode = "AUD"
-            }
-
-            "brl" -> {
-                symbol = "R$"
-                isoCode = "BRL"
-            }
-        }
-
-        // build API url string with selected currency
-        val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=$currency&ids=bitcoin"
-        val request = Request.Builder().url(url).build()
-
-        val client = OkHttpClient()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                Log.i(TAG, "GET request successful.")
-
-                // converts response into string
-                val body = response.body?.string()
-
-                // extracts object from JSON
-                val tempList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
-                data = tempList[0]
-                // update the activity_main layout with the new price data
-                // updateLayout(data, symbol, isoCode)
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                Log.i(TAG, "Failed to execute GET request.")
-            }
-        })
-    }
 }
 
 @Composable
@@ -153,7 +99,11 @@ fun RunApp() {
         navController = navController,
         startDestination = "main",
         enterTransition = {
-            EnterTransition.None
+            fadeIn(
+                animationSpec = tween(
+                    200
+                )
+            )
         },
         exitTransition = {
             slideOutOfContainer(
@@ -166,11 +116,11 @@ fun RunApp() {
         },
         popExitTransition = {
             slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.End,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioNoBouncy,
-                stiffness = Spring.StiffnessMedium
-            )
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.End,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
             )
         },
     ) {
@@ -207,8 +157,10 @@ fun RunApp() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPage(onSettingsButtonPressed: () -> Unit) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val btcPriceViewModel = BTCPriceViewModel(DataStoreManager(LocalContext.current))
+    var snackbarHostState = remember { SnackbarHostState() }
+    var isLoading by remember { mutableStateOf(true) }
+    val dataStoreManager = DataStoreManager(LocalContext.current)
+    val btcPriceViewModel = BTCPriceViewModel(dataStoreManager)
 
     BTCPriceWidgetTheme {
         Scaffold(
@@ -238,13 +190,21 @@ fun MainPage(onSettingsButtonPressed: () -> Unit) {
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    PriceCard(btcPriceViewModel)
-                    // display snackbar in case of an error
-                    if (btcPriceViewModel.error.value.isNotEmpty()) {
-                        SnackbarWidget(
-                            message = btcPriceViewModel.error.value,
-                            actionLabel = "Dismiss"
-                        )
+                    LaunchedEffect(Unit) {
+                        btcPriceViewModel.initData()
+                        isLoading = false
+                    }
+                    if (isLoading) {
+                        CircularProgressIndicator()
+                    } else {
+                        PriceCard(btcPriceViewModel)
+                        // display snackbar in case of an error
+                        if (btcPriceViewModel.error.value.isNotEmpty()) {
+                            SnackbarWidget(
+                                message = btcPriceViewModel.error.value,
+                                actionLabel = "Dismiss"
+                            )
+                        }
                     }
                 }
             }
@@ -256,11 +216,11 @@ fun MainPage(onSettingsButtonPressed: () -> Unit) {
 @Composable
 fun PriceCard(btcPriceViewModel: BTCPriceViewModel) {
     // Fetch price data when Composable is created
-    LaunchedEffect(Unit) {
-        btcPriceViewModel.startHere()
-        // this code takes too long,
-        // the value remains zero for a few seconds
-    }
+//    LaunchedEffect(Unit) {
+//        btcPriceViewModel.initData()
+//        // this code takes too long,
+//        // the value remains zero for a few seconds
+//    }
 
     Card(
         onClick = {
@@ -275,7 +235,7 @@ fun PriceCard(btcPriceViewModel: BTCPriceViewModel) {
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
             .fillMaxWidth()
-            .height(150.dp)
+            .height(180.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -306,7 +266,7 @@ fun CardHeader(selectedCurrency: String) {
             )
         }
         Box(modifier = Modifier.size(2.dp))
-        Text("Bitcoin / $selectedCurrency")
+        Text(" Bitcoin / $selectedCurrency")
     }
 }
 
@@ -318,11 +278,11 @@ class BTCPriceViewModel(private val dataStoreManager: DataStoreManager) : ViewMo
     var error = mutableStateOf("")
 
     // init here is causing issues I think? trying another method
-    suspend fun startHere() {
+    suspend fun initData() {
+        loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             fetchBitcoinPrice()
         }
-        loading.value = true
         val price = dataStoreManager.getPrice() // Fetch from DataStore
         val change = dataStoreManager.getChange()
         priceValue = price // Update state
@@ -426,7 +386,7 @@ fun SnackbarWidget(
 fun CardPrice(symbol: String, price: Double) {
 
     val myStyle =
-        MaterialTheme.typography.bodyLarge.copy(fontSize = 36.sp, fontWeight = FontWeight.Bold)
+        MaterialTheme.typography.bodyLarge.copy(fontSize = 40.sp, fontWeight = FontWeight.Bold)
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -465,7 +425,7 @@ fun CardDetails(change: Float, btcPriceViewModel: BTCPriceViewModel) {
 }
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 fun AppPreview() {
     RunApp()
 }
