@@ -1,21 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:minimalbitcoinwidget/constants.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // TODO - implement SharedPrefs for storing selected currency
+  // final sharedPreferences = await SharedPreferences.getInstance();
+
+  runApp(const MinimalBitcoinWidget());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MinimalBitcoinWidget extends StatelessWidget {
+  const MinimalBitcoinWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor:
+            // draw navigation bar over app (Android)
+            Colors.transparent,
+      ),
+    );
+
     return MaterialApp(
-      title: 'Minimal Bitcoin Widget',
+      title: appTitle,
+      themeMode: ThemeMode.system,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
       ),
-      home: const HomePage(title: 'Minimal Bitcoin Widget'),
+      home: const HomePage(title: appTitle),
     );
   }
 }
@@ -30,7 +49,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,16 +56,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-          ],
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: const Center(child: Text('Hello, world!')),
     );
   }
 }
