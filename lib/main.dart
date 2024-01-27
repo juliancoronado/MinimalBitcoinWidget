@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
+import 'package:minimalbitcoinwidget/settings_page.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -53,8 +54,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
+            },
+          )
+        ],
       ),
       body: const Center(child: Text('Hello, world!')),
     );
