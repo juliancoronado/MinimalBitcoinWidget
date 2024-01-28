@@ -7,7 +7,7 @@ class HeaderListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
       dense: true,
     );
   }

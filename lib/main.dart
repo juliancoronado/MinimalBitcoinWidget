@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
-import 'package:minimalbitcoinwidget/home_page.dart';
+import 'package:minimalbitcoinwidget/screens/home_page.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
