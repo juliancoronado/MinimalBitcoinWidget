@@ -124,7 +124,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                       'https://github.com/juliancoronado/MinimalBitcoinWidget/'),
             ),
             const ListTile(
-              title: Text('v1.0.0'),
+              // TODO - implement pulling version number from pubspec.yaml
+              title: Text('v2.4.0'),
               subtitle: Text('App Version'),
             ),
           ],

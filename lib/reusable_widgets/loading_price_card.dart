@@ -28,7 +28,7 @@ class LoadingPriceCard extends ConsumerWidget {
               ),
               Text(
                 ' Bitcoin / ${ref.read(currencyProvider).toUpperCase()}',
-                style: const TextStyle(fontSize: 20.0),
+                style: const TextStyle(fontSize: 18.0),
               ),
             ],
           ),
@@ -44,7 +44,7 @@ class LoadingPriceCard extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('24h: ${bitcoin.change24h.toStringAsFixed(2)}%',
-                  style: const TextStyle(fontSize: 20.0)),
+                  style: const TextStyle(fontSize: 18.0)),
               const SizedBox(
                   height: 20,
                   width: 20,

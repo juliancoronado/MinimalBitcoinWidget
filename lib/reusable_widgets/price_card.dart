@@ -28,7 +28,7 @@ class PriceCard extends ConsumerWidget {
               ),
               Text(
                 ' Bitcoin / ${ref.read(currencyProvider).toUpperCase()}',
-                style: const TextStyle(fontSize: 20.0),
+                style: const TextStyle(fontSize: 18.0),
               ),
             ],
           ),
@@ -42,7 +42,7 @@ class PriceCard extends ConsumerWidget {
             ),
           ),
           Text('24h: ${bitcoin.change24h.toStringAsFixed(2)}%',
-              style: const TextStyle(fontSize: 20.0)),
+              style: const TextStyle(fontSize: 18.0)),
         ],
       ),
     );
