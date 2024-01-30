@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
+import 'package:minimalbitcoinwidget/providers/shared_preferences_provider.dart';
 import 'package:minimalbitcoinwidget/screens/home_page.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // TODO - implement SharedPrefs for storing selected currency
-  // final sharedPreferences = await SharedPreferences.getInstance();
+  final sharedPreferences = await SharedPreferences.getInstance();
 
-  runApp(const MinimalBitcoinWidget());
+  runApp(
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      ],
+      child: const MinimalBitcoinWidget(),
+    ),
+  );
 }
 
-class MinimalBitcoinWidget extends StatelessWidget {
+class MinimalBitcoinWidget extends ConsumerWidget {
   const MinimalBitcoinWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
     SystemChrome.setSystemUIOverlayStyle(
@@ -32,7 +40,18 @@ class MinimalBitcoinWidget extends StatelessWidget {
       title: appTitle,
       themeMode: ThemeMode.system,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.orange,
+          brightness: Brightness.light,
+        ),
+        fontFamily: 'Manrope',
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.orange,
+          brightness: Brightness.dark,
+        ),
         fontFamily: 'Manrope',
         useMaterial3: true,
       ),

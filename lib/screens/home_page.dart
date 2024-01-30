@@ -1,23 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
-import 'package:minimalbitcoinwidget/models/bitcoin.dart';
+import 'package:minimalbitcoinwidget/providers/api_provider.dart';
+import 'package:minimalbitcoinwidget/reusable_widgets/error_card.dart';
+import 'package:minimalbitcoinwidget/reusable_widgets/loading_price_card.dart';
+import 'package:minimalbitcoinwidget/reusable_widgets/price_card.dart';
 import 'package:minimalbitcoinwidget/screens/settings_page.dart';
-import 'package:http/http.dart' as http;
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  String sampleText = 'Press to fetch data';
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -32,7 +26,11 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
-              );
+              ).then((value) async {
+                // delay to prevent jank
+                await Future.delayed(const Duration(milliseconds: 300));
+                ref.invalidate(apiProvider);
+              });
             },
           )
         ],
@@ -40,27 +38,24 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.max,
           children: [
             Card(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(12.0),
-                onTap: () async {
-                  String currency = 'usd';
-                  final response = await http.get(Uri.parse(
-                      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=$currency&include_24hr_change=true&precision=2'));
-
-                  if (response.statusCode == 200) {
-                    Map<String, dynamic> jsonData = json.decode(response.body);
-                    final bitcoin = Bitcoin.fromJson(jsonData, currency);
-                    setState(() {
-                      sampleText = bitcoin.toString();
-                    });
-                  }
-                },
-                child: SizedBox(
-                  height: 200,
-                  child: Center(child: Text(sampleText)),
+              child: SizedBox(
+                height: 200,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12.0),
+                  onTap: () => ref.invalidate(apiProvider),
+                  child: ref.watch(apiProvider).when(
+                        data: (_) => const PriceCard(),
+                        skipLoadingOnRefresh: false,
+                        skipError: false,
+                        error: (err, stack) {
+                          return ErrorCard(error: err as Map<String, dynamic>);
+                        },
+                        loading: () => const LoadingPriceCard(),
+                      ),
                 ),
               ),
             ),

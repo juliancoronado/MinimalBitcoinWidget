@@ -1,10 +1,12 @@
 class Bitcoin {
   final double price;
   final double change24h;
+  final String currency;
 
   Bitcoin({
     required this.price,
     required this.change24h,
+    required this.currency,
   });
 
   factory Bitcoin.fromJson(Map<String, dynamic> json, String currency) {
@@ -15,12 +17,13 @@ class Bitcoin {
     return Bitcoin(
       price: json['bitcoin'][currency],
       change24h: json['bitcoin']['${currency}_24h_change'],
+      currency: currency,
     );
   }
 
   @override
   String toString() {
-    return 'Bitcoin\nPrice: $price\n24h Change: $change24h';
+    return 'Bitcoin ($currency)\nPrice: $price\n24h Change: $change24h';
   }
 }
 
