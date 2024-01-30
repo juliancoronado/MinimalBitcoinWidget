@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:minimalbitcoinwidget/providers/bitcoin_provider.dart';
 import 'package:minimalbitcoinwidget/providers/currency_provider.dart';
 
@@ -33,7 +34,9 @@ class PriceCard extends ConsumerWidget {
           ),
           Center(
             child: Text(
-              bitcoin.price.toString(),
+              // TODO - implement currency symbols based on users' locale
+              // allow users to change this in settings? decimal or comma, symbol position, etc.
+              NumberFormat().format(bitcoin.price),
               style:
                   const TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
             ),
