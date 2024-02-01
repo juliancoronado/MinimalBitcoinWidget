@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/providers/api_provider.dart';
-import 'package:minimalbitcoinwidget/reusable_widgets/error_card.dart';
-import 'package:minimalbitcoinwidget/reusable_widgets/loading_price_card.dart';
-import 'package:minimalbitcoinwidget/reusable_widgets/price_card.dart';
+import 'package:minimalbitcoinwidget/widgets/error_card.dart';
+import 'package:minimalbitcoinwidget/widgets/loading_price_card.dart';
+import 'package:minimalbitcoinwidget/widgets/price_card.dart';
 import 'package:minimalbitcoinwidget/screens/settings_page.dart';
 
 class HomePage extends ConsumerWidget {
@@ -50,7 +50,6 @@ class HomePage extends ConsumerWidget {
                   child: ref.watch(apiProvider).when(
                         data: (_) => const PriceCard(),
                         skipLoadingOnRefresh: false,
-                        skipError: false,
                         error: (err, stack) {
                           return ErrorCard(error: err as Map<String, dynamic>);
                         },

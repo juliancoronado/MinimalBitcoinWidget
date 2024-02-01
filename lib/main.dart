@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/providers/shared_preferences_provider.dart';
 import 'package:minimalbitcoinwidget/screens/home_page.dart';
+import 'package:minimalbitcoinwidget/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -39,22 +40,8 @@ class MinimalBitcoinWidget extends ConsumerWidget {
     return MaterialApp(
       title: appTitle,
       themeMode: ThemeMode.system,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
-          brightness: Brightness.light,
-        ),
-        fontFamily: 'Manrope',
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
-          brightness: Brightness.dark,
-        ),
-        fontFamily: 'Manrope',
-        useMaterial3: true,
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home: const HomePage(),
     );
   }

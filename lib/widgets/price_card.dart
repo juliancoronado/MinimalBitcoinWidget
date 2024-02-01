@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/providers/bitcoin_provider.dart';
 import 'package:minimalbitcoinwidget/providers/currency_provider.dart';
 
+// TODO - move the apiProvider into this widget to simplify homepage widget
 class PriceCard extends ConsumerWidget {
   const PriceCard({super.key});
 
@@ -24,7 +26,7 @@ class PriceCard extends ConsumerWidget {
               SizedBox(
                 height: 24,
                 width: 24,
-                child: Image.asset('assets/images/bitcoin_icon.png'),
+                child: Image.asset(bitcoinIconAsset),
               ),
               Text(
                 ' Bitcoin / ${ref.read(currencyProvider).toUpperCase()}',

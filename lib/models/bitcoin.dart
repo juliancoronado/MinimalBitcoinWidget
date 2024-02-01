@@ -29,6 +29,7 @@ class Bitcoin {
 
 // JSON Sample from CoinGecko API
 // https://www.coingecko.com/api/documentation
+//
 // {
 //   "bitcoin": {
 //     "usd": 42085.28,

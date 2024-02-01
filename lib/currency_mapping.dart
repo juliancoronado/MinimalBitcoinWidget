@@ -4,4 +4,7 @@ Map<int, String> currencyMapping = {
   1: 'eur',
   2: 'cad',
   3: 'gbp',
+  4: 'mxn',
+  5: 'aud',
+  6: 'brl',
 };

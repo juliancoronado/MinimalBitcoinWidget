@@ -6,6 +6,7 @@ import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/models/bitcoin.dart';
 import 'package:minimalbitcoinwidget/providers/bitcoin_provider.dart';
 import 'package:minimalbitcoinwidget/providers/shared_preferences_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> fetchPriceData(AutoDisposeFutureProviderRef ref) async {
   String currency =
@@ -23,4 +24,11 @@ Future<void> fetchPriceData(AutoDisposeFutureProviderRef ref) async {
     // TODO - implement better way to handle this error
     throw json.decode(response.body);
   }
+}
+
+Future<void> openUrl({required String url}) async {
+  await launchUrl(
+    Uri.parse(url),
+    mode: LaunchMode.externalApplication,
+  );
 }
