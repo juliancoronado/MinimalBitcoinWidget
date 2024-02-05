@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/providers/api_provider.dart';
-import 'package:minimalbitcoinwidget/widgets/error_card.dart';
 import 'package:minimalbitcoinwidget/widgets/loading_price_card.dart';
 import 'package:minimalbitcoinwidget/widgets/price_card.dart';
 import 'package:minimalbitcoinwidget/screens/settings_page.dart';
@@ -12,6 +11,26 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // TODO - clean up this snackbar implementation
+    ref.listen<AsyncValue<void>>(
+      apiProvider,
+      (_, state) => state.whenOrNull(
+        error: (_, __) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          final snackBar = SnackBar(
+            content: const Text('Too many requests, try again later.'),
+            behavior: SnackBarBehavior.floating,
+            action: SnackBarAction(
+                label: 'Dismiss',
+                onPressed: () =>
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar()),
+          );
+          // show snackbar if an error occurred
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        },
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -47,12 +66,12 @@ class HomePage extends ConsumerWidget {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12.0),
                   onTap: () => ref.invalidate(apiProvider),
+                  // TODO - move this into a Price Card widget to clean up the widget tree here
                   child: ref.watch(apiProvider).when(
                         data: (_) => const PriceCard(),
+                        skipError: true,
                         skipLoadingOnRefresh: false,
-                        error: (err, stack) {
-                          return ErrorCard(error: err as Map<String, dynamic>);
-                        },
+                        error: (err, stack) => const PriceCard(),
                         loading: () => const LoadingPriceCard(),
                       ),
                 ),
