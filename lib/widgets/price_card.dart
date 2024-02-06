@@ -45,12 +45,17 @@ class PriceWidget extends ConsumerWidget {
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '24h: ${bitcoin.change24h.toStringAsFixed(2)}%',
+                '24h: ${bitcoin.change24h.toStringAsFixed(2)}%  ',
                 style: const TextStyle(fontSize: 18.0),
               ),
+              bitcoin.change24h == 0
+                  ? const Icon(Icons.trending_flat)
+                  : bitcoin.change24h.isNegative
+                      ? const Icon(Icons.trending_down, color: Colors.red)
+                      : const Icon(Icons.trending_up, color: Colors.green),
+              const Spacer(),
               ref.watch(apiProvider).when(
                     data: (_) => Container(),
                     skipError: true,
@@ -59,7 +64,7 @@ class PriceWidget extends ConsumerWidget {
                     loading: () => const SizedBox(
                       height: 20,
                       width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2.0),
+                      child: CircularProgressIndicator(strokeWidth: 3.0),
                     ),
                   ),
             ],
