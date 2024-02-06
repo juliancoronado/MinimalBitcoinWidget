@@ -2,14 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/providers/api_provider.dart';
-import 'package:minimalbitcoinwidget/widgets/price_card.dart';
 import 'package:minimalbitcoinwidget/screens/settings_page.dart';
+import 'package:minimalbitcoinwidget/widgets/price_card.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    // reload price data when the app is resumed from the background
+    if (state == AppLifecycleState.resumed) {
+      // small delay for better UX
+      await Future.delayed(const Duration(milliseconds: 250));
+      ref.invalidate(apiProvider);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // listen to changes from apiProvider and handle errors
     ref.listen<AsyncValue<void>>(
       apiProvider,
