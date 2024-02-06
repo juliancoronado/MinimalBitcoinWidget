@@ -28,22 +28,30 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           title: const Text(changeCurrencySubtitle),
           content: StatefulBuilder(
             builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: currencyMapping.entries.map(
-                  (entry) {
-                    return RadioListTile(
-                        title: Text(entry.value.toUpperCase()),
-                        value: entry.key,
-                        groupValue: currentOption,
-                        onChanged: (value) {
-                          if (value == null) return;
-                          setState(() {
-                            currentOption = value;
-                          });
-                        });
-                  },
-                ).toList(),
+              return SizedBox(
+                height: 300,
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: currencyMapping.entries.map(
+                        (entry) {
+                          return RadioListTile(
+                              title: Text(entry.value.toUpperCase()),
+                              value: entry.key,
+                              groupValue: currentOption,
+                              onChanged: (value) {
+                                if (value == null) return;
+                                setState(() {
+                                  currentOption = value;
+                                });
+                              });
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                ),
               );
             },
           ),
