@@ -9,7 +9,7 @@ class Bitcoin {
     required this.currency,
   });
 
-  factory Bitcoin.fromJson(Map<String, dynamic> json, String currency) {
+  factory Bitcoin.fromJsonApi(Map<String, dynamic> json, String currency) {
     if ((json['bitcoin'] as Map<String, dynamic>).isEmpty) {
       throw 'No data returned from API';
     }
@@ -20,6 +20,20 @@ class Bitcoin {
       currency: currency,
     );
   }
+
+  factory Bitcoin.fromJsonLocal(Map<String, dynamic> json, String currency) {
+    return Bitcoin(
+      price: json['price'],
+      change24h: json['${currency}_24h_change'],
+      currency: currency,
+    );
+  }
+
+  Map<String, dynamic> toJsonLocal(String currency) => {
+        'price': price,
+        'currency': currency,
+        '${currency}_24h_change': change24h,
+      };
 
   @override
   String toString() {

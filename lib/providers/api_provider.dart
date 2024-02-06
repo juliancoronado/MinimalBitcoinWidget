@@ -2,9 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/helpers/functions.dart';
 
 final apiProvider = FutureProvider.autoDispose<void>((ref) async {
+  // TODO - investigate if this is needed
   ref.onResume(() async {
-    await fetchPriceData(ref);
+    try {
+      await fetchPriceData(ref);
+    } catch (e) {
+      rethrow;
+    }
   });
 
-  await fetchPriceData(ref);
+  try {
+    await fetchPriceData(ref);
+  } catch (e) {
+    rethrow;
+  }
 });

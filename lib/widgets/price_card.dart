@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
+import 'package:minimalbitcoinwidget/providers/api_provider.dart';
 import 'package:minimalbitcoinwidget/providers/bitcoin_provider.dart';
 import 'package:minimalbitcoinwidget/providers/currency_provider.dart';
 
-// TODO - move the apiProvider into this widget to simplify homepage widget
-class PriceCard extends ConsumerWidget {
-  const PriceCard({super.key});
+class PriceWidget extends ConsumerWidget {
+  const PriceWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,8 +43,27 @@ class PriceCard extends ConsumerWidget {
                   const TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
             ),
           ),
-          Text('24h: ${bitcoin.change24h.toStringAsFixed(2)}%',
-              style: const TextStyle(fontSize: 18.0)),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '24h: ${bitcoin.change24h.toStringAsFixed(2)}%',
+                style: const TextStyle(fontSize: 18.0),
+              ),
+              ref.watch(apiProvider).when(
+                    data: (_) => Container(),
+                    skipError: true,
+                    skipLoadingOnRefresh: false,
+                    error: (err, stack) => Container(),
+                    loading: () => const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2.0),
+                    ),
+                  ),
+            ],
+          ),
         ],
       ),
     );

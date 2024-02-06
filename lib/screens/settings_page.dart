@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/helpers/functions.dart';
+import 'package:minimalbitcoinwidget/providers/api_provider.dart';
 import 'package:minimalbitcoinwidget/providers/currency_provider.dart';
 import 'package:minimalbitcoinwidget/providers/shared_preferences_provider.dart';
 import 'package:minimalbitcoinwidget/widgets/header_list_tile.dart';
@@ -18,6 +19,7 @@ class SettingsPage extends ConsumerStatefulWidget {
 class SettingsPageState extends ConsumerState<SettingsPage> {
   /// Displays an AlertDialog to the user where they can change the local currency of the app
   Future<void> displayCurrencyDialog() async {
+    // TODO - clean up this implementation
     int currentOption = getKeyFromValue(ref.read(currencyProvider)) ?? 0;
     int? selectedOption = await showDialog(
       context: context,
@@ -63,9 +65,12 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
     ref.read(currencyProvider.notifier).state = selectedOptionText;
 
-    ref
-        .read(sharedPreferencesProvider)
-        .setString(currencyKey, selectedOptionText);
+    ref.read(sharedPreferencesProvider).setString(
+          currencyKey,
+          selectedOptionText,
+        );
+    // refresh price data
+    ref.invalidate(apiProvider);
   }
 
   int? getKeyFromValue(String value) {

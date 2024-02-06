@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/providers/api_provider.dart';
-import 'package:minimalbitcoinwidget/widgets/loading_price_card.dart';
 import 'package:minimalbitcoinwidget/widgets/price_card.dart';
 import 'package:minimalbitcoinwidget/screens/settings_page.dart';
 
@@ -11,21 +10,20 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO - clean up this snackbar implementation
+    // listen to changes from apiProvider and handle errors
     ref.listen<AsyncValue<void>>(
       apiProvider,
-      (_, state) => state.whenOrNull(
-        error: (_, __) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      (previousState, state) => state.whenOrNull(
+        error: (error, _) {
+          // prevents loading state from acitivating the snackbar
+          if (!(previousState?.isLoading ?? false)) return;
+
           final snackBar = SnackBar(
-            content: const Text('Too many requests, try again later.'),
+            content: Text(error.toString()),
+            showCloseIcon: true,
             behavior: SnackBarBehavior.floating,
-            action: SnackBarAction(
-                label: 'Dismiss',
-                onPressed: () =>
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar()),
           );
-          // show snackbar if an error occurred
+          // show error snackbar
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
       ),
@@ -40,16 +38,12 @@ class HomePage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            tooltip: 'Settings',
+            tooltip: settingsTitle,
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
-              ).then((value) async {
-                // delay to prevent jank
-                await Future.delayed(const Duration(milliseconds: 300));
-                ref.invalidate(apiProvider);
-              });
+              );
             },
           )
         ],
@@ -65,18 +59,15 @@ class HomePage extends ConsumerWidget {
                 height: 200,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12.0),
-                  onTap: () => ref.invalidate(apiProvider),
-                  // TODO - move this into a Price Card widget to clean up the widget tree here
-                  child: ref.watch(apiProvider).when(
-                        data: (_) => const PriceCard(),
-                        skipError: true,
-                        skipLoadingOnRefresh: false,
-                        error: (err, stack) => const PriceCard(),
-                        loading: () => const LoadingPriceCard(),
-                      ),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    ref.invalidate(apiProvider);
+                  },
+                  child: const PriceWidget(),
                 ),
               ),
             ),
+            // LineDivider(),
           ],
         ),
       ),
