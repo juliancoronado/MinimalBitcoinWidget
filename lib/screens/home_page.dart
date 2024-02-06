@@ -6,8 +6,6 @@ import 'package:minimalbitcoinwidget/providers/api_provider.dart';
 import 'package:minimalbitcoinwidget/screens/settings_page.dart';
 import 'package:minimalbitcoinwidget/widgets/price_card.dart';
 
-const String appGroupId = 'GROUP123';
-
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -17,15 +15,6 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage>
     with WidgetsBindingObserver {
-  void updateHeadline() {
-    // Save the headline data to the widget
-    HomeWidget.saveWidgetData<String>('title', 'My Title');
-    HomeWidget.saveWidgetData<String>('headline_description', 'Description');
-    HomeWidget.updateWidget(
-      androidName: 'NewsWidget',
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -102,7 +91,6 @@ class _HomePageState extends ConsumerState<HomePage>
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12.0),
                   onTap: () {
-                    updateHeadline();
                     ScaffoldMessenger.of(context).clearSnackBars();
                     ref.invalidate(apiProvider);
                   },

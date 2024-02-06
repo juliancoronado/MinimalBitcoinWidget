@@ -17,6 +17,7 @@
         android:layout_marginLeft="8dp"
         android:background="@android:color/white"
         android:text="Title"
+        android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -31,8 +32,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
-        android:background="@android:color/white"
-        android:text="Title"
-        android:textSize="16sp" />
+        android:gravity="center"
+        android:text="Description"
+        android:textSize="12sp" />
 
 </RelativeLayout>

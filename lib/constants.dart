@@ -28,3 +28,6 @@ const String currencyKey = 'currency';
 // ASSETS
 const bitcoinIconAsset = 'assets/images/bitcoin_icon.png';
 const manropeFontTitle = 'Manrope';
+
+// WIDGETS
+const String appGroupId = 'GROUP123';
