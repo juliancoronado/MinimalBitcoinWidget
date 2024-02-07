@@ -11,7 +11,7 @@ import es.antonborri.home_widget.HomeWidgetPlugin
 /**
  * Implementation of App Widget functionality.
  */
-class NewsWidget : AppWidgetProvider() {
+class PriceWidget : AppWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -20,13 +20,13 @@ class NewsWidget : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
             // Get reference to SharedPreferences
             val widgetData = HomeWidgetPlugin.getData(context)
-            val views = RemoteViews(context.packageName, R.layout.news_widget).apply {
+            val views = RemoteViews(context.packageName, R.layout.price_widget).apply {
 
-                val title = widgetData.getString("title", null)
-                setTextViewText(R.id.title, title ?: "No title set")
+                val price = widgetData.getString("price", null)
+                setTextViewText(R.id.price, price ?: "No title set")
 
-                val description = widgetData.getString("description", null)
-                setTextViewText(R.id.description, description ?: "No description set")
+                val change24h = widgetData.getString("change24h", null)
+                setTextViewText(R.id.change24h, change24h ?: "No description set")
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

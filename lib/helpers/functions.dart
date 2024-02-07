@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:minimalbitcoinwidget/constants.dart';
 import 'package:minimalbitcoinwidget/helpers/url_helper.dart';
 import 'package:minimalbitcoinwidget/models/bitcoin.dart';
@@ -25,8 +26,8 @@ Future<void> fetchPriceData(AutoDisposeFutureProviderRef ref) async {
           bitcoinKey,
           jsonEncode(bitcoin.toJsonLocal(currency)),
         );
-    updateHeadline(
-        bitcoin.price.toStringAsFixed(2), bitcoin.change24h.toStringAsFixed(2));
+    updateHeadline(NumberFormat().format(bitcoin.price),
+        bitcoin.change24h.toStringAsFixed(2));
     return;
   } else if (response.statusCode == 429) {
     throw 'Too many requests. Try again later.';
@@ -42,11 +43,11 @@ Future<void> openUrl({required String url}) async {
   );
 }
 
-void updateHeadline(String title, String description) {
+void updateHeadline(String price, String change24h) {
   // Save the headline data to the widget
-  HomeWidget.saveWidgetData<String>('title', title);
-  HomeWidget.saveWidgetData<String>('description', description);
+  HomeWidget.saveWidgetData<String>('price', '\$$price');
+  HomeWidget.saveWidgetData<String>('change24h', '$change24h%');
   HomeWidget.updateWidget(
-    androidName: 'NewsWidget',
+    androidName: 'PriceWidget',
   );
 }
