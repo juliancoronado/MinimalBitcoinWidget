@@ -1,36 +1,28 @@
 # Minimal Bitcoin Widget
 
-Built with Flutter 3.16.9
+A Bitcoin price widget for your Android home screen.
+View price information in your local currency.
 
-A minimal Bitcoin price widget for your home screen!
-
-The widget conforms to your current system device theme and you can select which currency to view the price in (USD, GBP, EUR, MXN, and AUD).
-
-Price information provided by CoinGecko.
-
-New features will be added as I work on them! Thank you for the support!
-
-<a href='https://play.google.com/store/apps/details?id=com.jcoronado.minimalbitcoinwidget&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="35%"/></a>
+<a href='https://play.google.com/store/apps/details?id=com.jcoronado.minimalbitcoinwidget&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="25%"/></a>
 
 Google Play and the Google Play logo are trademarks of Google LLC.
 
 ## Screenshots
 
-<p align="center">
+<p align="start">
   <img src="screenshots/image1.png" width="20%">
   <img src="screenshots/image2.png" width="20%">
   <img src="screenshots/image3.png" width="20%">
   <img src="screenshots/image4.png" width="20%">
 </p>
 
-## Built With
+## Built using
 
-- [Flutter](https://flutter.dev/) - Flutter Framework
-- [Material Icons](https://material.io/resources/icons/) - Material IO Icons
-- [Manrope Font](https://manropefont.com/) - Manrope Font used for text
+- [Flutter](https://flutter.dev/) - Flutter (built with 3.16.9)
+- [Material Icons](https://material.io/resources/icons/) - Material Icons
+- [Manrope Font](https://manropefont.com/) - Manrope Font
 - [Android Studio](https://developer.android.com/studio) - Official IDE for Android app development
-
-## Known Issues
+- [CoinGecko](https://coingecko.com/) - Price data sourced from CoinGecko API
 
 ## License
 
