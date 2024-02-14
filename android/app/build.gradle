@@ -45,7 +45,7 @@ android {
         applicationId "com.jcoronado.minimalbitcoinwidget.minimalbitcoinwidget"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -59,7 +59,12 @@ android {
         }
     }
     buildFeatures {
+        compose true
         viewBinding true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.0-beta03"
     }
 }
 
@@ -67,4 +72,14 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+
+    implementation "androidx.compose.ui:ui:1.6.1"
+    implementation platform("androidx.compose:compose-bom:2024.02.00")
+    implementation "androidx.compose.material3:material3:1.2.0"
+
+    // For AppWidgets support
+    implementation "androidx.glance:glance-appwidget:1.0.0"
+    implementation "androidx.glance:glance-material3:1.0.0"
+    implementation "androidx.glance:glance-material:1.0.0"
+}
