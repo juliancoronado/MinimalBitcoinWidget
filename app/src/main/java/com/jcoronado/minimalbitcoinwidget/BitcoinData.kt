@@ -7,5 +7,5 @@ data class PriceData(
 
 data class Bitcoin(
     var usd: Double,
-    var usd_24h_change: Float
+    var usd_24h_change: Double
 )

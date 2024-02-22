@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -35,6 +36,7 @@ class MyAppWidget : GlanceAppWidget() {
     }
 
     @Composable
+    @Preview
     private fun WidgetContent() {
         GlanceTheme{
             Box(
@@ -66,7 +68,6 @@ class RefreshPriceAction : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        // Log.d("Refresh", "Here")
         print("Hello, world!")
         MyAppWidget().updateAll(context)
     }

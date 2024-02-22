@@ -19,6 +19,9 @@
     <string name="iso_code">USD</string>
     <string name="symbol">$</string>
 
+    <!-- Buttons -->
+    <string name="dismiss">Dismiss</string>
+
     <!-- Data Info Category -->
     <string name="pref_data">Data Information</string>
 
