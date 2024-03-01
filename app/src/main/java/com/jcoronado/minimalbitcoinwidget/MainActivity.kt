@@ -2,6 +2,7 @@ package com.jcoronado.minimalbitcoinwidget
 
 import android.content.Context
 import android.os.Bundle
+import android.provider.CalendarContract
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,8 +25,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.TrendingDown
+import androidx.compose.material.icons.filled.TrendingFlat
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -40,9 +44,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -52,7 +59,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -60,8 +66,6 @@ import androidx.navigation.compose.rememberNavController
 import com.jcoronado.minimalbitcoinwidget.ui.theme.BTCPriceWidgetTheme
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "preferences")
-val PRICE_KEY = doublePreferencesKey("price")
-val CHANGE_KEY = doublePreferencesKey("change")
 
 class MainActivity : ComponentActivity() {
 
@@ -77,6 +81,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MinimalBitcoinWidget() {
     val navController = rememberNavController()
+    val dataStoreManager = DataStoreManager(LocalContext.current)
+    val priceViewModel = PriceViewModel(dataStoreManager = dataStoreManager)
 
     NavHost(
         navController = navController,
@@ -111,6 +117,7 @@ fun MinimalBitcoinWidget() {
             "main",
         ) {
             MainPage(
+                priceViewModel = priceViewModel,
                 onSettingsButtonPressed = {
                     navController.navigate("settings")
                 }
@@ -129,6 +136,7 @@ fun MinimalBitcoinWidget() {
             },
         ) {
             SettingsPage(
+                priceViewModel = priceViewModel,
                 onBackButtonPressed = {
                     navController.popBackStack()
                 },
@@ -139,11 +147,8 @@ fun MinimalBitcoinWidget() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPage(onSettingsButtonPressed: () -> Unit) {
+fun MainPage(priceViewModel: PriceViewModel, onSettingsButtonPressed: () -> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val apiHelper = ApiHelper()
-    val btcDataStoreManager = BtcDataStoreManager(LocalContext.current)
-    val btcPriceViewModel = BTCPriceViewModel(apiHelper = apiHelper, btcDataStoreManager = btcDataStoreManager)
 
     BTCPriceWidgetTheme {
         Scaffold(
@@ -176,23 +181,9 @@ fun MainPage(onSettingsButtonPressed: () -> Unit) {
                         .fillMaxWidth()
                 ) {
                     LaunchedEffect(Unit) {
-                        btcPriceViewModel.fetchDataAsync()
+                        priceViewModel.fetchData()
                     }
-                    PriceCard(btcPriceViewModel)
-                    Button(
-                        onClick = {
-                            btcPriceViewModel.printStoredValues()
-                        },
-                        content = {Text("Press Me")}
-                    )
-                    // display snackbar in case of an error
-                    if (btcPriceViewModel.error.value.isNotEmpty()) {
-                        SnackbarWidget(
-                            message = btcPriceViewModel.error.value,
-                            actionLabel = stringResource(id = R.string.dismiss)
-                        )
-                    }
-
+                    PriceCard(priceViewModel)
                 }
             }
         }
@@ -201,11 +192,10 @@ fun MainPage(onSettingsButtonPressed: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PriceCard(btcPriceViewModel: BTCPriceViewModel) {
-
+fun PriceCard(priceViewModel: PriceViewModel) {
     Card(
         onClick = {
-            btcPriceViewModel.fetchDataAsync()
+            priceViewModel.fetchData()
         },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
@@ -216,7 +206,7 @@ fun PriceCard(btcPriceViewModel: BTCPriceViewModel) {
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
             .fillMaxWidth()
-            .height(180.dp)
+            .height(200.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -224,15 +214,17 @@ fun PriceCard(btcPriceViewModel: BTCPriceViewModel) {
                 .fillMaxSize()
                 .padding(all = 8.dp)
         ) {
-            CardHeader(selectedCurrency = "USD")
-            CardPrice(symbol = "$", btcPriceViewModel = btcPriceViewModel)
-            CardDetails(btcPriceViewModel = btcPriceViewModel)
+            CardHeader(priceViewModel = priceViewModel)
+            CardPrice(priceViewModel = priceViewModel)
+            CardDetails(priceViewModel = priceViewModel)
         }
     }
 }
 
 @Composable
-fun CardHeader(selectedCurrency: String) {
+fun CardHeader(priceViewModel: PriceViewModel) {
+    val currencyCode by priceViewModel.currencyCode.collectAsState(initial = "")
+
     Row(
         verticalAlignment = CenterVertically
     ) {
@@ -244,12 +236,15 @@ fun CardHeader(selectedCurrency: String) {
             )
         }
         Box(modifier = Modifier.size(2.dp))
-        Text(" Bitcoin / $selectedCurrency")
+        Text(" Bitcoin / ${currencyCode?.uppercase()}")
     }
 }
 
 @Composable
-fun CardPrice(symbol: String, btcPriceViewModel: BTCPriceViewModel) {
+fun CardPrice(priceViewModel: PriceViewModel) {
+
+    val symbol by priceViewModel.symbol.collectAsState(initial = "")
+    val price by priceViewModel.priceValue.collectAsState(initial = 0.00)
 
     val myStyle =
         MaterialTheme.typography.bodyLarge.copy(fontSize = 32.sp, fontWeight = FontWeight.Bold)
@@ -258,23 +253,54 @@ fun CardPrice(symbol: String, btcPriceViewModel: BTCPriceViewModel) {
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(text = symbol, style = myStyle)
-        Text(text = String.format("%,.2f", btcPriceViewModel.priceValue), style = myStyle)
+        Text(text = symbol ?: "", style = myStyle)
+        Text(text = String.format("%,.2f", price), style = myStyle)
     }
 }
 
 @Composable
-fun CardDetails(btcPriceViewModel: BTCPriceViewModel) {
+fun CardDetails(priceViewModel: PriceViewModel) {
+
+    val change by priceViewModel.changeValue.collectAsState(initial = 0.00)
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        val placeholderModifier = Modifier.size(20.dp) // Size of progress indicator
 
-        Text(text = "24h: ${String.format("%.2f", btcPriceViewModel.changeValue)}%")
-        if (btcPriceViewModel.loading.value) {
+        Text(text = "24h: ${String.format("%.2f", change)}% ")
+
+        if (change != null && change!! == 0.00) {
+            Icon(
+                imageVector = Icons.Default.TrendingFlat,
+                modifier = Modifier.size(20.dp),
+                contentDescription = "Trending Flat"
+            )
+        }
+
+        if (change != null && change!! > 0) {
+            Icon(
+                imageVector = Icons.Default.TrendingUp,
+                tint = Color.Red,
+                modifier = Modifier.size(20.dp),
+                contentDescription = "Trending Up"
+            )
+        }
+
+        if (change != null && change!! < 0) {
+            Icon(
+                imageVector = Icons.Default.TrendingDown,
+                tint = Color.Green,
+                modifier = Modifier.size(20.dp),
+                contentDescription = "Trending Down"
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        if (priceViewModel.loading.value) {
             Box(
                 modifier = Modifier.size(20.dp)
             ) {
@@ -285,7 +311,7 @@ fun CardDetails(btcPriceViewModel: BTCPriceViewModel) {
                 )
             }
         } else {
-            Box(placeholderModifier)
+            Box(modifier = Modifier.size(20.dp))
         }
     }
 }

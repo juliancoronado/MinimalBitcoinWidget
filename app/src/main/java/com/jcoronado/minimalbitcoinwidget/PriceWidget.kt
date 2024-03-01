@@ -1,8 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget
 
 import android.content.Context
-import android.util.Log
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,19 +16,20 @@ import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
 import androidx.glance.background
-import androidx.glance.layout.*
+import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
+import androidx.glance.layout.Column
+import androidx.glance.layout.Row
+import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.height
+import androidx.glance.layout.padding
 import androidx.glance.text.Text
 
-class MyAppWidget : GlanceAppWidget() {
+class PriceWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
 
-        // In this method, load data needed to render the AppWidget.
-        // Use `withContext` to switch to another thread for long running
-        // operations.
-
         provideContent {
-            // create your AppWidget here
             WidgetContent()
         }
     }
@@ -68,7 +67,6 @@ class RefreshPriceAction : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        print("Hello, world!")
-        MyAppWidget().updateAll(context)
+        PriceWidget().updateAll(context)
     }
 }

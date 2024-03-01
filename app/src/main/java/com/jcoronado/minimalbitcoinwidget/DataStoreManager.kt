@@ -7,16 +7,24 @@ import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class BtcDataStoreManager(context: Context) {
+class DataStoreManager(context: Context) {
     private val dataStore: DataStore<Preferences> = context.dataStore
 
-    suspend fun getValue(key: Preferences.Key<Double>) : Double {
-        return dataStore.data.map { preferences ->
-            preferences[key] ?: 0.00
+    suspend fun <T> getValue(key: Preferences.Key<T>, defaultValue: T) : T {
+
+        val storedValue = dataStore.data.map {preferences ->
+            preferences[key]
         }.first()
+
+        return if (storedValue == null) {
+            this.saveValue(key, defaultValue)
+            defaultValue
+        } else {
+            storedValue
+        }
     }
 
-    suspend fun storeValue(key: Preferences.Key<Double>, value: Double) {
+    suspend fun <T> saveValue(key: Preferences.Key<T>, value: T) {
         dataStore.edit { preferences ->
             preferences[key] = value
         }
