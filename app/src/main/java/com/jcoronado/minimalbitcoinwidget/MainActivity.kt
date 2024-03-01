@@ -2,7 +2,6 @@ package com.jcoronado.minimalbitcoinwidget
 
 import android.content.Context
 import android.os.Bundle
-import android.provider.CalendarContract
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,9 +24,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.TrendingDown
-import androidx.compose.material.icons.filled.TrendingFlat
-import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.automirrored.outlined.TrendingDown
+import androidx.compose.material.icons.automirrored.outlined.TrendingFlat
+import androidx.compose.material.icons.automirrored.outlined.TrendingUp
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -190,7 +189,6 @@ fun MainPage(priceViewModel: PriceViewModel, onSettingsButtonPressed: () -> Unit
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PriceCard(priceViewModel: PriceViewModel) {
     Card(
@@ -274,7 +272,7 @@ fun CardDetails(priceViewModel: PriceViewModel) {
 
         if (change != null && change!! == 0.00) {
             Icon(
-                imageVector = Icons.Default.TrendingFlat,
+                imageVector = Icons.AutoMirrored.Outlined.TrendingFlat,
                 modifier = Modifier.size(20.dp),
                 contentDescription = "Trending Flat"
             )
@@ -282,8 +280,8 @@ fun CardDetails(priceViewModel: PriceViewModel) {
 
         if (change != null && change!! > 0) {
             Icon(
-                imageVector = Icons.Default.TrendingUp,
-                tint = Color.Red,
+                imageVector = Icons.AutoMirrored.Outlined.TrendingUp,
+                tint = Color.Green,
                 modifier = Modifier.size(20.dp),
                 contentDescription = "Trending Up"
             )
@@ -291,8 +289,8 @@ fun CardDetails(priceViewModel: PriceViewModel) {
 
         if (change != null && change!! < 0) {
             Icon(
-                imageVector = Icons.Default.TrendingDown,
-                tint = Color.Green,
+                imageVector = Icons.AutoMirrored.Outlined.TrendingDown,
+                tint = Color.Red,
                 modifier = Modifier.size(20.dp),
                 contentDescription = "Trending Down"
             )
