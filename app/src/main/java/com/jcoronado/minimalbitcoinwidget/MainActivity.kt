@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.jcoronado.minimalbitcoinwidget
 
 import android.content.Context
@@ -24,10 +26,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.TrendingDown
-import androidx.compose.material.icons.automirrored.outlined.TrendingFlat
-import androidx.compose.material.icons.automirrored.outlined.TrendingUp
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.automirrored.filled.TrendingDown
+import androidx.compose.material.icons.automirrored.filled.TrendingFlat
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -144,7 +146,6 @@ fun MinimalBitcoinWidget() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPage(priceViewModel: PriceViewModel, onSettingsButtonPressed: () -> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -165,7 +166,7 @@ fun MainPage(priceViewModel: PriceViewModel, onSettingsButtonPressed: () -> Unit
                     actions = {
                         IconButton(onClick = onSettingsButtonPressed) {
                             Icon(
-                                imageVector = Icons.Outlined.Settings,
+                                imageVector = Icons.Filled.Settings,
                                 contentDescription = stringResource(id = R.string.content_description_settings)
                             )
                         }
@@ -230,7 +231,7 @@ fun CardHeader(priceViewModel: PriceViewModel) {
             Image(
                 modifier = Modifier.padding(1.dp),
                 painter = painterResource(id = R.drawable.bitcoin_icon),
-                contentDescription = ""
+                contentDescription = "Bitcoin Icon"
             )
         }
         Box(modifier = Modifier.size(2.dp))
@@ -272,7 +273,7 @@ fun CardDetails(priceViewModel: PriceViewModel) {
 
         if (change != null && change!! == 0.00) {
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.TrendingFlat,
+                imageVector = Icons.AutoMirrored.Filled.TrendingFlat,
                 modifier = Modifier.size(20.dp),
                 contentDescription = "Trending Flat"
             )
@@ -280,7 +281,7 @@ fun CardDetails(priceViewModel: PriceViewModel) {
 
         if (change != null && change!! > 0) {
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.TrendingUp,
+                imageVector = Icons.AutoMirrored.Filled.TrendingUp,
                 tint = Color.Green,
                 modifier = Modifier.size(20.dp),
                 contentDescription = "Trending Up"
@@ -289,7 +290,7 @@ fun CardDetails(priceViewModel: PriceViewModel) {
 
         if (change != null && change!! < 0) {
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.TrendingDown,
+                imageVector = Icons.AutoMirrored.Filled.TrendingDown,
                 tint = Color.Red,
                 modifier = Modifier.size(20.dp),
                 contentDescription = "Trending Down"
@@ -315,7 +316,8 @@ fun CardDetails(priceViewModel: PriceViewModel) {
 }
 
 @Composable
-@Preview
+// apiLevel = 33 - work around to get preview to render
+@Preview(apiLevel = 33, showSystemUi = true)
 fun AppPreview() {
     MinimalBitcoinWidget()
 }

@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.ui.theme.BTCPriceWidgetTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(priceViewModel: PriceViewModel, onBackButtonPressed: () -> Unit) {
     BTCPriceWidgetTheme {
@@ -56,7 +57,7 @@ fun SettingsPage(priceViewModel: PriceViewModel, onBackButtonPressed: () -> Unit
                     navigationIcon = {
                         IconButton(onClick = onBackButtonPressed) {
                             Icon(
-                                imageVector = Icons.Filled.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back"
                             )
                         }
@@ -73,11 +74,10 @@ fun SettingsPage(priceViewModel: PriceViewModel, onBackButtonPressed: () -> Unit
 fun SettingsMenu(priceViewModel: PriceViewModel, padding: PaddingValues) {
     Column(modifier = Modifier.padding(padding)) {
         CurrencySection(priceViewModel = priceViewModel)
-        Divider(color = Color.Gray, thickness = Dp.Hairline)
+        HorizontalDivider(thickness = Dp.Hairline, color = Color.Gray)
         Text(
             text = "${stringResource(id = R.string.version_title)} ${stringResource(id = R.string.version_summary)}",
-            modifier = Modifier.padding(all = 16.dp),
-            fontWeight = FontWeight.Bold
+            modifier = Modifier.padding(all = 16.dp)
         )
     }
 }
@@ -95,12 +95,13 @@ fun MenuTitle(text: String) {
     Text(
         text = text,
         modifier = Modifier.padding(start = 16.dp),
-        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold, color = Color.Black)
     )
 }
 
 @Composable
 fun MenuListTile(priceViewModel: PriceViewModel) {
+    // TODO - work in progress - dialog radio button inconsistencies
     var showDialog by remember { mutableStateOf(false) }
     var selectedCurrency by remember { mutableStateOf("") }
     val subtitle = "Selected Currency"
@@ -137,12 +138,18 @@ fun MenuListTile(priceViewModel: PriceViewModel) {
         )
     }
 
+    val textToDisplay : String = if (currencyCode.isNullOrBlank()) {
+        "USD"
+    } else {
+        currencyCode!!
+    }
+
     Surface(
         onClick = { showDialog = showDialog.not() },
         modifier = Modifier.fillMaxWidth()
     ) {
         ListItem(
-            headlineContent = { currencyCode?.let { Text(text = it.uppercase()) } },
+            headlineContent = { Text(textToDisplay) },
             supportingContent = {
                 Text(text = subtitle)
             })
@@ -195,7 +202,8 @@ fun DialogBody(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+// apiLevel = 33 - work around to get preview to render
+@Preview(apiLevel = 33, showSystemUi = true)
 @Composable
 fun SettingsPagePreview() {
     val dataStoreManager = DataStoreManager(LocalContext.current)
