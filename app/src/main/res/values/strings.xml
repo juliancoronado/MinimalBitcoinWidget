@@ -32,7 +32,7 @@
 
     <!-- + App Version -->
     <string name="version_title">App Version</string>
-    <string name="version_summary">2.5 (Build 9)</string>
+    <string name="version_summary">2.5.0 (Build 9)</string>
 
     <!-- + License -->
     <string name="license_title">License</string>
