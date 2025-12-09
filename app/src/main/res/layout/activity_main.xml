@@ -24,14 +24,15 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/price_card"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/price_card"
-        app:cardElevation="1dp"
+        android:layout_margin="8dp"
         app:cardCornerRadius="8dp"
-        android:layout_margin="8dp">
+        app:cardElevation="1dp">
 
         <LinearLayout
+            android:id="@+id/price_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -45,11 +46,11 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:padding="1dp"
-                    android:foregroundGravity="center"
                     android:layout_gravity="center"
                     android:layout_marginStart="2dp"
                     android:contentDescription="@string/description1"
+                    android:foregroundGravity="center"
+                    android:padding="1dp"
                     android:src="@drawable/bitcoin_icon" />
 
                 <TextView
@@ -82,23 +83,22 @@
                     android:id="@+id/main_symbol"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/manrope_bold"
-                    android:textSize="35sp"
-                    android:textAlignment="center"
                     android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/manrope_bold"
                     android:gravity="center_vertical"
                     android:text="@string/symbol"
-                    />
+                    android:textAlignment="center"
+                    android:textSize="35sp" />
 
                 <TextView
-                    android:gravity="center"
-                    android:textAlignment="center"
                     android:id="@+id/main_price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/manrope_bold"
-                    android:text="@string/loading_text"
-                    android:textSize="42sp" />
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textSize="42sp"
+                    tools:text="65,000.00" />
 
             </LinearLayout>
 
@@ -130,14 +130,23 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/manrope_regular"
                         android:gravity="center_vertical"
-                        android:text="@string/loading_text"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        tools:text="+2.5%" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loading_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="@color/dark_gray"
+            android:visibility="gone" />
 
     </com.google.android.material.card.MaterialCardView>
 

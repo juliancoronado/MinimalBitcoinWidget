@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +38,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     // var data will hold the information received from the HTTP Request
     var data = Data()
 
+    private lateinit var loadingIndicator: CircularProgressIndicator
+    private lateinit var priceContainer: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -47,15 +53,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val mToolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.m_toolbar)
         setSupportActionBar(mToolbar)
 
-        // create TextView objects that contain reference to layout objects
-        val priceTv: TextView = findViewById(R.id.main_price_text)
-        val changeTv: TextView = findViewById(R.id.main_day_change)
-        val symbolTv: TextView = findViewById(R.id.main_symbol)
-
-        // set TextViews text to loading string
-        priceTv.text = getString(R.string.loading_text)
-        changeTv.text = getString(R.string.loading_text)
-        symbolTv.text = ""
+        loadingIndicator = findViewById(R.id.loading_indicator)
+        priceContainer = findViewById(R.id.price_container)
 
         // initial HTTP GET request
         fetchData()
@@ -64,14 +63,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val updateButton: MaterialCardView = findViewById(R.id.price_card)
         updateButton.setOnClickListener {
             Log.i(TAG, "Refreshing price layout.")
-
-            // temp changes to show price is loading
-            runOnUiThread {
-                changeTv.setTextColor(priceTv.currentTextColor)
-                priceTv.text = getString(R.string.loading_text)
-                changeTv.text = getString(R.string.loading_text)
-                symbolTv.text = ""
-            }
             // make HTTP GET request
             fetchData()
         }
@@ -97,6 +88,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         return true
+    }
+
+    private fun showLoading() {
+        runOnUiThread {
+            loadingIndicator.visibility = View.VISIBLE
+            priceContainer.visibility = View.GONE
+        }
+    }
+
+    private fun hideLoading() {
+        runOnUiThread {
+            loadingIndicator.visibility = View.GONE
+            priceContainer.visibility = View.VISIBLE
+        }
     }
 
     /**
@@ -137,6 +142,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
      * HTTP GET request using the OkHttp library
      */
     private fun fetchData() {
+        showLoading()
 
         // set up shared preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -198,7 +204,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 data = tempList[0]
                 // launch a coroutine to introduce a short delay before updating the UI
                 CoroutineScope(Dispatchers.Main).launch {
-                    delay(1000)
+                    delay(750)
+                    hideLoading()
                     // update the activity_main layout with the new price data
                     updateLayout(data, symbol, isoCode)
                 }
@@ -206,6 +213,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             override fun onFailure(call: Call, e: IOException) {
                 Log.i(TAG, "Failed to execute GET request.")
+                hideLoading()
             }
         })
     }
