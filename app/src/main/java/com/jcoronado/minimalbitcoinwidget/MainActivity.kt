@@ -194,20 +194,42 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                Log.i(TAG, "GET request successful.")
+                if (!response.isSuccessful) {
+                    // failed GET request
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(500) // short delay
+                        hideLoading()
+                    }
+                    Log.e(TAG, "Unsuccessful GET request: ${response.code}")
+                    Log.e(TAG, "Error Body: ${response.body?.string()}")
+                    // TODO - show toast message briefly
+                    // TODO - pass in "error" data to display
+                    // updateLayout(data, symbol, isoCode)
+                    return
+                }
+
+                Log.i(TAG, "Successful GET request: ${response.code}")
 
                 // converts response into string
                 val body = response.body?.string()
 
-                // extracts object from JSON
-                val tempList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
-                data = tempList[0]
-                // launch a coroutine to introduce a short delay before updating the UI
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(750)
+                Log.d(TAG, "Body: $body")
+
+                try {
+                    // extracts object from JSON
+                    val tempList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
+                    data = tempList[0]
+                    // launch a coroutine to introduce a short delay before updating the UI
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(750)
+                        hideLoading()
+                        // update the activity_main layout with the new price data
+                        updateLayout(data, symbol, isoCode)
+                    }
+                } catch (e: Exception) {
+                    // catch potential JSON parsing errors
+                    Log.e(TAG, "Failed to parse JSON", e)
                     hideLoading()
-                    // update the activity_main layout with the new price data
-                    updateLayout(data, symbol, isoCode)
                 }
             }
 
