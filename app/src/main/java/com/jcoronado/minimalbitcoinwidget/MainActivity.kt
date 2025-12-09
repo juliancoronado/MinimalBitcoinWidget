@@ -4,18 +4,27 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
-import okhttp3.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import java.io.IOException
 
 // val TAG for Log information
@@ -27,6 +36,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     var data = Data()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         // follow system theme
@@ -51,7 +61,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         fetchData()
 
         // when update button gets pressed or activity restarted
-        val updateButton: ImageButton = findViewById(R.id.main_refresh_button)
+        val updateButton: MaterialCardView = findViewById(R.id.price_card)
         updateButton.setOnClickListener {
             Log.i(TAG, "Refreshing price layout.")
 
@@ -186,8 +196,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 // extracts object from JSON
                 val tempList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
                 data = tempList[0]
-                // update the activity_main layout with the new price data
-                updateLayout(data, symbol, isoCode)
+                // launch a coroutine to introduce a short delay before updating the UI
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(1000)
+                    // update the activity_main layout with the new price data
+                    updateLayout(data, symbol, isoCode)
+                }
             }
 
             override fun onFailure(call: Call, e: IOException) {
