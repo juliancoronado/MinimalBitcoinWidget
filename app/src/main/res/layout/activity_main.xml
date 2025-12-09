@@ -150,4 +150,19 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/release_notes_button"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_gravity="right"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/dark_gray"
+        app:iconTint="@color/dark_gray"
+        app:iconSize="14dp"
+        android:textSize="14sp"
+        android:text="@string/whats_new_title"
+        app:icon="@android:drawable/ic_dialog_info" />
+
 </LinearLayout>

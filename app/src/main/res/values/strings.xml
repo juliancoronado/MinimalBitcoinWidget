@@ -20,6 +20,8 @@
     <string name="iso_code">USD</string>
     <string name="symbol">$</string>
 
+    <string name="whats_new_title">What\'s New</string>
+
     <!-- Data Info Category -->
     <string name="pref_data">Data Information</string>
 
@@ -58,5 +60,10 @@
     <!-- Currency Preferences -->
     <string name="currency_header">Local Currency</string>
     <string name="currency_title">Currency Selected</string>
+
+    <!-- Release Notes -->
+    <string name="release_notes_title">Release Notes</string>
+    <string name="release_notes_summary">Version 2.5.0 (December 2025)\n- Enhanced user interface\n- Target the latest Android API level\n- Fixed bugs and made stability improvements\n- Started development on major app overhaul (3.0)</string>
+    <string name="close">Close</string>
 
 </resources>

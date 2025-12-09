@@ -15,8 +15,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var priceContainer: LinearLayout
+    private lateinit var releaseNotesButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -55,6 +59,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         loadingIndicator = findViewById(R.id.loading_indicator)
         priceContainer = findViewById(R.id.price_container)
+        releaseNotesButton = findViewById(R.id.release_notes_button)
 
         // initial HTTP GET request
         fetchData()
@@ -65,6 +70,21 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             Log.i(TAG, "Refreshing price layout.")
             // make HTTP GET request
             fetchData()
+        }
+
+        releaseNotesButton.setOnClickListener {
+            val dialog = MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.release_notes_title))
+                .setMessage(getString(R.string.release_notes_summary))
+                .setNegativeButton(getString(R.string.close)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.blue_500))
+            val messageView = dialog.findViewById<TextView>(android.R.id.message)
+            messageView?.let {
+                it.typeface = ResourcesCompat.getFont(this, R.font.manrope_regular)
+            }
         }
     }
 
