@@ -4,13 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 34
-    buildToolsVersion "30.0.3"
+    compileSdkVersion = 36
 
     defaultConfig {
-        applicationId "com.jcoronado.minimalbitcoinwidget"
+        applicationId = "com.jcoronado.minimalbitcoinwidget"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 36
         versionCode 9
         versionName "2.4.1"
 
@@ -19,17 +18,17 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    namespace 'com.jcoronado.minimalbitcoinwidget'
+    namespace = 'com.jcoronado.minimalbitcoinwidget'
 }
 
 dependencies {
