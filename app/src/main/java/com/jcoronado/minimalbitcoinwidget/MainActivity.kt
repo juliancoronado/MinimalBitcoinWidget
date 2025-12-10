@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -38,11 +39,11 @@ private const val TAG = "Main Activity"
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    // var data will hold the information received from the HTTP Request
-    var data = Data()
-
+    // var priceData will hold the information received from the HTTP Request
+    var priceData = Data()
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var priceContainer: LinearLayout
+    private lateinit var priceCard : MaterialCardView
     private lateinit var releaseNotesButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,13 +61,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         loadingIndicator = findViewById(R.id.loading_indicator)
         priceContainer = findViewById(R.id.price_container)
         releaseNotesButton = findViewById(R.id.release_notes_button)
+        priceCard = findViewById(R.id.price_card)
 
         // initial HTTP GET request
         fetchData()
 
-        // when update button gets pressed or activity restarted
-        val updateButton: MaterialCardView = findViewById(R.id.price_card)
-        updateButton.setOnClickListener {
+        // when card is tapped or activity restarted
+        priceCard.setOnClickListener {
             Log.i(TAG, "Refreshing price layout.")
             // make HTTP GET request
             fetchData()
@@ -222,9 +223,19 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     }
                     Log.e(TAG, "Unsuccessful GET request: ${response.code}")
                     Log.e(TAG, "Error Body: ${response.body?.string()}")
-                    // TODO - show toast message briefly
-                    // TODO - pass in "error" data to display
-                    // updateLayout(data, symbol, isoCode)
+
+                    if (response.code == 429) {
+                        runOnUiThread {
+                            Toast.makeText(this@MainActivity, getString(R.string.rate_limit_toast), Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(this@MainActivity, getString(R.string.failure_toast), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    // pass in "error" data to display - not sure if this is needed anymore?
+                    // val errorData = Data(price_change_24h = 0.0f, current_price = 0.0)
+                    // updateLayout(errorData, symbol, isoCode)
                     return
                 }
 
@@ -238,13 +249,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 try {
                     // extracts object from JSON
                     val tempList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
-                    data = tempList[0]
+                    priceData = tempList[0]
                     // launch a coroutine to introduce a short delay before updating the UI
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(750)
                         hideLoading()
                         // update the activity_main layout with the new price data
-                        updateLayout(data, symbol, isoCode)
+                        updateLayout(priceData, symbol, isoCode)
                     }
                 } catch (e: Exception) {
                     // catch potential JSON parsing errors

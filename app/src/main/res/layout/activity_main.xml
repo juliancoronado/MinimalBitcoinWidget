@@ -108,32 +108,23 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
+                    android:fontFamily="@font/manrope_regular"
+                    android:gravity="center_vertical"
+                    android:text="@string/str_24h"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="4dp"
-                        android:fontFamily="@font/manrope_regular"
-                        android:gravity="center_vertical"
-                        android:text="@string/str_24h"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/main_day_change"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/manrope_regular"
-                        android:gravity="center_vertical"
-                        android:textSize="20sp"
-                        tools:text="+2.5%" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/main_day_change"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/manrope_regular"
+                    android:gravity="center_vertical"
+                    android:textSize="20sp"
+                    tools:text="+2.5%" />
 
             </LinearLayout>
 
@@ -145,24 +136,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminate="true"
-            app:indicatorColor="@color/dark_gray"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:indicatorColor="?attr/colorAccent" />
 
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/release_notes_button"
-        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
+        android:layout_margin="8dp"
         android:layout_marginTop="2dp"
-        android:textColor="@color/dark_gray"
-        app:iconTint="@color/dark_gray"
-        app:iconSize="14dp"
-        android:textSize="14sp"
+        android:gravity="center_vertical"
         android:text="@string/whats_new_title"
-        app:icon="@android:drawable/ic_dialog_info" />
+        android:textSize="14sp"
+        app:cornerRadius="8dp"
+        app:icon="@android:drawable/ic_dialog_info"
+        app:iconSize="14dp" />
 
 </LinearLayout>
