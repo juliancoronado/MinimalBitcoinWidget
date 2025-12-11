@@ -33,6 +33,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 // val TAG for Log information
 private const val TAG = "Main Activity"
@@ -211,7 +212,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=$currency&ids=bitcoin"
         val request = Request.Builder().url(url).build()
 
-        val client = OkHttpClient()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
@@ -267,6 +272,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             override fun onFailure(call: Call, e: IOException) {
                 Log.i(TAG, "Failed to execute GET request.")
                 hideLoading()
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Request timed out", Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
