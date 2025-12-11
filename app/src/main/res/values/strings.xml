@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Minimal Bitcoin Widget</string>
+    <string name="app_name" translatable="false">Minimal Bitcoin Widget</string>
 
-    <string name="widget_picker_name">Price Widget</string>
+    <string name="widget_picker_name" translatable="false">Price Widget</string>
 
     <!-- Action Bar Items -->
     <string name="settings">Settings</string>
@@ -16,13 +17,13 @@
     <string name="rate_limit_toast">Too many requests. Try again later!</string>
 
     <!-- information for the cardView -->
-    <string name="bitcoin_title">Bitcoin /</string>
-    <string name="loading_text">Loading…</string>
-    <string name="str_24h">24h:</string>
-    <string name="description1">Bitcoin logo</string>
-    <string name="description2">Refresh button</string>
-    <string name="iso_code">USD</string>
-    <string name="symbol">$</string>
+    <string name="bitcoin_title" translatable="false">Bitcoin /</string>
+    <string name="loading_text" translatable="false">Loading…</string>
+    <string name="str_24h" translatable="false">24h:</string>
+    <string name="description1" translatable="false">Bitcoin logo</string>
+    <string name="description2" translatable="false">Refresh button</string>
+    <string name="iso_code" translatable="false">USD</string>
+    <string name="symbol" translatable="false">$</string>
 
     <string name="whats_new_title">What\'s New</string>
 
@@ -30,36 +31,36 @@
     <string name="pref_data">Data Information</string>
 
     <string name="coingecko_title">Provided by CoinGecko</string>
-    <string name="coingecko_summary">coingecko.com</string>
-    <string name="coingecko_link">https://coingecko.com/</string>
+    <string name="coingecko_summary" translatable="false">coingecko.com</string>
+    <string name="coingecko_link" translatable="false">https://coingecko.com/</string>
 
     <!-- App Info Category -->
     <string name="pref_info">App Information</string>
 
     <!-- + App Version -->
     <string name="version_title">App Version</string>
-    <string name="version_summary">2.5.0 (Build 9)</string>
+    <string name="version_summary" translatable="false">2.5.0 (Build 9)</string>
 
     <!-- + License -->
     <string name="license_title">License</string>
-    <string name="license_summary">GNU General Public License v3.0</string>
+    <string name="license_summary" translatable="false">GNU General Public License v3.0</string>
 
     <!-- + Source Code -->
     <string name="source_code_title">Source Code</string>
-    <string name="source_code_summary">github.com/juliancoronado/MinimalBitcoinWidget</string>
-    <string name="source_code_link">https://github.com/juliancoronado/MinimalBitcoinWidget</string>
+    <string name="source_code_summary" translatable="false">github.com/juliancoronado/MinimalBitcoinWidget</string>
+    <string name="source_code_link" translatable="false">https://github.com/juliancoronado/MinimalBitcoinWidget</string>
 
     <!-- Developer Category -->
     <string name="pref_developer">Developer</string>
 
     <!-- + Julian Coronado (link) -->
-    <string name="dev_title">Julian Coronado</string>
-    <string name="dev_summary">jcoronado.dev</string>
-    <string name="dev_link">https://jcoronado.dev</string>
+    <string name="dev_title" translatable="false">Julian Coronado</string>
+    <string name="dev_summary" translatable="false">jcoronado.dev</string>
+    <string name="dev_link" translatable="false">https://jcoronado.dev</string>
 
     <!-- Activity Titles -->
-    <string name="title_activity_info">InfoActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_info" translatable="false">InfoActivity</string>
+    <string name="title_activity_settings" translatable="false">SettingsActivity</string>
 
     <!-- Currency Preferences -->
     <string name="currency_header">Local Currency</string>
@@ -67,7 +68,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_title">Release Notes</string>
-    <string name="release_notes_summary">Version 2.5.0 (December 2025)\n- Enhanced user interface\n- Target the latest Android API level\n- Fixed bugs and made stability improvements\n- Began development on major app overhaul</string>
+    <string name="release_notes_summary">Version 2.5.0 (December 2025)\n- Updated app user interface\n- Tap the price card to refresh (in app)\n- Target the latest Android API level\n- Fixed bugs and made stability improvements\n- Began development on major app overhaul</string>
     <string name="close">Close</string>
 
 </resources>
