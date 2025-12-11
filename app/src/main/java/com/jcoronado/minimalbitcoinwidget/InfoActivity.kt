@@ -24,7 +24,7 @@ class InfoActivity : AppCompatActivity() {
         val iToolbar : Toolbar = findViewById(R.id.i_toolbar)
         iToolbar.setNavigationOnClickListener {
             // handle on back pressed
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
     }

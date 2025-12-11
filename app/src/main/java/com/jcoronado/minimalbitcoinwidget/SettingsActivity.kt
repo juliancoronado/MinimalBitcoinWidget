@@ -24,7 +24,7 @@ class SettingsActivity : AppCompatActivity() {
         val sToolbar: Toolbar = findViewById(R.id.s_toolbar)
         sToolbar.setNavigationOnClickListener {
             // handle on back pressed
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this)
 
-        // store current currency selection
+        // store current currency selection - default to "usd"
         val currency = prefs.getString("currency", "usd")
 
         var symbol = ""

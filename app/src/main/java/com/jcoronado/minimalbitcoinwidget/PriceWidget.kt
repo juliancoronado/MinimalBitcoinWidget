@@ -126,6 +126,11 @@ fun fetchData(
             symbol = "$"
             isoCode = "AUD"
         }
+
+        "brl" -> {
+            symbol = "R$"
+            isoCode = "BRL"
+        }
     }
 
     // OkHttp
