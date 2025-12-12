@@ -11,7 +11,7 @@ Date Format: YYYY-MM-DD
 
 ### Added
 
-## [1.5.0] 
+## [2.5.0] 
 
 ### Added
 - "What's New" dialog to show changes after an update.
@@ -29,6 +29,6 @@ Date Format: YYYY-MM-DD
 - Fixed errors when setting local currency to BRL.
 - Implemented Toast messages to properly notify users of API errors.
 
-## [1.4.0] - 2023-10-03
+## [2.4] - 2023-10-03
 - Previous changes not included in this file. Check in commit history on the master branch.
 
