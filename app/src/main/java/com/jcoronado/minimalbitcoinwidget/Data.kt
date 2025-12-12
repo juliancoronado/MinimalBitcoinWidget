@@ -61,10 +61,6 @@ data class Data(
         var priceString = current_price.toString()
         var length = priceString.length
 
-//        val tempStr = "%.2f".format(current_price)
-//
-//        println("TEMP STRING: $tempStr")
-
         // API returns cents with only 1 int if ending in 0
         // example: 12,345.9 (not .90)
         // check to add extra zero(s) if needed

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings">Ajustes</string>
+    <string name="version_info">Info. de la versión</string>
+    <string name="content_description_version_info">Info. de la versión</string>
+    <string name="content_description_settings">Ajustes</string>
+    <string name="failure_toast">Error al obtener los datos de precios</string>
+    <string name="rate_limit_toast">Demasiadas solicitudes. ¡Vuelve a intentarlo más tarde!</string>
+    <string name="whats_new_title">Novedades</string>
+    <string name="pref_data">Información de datos</string>
+    <string name="coingecko_title">Por CoinGecko</string>
+    <string name="pref_info">Información de la aplicación</string>
+    <string name="version_title">Versión de la aplicación</string>
+    <string name="license_title">Licencia</string>
+    <string name="source_code_title">Código fuente</string>
+    <string name="currency_header">Moneda local</string>
+    <string name="currency_title">Moneda seleccionada</string>
+    <string name="pref_developer">Desarrollador</string>
+    <string name="release_notes_title">Notas de la versión</string>
+    <string name="release_notes_summary">Versión 2.5.0 (Diciembre 2025)\n- Interfaz de usuario de la aplicación actualizada\n- Toca la tarjeta de precios para actualizar (en la aplicación)\n- Dirigido al último nivel de API de Android\n- Errores corregidos y mejoras en la estabilidad\n- Se inició el desarrollo de una revisión importante de la aplicación</string>
+    <string name="close">Cerrar</string>
+</resources>

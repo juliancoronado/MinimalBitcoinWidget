@@ -10,6 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -23,15 +24,17 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/price_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="4dp"
+        android:layout_height="200dp"
+        android:layout_margin="8dp"
         app:cardCornerRadius="8dp"
-        android:layout_margin="8dp">
+        app:cardElevation="1dp">
 
         <LinearLayout
+            android:id="@+id/price_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -43,11 +46,11 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:padding="1dp"
-                    android:foregroundGravity="center"
                     android:layout_gravity="center"
                     android:layout_marginStart="2dp"
                     android:contentDescription="@string/description1"
+                    android:foregroundGravity="center"
+                    android:padding="1dp"
                     android:src="@drawable/bitcoin_icon" />
 
                 <TextView
@@ -71,9 +74,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -81,23 +83,22 @@
                     android:id="@+id/main_symbol"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/manrope_bold"
-                    android:textSize="35sp"
-                    android:textAlignment="center"
                     android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/manrope_bold"
                     android:gravity="center_vertical"
                     android:text="@string/symbol"
-                    />
+                    android:textAlignment="center"
+                    android:textSize="35sp" />
 
                 <TextView
-                    android:gravity="center"
-                    android:textAlignment="center"
                     android:id="@+id/main_price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/manrope_bold"
-                    android:text="@string/loading_text"
-                    android:textSize="42sp" />
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textSize="42sp"
+                    tools:text="65,000.00" />
 
             </LinearLayout>
 
@@ -107,53 +108,51 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="4dp"
-                        android:fontFamily="@font/manrope_regular"
-                        android:gravity="center_vertical"
-                        android:text="@string/str_24h"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/main_day_change"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/manrope_regular"
-                        android:gravity="center_vertical"
-                        android:text="@string/loading_text"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="0">
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
+                    android:fontFamily="@font/manrope_regular"
+                    android:gravity="center_vertical"
+                    android:text="@string/str_24h"
+                    android:textSize="20sp" />
 
-                    <ImageButton
-                        android:id="@+id/main_refresh_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/description2"
-                        android:src="@drawable/icon_refresh" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/main_day_change"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/manrope_regular"
+                    android:gravity="center_vertical"
+                    android:textSize="20sp"
+                    tools:text="+2.5%" />
 
             </LinearLayout>
 
         </LinearLayout>
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loading_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorColor="?attr/colorAccent" />
+
     </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/release_notes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="8dp"
+        android:layout_marginTop="2dp"
+        android:gravity="center_vertical"
+        android:text="@string/whats_new_title"
+        android:textSize="14sp"
+        app:cornerRadius="8dp"
+        app:icon="@android:drawable/ic_dialog_info"
+        app:iconSize="14dp" />
 
 </LinearLayout>

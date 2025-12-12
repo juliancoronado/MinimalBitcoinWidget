@@ -1,6 +1,7 @@
 package com.jcoronado.minimalbitcoinwidget
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceFragmentCompat
@@ -8,6 +9,7 @@ import androidx.preference.PreferenceFragmentCompat
 class InfoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.info_activity)
         if (savedInstanceState == null) {
@@ -22,7 +24,7 @@ class InfoActivity : AppCompatActivity() {
         val iToolbar : Toolbar = findViewById(R.id.i_toolbar)
         iToolbar.setNavigationOnClickListener {
             // handle on back pressed
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
     }

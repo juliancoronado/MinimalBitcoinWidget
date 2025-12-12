@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings">Ayarlar</string>
+    <string name="version_info">Sürüm Bilgisi</string>
+    <string name="content_description_version_info">Sürüm Bilgisi</string>
+    <string name="content_description_settings">Ayarlar</string>
+    <string name="failure_toast">Fiyat verileri alınamadı</string>
+    <string name="rate_limit_toast">Çok fazla istek. Lütfen daha sonra tekrar deneyin!</string>
+    <string name="whats_new_title">Yenilikler</string>
+    <string name="pref_data">Veri Bilgileri</string>
+    <string name="coingecko_title">CoinGecko tarafından sağlanmıştır</string>
+    <string name="pref_info">Uygulama Bilgileri</string>
+    <string name="version_title">Uygulama Sürümü</string>
+    <string name="license_title">Lisans</string>
+    <string name="source_code_title">Kaynak Kodu</string>
+    <string name="currency_header">Yerel Para Birimi</string>
+    <string name="currency_title">Seçilen Para Birimi</string>
+    <string name="pref_developer">Geliştirici</string>
+    <string name="release_notes_title">Sürüm Notları</string>
+    <string name="release_notes_summary">Sürüm 2.5.0 (Aralık 2025)\n- Uygulama kullanıcı arayüzü güncellendi\n- Yenilemek için fiyat kartına dokunun (uygulama içinde)\n- En son Android API düzeyini hedefleme\n- Hatalar düzeltildi ve kararlılık iyileştirmeleri yapıldı\n- Büyük bir uygulama revizyonunun geliştirilmesine başlandı</string>
+    <string name="close">Kapat</string>
+</resources>

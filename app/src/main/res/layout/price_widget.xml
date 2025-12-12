@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="6dp"
             android:fontFamily="@font/manrope_regular"
             android:text="@string/bitcoin_title"
             android:textColor="?attr/appWidgetTextColor"
@@ -49,13 +49,13 @@
             android:id="@+id/widget_symbol"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="3dp"
+            android:layout_marginEnd="4dp"
             android:fontFamily="@font/manrope_bold"
             android:gravity="center"
             android:text="@string/symbol"
             android:textAlignment="center"
             android:textColor="?attr/appWidgetTextColor"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/widget_text_price"
@@ -64,7 +64,7 @@
             android:fontFamily="@font/manrope_bold"
             android:text="@string/loading_text"
             android:textColor="?attr/appWidgetTextColor"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
     </LinearLayout>
 
