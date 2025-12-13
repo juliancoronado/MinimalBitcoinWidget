@@ -39,7 +39,7 @@
 
     <!-- + App Version -->
     <string name="version_title">App Version</string>
-    <string name="version_summary" translatable="false">2.5.0 (Build 9)</string>
+    <string name="version_summary" translatable="false">2.6.0-SNAPSHOT (Build 10)</string>
 
     <!-- + License -->
     <string name="license_title">License</string>
@@ -68,6 +68,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_title">Release Notes</string>
+    <!-- TODO move version string out of this translatable string -->
     <string name="release_notes_summary">Version 2.5.0 (December 2025)\n- Updated app user interface\n- Tap the price card to refresh (in app)\n- Target the latest Android API level\n- Fixed bugs and made stability improvements\n- Began development on major app overhaul</string>
     <string name="close">Close</string>
 
