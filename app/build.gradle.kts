@@ -51,5 +51,4 @@ dependencies {
     // added libraries
     implementation(libs.okhttp)
     implementation(libs.gson)
-    implementation(libs.androidx.cardview)
 }
