@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.jcoronado.minimalbitcoinwidget.MainActivity.Companion.getCurrencyInfo
 import okhttp3.Call
 import okhttp3.Callback
@@ -31,6 +32,7 @@ class PriceWidget : AppWidgetProvider() {
     override fun onUpdate(
         context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray
     ) {
+        runOneTimeCleanup(context)
         // update all available widgets
         for (appWidgetId in appWidgetIds) {
             Log.d(TAG, "Updating widget with ID: $appWidgetId")
@@ -52,7 +54,7 @@ internal fun drawWidget(
     val views = RemoteViews(context.packageName, R.layout.price_widget)
 
     // set widgets to display loading state
-    setWidgetViews(context, views, Data(), CurrencyInfo("", ""), loading = true)
+    setWidgetViews(context, views, null, CurrencyInfo("", ""), loading = true)
 
     // refresh widget UI
     appWidgetManager.updateAppWidget(appWidgetId, views) // continues after this
@@ -100,11 +102,12 @@ fun refreshData(
             return
         }
 
-        val cachedData: Data = Gson().fromJson(cachedDataJson, Data::class.java)
+        val gson = Gson()
+        val cachedPriceData: PriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
         val currency = prefs.getString(Prefs.SELECTED_CURRENCY, Prefs.CURRENCY_DEFAULT)
         val currencyInfo = getCurrencyInfo(currency)
         // set widget views with cached data
-        setWidgetViews(context, views, cachedData, currencyInfo, loading = false)
+        setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)
         showDelay(500)
         // update widget UI
         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -126,15 +129,13 @@ fun fetchFromNetwork(
     Log.d(TAG, "Fetching from network.")
     val currency = prefs.getString(Prefs.SELECTED_CURRENCY, Prefs.CURRENCY_DEFAULT)
     // current CoinGecko url to send GET request
-    val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=$currency&ids=bitcoin&precision=2"
+    val url = Api.COINGECKO_API_URL + currency
     val currencyInfo = getCurrencyInfo(currency)
 
     // OkHttp
     val request = Request.Builder().url(url).build()
 
     val client = OkHttpClient()
-
-    var priceData: Data
 
     client.newCall(request).enqueue(object : Callback {
         override fun onResponse(call: Call, response: Response) {
@@ -151,13 +152,21 @@ fun fetchFromNetwork(
             // converts response into string
             val body = response.body.string()
 
-            // extracts object from JSON
-            val jsonList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
-            priceData = jsonList.first()
+            // extracts data from JSON
+            val gson = Gson()
+            val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
+            // Map<"bitcoin", Map<"$currency", Value>>
+            val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
+
+            val priceDataJson = data["bitcoin"] ?: return
+
+            val price = priceDataJson[currency] ?: 0.0
+            val change24h = priceDataJson["${currency}_24h_change"] ?: 0.0
+            val priceData = PriceData(price, change24h)
 
             prefs.edit {
                 putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
-                putString(Prefs.CACHED_PRICE_DATA, Gson().toJson(priceData))
+                putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))
                 apply()
             }
 
@@ -176,10 +185,11 @@ fun fetchFromNetwork(
     })
 }
 
+// PriceData being null and loading are mutually exclusive
 fun setWidgetViews(
     context: Context,
     views: RemoteViews,
-    priceData: Data,
+    priceData: PriceData?,
     currencyInfo: CurrencyInfo,
     loading: Boolean
 ) {
@@ -190,13 +200,15 @@ fun setWidgetViews(
         views.setTextViewText(R.id.widget_symbol, "")
     } else {
         // data loaded state
-        views.setTextViewText(R.id.widget_text_price, priceData.priceString())
-        views.setTextViewText(R.id.widget_day_change, priceData.dayChangeString())
+        views.setTextViewText(R.id.widget_text_price, priceData!!.currentPrice.toString())
+        views.setTextViewText(
+            R.id.widget_day_change, "%.2f".format(priceData.priceChangePercentage24h) + "%"
+        )
         views.setTextViewText(R.id.widget_iso_code, currencyInfo.isoCode)
         views.setTextViewText(R.id.widget_symbol, currencyInfo.symbol)
 
         // determine the specific color for the day change view (red or green)
-        val isPositive = priceData.dayChangeString().contains('+')
+        val isPositive = priceData.priceChangePercentage24h >= 0
         val dayChangeColor = if (isPositive) {
             ContextCompat.getColor(context, R.color.positive_green)
         } else {
@@ -204,5 +216,18 @@ fun setWidgetViews(
         }
         // apply to widget_day_change textView
         views.setTextColor(R.id.widget_day_change, dayChangeColor)
+    }
+}
+
+private fun runOneTimeCleanup(context: Context) {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    val cleanupComplete = prefs.getBoolean(Prefs.OLD_CACHE_CLEANED_UP, false)
+
+    if (!cleanupComplete) {
+        Log.d(TAG, "Running one-time cleanup for key (v1): ${Prefs.CACHED_PRICE_DATA_V1}")
+        // check for previous CACHE_KEY and remove it
+        prefs.edit {
+            remove(Prefs.CACHED_PRICE_DATA_V1).putBoolean(Prefs.OLD_CACHE_CLEANED_UP, true)
+        }
     }
 }
