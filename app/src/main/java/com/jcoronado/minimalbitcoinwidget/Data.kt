@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget
 
+@Deprecated("Use SimplePriceData instead")
 data class Data(
     // all values initialized to null
     var id: String? = null,
