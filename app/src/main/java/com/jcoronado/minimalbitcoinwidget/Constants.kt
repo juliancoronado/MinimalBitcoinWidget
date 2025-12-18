@@ -7,11 +7,9 @@ import java.util.concurrent.TimeUnit
  */
 object Prefs {
     const val LAST_API_CALL_TIMESTAMP = "app_last_api_call_timestamp"
-    const val CACHED_PRICE_DATA_V1 = "app_cached_price_data"
-    const val CACHED_PRICE_DATA = "app_cached_price_data_v2"
+    const val CACHED_PRICE_DATA = "app_cached_price_data_v1"
     const val SELECTED_CURRENCY = "currency"
     const val CURRENCY_DEFAULT = "usd"
-    const val OLD_CACHE_CLEANED_UP = "app_old_cache_cleaned_up"
 }
 
 /**

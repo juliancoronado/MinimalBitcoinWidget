@@ -76,8 +76,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        runOneTimeCleanup()
-
         // follow system theme
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         setContentView(R.layout.activity_main)
@@ -394,18 +392,5 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
         sendBroadcast(intent)
-    }
-
-    private fun runOneTimeCleanup() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val cleanupComplete = prefs.getBoolean(Prefs.OLD_CACHE_CLEANED_UP, false)
-
-        if (!cleanupComplete) {
-            Log.d(TAG, "Running one-time cleanup for key (v1): ${Prefs.CACHED_PRICE_DATA_V1}")
-            // check for previous CACHE_KEY and remove it
-            prefs.edit {
-                remove(Prefs.CACHED_PRICE_DATA_V1).putBoolean(Prefs.OLD_CACHE_CLEANED_UP, true)
-            }
-        }
     }
 }
