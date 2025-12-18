@@ -24,6 +24,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -74,6 +75,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        runOneTimeCleanup()
 
         // follow system theme
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
@@ -167,7 +170,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     /**
      * Updates the price information layout
      */
-    private fun updateLayoutValues(values: Data, currencyInfo: CurrencyInfo) {
+    private fun updateLayoutValues(priceData: PriceData, currencyInfo: CurrencyInfo) {
         val symbol = currencyInfo.symbol
         val isoCode = currencyInfo.isoCode
 
@@ -178,25 +181,23 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val symbolTv: TextView = findViewById(R.id.main_symbol)
 
         runOnUiThread {
-
             // update the layout with new data
-            priceTv.text = values.priceString()
-            changeTv.text = values.dayChangeString()
+            // TODO - fix price string to display different formatting localizations
+            priceTv.text = priceData.currentPrice.toString()
+            changeTv.text = "%.2f".format(priceData.priceChangePercentage24h) + "%"
             isoCodeTv.text = isoCode
             symbolTv.text = symbol
 
-            // check for positive or negative change to set color accordingly
-            if (values.dayChangeString() == "0.0%") {
+            if (priceData.priceChangePercentage24h == 0.0) {
                 // no change
                 changeTv.setTextColor(priceTv.currentTextColor)
-            } else if (values.dayChangeString().contains('+')) {
-                // green color
-                changeTv.setTextColor(ContextCompat.getColor(this, R.color.positive_green))
-            } else {
-                // red color
+            } else if (priceData.priceChangePercentage24h < 0) {
+                // negative
                 changeTv.setTextColor(ContextCompat.getColor(this, R.color.negative_red))
+            } else {
+                // positive
+                changeTv.setTextColor(ContextCompat.getColor(this, R.color.positive_green))
             }
-
         }
     }
 
@@ -228,12 +229,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         if (currentTime - lastApiCallTime < AppConstants.CACHE_DURATION_MILLIS) {
             // still within the cache duration - check shared prefs for cached data
             val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
+            Log.d(TAG, "Cached Data: $cachedDataJson")
             if (cachedDataJson != null) {
                 // cachedData is not null
                 Log.d(TAG, "Loading data from cache.")
                 val currency = prefs.getString(Prefs.SELECTED_CURRENCY, Prefs.CURRENCY_DEFAULT)
                 // use the cached data instead of making a network call
-                val cachedData: Data = Gson().fromJson(cachedDataJson, Data::class.java)
+                val cachedData: PriceData = Gson().fromJson(cachedDataJson, PriceData::class.java)
                 val currencyInfo = getCurrencyInfo(currency)
                 updateLayoutValues(cachedData, currencyInfo)
                 CoroutineScope(Dispatchers.Main).launch {
@@ -263,8 +265,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private fun fetchFromNetwork(prefs: SharedPreferences) {
         val currency = prefs.getString(Prefs.SELECTED_CURRENCY, Prefs.CURRENCY_DEFAULT)
         val currencyInfo = getCurrencyInfo(currency)
-        val url =
-            "https://api.coingecko.com/api/v3/coins/markets?vs_currency=$currency&ids=bitcoin&precision=2"
+        val url = Api.COINGECKO_API_URL + currency
         val request = Request.Builder().url(url).build()
 
         val client = OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
@@ -277,13 +278,21 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     val body = response.body.string()
                     Log.d(TAG, "Body: $body")
                     try {
-                        val jsonList: Array<Data> = Gson().fromJson(body, Array<Data>::class.java)
-                        val newData = jsonList.first()
+                        val gson = Gson()
+                        val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
+                        // Map<"bitcoin", Map<"$currency", Value>>
+                        val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
+
+                        val priceDataJson = data["bitcoin"] ?: return
+
+                        val price = priceDataJson[currency] ?: 0.0
+                        val change24h = priceDataJson["${currency}_24h_change"] ?: 0.0
+                        val priceData = PriceData(price, change24h)
 
                         // store the new data
                         prefs.edit {
                             putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
-                            putString(Prefs.CACHED_PRICE_DATA, Gson().toJson(newData))
+                            putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))
                             apply()
                         }
 
@@ -293,7 +302,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                             hideLoading()
                             // update the activity_main layout with the new price data
                             updateLayoutValues(
-                                newData, currencyInfo
+                                priceData, currencyInfo
                             )
                             redrawWidgets()
                         }
@@ -385,5 +394,18 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
         sendBroadcast(intent)
+    }
+
+    private fun runOneTimeCleanup() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val cleanupComplete = prefs.getBoolean(Prefs.OLD_CACHE_CLEANED_UP, false)
+
+        if (!cleanupComplete) {
+            Log.d(TAG, "Running one-time cleanup for key (v1): ${Prefs.CACHED_PRICE_DATA_V1}")
+            // check for previous CACHE_KEY and remove it
+            prefs.edit {
+                remove(Prefs.CACHED_PRICE_DATA_V1).putBoolean(Prefs.OLD_CACHE_CLEANED_UP, true)
+            }
+        }
     }
 }
