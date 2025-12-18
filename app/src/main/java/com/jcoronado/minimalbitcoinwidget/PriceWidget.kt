@@ -32,7 +32,6 @@ class PriceWidget : AppWidgetProvider() {
     override fun onUpdate(
         context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray
     ) {
-        runOneTimeCleanup(context)
         // update all available widgets
         for (appWidgetId in appWidgetIds) {
             Log.d(TAG, "Updating widget with ID: $appWidgetId")
@@ -216,18 +215,5 @@ fun setWidgetViews(
         }
         // apply to widget_day_change textView
         views.setTextColor(R.id.widget_day_change, dayChangeColor)
-    }
-}
-
-private fun runOneTimeCleanup(context: Context) {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    val cleanupComplete = prefs.getBoolean(Prefs.OLD_CACHE_CLEANED_UP, false)
-
-    if (!cleanupComplete) {
-        Log.d(TAG, "Running one-time cleanup for key (v1): ${Prefs.CACHED_PRICE_DATA_V1}")
-        // check for previous CACHE_KEY and remove it
-        prefs.edit {
-            remove(Prefs.CACHED_PRICE_DATA_V1).putBoolean(Prefs.OLD_CACHE_CLEANED_UP, true)
-        }
     }
 }
