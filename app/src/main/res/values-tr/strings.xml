@@ -17,6 +17,7 @@
     <string name="currency_title">Seçilen Para Birimi</string>
     <string name="pref_developer">Geliştirici</string>
     <string name="release_notes_title">Sürüm Notları</string>
-    <string name="release_notes_summary">Sürüm 2.5.0 (Aralık 2025)\n- Uygulama kullanıcı arayüzü güncellendi\n- Yenilemek için fiyat kartına dokunun (uygulama içinde)\n- En son Android API düzeyini hedefleme\n- Hatalar düzeltildi ve kararlılık iyileştirmeleri yapıldı\n- Büyük bir uygulama revizyonunun geliştirilmesine başlandı</string>
+    <string name="release_notes_date">(Aralık 2025)</string>
+    <string name="release_notes_summary">- Fiyat verilerini yenilemeler arasında yerel olarak sakla\n- Daha basit bir Coingecko uç noktası kullan\n- Ana ekran widget\'ında dairesel bir yükleme göstergesi göster</string>
     <string name="close">Kapat</string>
 </resources>

@@ -39,7 +39,8 @@
 
     <!-- + App Version -->
     <string name="version_title">App Version</string>
-    <string name="version_summary" translatable="false">2.5.0 (Build 9)</string>
+    <string name="version_summary" translatable="false">2.6.0 (Build 10)</string>
+    <string name="version_only_main" translatable="false">Version 2.6.0</string>
 
     <!-- + License -->
     <string name="license_title">License</string>
@@ -68,7 +69,8 @@
 
     <!-- Release Notes -->
     <string name="release_notes_title">Release Notes</string>
-    <string name="release_notes_summary">Version 2.5.0 (December 2025)\n- Updated app user interface\n- Tap the price card to refresh (in app)\n- Target the latest Android API level\n- Fixed bugs and made stability improvements\n- Began development on major app overhaul</string>
+    <string name="release_notes_date">(December 2025)</string>
+    <string name="release_notes_summary">- Store price data locally between refreshes\n- Use simpler Coingecko endpoint\n- Display a circular loading indicator on the home screen widget</string>
     <string name="close">Close</string>
 
 </resources>

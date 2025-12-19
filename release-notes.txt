@@ -1,0 +1,63 @@
+// release notes for the Google Play Store listing including translations
+<en-US>
+- Added a local cache to store price data locally.
+- Added a loading indicator on the home screen widget.
+- Added price display based on the device's locale format.
+- Updated Android dependencies.
+- Updated Coingecko endpoint to use simple/price/.
+- Bug fixes and improvements.
+</en-US>
+
+<es-ES>
+- Se agregó un caché local para almacenar los datos de precios localmente.
+- Se agregó un indicador de carga en el widget de la pantalla de inicio.
+- Se agregó la visualización de precios basada en el formato regional del dispositivo.
+- Se actualizaron las dependencias de Android.
+- Se actualizó el endpoint de Coingecko para usar simple/price/.
+- Corrección de errores y mejoras.
+</es-ES>
+
+<de-DE>
+- Lokaler Cache zum lokalen Speichern von Preisdaten hinzugefügt.
+- Ladeanzeige für das Startbildschirm-Widget hinzugefügt.
+- Preisanzeige basierend auf dem Gebietsschema-Format des Geräts hinzugefügt.
+- Android-Abhängigkeiten aktualisiert.
+- Coingecko-Endpunkt auf simple/price/ aktualisiert.
+- Fehlerbehebungen und Verbesserungen.
+</de-DE>
+
+<fr-FR>
+- Ajout d'un cache local pour stocker les données de prix localement.
+- Ajout d'un indicateur de chargement sur le widget de l'écran d'accueil.
+- Affichage du prix basé sur le format linguistique de l'appareil.
+- Mise à jour des dépendances Android.
+- Mise à jour du point de terminaison Coingecko pour utiliser simple/price/.
+- Corrections de bugs et améliorations.
+</fr-FR>
+
+<it-IT>
+- Aggiunta una cache locale per memorizzare i dati dei prezzi localmente.
+- Aggiunto indicatore di caricamento sul widget della schermata iniziale.
+- Visualizzazione del prezzo in base al formato locale del dispositivo.
+- Aggiornate le dipendenze di Android.
+- Aggiornato l'endpoint Coingecko per utilizzare simple/price/.
+- Correzioni di bug e miglioramenti.
+</it-IT>
+
+<pt-BR>
+- Adicionado cache local para armazenar dados de preços localmente.
+- Adicionado indicador de carregamento no widget da tela inicial.
+- Exibição de preços com base no formato de localidade do dispositivo.
+- Dependências do Android atualizadas.
+- Endpoint do Coingecko atualizado para usar simple/price/.
+- Correções de bugs e melhorias.
+</pt-BR>
+
+<tr-TR>
+- Fiyat verilerini yerel olarak depolamak için yerel önbellek eklendi.
+- Ana ekran widget'ına yükleme göstergesi eklendi.
+- Fiyatların cihazın yerel biçimine göre görüntülenmesi sağlandı.
+- Android bağımlılıkları güncellendi.
+- Coingecko uç noktası simple/price/ kullanacak şekilde güncellendi.
+- Hata düzeltmeleri ve iyileştirmeler.
+</tr-TR>

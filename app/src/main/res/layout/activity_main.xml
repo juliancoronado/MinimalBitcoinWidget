@@ -115,7 +115,7 @@
                     android:fontFamily="@font/manrope_regular"
                     android:gravity="center_vertical"
                     android:text="@string/str_24h"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/main_day_change"
@@ -123,7 +123,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/manrope_regular"
                     android:gravity="center_vertical"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     tools:text="+2.5%" />
 
             </LinearLayout>

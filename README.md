@@ -43,8 +43,7 @@ To build and run the project locally, you can clone the repository and open it i
 ## Known Issues
 
 - The home screen widget may not refresh when Low Power Mode is enabled.
-- The widget can occasionally get stuck on "Loading...". A manual refresh usually resolves this.
-- "Loading..." text color for widget next to "24h:" should be the default widget text color, not green/red.
+- The widget can occasionally get stuck on the loading state. A manual refresh usually resolves this.
 - On shorter displays, the widget layout is not displayed properly.
 
 ## Contributing

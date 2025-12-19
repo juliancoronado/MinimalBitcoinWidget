@@ -17,6 +17,7 @@
     <string name="currency_title">Valuta selezionata</string>
     <string name="pref_developer">Sviluppatore</string>
     <string name="release_notes_title">Note sulla versione</string>
-    <string name="release_notes_summary">Versione 2.5.0 (Dicembre 2025)\n- Interfaccia utente dell\'app aggiornata\n- Tocca la scheda del prezzo per aggiornare (nell\'app)\n- Obiettivo al più recente livello API di Android\n- Risoluzione di bug e miglioramenti della stabilità\n- Inizio dello sviluppo di una revisione importante dell\'app</string>
+    <string name="release_notes_date">(Dicembre 2025)</string>
+    <string name="release_notes_summary">- Memorizzare localmente i dati dei prezzi tra un aggiornamento e l\'altro\n- Utilizzare un endpoint Coingecko più semplice\n- Visualizzare un indicatore di caricamento circolare nel widget della schermata principale</string>
     <string name="close">Chiudi</string>
 </resources>
