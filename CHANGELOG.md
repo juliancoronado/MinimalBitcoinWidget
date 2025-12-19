@@ -9,7 +9,16 @@ Date Format: YYYY-MM-DD
 
 ## [Unreleased]
 
+## [2.6.0]
+
 ### Added
+- Local cache to store the price data locally
+- Loading indicator on homescreen widget
+- Displaying the price based on the devices locale format
+
+### Changed
+- Updated Android dependencies
+- Updated Coingecko endpoint to use simple/price/
 
 ## [2.5.0] 
 

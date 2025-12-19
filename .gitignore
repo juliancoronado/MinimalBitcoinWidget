@@ -9,5 +9,5 @@ build/
 .cxx/
 local.properties
 /app/release/
-*.txt
+notes.txt
 *upload-keystore.jks
