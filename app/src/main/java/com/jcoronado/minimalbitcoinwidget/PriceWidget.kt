@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -20,6 +21,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.text.NumberFormat
 
 /**
  * Implementation of App Widget functionality.
@@ -194,14 +196,29 @@ fun setWidgetViews(
 ) {
     if (loading) {
         // loading state
-        views.setTextViewText(R.id.widget_text_price, "Loading...")
+        views.setViewVisibility(R.id.widget_progress_bar, View.VISIBLE)
+        views.setViewVisibility(R.id.widget_text_price, View.GONE)
+        views.setViewVisibility(R.id.widget_symbol, View.GONE)
         views.setTextViewText(R.id.widget_day_change, "")
-        views.setTextViewText(R.id.widget_symbol, "")
     } else {
         // data loaded state
-        views.setTextViewText(R.id.widget_text_price, priceData!!.currentPrice.toString())
+        views.setViewVisibility(R.id.widget_progress_bar, View.GONE)
+        views.setViewVisibility(R.id.widget_text_price, View.VISIBLE)
+        views.setViewVisibility(R.id.widget_symbol, View.VISIBLE)
+
+        val numberFormatter = NumberFormat.getNumberInstance().apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
+
+        val percentFormatter = NumberFormat.getPercentInstance().apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
+
+        views.setTextViewText(R.id.widget_text_price, numberFormatter.format(priceData!!.currentPrice))
         views.setTextViewText(
-            R.id.widget_day_change, "%.2f".format(priceData.priceChangePercentage24h) + "%"
+            R.id.widget_day_change, percentFormatter.format(priceData.priceChangePercentage24h / 100)
         )
         views.setTextViewText(R.id.widget_iso_code, currencyInfo.isoCode)
         views.setTextViewText(R.id.widget_symbol, currencyInfo.symbol)
