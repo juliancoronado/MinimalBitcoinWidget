@@ -35,6 +35,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.text.NumberFormat
 import java.util.concurrent.TimeUnit
 
 // val TAG for Log information
@@ -180,9 +181,18 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         runOnUiThread {
             // update the layout with new data
-            // TODO - fix price string to display different formatting localizations
-            priceTv.text = priceData.currentPrice.toString()
-            changeTv.text = "%.2f".format(priceData.priceChangePercentage24h) + "%"
+            val numberFormatter = NumberFormat.getNumberInstance().apply {
+                minimumFractionDigits = 2
+                maximumFractionDigits = 2
+            }
+            priceTv.text = numberFormatter.format(priceData.currentPrice)
+
+            val percentFormatter = NumberFormat.getPercentInstance().apply {
+                minimumFractionDigits = 2
+                maximumFractionDigits = 2
+            }
+            changeTv.text = percentFormatter.format(priceData.priceChangePercentage24h / 100)
+
             isoCodeTv.text = isoCode
             symbolTv.text = symbol
 
