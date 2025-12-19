@@ -97,9 +97,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         releaseNotesButton.setOnClickListener {
+            val header = getString(R.string.version_only_main) + " - " + getString(R.string.release_notes_date)
             val dialog =
                 MaterialAlertDialogBuilder(this).setTitle(getString(R.string.release_notes_title))
-                    .setMessage(getString(R.string.release_notes_summary))
+                    .setMessage(header + "\n" + getString(R.string.release_notes_summary))
                     .setNegativeButton(getString(R.string.close)) { dialog, _ ->
                         dialog.dismiss()
                     }.show()
