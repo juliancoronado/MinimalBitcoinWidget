@@ -1,0 +1,52 @@
+// release notes for the Google Play Store listing including translations
+<en-US>
+- The app now goes Edge-to-Edge for a more immersive look.
+- See a summary of changes right in the app after an update.
+- Added support for German, Spanish, French, Italian, Portuguese, and Turkish.
+- Themed home screen icon for Android 13+ devices.
+- Fixed colors in Dark Mode and improved the home screen widget layout.
+- Bug fixes and improvements.
+</en-US>
+<es-ES>
+- La aplicación ahora es de borde a borde para un diseño más inmersivo.
+- Mira un resumen de los cambios directamente en la aplicación después de una actualización.
+- Se agregó soporte para alemán, español, francés, italiano, portugués y turco.
+- Icono de pantalla de inicio temático para dispositivos con Android 13+.
+- Corrección de errores y mejoras.
+</es-ES>
+<de-DE>
+- Die App ist jetzt Edge-to-Edge für ein noch intensiveres Erlebnis.
+- Sieh dir nach einem Update eine Zusammenfassung der Änderungen direkt in der App an.
+- Unterstützung für Deutsch, Spanisch, Französisch, Italienisch, Portugiesisch und Türkisch hinzugefügt.
+- Themenbezogenes Startbildschirm-Symbol für Geräte mit Android 13+.
+- Fehlerbehebungen und Verbesserungen.
+</de-DE>
+<fr-FR>
+- L'application est désormais en affichage bord à bord pour un aspect plus immersif.
+- Consultez un résumé des modifications directement dans l'application après une mise à jour.
+- Ajout de la prise en charge de l'allemand, de l'espagnol, du français, de l'italien, du portugais et du turc.
+- Icône d'écran d'accueil à thème pour les appareils Android 13+.
+- Corrections de bugs et améliorations.
+</fr-FR>
+<it-IT>
+- L'app è ora edge-to-edge per un look più coinvolgente.
+- Visualizza un riepilogo delle modifiche direttamente nell'app dopo un aggiornamento.
+- Aggiunto il supporto per tedesco, spagnolo, francese, italiano, portoghese e turco.
+- Icona della schermata iniziale a tema per i dispositivi Android 13+.
+- Correzioni di bug e miglioramenti.
+</it-IT>
+<pt-BR>
+- O aplicativo agora é de borda a borda para um visual mais imersivo.
+- Veja um resumo das alterações diretamente no aplicativo após uma atualização.
+- Adicionado suporte para alemão, espanhol, francês, italiano, português e turco.
+- Ícone de tela inicial temático para dispositivos Android 13+.
+- Correções de bugs e melhorias.
+</pt-BR>
+<tr-TR>
+- Uygulama artık daha etkileyici bir görünüm için uçtan uca (Edge-to-Edge) ekranı destekliyor.
+- Güncellemeden sonra değişikliklerin özetini doğrudan uygulama içinden görebilirsiniz.
+- Almanca, İspanyolca, Fransızca, İtalyanca, Portekizce ve Türkçe dil desteği eklendi.
+- Android 13+ cihazlar için temalı ana ekran simgesi.
+- Hata düzeltmeleri ve iyileştirmeler.
+</tr-TR>
+
