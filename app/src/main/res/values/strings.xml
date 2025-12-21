@@ -39,8 +39,8 @@
 
     <!-- + App Version -->
     <string name="version_title">App Version</string>
-    <string name="version_summary" translatable="false">2.6.0 (Build 10)</string>
-    <string name="version_only_main" translatable="false">Version 2.6.0</string>
+    <string name="version_summary" translatable="false">2.6.1 (Build 11)</string>
+    <string name="version_only_main" translatable="false">Version 2.6.1</string>
 
     <!-- + License -->
     <string name="license_title">License</string>
