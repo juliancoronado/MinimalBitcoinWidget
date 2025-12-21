@@ -43,7 +43,6 @@ To build and run the project locally, you can clone the repository and open it i
 ## Known Issues
 
 - The home screen widget may not refresh when Low Power Mode is enabled.
-- The widget can occasionally get stuck on the loading state. A manual refresh usually resolves this.
 - On shorter displays, the widget layout is not displayed properly.
 
 ## Contributing
