@@ -9,6 +9,11 @@ Date Format: YYYY-MM-DD
 
 ## [Unreleased]
 
+## [2.6.1]
+
+### Fixed
+- Handle network failures when the widget refreshes data
+
 ## [2.6.0]
 
 ### Added

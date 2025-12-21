@@ -139,11 +139,24 @@ fun fetchFromNetwork(
     val client = OkHttpClient()
 
     client.newCall(request).enqueue(object : Callback {
+        val gson = Gson()
         override fun onResponse(call: Call, response: Response) {
-
             if (!response.isSuccessful) {
                 // unsuccessful GET request
                 Log.w(TAG, "Unsuccessful GET request: ${response.code}")
+                showDelay(300)
+                // if get request fails, show cached data
+                val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
+
+                if (cachedDataJson == null) {
+                    // if no cached data, show zeros as default values
+                    setWidgetViews(context, views, PriceData(currentPrice = 0.0, priceChangePercentage24h = 0.0), currencyInfo, loading = false)
+                } else {
+                    val cachedPriceData: PriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
+                    setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)
+                }
+
+                appWidgetManager.updateAppWidget(appWidgetId, views)
                 return
             }
 
@@ -154,7 +167,6 @@ fun fetchFromNetwork(
             val body = response.body.string()
 
             // extracts data from JSON
-            val gson = Gson()
             val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
             // Map<"bitcoin", Map<"$currency", Value>>
             val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
@@ -182,6 +194,19 @@ fun fetchFromNetwork(
         override fun onFailure(call: Call, e: IOException) {
             // failed GET request
             Log.w(TAG, "Failed to execute GET request.")
+            showDelay(300)
+            // if request fails, use cached data
+            val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
+            if (cachedDataJson == null) {
+                // if no cached data, show zeros as default values
+                setWidgetViews(context, views, PriceData(currentPrice = 0.0, priceChangePercentage24h = 0.0), currencyInfo, loading = false)
+            } else {
+                val cachedPriceData: PriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
+                setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)
+            }
+
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+            return
         }
     })
 }
