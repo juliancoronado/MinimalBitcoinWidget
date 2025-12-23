@@ -1,0 +1,124 @@
+package com.jcoronado.minimalbitcoinwidget.viewmodels
+
+import android.app.Application
+import android.util.Log
+import androidx.core.content.edit
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.jcoronado.minimalbitcoinwidget.classes.Api
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
+import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.classes.PriceData
+import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
+
+private const val LOG_TAG = "PriceViewModel"
+
+class PriceViewModel(application: Application) : AndroidViewModel(application) {
+    private val _uiState = MutableStateFlow(PriceUiState(isLoading = true))
+
+    // read-only state
+    val uiState: StateFlow<PriceUiState> = _uiState.asStateFlow()
+
+    private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
+    private val client = OkHttpClient.Builder().build()
+    private val gson = Gson()
+
+    init {
+        loadInitialData()
+        fetchPrice()
+    }
+
+    /** Load initial data from SharedPreferences. */
+    private fun loadInitialData() {
+        val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
+        val cachedCurrency =
+            prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)!!
+        if (cachedDataJson != null) {
+            try {
+                val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
+                // update state immediately
+                _uiState.value = _uiState.value.copy(
+                    price = cachedData.currentPrice,
+                    percentageChange = cachedData.priceChangePercentage24h,
+                    selectedCurrency = cachedCurrency
+                )
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Failed to parse initial cache $e")
+            }
+        }
+    }
+
+    /** Fetch data from the Coingecko API. */
+    fun fetchPrice(force: Boolean = false) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+
+            val lastApiCallTime = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
+            val currentTime = System.currentTimeMillis()
+
+            val hasCache = prefs.contains(Prefs.CACHED_PRICE_DATA)
+            val isFresh = (currentTime - lastApiCallTime < AppConstants.CACHE_DURATION_MILLIS)
+
+            if (!force && hasCache && isFresh) {
+                Log.d(LOG_TAG, "Using cached data")
+                delay(1000)
+                _uiState.value = _uiState.value.copy(isLoading = false)
+                return@launch
+            }
+
+            val currency = _uiState.value.selectedCurrency
+            val url = Api.COINGECKO_API_URL + currency
+            val request = Request.Builder().url(url).build()
+
+            try {
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    Log.d(LOG_TAG, "Successful GET request: ${response.code}")
+                    val body = response.body.string()
+                    val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
+                    val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
+
+                    Log.d("PriceViewModel", "Body: $body")
+
+                    val priceDataJson = data["bitcoin"] ?: throw Exception("Invalid JSON")
+                    val price = priceDataJson[currency] ?: 0.0
+                    val change24h = priceDataJson["${currency}_24h_change"] ?: 0.0
+
+                    // update cached values
+                    prefs.edit {
+                        putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
+                        putString(Prefs.CACHED_PRICE_DATA, gson.toJson(PriceData(price, change24h)))
+                    }
+
+                    delay(500)
+
+                    _uiState.value = _uiState.value.copy(
+                        price = price, percentageChange = change24h, isLoading = false
+                    )
+                } else {
+                    Log.w(LOG_TAG, "Unsuccessful GET request: ${response.code}")
+                    delay(1000)
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false, errorMessage = "Server Error: ${response.code}"
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Network call failed: ${e.message}")
+                delay(1000)
+                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "Error: $e")
+            }
+        }
+
+    }
+}

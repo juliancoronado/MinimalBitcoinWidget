@@ -1,4 +1,4 @@
-package com.jcoronado.minimalbitcoinwidget
+package com.jcoronado.minimalbitcoinwidget.classes
 
 import java.util.concurrent.TimeUnit
 
@@ -9,13 +9,13 @@ object Prefs {
     const val LAST_API_CALL_TIMESTAMP = "app_last_api_call_timestamp"
     const val CACHED_PRICE_DATA = "app_cached_price_data_v1"
     const val SELECTED_CURRENCY = "currency"
-    const val CURRENCY_DEFAULT = "usd"
 }
 
 /**
  * Holds app constant values.
  */
 object AppConstants {
+    const val CURRENCY_DEFAULT = "usd"
     private const val CACHE_DURATION_MINUTES = 29L
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
 }

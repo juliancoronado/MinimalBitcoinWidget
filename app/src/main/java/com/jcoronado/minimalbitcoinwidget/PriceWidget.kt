@@ -14,7 +14,10 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.jcoronado.minimalbitcoinwidget.MainActivity.Companion.getCurrencyInfo
+import com.jcoronado.minimalbitcoinwidget.classes.Api
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
+import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -28,6 +31,21 @@ import java.text.NumberFormat
  */
 
 private const val TAG = "Price Widget"
+
+fun getCurrencyInfo(currency: String?): CurrencyInfo {
+    return when (currency) {
+        "usd" -> CurrencyInfo("$", "USD")
+        "gbp" -> CurrencyInfo("£", "GBP")
+        "eur" -> CurrencyInfo("€", "EUR")
+        "cad" -> CurrencyInfo("$", "CAD")
+        "mxn" -> CurrencyInfo("$", "MXN")
+        "aud" -> CurrencyInfo("$", "AUD")
+        "brl" -> CurrencyInfo("R$", "BRL")
+        else -> CurrencyInfo("$", "USD") // default to USD
+    }
+}
+
+data class CurrencyInfo(val symbol: String, val isoCode: String)
 
 class PriceWidget : AppWidgetProvider() {
 
@@ -105,7 +123,7 @@ fun refreshData(
 
         val gson = Gson()
         val cachedPriceData: PriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
-        val currency = prefs.getString(Prefs.SELECTED_CURRENCY, Prefs.CURRENCY_DEFAULT)
+        val currency = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
         val currencyInfo = getCurrencyInfo(currency)
         // set widget views with cached data
         setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)
@@ -128,7 +146,7 @@ fun fetchFromNetwork(
     prefs: SharedPreferences
 ) {
     Log.d(TAG, "Fetching from network.")
-    val currency = prefs.getString(Prefs.SELECTED_CURRENCY, Prefs.CURRENCY_DEFAULT)
+    val currency = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
     // current CoinGecko url to send GET request
     val url = Api.COINGECKO_API_URL + currency
     val currencyInfo = getCurrencyInfo(currency)
@@ -150,7 +168,8 @@ fun fetchFromNetwork(
 
                 if (cachedDataJson == null) {
                     // if no cached data, show zeros as default values
-                    setWidgetViews(context, views, PriceData(currentPrice = 0.0, priceChangePercentage24h = 0.0), currencyInfo, loading = false)
+                    setWidgetViews(context, views,
+                        PriceData(currentPrice = 0.0, priceChangePercentage24h = 0.0), currencyInfo, loading = false)
                 } else {
                     val cachedPriceData: PriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
                     setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)
@@ -199,7 +218,8 @@ fun fetchFromNetwork(
             val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
             if (cachedDataJson == null) {
                 // if no cached data, show zeros as default values
-                setWidgetViews(context, views, PriceData(currentPrice = 0.0, priceChangePercentage24h = 0.0), currencyInfo, loading = false)
+                setWidgetViews(context, views,
+                    PriceData(currentPrice = 0.0, priceChangePercentage24h = 0.0), currencyInfo, loading = false)
             } else {
                 val cachedPriceData: PriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
                 setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)

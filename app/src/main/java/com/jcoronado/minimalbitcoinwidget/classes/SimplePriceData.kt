@@ -1,4 +1,4 @@
-package com.jcoronado.minimalbitcoinwidget
+package com.jcoronado.minimalbitcoinwidget.classes
 
 /**
  * A simplified data class to hold only the required information from the API response.
