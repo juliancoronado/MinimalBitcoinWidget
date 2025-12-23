@@ -73,8 +73,13 @@ fun AppNavigation(
                     NavEntry(
                         key
                     ) {
+                        val viewModel: PriceViewModel = viewModel()
+                        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                         SettingsScreen(
-                            onBackButtonClick = { backStack.removeAt(backStack.lastIndex) })
+                            selectedCurrency = uiState.selectedCurrency,
+                            onCurrencySelected = { viewModel.updateCurrency(it) },
+                            onBackButtonClick = { backStack.removeAt(backStack.lastIndex) }
+                        )
                     }
                 }
 

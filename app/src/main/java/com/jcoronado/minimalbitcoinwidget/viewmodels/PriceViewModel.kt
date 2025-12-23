@@ -1,13 +1,20 @@
 package com.jcoronado.minimalbitcoinwidget.viewmodels
 
 import android.app.Application
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Intent
 import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.jcoronado.minimalbitcoinwidget.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
@@ -24,17 +31,35 @@ import okhttp3.Request
 
 private const val LOG_TAG = "PriceViewModel"
 
-class PriceViewModel(application: Application) : AndroidViewModel(application) {
+class PriceViewModel(application: Application) : AndroidViewModel(application), DefaultLifecycleObserver {
     private val _uiState = MutableStateFlow(PriceUiState(isLoading = true))
 
     // read-only state
     val uiState: StateFlow<PriceUiState> = _uiState.asStateFlow()
-
     private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
     private val client = OkHttpClient.Builder().build()
     private val gson = Gson()
 
     init {
+        loadInitialData()
+        // add observer to ProcessLifecycleOwner to detect app foregrounding
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        Log.d(LOG_TAG, "App resumed - refreshing data")
+        refresh()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        // clean up observer
+        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
+    }
+
+    /** Helper to run the initial/resume logic. */
+    private fun refresh() {
         loadInitialData()
         fetchPrice()
     }
@@ -57,6 +82,19 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 Log.e(LOG_TAG, "Failed to parse initial cache $e")
             }
         }
+    }
+
+    /** Update the selected currency and persist it. */
+    fun updateCurrency(newCurrency: String) {
+        if (_uiState.value.selectedCurrency == newCurrency) return
+
+        Log.i(LOG_TAG, "Updating currency to: $newCurrency")
+
+        _uiState.value = _uiState.value.copy(selectedCurrency = newCurrency)
+        prefs.edit {
+            putString(Prefs.SELECTED_CURRENCY, newCurrency)
+        }
+        fetchPrice(force = true)
     }
 
     /** Fetch data from the Coingecko API. */
@@ -106,6 +144,9 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                     _uiState.value = _uiState.value.copy(
                         price = price, percentageChange = change24h, isLoading = false
                     )
+
+                    // trigger widget update to sync with new data
+                    redrawWidgets()
                 } else {
                     Log.w(LOG_TAG, "Unsuccessful GET request: ${response.code}")
                     delay(1000)
@@ -119,6 +160,21 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "Error: $e")
             }
         }
+    }
 
+    /**
+     * LEGACY: Triggers a manual update for all placed instances of [PriceWidget].
+     * TODO - convert this logic when moving over to Glance widgets
+     */
+    private fun redrawWidgets() {
+        val context = getApplication<Application>()
+        val intent = Intent(context, PriceWidget::class.java).apply {
+            action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+            val ids = AppWidgetManager.getInstance(context).getAppWidgetIds(
+                ComponentName(context, PriceWidget::class.java)
+            )
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        }
+        context.sendBroadcast(intent)
     }
 }

@@ -16,7 +16,7 @@ object Prefs {
  */
 object AppConstants {
     const val CURRENCY_DEFAULT = "usd"
-    private const val CACHE_DURATION_MINUTES = 29L
+    private const val CACHE_DURATION_MINUTES = 30L - 1L
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
 }
 
