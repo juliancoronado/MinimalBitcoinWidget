@@ -1,0 +1,9 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.MinimalBitcoinWidget" parent="Theme.Material3.DayNight.NoActionBar" />
+
+    <style name="ThemeOverlay.MinimalBitcoinWidget.AppWidgetContainer" parent="">
+        <item name="appWidgetBackgroundColor">@color/light_widget</item>
+        <item name="appWidgetTextColor">@color/black</item>
+    </style>
+</resources>
