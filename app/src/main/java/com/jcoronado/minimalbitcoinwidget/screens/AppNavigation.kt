@@ -29,28 +29,18 @@ fun AppNavigation(
     val backStack = remember { mutableStateListOf<Any>(MainScreen) }
     NavDisplay(
         backStack = backStack, onBack = { backStack.removeLastOrNull() },
-        // these transition specs will do for now, but
-        // TODO - match this as close as possible to Android 16 default animation
+        // these transition specs will do for now
         transitionSpec = {
-            slideInHorizontally {
-                it / 3
-            } + fadeIn() togetherWith slideOutHorizontally {
-                -it / 3
-            } + fadeOut()
+            (slideInHorizontally(initialOffsetX = { it }) + fadeIn(initialAlpha = 0.5F))
+                .togetherWith(slideOutHorizontally(targetOffsetX = { -it / 4 }) + fadeOut(targetAlpha = 0.75F))
         },
         popTransitionSpec = {
-            slideInHorizontally {
-                - it / 3
-            } + fadeIn() togetherWith slideOutHorizontally {
-                it / 3
-            } + fadeOut()
+            (slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn(initialAlpha = 0.5F))
+                .togetherWith(slideOutHorizontally(targetOffsetX = { it }))
         },
         predictivePopTransitionSpec = {
-            slideInHorizontally {
-                - it / 3
-            } + fadeIn() togetherWith slideOutHorizontally {
-                it / 3
-            } + fadeOut()
+            (slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn(initialAlpha = 0.5F))
+                .togetherWith(slideOutHorizontally(targetOffsetX = { it }))
         },
         entryProvider = { key ->
             when (key) {
