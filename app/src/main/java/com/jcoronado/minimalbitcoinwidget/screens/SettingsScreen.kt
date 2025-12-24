@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,12 +27,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +43,7 @@ fun SettingsScreen(
     onCurrencySelected: (String) -> Unit,
     onBackButtonClick: () -> Unit
 ) {
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -106,8 +110,8 @@ fun SettingsScreen(
                         title = "24 hours",
                         subtitle = "Change Percentage",
                         onClick = {
-                            // TODO: Implement change percentage selection
-                            // 24 hours, 7 days, 1 month, 1 year
+                            // TODO - implement change percentage setting
+                            Toast.makeText(context, "Feature not yet implemented", Toast.LENGTH_SHORT).show()
                         }
                     )
 
@@ -115,8 +119,8 @@ fun SettingsScreen(
                         title = "30 minutes", 
                         subtitle = "Refresh Interval", 
                         onClick = {
-                            // TODO: Implement refresh interval selection
-                            // 30 minutes, 1 hour, 4 hours, 8 hours
+                            // TODO - implement refresh interval setting
+                            Toast.makeText(context, "Feature not yet implemented", Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
@@ -179,7 +183,7 @@ fun SettingsHeader(text: String) {
 @Composable
 fun SettingsScreenPreview() {
     SettingsScreen(
-        selectedCurrency = "usd",
+        selectedCurrency = AppConstants.CURRENCY_DEFAULT,
         onCurrencySelected = {},
         onBackButtonClick = {}
     )

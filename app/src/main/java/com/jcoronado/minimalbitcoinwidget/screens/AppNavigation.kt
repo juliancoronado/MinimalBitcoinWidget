@@ -1,6 +1,5 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -31,29 +30,25 @@ fun AppNavigation(
     NavDisplay(
         backStack = backStack, onBack = { backStack.removeLastOrNull() },
         transitionSpec = {
-            // screen forward animation
-            val enterTransition = slideInHorizontally(
-                initialOffsetX = { fullWidth -> fullWidth }, animationSpec = tween(300)
-            ) + fadeIn(tween(250))
-
-            enterTransition togetherWith fadeOut(tween(500))
+            slideInHorizontally {
+                it
+            } + fadeIn() togetherWith slideOutHorizontally {
+                -it
+            } + fadeOut()
         },
         popTransitionSpec = {
-            // screen back animation
-            val exitTransition = slideOutHorizontally(
-                targetOffsetX = { fullWidth -> fullWidth }, animationSpec = tween(300)
-            ) + fadeOut(tween(500))
-            fadeIn(animationSpec = tween(500)) togetherWith exitTransition
+            slideInHorizontally {
+                - it
+            } + fadeIn() togetherWith slideOutHorizontally {
+                it
+            } + fadeOut()
         },
         predictivePopTransitionSpec = {
-            // predictive back animation
-            val enterTransition = slideInHorizontally(
-                initialOffsetX = { -it / 2 }, animationSpec = tween(500)
-            ) + fadeIn(tween(500))
-            val exitTransition = slideOutHorizontally(
-                targetOffsetX = { it / 2 }, animationSpec = tween(500)
-            ) + fadeOut(tween(500))
-            enterTransition togetherWith exitTransition
+            slideInHorizontally {
+                - it
+            } togetherWith slideOutHorizontally {
+                it
+            }
         },
         entryProvider = { key ->
             when (key) {
