@@ -1,10 +1,8 @@
 package com.jcoronado.minimalbitcoinwidget
 
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import android.view.View
@@ -77,20 +75,6 @@ internal fun drawWidget(
 
     // refresh widget UI
     appWidgetManager.updateAppWidget(appWidgetId, views) // continues after this
-
-    // refresh button logic
-    val intentUpdate = Intent(context, PriceWidget::class.java)
-    intentUpdate.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-
-    val idArray = intArrayOf(appWidgetId)
-    intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray)
-
-    // set up pending intent
-    val pendingUpdate = PendingIntent.getBroadcast(
-        context, appWidgetId, intentUpdate, PendingIntent.FLAG_IMMUTABLE
-    )
-
-    views.setOnClickPendingIntent(R.id.widget_refresh_button, pendingUpdate)
 
     // function call to fetch data from cache OR HTTP GET request
     refreshData(appWidgetManager, appWidgetId, views, context)
