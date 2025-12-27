@@ -41,12 +41,10 @@ fun MainScreen(uiState: PriceUiState, onSettingsClick: () -> Unit, onRefresh: ()
             TopAppBar(
                 title = {
                     Text(stringResource(R.string.app_name))
-                },
-                colors = topAppBarColors(
+                }, colors = topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                actions = {
+                ), actions = {
                     IconButton(onClick = onSettingsClick) {
                         Icon(
                             painter = painterResource(id = R.drawable.rounded_settings_24),
@@ -54,10 +52,8 @@ fun MainScreen(uiState: PriceUiState, onSettingsClick: () -> Unit, onRefresh: ()
                             tint = MaterialTheme.colorScheme.secondary
                         )
                     }
-                }
-            )
-        }
-    ) { innerPadding ->
+                })
+        }) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -77,8 +73,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
-            contentAlignment = Alignment.Center
+                .height(200.dp), contentAlignment = Alignment.Center
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -123,7 +118,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     ) else Icon(
                         painter = painterResource(id = R.drawable.rounded_trending_down_24),
                         contentDescription = "Trending down icon",
-                        tint = MaterialTheme.colorScheme.secondary
+                        tint = MaterialTheme.colorScheme.error
                     )
                     Text(
                         text = FormatUtils.formatChange(uiState.percentageChange),
@@ -145,7 +140,9 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
             if (uiState.errorMessage != null) {
                 Text(
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 12.dp),
                     text = uiState.errorMessage,
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.error,
@@ -162,12 +159,8 @@ fun PriceCardPreviewLoadedPos() {
     MaterialTheme {
         PriceCard(
             uiState = PriceUiState(
-                price = 95234.12,
-                percentageChange = 0.45,
-                isLoading = false
-            ),
-            onRefresh = { }
-        )
+                price = 95234.12, percentageChange = 0.45, isLoading = false
+            ), onRefresh = { })
     }
 }
 
@@ -177,12 +170,8 @@ fun PriceCardPreviewLoadedNeg() {
     MaterialTheme {
         PriceCard(
             uiState = PriceUiState(
-                price = 95234.12,
-                percentageChange = -0.32,
-                isLoading = false
-            ),
-            onRefresh = { }
-        )
+                price = 95234.12, percentageChange = -0.32, isLoading = false
+            ), onRefresh = { })
     }
 }
 
@@ -192,12 +181,8 @@ fun PriceCardPreviewLoading() {
     MaterialTheme {
         PriceCard(
             uiState = PriceUiState(
-                price = 95234.12,
-                percentageChange = 2.45,
-                isLoading = true
-            ),
-            onRefresh = { }
-        )
+                price = 95234.12, percentageChange = 2.45, isLoading = true
+            ), onRefresh = { })
     }
 }
 
@@ -211,8 +196,6 @@ fun PriceCardPreviewError() {
                 percentageChange = 1.95,
                 isLoading = false,
                 errorMessage = "Error: HTTP 400"
-            ),
-            onRefresh = { }
-        )
+            ), onRefresh = { })
     }
 }

@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.util.Log
 import androidx.core.content.edit
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -20,6 +21,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
+import com.jcoronado.minimalbitcoinwidget.widgets.TestWidget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -163,11 +165,21 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
     }
 
     /**
-     * LEGACY: Triggers a manual update for all placed instances of [PriceWidget].
-     * TODO - convert this logic when moving over to Glance widgets
+     * Triggers a manual update for all placed instances of both legacy and Glance widgets.
      */
     private fun redrawWidgets() {
         val context = getApplication<Application>()
+        
+        // update glance widgets
+        viewModelScope.launch {
+            try {
+                TestWidget().updateAll(context)
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Failed to update Glance widgets: $e")
+            }
+        }
+
+        // Update Legacy Widgets (PriceWidget)
         val intent = Intent(context, PriceWidget::class.java).apply {
             action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             val ids = AppWidgetManager.getInstance(context).getAppWidgetIds(

@@ -1,11 +1,13 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.content.Intent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -25,24 +27,38 @@ data object SettingsScreen : NavKey
 
 @Composable
 fun AppNavigation(
+    intent: Intent? = null
 ) {
     val backStack = remember { mutableStateListOf<Any>(MainScreen) }
+
+    LaunchedEffect(intent) {
+        // if the app is opened from the widget, clear the current stack
+        if (intent?.action == Intent.ACTION_MAIN || intent?.hasExtra("reset_nav") == true) {
+            if (backStack.size > 1) {
+                backStack.clear()
+                backStack.add(MainScreen)
+            }
+        }
+    }
+
     NavDisplay(
         backStack = backStack, onBack = { backStack.removeLastOrNull() },
         // these transition specs will do for now
         transitionSpec = {
-            (slideInHorizontally(initialOffsetX = { it }) + fadeIn(initialAlpha = 0.5F))
-                .togetherWith(slideOutHorizontally(targetOffsetX = { -it / 4 }) + fadeOut(targetAlpha = 0.75F))
-        },
-        popTransitionSpec = {
-            (slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn(initialAlpha = 0.5F))
-                .togetherWith(slideOutHorizontally(targetOffsetX = { it }))
-        },
-        predictivePopTransitionSpec = {
-            (slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn(initialAlpha = 0.5F))
-                .togetherWith(slideOutHorizontally(targetOffsetX = { it }))
-        },
-        entryProvider = { key ->
+            (slideInHorizontally(initialOffsetX = { it }) + fadeIn(initialAlpha = 0.5F)).togetherWith(
+                slideOutHorizontally(targetOffsetX = { -it / 4 }) + fadeOut(
+                    targetAlpha = 0.75F
+                )
+            )
+        }, popTransitionSpec = {
+            (slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn(initialAlpha = 0.5F)).togetherWith(
+                slideOutHorizontally(targetOffsetX = { it })
+            )
+        }, predictivePopTransitionSpec = {
+            (slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn(initialAlpha = 0.5F)).togetherWith(
+                slideOutHorizontally(targetOffsetX = { it })
+            )
+        }, entryProvider = { key ->
             when (key) {
                 is MainScreen -> {
                     NavEntry(key) {
@@ -65,8 +81,7 @@ fun AppNavigation(
                         SettingsScreen(
                             selectedCurrency = uiState.selectedCurrency,
                             onCurrencySelected = { viewModel.updateCurrency(it) },
-                            onBackButtonClick = { backStack.removeAt(backStack.lastIndex) }
-                        )
+                            onBackButtonClick = { backStack.removeAt(backStack.lastIndex) })
                     }
                 }
 
