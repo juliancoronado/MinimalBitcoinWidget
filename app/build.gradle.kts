@@ -46,6 +46,10 @@ android {
         compose = true
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
+
 }
 
 dependencies {
@@ -76,6 +80,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.process)
+    // glance
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.material3)
 
     // navigation 3
     implementation(libs.androidx.navigation3.ui)
