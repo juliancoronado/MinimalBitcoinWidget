@@ -165,7 +165,7 @@ class TestWidget : GlanceAppWidget() {
                 modifier = GlanceModifier.size(14.dp).padding(top = 1.dp)
             )
             Text(
-                " / ${currencyInfo.isoCode}", style = TextStyle(
+                "/ ${currencyInfo.isoCode}", style = TextStyle(
                     color = GlanceTheme.colors.primary,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 12.sp
