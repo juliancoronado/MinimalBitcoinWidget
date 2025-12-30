@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import kotlinx.serialization.Serializable
 
@@ -33,7 +34,7 @@ fun AppNavigation(
 
     LaunchedEffect(intent) {
         // if the app is opened from the widget, clear the current stack
-        if (intent?.action == Intent.ACTION_MAIN || intent?.hasExtra("reset_nav") == true) {
+        if (intent?.action == Intent.ACTION_MAIN || intent?.hasExtra(AppConstants.EXTRA_RESET_NAV) == true) {
             if (backStack.size > 1) {
                 backStack.clear()
                 backStack.add(MainScreen)
