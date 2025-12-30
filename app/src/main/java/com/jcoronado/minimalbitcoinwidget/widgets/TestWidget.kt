@@ -3,6 +3,7 @@ package com.jcoronado.minimalbitcoinwidget.widgets
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +30,6 @@ import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
-import androidx.glance.text.FontFamily
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.preference.PreferenceManager
@@ -57,9 +57,11 @@ import java.text.NumberFormat
 
 class TestWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        Log.d("Test Widget", "provideGlance() - Widget Id: $id")
         val priceData = withContext(Dispatchers.IO) { loadData(context) }
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val currency = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
+        Log.d("Test Widget", "Selected Currency: $currency")
         val currencyInfo = getCurrencyInfo(currency)
 
         provideContent {
@@ -68,12 +70,13 @@ class TestWidget : GlanceAppWidget() {
     }
 
     private fun loadData(context: Context): PriceData {
+        Log.d("Test Widget", "Inside loadData()")
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val lastApiCallTime = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
         val currentTime = System.currentTimeMillis()
         val gson = Gson()
 
-        // Check if cached data is still valid
+        // check if cached data is still valid
         if (currentTime - lastApiCallTime < AppConstants.CACHE_DURATION_MILLIS) {
             val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
             if (cachedDataJson != null) {
@@ -81,7 +84,7 @@ class TestWidget : GlanceAppWidget() {
             }
         }
 
-        // Cache is stale or missing, fetch from network
+        // cache is stale or missing, fetch from network
         val currency = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
             ?: AppConstants.CURRENCY_DEFAULT
         val url = Api.COINGECKO_API_URL + currency
@@ -101,7 +104,7 @@ class TestWidget : GlanceAppWidget() {
                     val change24h = priceDataJson["${currency}_24h_change"] ?: 0.0
                     val priceData = PriceData(price, change24h)
 
-                    // Update cache
+                    // update cache
                     prefs.edit {
                         putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
                         putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))
@@ -110,6 +113,7 @@ class TestWidget : GlanceAppWidget() {
                 }
             }
         } catch (e: Exception) {
+            Log.e("Price Widget", e.toString())
             e.printStackTrace()
         }
 
@@ -127,12 +131,17 @@ class TestWidget : GlanceAppWidget() {
         val openAppIntent = Intent(LocalContext.current, MainActivity::class.java).apply {
             flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            // pass reset_nav to AppNavigation via extras
-            putExtra("reset_nav", true)
+            // pass extra value to AppNavigation
+            putExtra(AppConstants.EXTRA_RESET_NAV, true)
         }
         GlanceTheme(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) GlanceTheme.colors
-            else GlanceColorScheme.colors
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // dynamic colors
+                GlanceTheme.colors
+            } else {
+                // default app color scheme
+                GlanceColorScheme.colors
+            }
         ) {
             Scaffold {
                 Column(
@@ -161,13 +170,12 @@ class TestWidget : GlanceAppWidget() {
             Image(
                 provider = ImageProvider(R.drawable.rounded_currency_bitcoin_24),
                 contentDescription = "Bitcoin Icon",
-                colorFilter = ColorFilter.tint(GlanceTheme.colors.primary),
-                modifier = GlanceModifier.size(14.dp).padding(top = 1.dp)
+                colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary),
+                modifier = GlanceModifier.size(14.dp)
             )
             Text(
                 "/ ${currencyInfo.isoCode}", style = TextStyle(
-                    color = GlanceTheme.colors.primary,
-                    fontFamily = FontFamily.SansSerif,
+                    color = GlanceTheme.colors.secondary,
                     fontSize = 12.sp
                 )
             )
@@ -181,21 +189,23 @@ class TestWidget : GlanceAppWidget() {
             maximumFractionDigits = 2
         }
 
-        val fontSize = if (priceData.currentPrice >= 100000) 24.sp else 26.sp
+        val fontSize = when {
+            priceData.currentPrice >= 1000000 -> 20.sp
+            priceData.currentPrice >= 100000 -> 22.sp
+            else -> 24.sp
+        }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = currencyInfo.symbol, style = TextStyle(
-                    color = GlanceTheme.colors.primary,
-                    fontFamily = FontFamily.SansSerif,
-                    fontSize = 18.sp
+                    color = GlanceTheme.colors.onBackground,
+                    fontSize = 16.sp
                 )
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Text(
                 text = numberFormatter.format(priceData.currentPrice), style = TextStyle(
-                    color = GlanceTheme.colors.primary,
-                    fontFamily = FontFamily.SansSerif,
+                    color = GlanceTheme.colors.onSurface,
                     fontSize = fontSize
                 )
             )
@@ -223,7 +233,6 @@ class TestWidget : GlanceAppWidget() {
             Text(
                 text = String.format("%.2f%%", changePercentage * 100), style = TextStyle(
                     color = GlanceTheme.colors.secondary,
-                    fontFamily = FontFamily.SansSerif,
                     fontSize = 12.sp
                 )
             )

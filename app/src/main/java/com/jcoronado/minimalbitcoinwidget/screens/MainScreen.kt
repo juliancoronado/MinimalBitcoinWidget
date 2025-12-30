@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,7 +51,7 @@ fun MainScreen(uiState: PriceUiState, onSettingsClick: () -> Unit, onRefresh: ()
                         Icon(
                             painter = painterResource(id = R.drawable.rounded_settings_24),
                             contentDescription = "Settings Icon",
-                            tint = MaterialTheme.colorScheme.secondary
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 })
@@ -87,24 +89,25 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     Icon(
                         painter = painterResource(id = R.drawable.rounded_currency_bitcoin_24),
                         contentDescription = "Bitcoin Icon",
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.secondary
                     )
+                    Spacer(modifier = Modifier.width(2.dp))
                     Text(
                         text = "/",
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(horizontal = 6.dp)
+                        color = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.padding(end = 6.dp)
                     )
                     Text(
                         text = uiState.selectedCurrency.uppercase(),
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
                 Text(
                     text = FormatUtils.formatPrice(uiState.price),
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
                 Row(
@@ -123,14 +126,16 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     Text(
                         text = FormatUtils.formatChange(uiState.percentageChange),
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.secondary,
                         textAlign = TextAlign.Center
                     )
                 }
             }
 
             if (uiState.isLoading) {
+                // TODO - replace with M3 Expressive version soon
                 CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(12.dp)
