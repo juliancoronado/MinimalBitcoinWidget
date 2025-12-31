@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     // compose
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -89,4 +90,10 @@ dependencies {
     // navigation 3
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.navigation3.runtime)
+
+    // serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // workmanager
+    implementation(libs.androidx.work.runtime.ktx)
 }
