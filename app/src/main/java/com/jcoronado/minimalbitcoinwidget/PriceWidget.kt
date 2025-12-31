@@ -31,7 +31,7 @@ import java.text.NumberFormat
 private const val TAG = "Price Widget"
 
 fun getCurrencyInfo(currency: String?): CurrencyInfo {
-    return when (currency) {
+    return when (currency?.lowercase()) {
         "usd" -> CurrencyInfo("$", "USD")
         "gbp" -> CurrencyInfo("£", "GBP")
         "eur" -> CurrencyInfo("€", "EUR")

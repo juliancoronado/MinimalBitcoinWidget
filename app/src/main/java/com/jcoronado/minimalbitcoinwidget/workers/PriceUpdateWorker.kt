@@ -1,0 +1,133 @@
+package com.jcoronado.minimalbitcoinwidget.workers
+
+import android.content.Context
+import android.util.Log
+import androidx.core.content.edit
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.state.updateAppWidgetState
+import androidx.glance.appwidget.updateAll
+import androidx.preference.PreferenceManager
+import androidx.work.Constraints
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.jcoronado.minimalbitcoinwidget.classes.Api
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
+import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.classes.PriceData
+import com.jcoronado.minimalbitcoinwidget.getCurrencyInfo
+import com.jcoronado.minimalbitcoinwidget.widgets.PriceWidgetState
+import com.jcoronado.minimalbitcoinwidget.widgets.PriceWidgetStateDefinition
+import com.jcoronado.minimalbitcoinwidget.widgets.TestWidget
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.util.concurrent.TimeUnit
+
+private const val LOG_TAG = "PriceUpdateWorker"
+
+class PriceUpdateWorker(
+    private val context: Context,
+    workerParams: WorkerParameters
+) : CoroutineWorker(context, workerParams) {
+
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        Log.d(LOG_TAG, "Worker started (doWork())")
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
+            ?: AppConstants.CURRENCY_DEFAULT
+        
+        val gson = Gson()
+        val client = OkHttpClient()
+        val url = Api.COINGECKO_API_URL + currencyCode
+        val request = Request.Builder().url(url).build()
+
+        try {
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                val body = response.body.string()
+
+                val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
+                val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
+                val priceDataMap = data["bitcoin"]
+
+                if (priceDataMap != null) {
+                    val price = priceDataMap[currencyCode] ?: 0.0
+                    val change24h = priceDataMap["${currencyCode}_24h_change"] ?: 0.0
+                    
+                    val symbol = getCurrencyInfo(currencyCode).symbol
+
+                    val newState = PriceWidgetState.Available(
+                        price = price,
+                        changePercentage = change24h,
+                        currency = currencyCode,
+                        symbol = symbol
+                    )
+
+                    // update shared prefs cache for the MainActivity display
+                    val priceData = PriceData(price, change24h)
+                    prefs.edit {
+                        putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
+                        putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))
+                    }
+
+                    // update widgets
+                    updateWidgets(newState)
+                    
+                    Result.success()
+                } else {
+                    Result.retry()
+                }
+            } else {
+                Result.retry()
+            }
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Error fetching price", e)
+            Result.retry()
+        }
+    }
+
+    private suspend fun updateWidgets(state: PriceWidgetState) {
+        val manager = GlanceAppWidgetManager(context)
+        val glanceIds = manager.getGlanceIds(TestWidget::class.java)
+        glanceIds.forEach { glanceId ->
+            updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
+                state
+            }
+        }
+        Log.d(LOG_TAG, "Updating widgets using .updateAll()")
+        // notify widgets to redraw
+        TestWidget().updateAll(context)
+    }
+
+    companion object {
+        private const val WORK_NAME = "PriceUpdateWork"
+
+        fun enqueue(context: Context) {
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+
+            val request = PeriodicWorkRequestBuilder<PriceUpdateWorker>(30, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build()
+
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                WORK_NAME,
+                ExistingPeriodicWorkPolicy.UPDATE,
+                request
+            )
+        }
+
+        fun cancel(context: Context) {
+            WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+        }
+    }
+}

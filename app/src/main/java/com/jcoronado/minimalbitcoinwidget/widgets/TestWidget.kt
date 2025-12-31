@@ -3,11 +3,9 @@ package com.jcoronado.minimalbitcoinwidget.widgets
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.edit
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -16,10 +14,12 @@ import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.action.clickable
+import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.provideContent
+import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
@@ -32,114 +32,33 @@ import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import androidx.preference.PreferenceManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.jcoronado.minimalbitcoinwidget.CurrencyInfo
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
-import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
-import com.jcoronado.minimalbitcoinwidget.classes.Prefs
-import com.jcoronado.minimalbitcoinwidget.classes.PriceData
-import com.jcoronado.minimalbitcoinwidget.getCurrencyInfo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import java.text.NumberFormat
 
-// TODO - convert this "Test" into the main widget
-// TODO - make sure that different currencies and locale formatting displays correctly
-// TODO - make sure to handle "error" states properly (network failure, etc)
-// TODO - tweak theme and colors to match Material Widgets better (lighter text on background)
-// TODO - remove legacy widget and code in future release
-
 class TestWidget : GlanceAppWidget() {
+
+    override val stateDefinition = PriceWidgetStateDefinition
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        Log.d("Test Widget", "provideGlance() - Widget Id: $id")
-        val priceData = withContext(Dispatchers.IO) { loadData(context) }
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val currency = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
-        Log.d("Test Widget", "Selected Currency: $currency")
-        val currencyInfo = getCurrencyInfo(currency)
-
         provideContent {
-            WidgetContent(priceData, currencyInfo)
-        }
-    }
-
-    private fun loadData(context: Context): PriceData {
-        Log.d("Test Widget", "Inside loadData()")
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val lastApiCallTime = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
-        val currentTime = System.currentTimeMillis()
-        val gson = Gson()
-
-        // check if cached data is still valid
-        if (currentTime - lastApiCallTime < AppConstants.CACHE_DURATION_MILLIS) {
-            val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
-            if (cachedDataJson != null) {
-                return gson.fromJson(cachedDataJson, PriceData::class.java)
-            }
-        }
-
-        // cache is stale or missing, fetch from network
-        val currency = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
-            ?: AppConstants.CURRENCY_DEFAULT
-        val url = Api.COINGECKO_API_URL + currency
-        val request = Request.Builder().url(url).build()
-        val client = OkHttpClient()
-
-        try {
-            val response = client.newCall(request).execute()
-            if (response.isSuccessful) {
-                val body = response.body.string()
-                val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
-                val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
-                val priceDataJson = data["bitcoin"]
-
-                if (priceDataJson != null) {
-                    val price = priceDataJson[currency] ?: 0.0
-                    val change24h = priceDataJson["${currency}_24h_change"] ?: 0.0
-                    val priceData = PriceData(price, change24h)
-
-                    // update cache
-                    prefs.edit {
-                        putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
-                        putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))
-                    }
-                    return priceData
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("Price Widget", e.toString())
-            e.printStackTrace()
-        }
-
-        // fallback to cache if network call fails, otherwise return zeros (app first installed but no cached data yet)
-        val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
-        return if (cachedDataJson != null) {
-            gson.fromJson(cachedDataJson, PriceData::class.java)
-        } else {
-            PriceData(0.0, 0.0)
+            val state = currentState<PriceWidgetState>()
+            WidgetContent(state)
         }
     }
 
     @Composable
-    private fun WidgetContent(priceData: PriceData, currencyInfo: CurrencyInfo) {
+    private fun WidgetContent(state: PriceWidgetState) {
         val openAppIntent = Intent(LocalContext.current, MainActivity::class.java).apply {
             flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            // pass extra value to AppNavigation
             putExtra(AppConstants.EXTRA_RESET_NAV, true)
         }
         GlanceTheme(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                // dynamic colors
                 GlanceTheme.colors
             } else {
-                // default app color scheme
                 GlanceColorScheme.colors
             }
         ) {
@@ -150,20 +69,40 @@ class TestWidget : GlanceAppWidget() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // TODO - clean up this logic (like currencyInfo variable)
-                    TitleUI(currencyInfo)
-                    Spacer(modifier = GlanceModifier.defaultWeight())
-                    PriceUi(priceData, currencyInfo)
-                    Spacer(modifier = GlanceModifier.defaultWeight())
-                    // TODO - don't divide here, do that when formatting the string
-                    ChangeUI(changePercentage = priceData.priceChangePercentage24h / 100)
+                    when (state) {
+                        is PriceWidgetState.Available -> {
+                            AvailableUI(state, GlanceModifier.defaultWeight())
+                        }
+
+                        is PriceWidgetState.Error -> {
+                            ErrorUI(state)
+                        }
+
+                        is PriceWidgetState.Loading -> {
+                            CircularProgressIndicator()
+                        }
+                    }
                 }
             }
         }
     }
 
     @Composable
-    private fun TitleUI(currencyInfo: CurrencyInfo) {
+    private fun AvailableUI(state: PriceWidgetState.Available, modifier: GlanceModifier) {
+        Header(state.currency)
+        Spacer(modifier)
+        PriceValue(state)
+        Spacer(modifier)
+        PriceChange(state.changePercentage / 100)
+    }
+
+    @Composable
+    private fun ErrorUI(state: PriceWidgetState.Error) {
+        Text("Error: ${state.message ?: "Unknown"}")
+    }
+
+    @Composable
+    private fun Header(currency: String) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -174,7 +113,7 @@ class TestWidget : GlanceAppWidget() {
                 modifier = GlanceModifier.size(14.dp)
             )
             Text(
-                "/ ${currencyInfo.isoCode}", style = TextStyle(
+                "/ ${currency.uppercase()}", style = TextStyle(
                     color = GlanceTheme.colors.secondary,
                     fontSize = 12.sp
                 )
@@ -183,28 +122,28 @@ class TestWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun PriceUi(priceData: PriceData, currencyInfo: CurrencyInfo) {
+    private fun PriceValue(state: PriceWidgetState.Available) {
         val numberFormatter = NumberFormat.getNumberInstance().apply {
             minimumFractionDigits = 2
             maximumFractionDigits = 2
         }
 
         val fontSize = when {
-            priceData.currentPrice >= 1000000 -> 20.sp
-            priceData.currentPrice >= 100000 -> 22.sp
+            state.price >= 1000000 -> 20.sp
+            state.price >= 100000 -> 22.sp
             else -> 24.sp
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = currencyInfo.symbol, style = TextStyle(
+                text = state.symbol, style = TextStyle(
                     color = GlanceTheme.colors.onBackground,
                     fontSize = 16.sp
                 )
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Text(
-                text = numberFormatter.format(priceData.currentPrice), style = TextStyle(
+                text = numberFormatter.format(state.price), style = TextStyle(
                     color = GlanceTheme.colors.onSurface,
                     fontSize = fontSize
                 )
@@ -213,7 +152,7 @@ class TestWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun ChangeUI(changePercentage: Double) {
+    private fun PriceChange(changePercentage: Double) {
         val (iconRes, color) = if (changePercentage >= 0) {
             R.drawable.rounded_trending_up_24 to GlanceTheme.colors.tertiary
         } else {
@@ -244,10 +183,13 @@ class TestWidget : GlanceAppWidget() {
     @Preview(widthDp = 250, heightDp = 100)
     @Composable
     private fun WidgetPreviewDataPos() {
-        WidgetContent(
-            PriceData(currentPrice = 84123.34, priceChangePercentage24h = 2.3),
-            CurrencyInfo("$", "USD")
+        val state = PriceWidgetState.Available(
+            price = 123456.78,
+            changePercentage = 0.49,
+            currency = "USD",
+            symbol = "$"
         )
+        WidgetContent(state)
     }
 
     @Suppress("unused")
@@ -255,10 +197,13 @@ class TestWidget : GlanceAppWidget() {
     @Preview(widthDp = 250, heightDp = 100)
     @Composable
     private fun WidgetPreviewDataNeg() {
-        WidgetContent(
-            PriceData(currentPrice = 84123.78, priceChangePercentage24h = -1.67),
-            CurrencyInfo("$", "USD")
+        val state = PriceWidgetState.Available(
+            price = 123456.78,
+            changePercentage = -2.45,
+            currency = "USD",
+            symbol = "$"
         )
+        WidgetContent(state)
     }
 
     @Suppress("unused")
@@ -266,10 +211,13 @@ class TestWidget : GlanceAppWidget() {
     @Preview(widthDp = 250, heightDp = 100)
     @Composable
     private fun WidgetPreviewDataLargePos() {
-        WidgetContent(
-            PriceData(currentPrice = 184123.78, priceChangePercentage24h = 0.57),
-            CurrencyInfo("$", "USD")
+        val state = PriceWidgetState.Available(
+            price = 1234560.78,
+            changePercentage = 3.58,
+            currency = "USD",
+            symbol = "$"
         )
+        WidgetContent(state)
     }
 
     @Suppress("unused")
@@ -277,9 +225,12 @@ class TestWidget : GlanceAppWidget() {
     @Preview(widthDp = 250, heightDp = 100)
     @Composable
     private fun WidgetPreviewDataLargeNeg() {
-        WidgetContent(
-            PriceData(currentPrice = 184123.78, priceChangePercentage24h = -2.47),
-            CurrencyInfo("$", "USD")
+        val state = PriceWidgetState.Available(
+            price = 1234560.78,
+            changePercentage = -3.29,
+            currency = "USD",
+            symbol = "$"
         )
+        WidgetContent(state)
     }
 }

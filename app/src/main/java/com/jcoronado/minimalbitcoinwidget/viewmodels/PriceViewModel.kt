@@ -6,6 +6,8 @@ import android.content.ComponentName
 import android.content.Intent
 import android.util.Log
 import androidx.core.content.edit
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -21,6 +23,9 @@ import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
+import com.jcoronado.minimalbitcoinwidget.getCurrencyInfo
+import com.jcoronado.minimalbitcoinwidget.widgets.PriceWidgetState
+import com.jcoronado.minimalbitcoinwidget.widgets.PriceWidgetStateDefinition
 import com.jcoronado.minimalbitcoinwidget.widgets.TestWidget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -169,10 +174,26 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
      */
     private fun redrawWidgets() {
         val context = getApplication<Application>()
+        val state = _uiState.value
         
-        // update glance widgets
+        // update glance widgets using PriceWidgetStateDefinition
         viewModelScope.launch {
             try {
+                val manager = GlanceAppWidgetManager(context)
+                val glanceIds = manager.getGlanceIds(TestWidget::class.java)
+
+                Log.d(LOG_TAG, "Updating ${glanceIds.size} widgets: $glanceIds")
+                
+                glanceIds.forEach { glanceId ->
+                    updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
+                        PriceWidgetState.Available(
+                            price = state.price,
+                            changePercentage = state.percentageChange,
+                            currency = state.selectedCurrency,
+                            symbol = getCurrencyInfo(state.selectedCurrency).symbol
+                        )
+                    }
+                }
                 TestWidget().updateAll(context)
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Failed to update Glance widgets: $e")
