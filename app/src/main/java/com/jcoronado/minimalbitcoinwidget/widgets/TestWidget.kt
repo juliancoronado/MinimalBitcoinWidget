@@ -18,9 +18,12 @@ import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.components.Scaffold
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import androidx.glance.background
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
@@ -75,7 +78,11 @@ class TestWidget : GlanceAppWidget() {
                         }
 
                         is PriceWidgetState.Error -> {
-                            ErrorUI(state)
+                            if (state.lastValidState != null) {
+                                AvailableUI(state.lastValidState, GlanceModifier.defaultWeight(), error = true)
+                            } else {
+                                ErrorUI(state)
+                            }
                         }
 
                         is PriceWidgetState.Loading -> {
@@ -88,17 +95,41 @@ class TestWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun AvailableUI(state: PriceWidgetState.Available, modifier: GlanceModifier) {
+    private fun AvailableUI(state: PriceWidgetState.Available, modifier: GlanceModifier, error: Boolean = false) {
         Header(state.currency)
         Spacer(modifier)
         PriceValue(state)
         Spacer(modifier)
-        PriceChange(state.changePercentage / 100)
+        PriceChange(state.changePercentage, error)
+        if (state.debug) {
+            LastUpdated(state)
+        }
+    }
+
+    @Composable
+    private fun LastUpdated(state: PriceWidgetState.Available) {
+        Text(
+            text = "Last Updated: ${state.lastUpdated}",
+            style = TextStyle(
+                color = GlanceTheme.colors.primary,
+                fontSize = 10.sp
+            )
+        )
     }
 
     @Composable
     private fun ErrorUI(state: PriceWidgetState.Error) {
-        Text("Error: ${state.message ?: "Unknown"}")
+        Text(
+            "Error:", style = TextStyle(
+                fontSize = 12.sp
+            )
+        )
+        Text(
+            state.message, style = TextStyle(
+                color = GlanceTheme.colors.onSurface,
+                fontSize = 12.sp
+            )
+        )
     }
 
     @Composable
@@ -152,11 +183,13 @@ class TestWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun PriceChange(changePercentage: Double) {
-        val (iconRes, color) = if (changePercentage >= 0) {
-            R.drawable.rounded_trending_up_24 to GlanceTheme.colors.tertiary
+    private fun PriceChange(changePercentage: Double, error: Boolean) {
+        val (iconRes, color, iconDesc) = if (changePercentage > 0) {
+            Triple(R.drawable.rounded_trending_up_24, GlanceTheme.colors.primary, "Trending up icon")
+        } else if (changePercentage < 0) {
+            Triple(R.drawable.rounded_trending_down_24, GlanceTheme.colors.error, "Trending down icon")
         } else {
-            R.drawable.rounded_trending_down_24 to GlanceTheme.colors.error
+            Triple(R.drawable.rounded_trending_flat_24, GlanceTheme.colors.secondary, "Trending flat icon")
         }
 
         Row(
@@ -164,17 +197,28 @@ class TestWidget : GlanceAppWidget() {
         ) {
             Image(
                 provider = ImageProvider(iconRes),
-                contentDescription = null,
+                contentDescription = iconDesc,
                 colorFilter = ColorFilter.tint(color),
                 modifier = GlanceModifier.size(16.dp).padding(top = 2.dp)
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Text(
-                text = String.format("%.2f%%", changePercentage * 100), style = TextStyle(
+                text = String.format("%.2f%%", changePercentage), style = TextStyle(
                     color = GlanceTheme.colors.secondary,
                     fontSize = 12.sp
                 )
             )
+            if (error) {
+                Spacer(modifier = GlanceModifier.width(4.dp))
+                Box(
+                    modifier = GlanceModifier
+                        .size(3.dp)
+                        .background(
+                            GlanceTheme.colors.error
+                        ).cornerRadius(32.dp),
+                    content = {}
+                )
+            }
         }
     }
 
@@ -185,9 +229,10 @@ class TestWidget : GlanceAppWidget() {
     private fun WidgetPreviewDataPos() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
-            changePercentage = 0.49,
+            changePercentage = 1.23,
             currency = "USD",
-            symbol = "$"
+            symbol = "$",
+            lastUpdated = "12:34:56 PM"
         )
         WidgetContent(state)
     }
@@ -199,9 +244,25 @@ class TestWidget : GlanceAppWidget() {
     private fun WidgetPreviewDataNeg() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
-            changePercentage = -2.45,
+            changePercentage = -2.34,
             currency = "USD",
-            symbol = "$"
+            symbol = "$",
+            lastUpdated = "12:34:56 PM"
+        )
+        WidgetContent(state)
+    }
+
+    @Suppress("unused")
+    @OptIn(ExperimentalGlancePreviewApi::class)
+    @Preview(widthDp = 250, heightDp = 100)
+    @Composable
+    private fun WidgetPreviewDataZero() {
+        val state = PriceWidgetState.Available(
+            price = 123456.78,
+            changePercentage = 0.00,
+            currency = "USD",
+            symbol = "$",
+            lastUpdated = "12:34:56 PM"
         )
         WidgetContent(state)
     }
@@ -213,9 +274,10 @@ class TestWidget : GlanceAppWidget() {
     private fun WidgetPreviewDataLargePos() {
         val state = PriceWidgetState.Available(
             price = 1234560.78,
-            changePercentage = 3.58,
+            changePercentage = 3.45,
             currency = "USD",
-            symbol = "$"
+            symbol = "$",
+            lastUpdated = "12:34:56 PM"
         )
         WidgetContent(state)
     }
@@ -227,9 +289,43 @@ class TestWidget : GlanceAppWidget() {
     private fun WidgetPreviewDataLargeNeg() {
         val state = PriceWidgetState.Available(
             price = 1234560.78,
-            changePercentage = -3.29,
+            changePercentage = -1.23,
             currency = "USD",
-            symbol = "$"
+            symbol = "$",
+            lastUpdated = "12:34:56 PM"
+        )
+        WidgetContent(state)
+    }
+
+    @Suppress("unused")
+    @OptIn(ExperimentalGlancePreviewApi::class)
+    @Preview(widthDp = 250, heightDp = 100)
+    @Composable
+    private fun WidgetPreviewPosError() {
+        val lastValidState = PriceWidgetState.Available(
+            price = 123456.78,
+            changePercentage = 2.34,
+            currency = "USD",
+            symbol = "$",
+            lastUpdated = "12:34:56 PM"
+        )
+        val state = PriceWidgetState.Error(
+            lastValidState = lastValidState,
+            message = "Error Message"
+        )
+        WidgetContent(state)
+    }
+
+    @Suppress("unused")
+    @OptIn(ExperimentalGlancePreviewApi::class)
+    @Preview(widthDp = 250, heightDp = 100)
+    @Composable
+    private fun WidgetPreviewNegError() {
+        val lastValidState = null
+        // no last valid state
+        val state = PriceWidgetState.Error(
+            lastValidState = lastValidState,
+            message = "Price data could not be fetched"
         )
         WidgetContent(state)
     }

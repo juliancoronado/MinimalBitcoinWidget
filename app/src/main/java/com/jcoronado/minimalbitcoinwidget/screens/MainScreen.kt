@@ -117,11 +117,15 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     if (uiState.percentageChange > 0) Icon(
                         painter = painterResource(id = R.drawable.rounded_trending_up_24),
                         contentDescription = "Trending up icon",
-                        tint = MaterialTheme.colorScheme.secondary
-                    ) else Icon(
+                        tint = MaterialTheme.colorScheme.primary
+                    ) else if (uiState.percentageChange < 0) Icon(
                         painter = painterResource(id = R.drawable.rounded_trending_down_24),
                         contentDescription = "Trending down icon",
                         tint = MaterialTheme.colorScheme.error
+                    ) else Icon(
+                        painter = painterResource(id = R.drawable.rounded_trending_flat_24),
+                        contentDescription = "Trending flat icon",
+                        tint = MaterialTheme.colorScheme.secondary
                     )
                     Text(
                         text = FormatUtils.formatChange(uiState.percentageChange),

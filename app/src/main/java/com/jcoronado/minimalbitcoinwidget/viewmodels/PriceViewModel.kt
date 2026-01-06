@@ -35,6 +35,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 private const val LOG_TAG = "PriceViewModel"
 
@@ -183,14 +186,18 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
                 val glanceIds = manager.getGlanceIds(TestWidget::class.java)
 
                 Log.d(LOG_TAG, "Updating ${glanceIds.size} widgets: $glanceIds")
-                
+
+                val currentTime = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
+
                 glanceIds.forEach { glanceId ->
                     updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
                         PriceWidgetState.Available(
                             price = state.price,
                             changePercentage = state.percentageChange,
                             currency = state.selectedCurrency,
-                            symbol = getCurrencyInfo(state.selectedCurrency).symbol
+                            symbol = getCurrencyInfo(state.selectedCurrency).symbol,
+                            lastUpdated = currentTime,
+                            debug = AppConstants.DEBUG_MODE
                         )
                     }
                 }

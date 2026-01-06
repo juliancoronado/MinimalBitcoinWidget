@@ -24,8 +24,8 @@ object AppConstants {
     private const val CACHE_DURATION_MINUTES = 29L
     /** Duration in milliseconds for which the cached price data is considered valid. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
-
     const val EXTRA_RESET_NAV = "reset_nav"
+    const val DEBUG_MODE = false
 }
 
 /**

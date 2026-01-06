@@ -4,15 +4,18 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.appwidget.updateAll
 import androidx.preference.PreferenceManager
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -28,6 +31,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 private const val LOG_TAG = "PriceUpdateWorker"
@@ -43,9 +50,12 @@ class PriceUpdateWorker(
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
             ?: AppConstants.CURRENCY_DEFAULT
-        
+
         val gson = Gson()
-        val client = OkHttpClient()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .build()
         val url = Api.COINGECKO_API_URL + currencyCode
         val request = Request.Builder().url(url).build()
 
@@ -61,14 +71,19 @@ class PriceUpdateWorker(
                 if (priceDataMap != null) {
                     val price = priceDataMap[currencyCode] ?: 0.0
                     val change24h = priceDataMap["${currencyCode}_24h_change"] ?: 0.0
-                    
+
                     val symbol = getCurrencyInfo(currencyCode).symbol
+
+                    val currentTime =
+                        SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
 
                     val newState = PriceWidgetState.Available(
                         price = price,
                         changePercentage = change24h,
                         currency = currencyCode,
-                        symbol = symbol
+                        symbol = symbol,
+                        lastUpdated = currentTime,
+                        debug = AppConstants.DEBUG_MODE
                     )
 
                     // update shared prefs cache for the MainActivity display
@@ -80,20 +95,46 @@ class PriceUpdateWorker(
 
                     // update widgets
                     updateWidgets(newState)
-                    
+
                     Result.success()
                 } else {
                     Result.retry()
                 }
-            } else {
+            } else if (response.code == 429) {
+                // rate limit error - retry with backoff
                 Result.retry()
+            } else {
+                // other error - display error state
+                throw Exception("Server error: ${response.code}")
             }
+        } catch (e: IOException) {
+            // network timeout or no connection - retry with backoff
+            Log.e(LOG_TAG, "Network error", e)
+            return@withContext handleError(e)
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "Error fetching price", e)
-            Result.retry()
+            // other error
+            Log.e(LOG_TAG, "Fatal error", e)
+            return@withContext handleError(e)
         }
     }
 
+    private suspend fun handleError(e: Exception): Result {
+        val manager = GlanceAppWidgetManager(context)
+        val glanceIds = manager.getGlanceIds(TestWidget::class.java)
+        var lastValid: PriceWidgetState.Available? = null
+
+        if (glanceIds.isNotEmpty()) {
+            val currentState: PriceWidgetState = TestWidget().getAppWidgetState(context, glanceIds.first())
+            lastValid = when (currentState) {
+                is PriceWidgetState.Available -> currentState
+                is PriceWidgetState.Error -> currentState.lastValidState
+                else -> null
+            }
+        }
+
+        updateWidgets(PriceWidgetState.Error(e.message ?: "Unknown Error" ,  lastValid))
+        return Result.retry()
+    }
     private suspend fun updateWidgets(state: PriceWidgetState) {
         val manager = GlanceAppWidgetManager(context)
         val glanceIds = manager.getGlanceIds(TestWidget::class.java)
@@ -116,6 +157,11 @@ class PriceUpdateWorker(
                 .build()
 
             val request = PeriodicWorkRequestBuilder<PriceUpdateWorker>(30, TimeUnit.MINUTES)
+                .setBackoffCriteria(
+                    BackoffPolicy.EXPONENTIAL,
+                    WorkRequest.MIN_BACKOFF_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
                 .setConstraints(constraints)
                 .build()
 

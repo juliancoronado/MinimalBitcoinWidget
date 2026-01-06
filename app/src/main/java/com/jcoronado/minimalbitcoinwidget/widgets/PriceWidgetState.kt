@@ -12,9 +12,14 @@ sealed class PriceWidgetState {
         val price: Double,
         val changePercentage: Double,
         val currency: String,
-        val symbol: String
+        val symbol: String,
+        val lastUpdated: String = "",
+        val debug : Boolean = false
     ) : PriceWidgetState()
 
     @Serializable
-    data class Error(val message: String?) : PriceWidgetState()
+    data class Error(
+        val message: String,
+        val lastValidState: Available? = null
+    ) : PriceWidgetState()
 }
