@@ -3,7 +3,9 @@
     <string name="app_name" translatable="false">Minimal Bitcoin Widget</string>
 
     <string name="legacy_widget_picker_name" translatable="false">Legacy Price Widget</string>
-    <string name="price_widget_picker_name" translatable="false">Price Widget</string>
+    <string name="legacy_widget_picker_description" translatable="false">Quickly view the current BTC price</string>
+    <string name="glance_widget_picker_name" translatable="false">Price Widget (Beta)</string>
+    <string name="glance_widget_picker_description" translatable="false">Quickly view the current Bitcoin price</string>
 
     <!-- Action Bar Items -->
     <string name="settings">Settings</string>

@@ -70,7 +70,7 @@ internal fun drawWidget(
     context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int
 ) {
     // create remote view
-    val views = RemoteViews(context.packageName, R.layout.price_widget)
+    val views = RemoteViews(context.packageName, R.layout.legacy_price_widget)
 
     // set widgets to display loading state
     setWidgetViews(context, views, null, CurrencyInfo("", ""), loading = true)

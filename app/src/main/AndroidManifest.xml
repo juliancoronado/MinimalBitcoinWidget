@@ -30,7 +30,7 @@
         <!-- Glance Price Widget Code-->
         <receiver
             android:name=".widgets.glance.PriceWidgetReceiver"
-            android:label="@string/price_widget_picker_name"
+            android:label="@string/glance_widget_picker_name"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
