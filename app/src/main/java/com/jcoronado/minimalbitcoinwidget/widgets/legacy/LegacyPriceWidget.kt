@@ -1,4 +1,4 @@
-package com.jcoronado.minimalbitcoinwidget
+package com.jcoronado.minimalbitcoinwidget.widgets.legacy
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -12,6 +12,7 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
@@ -23,12 +24,13 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 import java.text.NumberFormat
+import kotlin.collections.get
 
 /**
  * Implementation of App Widget functionality.
  */
 
-private const val TAG = "Price Widget"
+private const val TAG = "Legacy Price Widget"
 
 fun getCurrencyInfo(currency: String?): CurrencyInfo {
     return when (currency?.lowercase()) {
@@ -45,7 +47,7 @@ fun getCurrencyInfo(currency: String?): CurrencyInfo {
 
 data class CurrencyInfo(val symbol: String, val isoCode: String)
 
-class PriceWidget : AppWidgetProvider() {
+class LegacyPriceWidget : AppWidgetProvider() {
 
     override fun onUpdate(
         context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray

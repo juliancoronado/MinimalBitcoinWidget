@@ -2,7 +2,8 @@
 <resources>
     <string name="app_name" translatable="false">Minimal Bitcoin Widget</string>
 
-    <string name="widget_picker_name" translatable="false">Price Widget</string>
+    <string name="legacy_widget_picker_name" translatable="false">Legacy Price Widget</string>
+    <string name="price_widget_picker_name" translatable="false">Price Widget</string>
 
     <!-- Action Bar Items -->
     <string name="settings">Settings</string>

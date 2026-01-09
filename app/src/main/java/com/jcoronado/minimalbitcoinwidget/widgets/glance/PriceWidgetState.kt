@@ -1,4 +1,4 @@
-package com.jcoronado.minimalbitcoinwidget.widgets
+package com.jcoronado.minimalbitcoinwidget.widgets.glance
 
 import kotlinx.serialization.Serializable
 

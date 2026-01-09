@@ -1,4 +1,4 @@
-package com.jcoronado.minimalbitcoinwidget.widgets
+package com.jcoronado.minimalbitcoinwidget.widgets.glance
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -9,8 +9,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.jcoronado.minimalbitcoinwidget.workers.PriceUpdateWorker
 
-class TestWidgetReceiver : GlanceAppWidgetReceiver() {
-    override val glanceAppWidget: GlanceAppWidget = TestWidget()
+class PriceWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = PriceWidget()
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)

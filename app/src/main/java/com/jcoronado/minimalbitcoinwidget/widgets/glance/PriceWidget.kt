@@ -1,4 +1,4 @@
-package com.jcoronado.minimalbitcoinwidget.widgets
+package com.jcoronado.minimalbitcoinwidget.widgets.glance
 
 import android.content.Context
 import android.content.Intent
@@ -40,7 +40,7 @@ import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import java.text.NumberFormat
 
-class TestWidget : GlanceAppWidget() {
+class PriceWidget : GlanceAppWidget() {
 
     override val stateDefinition = PriceWidgetStateDefinition
 

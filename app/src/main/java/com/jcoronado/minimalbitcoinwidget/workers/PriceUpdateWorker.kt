@@ -23,10 +23,10 @@ import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
-import com.jcoronado.minimalbitcoinwidget.getCurrencyInfo
-import com.jcoronado.minimalbitcoinwidget.widgets.PriceWidgetState
-import com.jcoronado.minimalbitcoinwidget.widgets.PriceWidgetStateDefinition
-import com.jcoronado.minimalbitcoinwidget.widgets.TestWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.legacy.getCurrencyInfo
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -120,11 +120,11 @@ class PriceUpdateWorker(
 
     private suspend fun handleError(e: Exception): Result {
         val manager = GlanceAppWidgetManager(context)
-        val glanceIds = manager.getGlanceIds(TestWidget::class.java)
+        val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
         var lastValid: PriceWidgetState.Available? = null
 
         if (glanceIds.isNotEmpty()) {
-            val currentState: PriceWidgetState = TestWidget().getAppWidgetState(context, glanceIds.first())
+            val currentState: PriceWidgetState = PriceWidget().getAppWidgetState(context, glanceIds.first())
             lastValid = when (currentState) {
                 is PriceWidgetState.Available -> currentState
                 is PriceWidgetState.Error -> currentState.lastValidState
@@ -137,7 +137,7 @@ class PriceUpdateWorker(
     }
     private suspend fun updateWidgets(state: PriceWidgetState) {
         val manager = GlanceAppWidgetManager(context)
-        val glanceIds = manager.getGlanceIds(TestWidget::class.java)
+        val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
         glanceIds.forEach { glanceId ->
             updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
                 state
@@ -145,7 +145,7 @@ class PriceUpdateWorker(
         }
         Log.d(LOG_TAG, "Updating widgets using .updateAll()")
         // notify widgets to redraw
-        TestWidget().updateAll(context)
+        PriceWidget().updateAll(context)
     }
 
     companion object {

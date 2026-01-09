@@ -17,16 +17,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.jcoronado.minimalbitcoinwidget.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
-import com.jcoronado.minimalbitcoinwidget.getCurrencyInfo
-import com.jcoronado.minimalbitcoinwidget.widgets.PriceWidgetState
-import com.jcoronado.minimalbitcoinwidget.widgets.PriceWidgetStateDefinition
-import com.jcoronado.minimalbitcoinwidget.widgets.TestWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
+import com.jcoronado.minimalbitcoinwidget.widgets.legacy.LegacyPriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.legacy.getCurrencyInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -120,8 +120,9 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
 
             if (!force && hasCache && isFresh) {
                 Log.d(LOG_TAG, "Using cached data")
-                delay(1000)
+                delay(1250)
                 _uiState.value = _uiState.value.copy(isLoading = false)
+                redrawWidgets()
                 return@launch
             }
 
@@ -149,7 +150,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
                         putString(Prefs.CACHED_PRICE_DATA, gson.toJson(PriceData(price, change24h)))
                     }
 
-                    delay(500)
+                    delay(750)
 
                     _uiState.value = _uiState.value.copy(
                         price = price, percentageChange = change24h, isLoading = false
@@ -183,7 +184,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
         viewModelScope.launch {
             try {
                 val manager = GlanceAppWidgetManager(context)
-                val glanceIds = manager.getGlanceIds(TestWidget::class.java)
+                val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
 
                 Log.d(LOG_TAG, "Updating ${glanceIds.size} widgets: $glanceIds")
 
@@ -201,17 +202,17 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
                         )
                     }
                 }
-                TestWidget().updateAll(context)
+                PriceWidget().updateAll(context)
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Failed to update Glance widgets: $e")
             }
         }
 
         // Update Legacy Widgets (PriceWidget)
-        val intent = Intent(context, PriceWidget::class.java).apply {
+        val intent = Intent(context, LegacyPriceWidget::class.java).apply {
             action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             val ids = AppWidgetManager.getInstance(context).getAppWidgetIds(
-                ComponentName(context, PriceWidget::class.java)
+                ComponentName(context, LegacyPriceWidget::class.java)
             )
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
         }
