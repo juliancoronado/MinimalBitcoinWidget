@@ -11,18 +11,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
+import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,21 +42,16 @@ import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 fun MainScreen(uiState: PriceUiState, onSettingsClick: () -> Unit, onRefresh: () -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.app_name))
-                }, colors = topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ), actions = {
-                    IconButton(onClick = onSettingsClick) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.rounded_settings_24),
-                            contentDescription = "Settings Icon",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                })
+            TopAppBar(title = {
+                Text(stringResource(R.string.app_name))
+            }, actions = {
+                IconButton(onClick = onSettingsClick) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.rounded_settings_24),
+                        contentDescription = "Settings Icon"
+                    )
+                }
+            })
         }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -67,6 +64,7 @@ fun MainScreen(uiState: PriceUiState, onSettingsClick: () -> Unit, onRefresh: ()
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     Surface(
@@ -106,7 +104,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 }
                 Text(
                     text = FormatUtils.formatPrice(uiState.price),
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.headlineMedium.copy(fontFamily = googleSansCodeFontFamily),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
@@ -129,7 +127,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     )
                     Text(
                         text = FormatUtils.formatChange(uiState.percentageChange),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
                         color = MaterialTheme.colorScheme.secondary,
                         textAlign = TextAlign.Center
                     )
@@ -137,13 +135,12 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
             }
 
             if (uiState.isLoading) {
-                // TODO - replace with M3 Expressive version soon
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.primary,
+                LoadingIndicator(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(12.dp)
-                        .size(32.dp)
+                        .padding(8.dp)
+                        .size(32.dp),
+                    polygons = LoadingIndicatorDefaults.IndeterminateIndicatorPolygons.shuffled()
                 )
             }
 
@@ -159,6 +156,15 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
             }
         }
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun MainScreenPreview() {
+    MainScreen(
+        uiState = PriceUiState(
+            price = 95234.12, percentageChange = 0.45, isLoading = false
+        ), onSettingsClick = {}) {}
 }
 
 
