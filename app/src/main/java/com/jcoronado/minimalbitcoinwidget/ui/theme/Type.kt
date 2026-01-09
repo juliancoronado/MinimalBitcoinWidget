@@ -12,21 +12,24 @@ val gFontsProvider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 val googleSansCode = GoogleFont("Google Sans Code")
-
-// val googleSansFlex = GoogleFont("Google Sans Flex")
+val googleSansFlex = GoogleFont("Google Sans Flex")
+val googleSans = GoogleFont("Google Sans")
 
 val googleSansCodeFontFamily = FontFamily(
     Font(googleFont = googleSansCode, fontProvider = gFontsProvider)
 )
 
-// not sure if I want to use this font...
-// val googleSansFlexFontFamily = FontFamily(
-//     Font(googleFont = googleSansFlex, fontProvider = gFontsProvider)
-// )
+val googleSansFlexFontFamily = FontFamily(
+    Font(googleFont = googleSansFlex, fontProvider = gFontsProvider)
+)
 
-val currentFont = googleSansCodeFontFamily
+val googleSansFontFamily = FontFamily(
+    Font(googleFont = googleSans, fontProvider = gFontsProvider)
+)
 
-// Set of Material typography styles to start with
+val currentFont = googleSansFlexFontFamily
+
+// default Material typography to start with
 val defaultTypography = Typography()
 
 val appTypography = Typography(

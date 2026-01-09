@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,15 +48,11 @@ fun SettingsScreen(
             TopAppBar(
                 title = {
                     Text(stringResource(R.string.settings))
-                }, colors = topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ), navigationIcon = {
+                }, navigationIcon = {
                     IconButton(onClick = onBackButtonClick) {
                         Icon(
                             painter = painterResource(id = R.drawable.rounded_arrow_back_24),
                             contentDescription = "Back Arrow Icon",
-                            tint = MaterialTheme.colorScheme.secondary
                         )
                     }
                 })
@@ -74,7 +69,7 @@ fun SettingsScreen(
                     var expanded by remember { mutableStateOf(false) }
                     val currencyEntries = stringArrayResource(id = R.array.currency_entries)
                     val currencyValues = stringArrayResource(id = R.array.currency_values)
-                    
+
                     val selectedIndex = currencyValues.indexOf(selectedCurrency).coerceAtLeast(0)
                     val currentEntry = currencyEntries[selectedIndex]
 
@@ -83,7 +78,10 @@ fun SettingsScreen(
                         onExpandedChange = { expanded = !expanded },
                     ) {
                         SettingsItem(
-                            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, true),
+                            modifier = Modifier.menuAnchor(
+                                ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+                                true
+                            ),
                             title = currentEntry,
                             subtitle = stringResource(R.string.currency_title),
                             onClick = { expanded = true }
@@ -111,16 +109,24 @@ fun SettingsScreen(
                         subtitle = "Change Percentage",
                         onClick = {
                             // TODO - implement change percentage setting
-                            Toast.makeText(context, "Feature not yet implemented", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Feature not yet implemented",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     )
 
                     SettingsItem(
-                        title = "30 minutes", 
-                        subtitle = "Refresh Interval", 
+                        title = "30 minutes",
+                        subtitle = "Refresh Interval",
                         onClick = {
                             // TODO - implement refresh interval setting
-                            Toast.makeText(context, "Feature not yet implemented", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Feature not yet implemented",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     )
                 }

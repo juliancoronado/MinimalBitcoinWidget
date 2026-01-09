@@ -21,7 +21,7 @@ object AppConstants {
     /** Default currency used if none is selected. */
     const val CURRENCY_DEFAULT = "usd"
     /** Internal cache duration in minutes. */
-    private const val CACHE_DURATION_MINUTES = 29L
+    private const val CACHE_DURATION_MINUTES = 30L
     /** Duration in milliseconds for which the cached price data is considered valid. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
     const val EXTRA_RESET_NAV = "reset_nav"
