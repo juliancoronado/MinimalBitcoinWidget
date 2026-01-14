@@ -11,19 +11,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,18 +38,11 @@ import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(uiState: PriceUiState, onSettingsClick: () -> Unit, onRefresh: () -> Unit) {
+fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(title = {
+            CenterAlignedTopAppBar(title = {
                 Text(stringResource(R.string.app_name))
-            }, actions = {
-                IconButton(onClick = onSettingsClick) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.rounded_settings_24),
-                        contentDescription = "Settings Icon"
-                    )
-                }
             })
         }) { innerPadding ->
         Column(
@@ -158,14 +150,14 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun MainScreenPreview() {
-    MainScreen(
-        uiState = PriceUiState(
-            price = 95234.12, percentageChange = 0.45, isLoading = false
-        ), onSettingsClick = {}) {}
-}
+// @Preview(showBackground = true, showSystemUi = true)
+// @Composable
+// fun MainScreenPreview() {
+//     MainScreen(
+//         uiState = PriceUiState(
+//             price = 95234.12, percentageChange = 0.45, isLoading = false
+//         )) {}
+// }
 
 
 @Preview(showBackground = true)

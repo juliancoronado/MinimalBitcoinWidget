@@ -56,7 +56,6 @@ class PriceWidget : GlanceAppWidget() {
         val openAppIntent = Intent(LocalContext.current, MainActivity::class.java).apply {
             flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra(AppConstants.EXTRA_RESET_NAV, true)
         }
         GlanceTheme(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

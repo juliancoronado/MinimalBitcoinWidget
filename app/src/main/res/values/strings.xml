@@ -7,7 +7,12 @@
     <string name="glance_widget_picker_name" translatable="false">Price Widget (Beta)</string>
     <string name="glance_widget_picker_description" translatable="false">Quickly view the current Bitcoin price</string>
 
+    <string name="settings_data" translatable="false">Data</string>
+    <string name="settings_appearance" translatable="false">Appearance</string>
+    <string name="settings_about" translatable="false">About</string>
+
     <!-- Action Bar Items -->
+    <string name="dashboard" translatable="false">Dashboard</string>
     <string name="settings">Settings</string>
     <string name="version_info">Version Info</string>
 
