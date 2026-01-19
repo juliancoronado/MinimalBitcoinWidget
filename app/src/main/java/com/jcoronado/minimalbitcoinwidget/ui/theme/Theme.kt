@@ -3,6 +3,7 @@ package com.jcoronado.minimalbitcoinwidget.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -271,8 +272,18 @@ fun AppTheme(
         }
     }
 
+    val appColorScheme : ColorScheme = if (darkTheme) {
+        // swap surface and surfaceContainer colors when darkMode = true
+        colorScheme.copy(
+            surface = colorScheme.surfaceContainer,
+            surfaceContainer = colorScheme.surface
+        )
+    } else {
+        colorScheme
+    }
+
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = appColorScheme,
         typography = appTypography,
         content = content
     )

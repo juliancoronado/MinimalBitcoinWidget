@@ -199,7 +199,7 @@ fun AppNavigation() {
                 }
             }
         }
-    }) { contentPadding ->
+    }, containerColor = MaterialTheme.colorScheme.surfaceContainer,) { contentPadding ->
         val silencePaddingWarning = contentPadding
         NavDisplay(
             backStack = backStack,

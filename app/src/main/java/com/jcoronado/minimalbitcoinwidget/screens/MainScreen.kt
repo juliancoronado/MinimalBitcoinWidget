@@ -12,17 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,22 +36,28 @@ import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
 import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = {
-                Text(stringResource(R.string.app_name))
-            })
-        }) { innerPadding ->
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(stringResource(R.string.app_name))
+                }, colors = TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                )
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
         ) {
             PriceCard(uiState, onRefresh = onRefresh)
-            HorizontalDivider(thickness = DividerDefaults.Thickness / 2)
         }
     }
 }
@@ -59,9 +65,17 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
-    Surface(
+    val colors =
+        ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
+    SegmentedListItem(
+        modifier = Modifier.padding(horizontal = 12.dp),
         onClick = onRefresh,
-    ) {
+        colors = colors,
+        shapes = ListItemDefaults.segmentedShapes(
+            index = 0, count = 2
+        )
+    )
+    {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -148,16 +162,19 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
             }
         }
     }
-}
+    SegmentedListItem(
+        modifier = Modifier.padding(horizontal = 12.dp),
+        onClick = {},
+        colors = colors,
+        enabled = false,
+        shapes = ListItemDefaults.segmentedShapes(
+            index = 1, count = 2
+        )
+    ) {
+        Text("Last Updated: (TODO)")
+    }
 
-// @Preview(showBackground = true, showSystemUi = true)
-// @Composable
-// fun MainScreenPreview() {
-//     MainScreen(
-//         uiState = PriceUiState(
-//             price = 95234.12, percentageChange = 0.45, isLoading = false
-//         )) {}
-// }
+}
 
 
 @Preview(showBackground = true)
