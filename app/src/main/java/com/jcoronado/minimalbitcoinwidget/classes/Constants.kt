@@ -12,6 +12,8 @@ object Prefs {
     const val CACHED_PRICE_DATA = "app_cached_price_data_v1"
     /** Key for storing the user's selected currency preference. */
     const val SELECTED_CURRENCY = "currency"
+    const val DYNAMIC_COLORS = "dynamic_colors"
+    const val SELECTED_THEME = "selected_theme"
 }
 
 /**
@@ -24,7 +26,6 @@ object AppConstants {
     private const val CACHE_DURATION_MINUTES = 30L
     /** Duration in milliseconds for which the cached price data is considered valid. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
-    const val EXTRA_RESET_NAV = "reset_nav"
     const val DEBUG_MODE = false
 }
 

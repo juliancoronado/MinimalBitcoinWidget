@@ -1,56 +1,140 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonGroup
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SettingsScreen(
-    selectedCurrency: String
+    selectedCurrency: String,
+    onCurrencySelected: (String) -> Unit = {},
+    currentTheme: AppTheme,
+    onThemeSelected: (AppTheme) -> Unit = {},
+    dynamicColors: Boolean,
+    onDynamicColorsSelected: (Boolean) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
+    val showCurrencyDialog = remember { mutableStateOf(false) }
+    var newSelection by remember { mutableStateOf(selectedCurrency) }
+    val currencyDescriptions = stringArrayResource(R.array.currency_entries)
+    val currencyValues = stringArrayResource(R.array.currency_values)
 
-    var dynamicColorsSelected by remember { mutableStateOf(false) }
+    if (showCurrencyDialog.value) {
+        AlertDialog(
+            modifier = Modifier.heightIn(min = 200.dp, max = 400.dp),
+            onDismissRequest = { showCurrencyDialog.value = false },
+            title = { Text("Update Currency") },
+            text = {
+                Column(Modifier.fillMaxWidth()) {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        currencyValues.forEachIndexed { index, currency ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .selectable(
+                                        selected = (currency.equals(
+                                            newSelection,
+                                            ignoreCase = true
+                                        )),
+                                        onClick = {
+                                            // Logic to update preference
+                                            // use viewModel to update currency
+                                            Log.d("SettingsScreen", "Currency selected: $currency")
+                                            newSelection = currency
+                                        })
+                                    .padding(vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(
+                                    selected = (currency.equals(newSelection, ignoreCase = true)),
+                                    onClick = null // row handles click
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(
+                                    text = "${currencyDescriptions[index]} - ${currency.uppercase()}",
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
+                        }
+                    }
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 0.dp))
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showCurrencyDialog.value = false
+                    onCurrencySelected(newSelection)
+                }) {
+                    Text("Save")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCurrencyDialog.value = false }) {
+                    Text("Cancel")
+                }
+            })
+    }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(stringResource(R.string.settings))
-                })
-        }) { innerPadding ->
+                },
+                colors = TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                )
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -59,13 +143,10 @@ fun SettingsScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            var selected by remember { mutableIntStateOf(0) }
             val colors =
-                ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+                ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
             Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
-                Text(
-                    "Data", modifier = Modifier.padding(vertical = 8.dp)
-                )
+                SectionHeader("Data", true)
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
@@ -73,18 +154,19 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_currency_exchange_24),
-                            "TBD"
+                            painterResource(R.drawable.rounded_currency_exchange_24), "TBD"
                         )
                     },
                     content = {
-                        Text(selectedCurrency.uppercase())
+                        Text(currencyDescriptions[currencyValues.indexOf(selectedCurrency)])
                     },
                     supportingContent = {
-                        Text("Currency")
+                        Text("Display Currency")
                     },
                     onClick = {
-                        // display options dialog
+                        // show options dialog
+                        newSelection = selectedCurrency // reset to current value for UI
+                        showCurrencyDialog.value = true
                     },
                 )
                 SegmentedListItem(
@@ -94,8 +176,7 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_date_range_24),
-                            "TBD"
+                            painterResource(R.drawable.rounded_price_change_24), null
                         )
                     },
                     content = {
@@ -104,22 +185,18 @@ fun SettingsScreen(
                     supportingContent = {
                         ButtonGroup(
                             modifier = Modifier.fillMaxWidth(),
-                            overflowIndicator = { menuState ->
-                                ButtonGroupDefaults.OverflowIndicator(
-                                    menuState = menuState
-                                )
-                            },
+                            overflowIndicator = { },
                             expandedRatio = ButtonGroupDefaults.ExpandedRatio,
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.Top,
                             content = {
                                 this.toggleableItem(
-                                    checked = true,
+                                    checked = false,
                                     label = "24 Hours",
                                     onCheckedChange = {},
                                 )
                                 this.toggleableItem(
-                                    checked = false,
+                                    checked = true,
                                     label = "7 Days",
                                     onCheckedChange = {},
                                 )
@@ -140,8 +217,7 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_timer_24),
-                            "TBD"
+                            painterResource(R.drawable.rounded_timer_24), null
                         )
                     },
                     content = {
@@ -159,7 +235,7 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.Top,
                             content = {
                                 this.toggleableItem(
-                                    checked = true,
+                                    checked = false,
                                     label = "30 Mins",
                                     onCheckedChange = {},
                                 )
@@ -169,7 +245,7 @@ fun SettingsScreen(
                                     onCheckedChange = {},
                                 )
                                 this.toggleableItem(
-                                    checked = false,
+                                    checked = true,
                                     label = "4 Hours",
                                     onCheckedChange = {},
                                 )
@@ -178,9 +254,7 @@ fun SettingsScreen(
                     },
                     onClick = {},
                 )
-                Text(
-                    "Appearance", modifier = Modifier.padding(vertical = 8.dp)
-                )
+                SectionHeader("Appearance")
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
@@ -188,8 +262,7 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_brightness_6_24),
-                            "TBD"
+                            painterResource(R.drawable.rounded_brightness_6_24), null
                         )
                     },
                     content = {
@@ -199,37 +272,35 @@ fun SettingsScreen(
                         ButtonGroup(
                             modifier = Modifier.fillMaxWidth(),
                             overflowIndicator = {},
-                            expandedRatio = 0.02F,
+                            expandedRatio = ButtonGroupDefaults.ExpandedRatio,
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.Top,
                             content = {
                                 this.toggleableItem(
-                                    checked = selected == 0,
+                                    checked = currentTheme == AppTheme.SYSTEM,
                                     label = "System",
                                     onCheckedChange = {
-                                        selected = 0
+                                        onThemeSelected(AppTheme.SYSTEM)
                                     },
                                 )
                                 this.toggleableItem(
-                                    checked = selected == 1,
+                                    checked = currentTheme == AppTheme.LIGHT,
                                     label = "Light",
                                     onCheckedChange = {
-                                        selected = 1
+                                        onThemeSelected(AppTheme.LIGHT)
                                     },
                                 )
                                 this.toggleableItem(
-                                    checked = selected == 2,
+                                    checked = currentTheme == AppTheme.DARK,
                                     label = "Dark",
                                     onCheckedChange = {
-                                        selected = 2
+                                        onThemeSelected(AppTheme.DARK)
                                     },
                                 )
                             },
                         )
                     },
-                    onClick = {
-                        // display options dialog
-                    },
+                    onClick = {},
                 )
                 SegmentedListItem(
                     colors = colors,
@@ -238,23 +309,23 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_palette_24),
-                            "TBD"
+                            painterResource(R.drawable.rounded_palette_24), null
                         )
                     },
                     content = {
                         Text("Dynamic Colors")
                     },
                     trailingContent = {
-                        Switch(checked = dynamicColorsSelected, onCheckedChange = {
-                            dynamicColorsSelected = it
-                        })
+                        Switch(
+                            checked = dynamicColors,
+                            onCheckedChange = { value ->
+                                onDynamicColorsSelected(value)
+                            },
+                        )
                     },
                     onClick = {},
                 )
-                Text(
-                    "App Info", modifier = Modifier.padding(vertical = 8.dp)
-                )
+                SectionHeader("App Info")
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
@@ -262,15 +333,14 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_info_24),
-                            "TBD"
+                            painterResource(R.drawable.rounded_info_24), "TBD"
                         )
                     },
                     content = {
-                        Text("1.0.0")
+                        Text(stringResource(R.string.version_only_main))
                     },
                     supportingContent = {
-                        Text("App Version")
+                        Text("Version")
                     },
                     onClick = {},
                 )
@@ -281,12 +351,11 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_build_24),
-                            "TBD"
+                            painterResource(R.drawable.rounded_build_24), "TBD"
                         )
                     },
                     content = {
-                        Text("12")
+                        Text(stringResource(R.string.version_only_build))
                     },
                     supportingContent = {
                         Text("Build Number")
@@ -300,8 +369,7 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_alternate_email_24),
-                            "TBD"
+                            painterResource(R.drawable.rounded_alternate_email_24), null
                         )
                     },
                     content = {
@@ -310,17 +378,37 @@ fun SettingsScreen(
                     supportingContent = {
                         Text("Contact Developer")
                     },
-                    onClick = {},
+                    onClick = {
+                        // TODO - implement this to open an email client / browser
+                        Log.d("SettingsScreen", "Contact Developer")
+                    },
                 )
-                Spacer(modifier = Modifier.height(120.dp))
+                Spacer(modifier = Modifier.height(100.dp))
             }
         }
     }
 }
 
 @Composable
+fun SectionHeader(title: String, top: Boolean = false) {
+    Text(
+        title,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .padding(horizontal = 4.dp)
+            .padding(top = if (top) 8.dp else 16.dp, bottom = 8.dp)
+    )
+}
+
+@Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun SettingsPreview() {
     SettingsScreen(
-        selectedCurrency = "USD")
+        selectedCurrency = "USD",
+        currentTheme = AppTheme.LIGHT,
+        dynamicColors = true,
+        onCurrencySelected = {},
+        onThemeSelected = {},
+        onDynamicColorsSelected = {}
+    )
 }

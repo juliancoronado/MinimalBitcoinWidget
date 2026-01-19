@@ -28,6 +28,7 @@ import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.material3.FloatingToolbarExitDirection
 import androidx.compose.material3.HorizontalFloatingToolbar
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.motionScheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
@@ -62,6 +63,7 @@ import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.NavItem
 import com.jcoronado.minimalbitcoinwidget.classes.Screen
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
+import com.jcoronado.minimalbitcoinwidget.viewmodels.SettingsViewModel
 
 val navigationScreenList = listOf(
     NavItem(
@@ -87,7 +89,8 @@ fun AppNavigation() {
 
     val motionScheme = motionScheme
     val backStack = rememberNavBackStack(Screen.Dashboard)
-    val viewModel: PriceViewModel = viewModel()
+    val priceViewModel: PriceViewModel = viewModel()
+    val settingsViewModel : SettingsViewModel = viewModel()
 
     // Show NavBar only on top-level routes (Dashboard or Settings Main)
     val isNavBarVisible by remember {
@@ -113,6 +116,10 @@ fun AppNavigation() {
             ) {
                 HorizontalFloatingToolbar(
                     expanded = true,
+                    colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
+                        toolbarContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        toolbarContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
                     scrollBehavior = toolbarScrollBehavior,
                     modifier = Modifier
                         .padding(
@@ -155,7 +162,14 @@ fun AppNavigation() {
                                         // Reset to Dashboard
                                         while (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
                                     }
-                                }, shapes = ToggleButtonDefaults.shapes(
+                                },
+                                colors = ToggleButtonDefaults.toggleButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    checkedContainerColor = MaterialTheme.colorScheme.primary,
+                                    checkedContentColor = MaterialTheme.colorScheme.onPrimary
+                                ),
+                                shapes = ToggleButtonDefaults.shapes(
                                     CircleShape, CircleShape, CircleShape
                                 ), modifier = Modifier.height(56.dp)
                             ) {
@@ -203,16 +217,24 @@ fun AppNavigation() {
             },
             entryProvider = entryProvider {
                 entry<Screen.Dashboard> {
-                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
                     MainScreen(
                         uiState = uiState,
-                        onRefresh = { viewModel.fetchPrice() },
+                        onRefresh = { priceViewModel.fetchPrice() },
                     )
                 }
                 entry<Screen.Settings> {
-                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
+                    val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
+                    val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
+
                     SettingsScreen(
                         selectedCurrency = uiState.selectedCurrency,
+                        onCurrencySelected = { newCurrency -> priceViewModel.updateCurrency(newCurrency) },
+                        currentTheme = currentTheme,
+                        onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
+                        dynamicColors = dynamicColors,
+                        onDynamicColorsSelected = { newDynamicColors -> settingsViewModel.updateDynamicColorsFlag(newDynamicColors) }
                     )
                 }
             },
