@@ -49,6 +49,7 @@
     <string name="version_title">App Version</string>
     <string name="version_summary" translatable="false">3.0.0-SNAPSHOT (Build 12)</string>
     <string name="version_only_main" translatable="false">Version 3.0.0-SNAPSHOT</string>
+    <string name="version_only_build" translatable="false">12</string>
 
     <!-- + License -->
     <string name="license_title">License</string>
