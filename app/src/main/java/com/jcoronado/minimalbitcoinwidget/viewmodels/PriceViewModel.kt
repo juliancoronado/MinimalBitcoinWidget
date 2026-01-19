@@ -76,20 +76,22 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
 
     /** Load initial data from SharedPreferences. */
     private fun loadInitialData() {
-        val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
-        val cachedCurrency =
-            prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)!!
-        if (cachedDataJson != null) {
-            try {
-                val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
-                // update state immediately
-                _uiState.value = _uiState.value.copy(
-                    price = cachedData.currentPrice,
-                    percentageChange = cachedData.priceChangePercentage24h,
-                    selectedCurrency = cachedCurrency
-                )
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "Failed to parse initial cache $e")
+        viewModelScope.launch(Dispatchers.IO) {
+            val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
+            val cachedCurrency =
+                prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)!!
+            if (cachedDataJson != null) {
+                try {
+                    val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
+                    // update state immediately
+                    _uiState.value = _uiState.value.copy(
+                        price = cachedData.currentPrice,
+                        percentageChange = cachedData.priceChangePercentage24h,
+                        selectedCurrency = cachedCurrency
+                    )
+                } catch (e: Exception) {
+                    Log.e(LOG_TAG, "Failed to parse initial cache $e")
+                }
             }
         }
     }

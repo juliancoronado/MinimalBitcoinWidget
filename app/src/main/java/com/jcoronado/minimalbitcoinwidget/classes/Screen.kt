@@ -10,15 +10,7 @@ sealed class Screen : NavKey {
     object Dashboard : Screen()
 
     @Serializable
-    sealed class Settings : Screen() {
-        @Serializable
-        object Main : Settings()
-        @Serializable
-        object Data : Settings()
-        @Serializable
-        object Appearance : Settings()
-        @Serializable
-        object About : Settings()
+    object Settings : Screen() {
     }
 }
 
@@ -27,10 +19,3 @@ data class NavItem(
     @param:DrawableRes val icon: Int,
     @param:StringRes val label: Int
 )
-
- data class SettingsNavItem(
-     val route: Screen.Settings,
-     @param:DrawableRes val icon: Int,
-     @param:StringRes val label: Int,
-     val subtitle: String,
- )

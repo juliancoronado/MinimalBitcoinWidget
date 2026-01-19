@@ -69,7 +69,7 @@ val navigationScreenList = listOf(
     NavItem(
         route = Screen.Dashboard, icon = R.drawable.rounded_dashboard_24, label = R.string.dashboard
     ), NavItem(
-        Screen.Settings.Main, R.drawable.rounded_settings_24, R.string.settings
+        Screen.Settings, R.drawable.rounded_settings_24, R.string.settings
     )
 )
 
@@ -95,7 +95,7 @@ fun AppNavigation() {
     val isNavBarVisible by remember {
         derivedStateOf {
             val current = backStack.lastOrNull()
-            current == Screen.Dashboard || current == Screen.Settings.Main
+            current == Screen.Dashboard || current == Screen.Settings
         }
     }
 
@@ -147,7 +147,7 @@ fun AppNavigation() {
                                         // If we are deep in settings, go back to Settings Main
                                         // Otherwise, just add Settings Main
                                         if (backStack.any { it is Screen.Settings }) {
-                                            while (backStack.lastOrNull() !is Screen.Settings.Main) {
+                                            while (backStack.lastOrNull() !is Screen.Settings) {
                                                 backStack.removeLastOrNull()
                                             }
                                         } else {
@@ -195,36 +195,13 @@ fun AppNavigation() {
                 if (backStack.size > 1) backStack.removeLastOrNull()
             },
             transitionSpec = {
-                val to = backStack.lastOrNull()
-                if (to is Screen.Settings && to != Screen.Settings.Main) {
-                    // Slide in for inner settings
-                    (slideInHorizontally(initialOffsetX = { it }) + fadeIn(initialAlpha = 0.5F)).togetherWith(
-                        slideOutHorizontally(targetOffsetX = { -it / 4 }) + fadeOut(targetAlpha = 0.75F)
-                    )
-                } else {
-                    // Default fade for tabs
-                    fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
-                }
+                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
             },
             popTransitionSpec = {
-                val from = backStack.lastOrNull()
-                if (from is Screen.Settings) {
-                    (slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn(initialAlpha = 0.5F)).togetherWith(
-                        slideOutHorizontally(targetOffsetX = { it })
-                    )
-                } else {
-                    fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
-                }
+                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
             },
             predictivePopTransitionSpec = {
-                val from = backStack.lastOrNull()
-                if (from is Screen.Settings) {
-                    (slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn(initialAlpha = 0.5F)).togetherWith(
-                        slideOutHorizontally(targetOffsetX = { it })
-                    )
-                } else {
-                    fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
-                }
+                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
             },
             entryProvider = entryProvider {
                 entry<Screen.Dashboard> {
@@ -234,18 +211,11 @@ fun AppNavigation() {
                         onRefresh = { viewModel.fetchPrice() },
                     )
                 }
-                entry<Screen.Settings.Main> {
+                entry<Screen.Settings> {
+                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                     SettingsScreen(
-                        onNavigate = { route -> backStack.add(route) })
-                }
-                entry<Screen.Settings.Data> {
-                    DataSettingsScreen(onBack = { backStack.removeAt(backStack.lastIndex) })
-                }
-                entry<Screen.Settings.Appearance> {
-                    AppearanceSettingsScreen(onBack = { backStack.removeAt(backStack.lastIndex) })
-                }
-                entry<Screen.Settings.About> {
-                    AboutScreen(onBack = { backStack.removeAt(backStack.lastIndex) })
+                        selectedCurrency = uiState.selectedCurrency,
+                    )
                 }
             },
         )
