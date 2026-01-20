@@ -144,7 +144,6 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 LoadingIndicator(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(8.dp)
                         .size(32.dp),
                     polygons = LoadingIndicatorDefaults.IndeterminateIndicatorPolygons.shuffled()
                 )
