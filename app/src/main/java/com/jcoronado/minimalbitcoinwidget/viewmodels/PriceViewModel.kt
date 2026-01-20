@@ -41,7 +41,8 @@ import java.util.Locale
 
 private const val LOG_TAG = "PriceViewModel"
 
-class PriceViewModel(application: Application) : AndroidViewModel(application), DefaultLifecycleObserver {
+class PriceViewModel(application: Application) : AndroidViewModel(application),
+    DefaultLifecycleObserver {
     private val _uiState = MutableStateFlow(PriceUiState(isLoading = true))
 
     // read-only state
@@ -82,12 +83,14 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
                 prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)!!
             if (cachedDataJson != null) {
                 try {
+                    val lastUpdated = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
                     val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
                     // update state immediately
                     _uiState.value = _uiState.value.copy(
                         price = cachedData.currentPrice,
                         percentageChange = cachedData.priceChangePercentage24h,
-                        selectedCurrency = cachedCurrency
+                        selectedCurrency = cachedCurrency,
+                        lastUpdated = lastUpdated
                     )
                 } catch (e: Exception) {
                     Log.e(LOG_TAG, "Failed to parse initial cache $e")
@@ -122,7 +125,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
 
             if (!force && hasCache && isFresh) {
                 Log.d(LOG_TAG, "Using cached data")
-                delay(1250)
+                delay(750)
                 _uiState.value = _uiState.value.copy(isLoading = false)
                 redrawWidgets()
                 return@launch
@@ -155,7 +158,10 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
                     delay(750)
 
                     _uiState.value = _uiState.value.copy(
-                        price = price, percentageChange = change24h, isLoading = false
+                        price = price,
+                        percentageChange = change24h,
+                        isLoading = false,
+                        lastUpdated = System.currentTimeMillis()
                     )
 
                     // trigger widget update to sync with new data
@@ -181,7 +187,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application), 
     private fun redrawWidgets() {
         val context = getApplication<Application>()
         val state = _uiState.value
-        
+
         // update glance widgets using PriceWidgetStateDefinition
         viewModelScope.launch {
             try {

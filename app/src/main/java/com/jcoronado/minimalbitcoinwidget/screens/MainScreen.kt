@@ -35,6 +35,8 @@ import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
 import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -67,6 +69,7 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
+    val formattedTime = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(uiState.lastUpdated)
     SegmentedListItem(
         modifier = Modifier.padding(horizontal = 12.dp),
         onClick = onRefresh,
@@ -165,16 +168,25 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
         modifier = Modifier.padding(horizontal = 12.dp),
         onClick = {},
         colors = colors,
-        enabled = false,
         shapes = ListItemDefaults.segmentedShapes(
             index = 1, count = 2
         )
     ) {
-        Text("Last Updated: (TODO)")
+        Text("Last Updated: $formattedTime")
     }
 
 }
 
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun MainScreenPreview() {
+    MainScreen(
+        uiState = PriceUiState(
+            price = 95234.12, percentageChange = 0.45, isLoading = false
+        ),
+        onRefresh = { }
+    )
+}
 
 @Preview(showBackground = true)
 @Composable

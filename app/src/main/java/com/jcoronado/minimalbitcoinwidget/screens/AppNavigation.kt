@@ -165,7 +165,7 @@ fun AppNavigation() {
                                 },
                                 colors = ToggleButtonDefaults.toggleButtonColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                     checkedContainerColor = MaterialTheme.colorScheme.primary,
                                     checkedContentColor = MaterialTheme.colorScheme.onPrimary
                                 ),
