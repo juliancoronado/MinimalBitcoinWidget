@@ -1,6 +1,7 @@
 package com.jcoronado.minimalbitcoinwidget.viewmodels
 
 import android.app.Application
+import android.os.Build
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
@@ -33,7 +34,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun getDynamicColorsFlag(): Boolean {
-        return prefs.getBoolean(Prefs.DYNAMIC_COLORS, true)
+        return prefs.getBoolean(Prefs.DYNAMIC_COLORS, Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
     }
 
     fun updateDynamicColorsFlag(toggleValue: Boolean) {

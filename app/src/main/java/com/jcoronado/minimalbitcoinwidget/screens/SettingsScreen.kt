@@ -1,6 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
-import android.util.Log
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +33,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -58,9 +59,11 @@ fun SettingsScreen(
 ) {
     val scrollState = rememberScrollState()
     val showCurrencyDialog = remember { mutableStateOf(false) }
-    var newSelection by remember { mutableStateOf(selectedCurrency) }
+    var newSelection by remember { mutableStateOf(selectedCurrency.lowercase()) }
     val currencyDescriptions = stringArrayResource(R.array.currency_entries)
     val currencyValues = stringArrayResource(R.array.currency_values)
+    var refreshInterval by remember { mutableIntStateOf(0) }
+    var changePercentage by remember { mutableIntStateOf(0) }
 
     if (showCurrencyDialog.value) {
         AlertDialog(
@@ -84,9 +87,6 @@ fun SettingsScreen(
                                             ignoreCase = true
                                         )),
                                         onClick = {
-                                            // Logic to update preference
-                                            // use viewModel to update currency
-                                            Log.d("SettingsScreen", "Currency selected: $currency")
                                             newSelection = currency
                                         })
                                     .padding(vertical = 12.dp),
@@ -161,7 +161,7 @@ fun SettingsScreen(
                         Text(currencyDescriptions[currencyValues.indexOf(selectedCurrency)])
                     },
                     supportingContent = {
-                        Text("Display Currency")
+                        Text("Local Currency", modifier = Modifier.padding(top = 4.dp))
                     },
                     onClick = {
                         // show options dialog
@@ -184,26 +184,35 @@ fun SettingsScreen(
                     },
                     supportingContent = {
                         ButtonGroup(
-                            modifier = Modifier.fillMaxWidth(),
                             overflowIndicator = { },
-                            expandedRatio = ButtonGroupDefaults.ExpandedRatio,
-                            horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier.padding(top = 8.dp),
+                            expandedRatio = 0.02F,
+                            horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                             verticalAlignment = Alignment.Top,
                             content = {
                                 this.toggleableItem(
-                                    checked = false,
+                                    checked = changePercentage == 0,
                                     label = "24 Hours",
-                                    onCheckedChange = {},
+                                    weight = if (changePercentage == 0) 1F else 0.9F,
+                                    onCheckedChange = {
+                                        changePercentage = 0
+                                    },
                                 )
                                 this.toggleableItem(
-                                    checked = true,
+                                    checked = changePercentage == 1,
                                     label = "7 Days",
-                                    onCheckedChange = {},
+                                    weight = if (changePercentage == 1) 1F else 0.9F,
+                                    onCheckedChange = {
+                                        changePercentage = 1
+                                    },
                                 )
                                 this.toggleableItem(
-                                    checked = false,
+                                    checked = changePercentage == 2,
                                     label = "30 Days",
-                                    onCheckedChange = {},
+                                    weight = if (changePercentage == 2) 1F else 0.9F,
+                                    onCheckedChange = {
+                                        changePercentage = 2
+                                    },
                                 )
                             },
                         )
@@ -225,29 +234,35 @@ fun SettingsScreen(
                     },
                     supportingContent = {
                         ButtonGroup(
-                            overflowIndicator = { menuState ->
-                                ButtonGroupDefaults.OverflowIndicator(
-                                    menuState = menuState
-                                )
-                            },
-                            expandedRatio = ButtonGroupDefaults.ExpandedRatio,
-                            horizontalArrangement = ButtonGroupDefaults.HorizontalArrangement,
+                            overflowIndicator = { },
+                            modifier = Modifier.padding(top = 8.dp),
+                            expandedRatio = 0.02F,
+                            horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                             verticalAlignment = Alignment.Top,
                             content = {
                                 this.toggleableItem(
-                                    checked = false,
+                                    checked = refreshInterval == 0,
                                     label = "30 Mins",
-                                    onCheckedChange = {},
+                                    weight = if (refreshInterval == 0) 1F else 0.9F,
+                                    onCheckedChange = {
+                                        refreshInterval = 0
+                                    },
                                 )
                                 this.toggleableItem(
-                                    checked = false,
+                                    checked = refreshInterval == 1,
                                     label = "1 Hour",
-                                    onCheckedChange = {},
+                                    weight = if (refreshInterval == 1) 1F else 0.9F,
+                                    onCheckedChange = {
+                                        refreshInterval = 1
+                                    },
                                 )
                                 this.toggleableItem(
-                                    checked = true,
+                                    checked = refreshInterval == 2,
                                     label = "4 Hours",
-                                    onCheckedChange = {},
+                                    weight = if (refreshInterval == 2) 1F else 0.9F,
+                                    onCheckedChange = {
+                                        refreshInterval = 2
+                                    },
                                 )
                             },
                         )
@@ -270,15 +285,16 @@ fun SettingsScreen(
                     },
                     supportingContent = {
                         ButtonGroup(
-                            modifier = Modifier.fillMaxWidth(),
-                            overflowIndicator = {},
-                            expandedRatio = ButtonGroupDefaults.ExpandedRatio,
-                            horizontalArrangement = Arrangement.Start,
+                            overflowIndicator = { },
+                            modifier = Modifier.padding(top = 8.dp),
+                            expandedRatio = 0.02F,
+                            horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                             verticalAlignment = Alignment.Top,
                             content = {
                                 this.toggleableItem(
                                     checked = currentTheme == AppTheme.SYSTEM,
                                     label = "System",
+                                    weight = if (currentTheme == AppTheme.SYSTEM) 1F else 0.9F,
                                     onCheckedChange = {
                                         onThemeSelected(AppTheme.SYSTEM)
                                     },
@@ -286,6 +302,7 @@ fun SettingsScreen(
                                 this.toggleableItem(
                                     checked = currentTheme == AppTheme.LIGHT,
                                     label = "Light",
+                                    weight = if (currentTheme == AppTheme.LIGHT) 1F else 0.9F,
                                     onCheckedChange = {
                                         onThemeSelected(AppTheme.LIGHT)
                                     },
@@ -293,6 +310,7 @@ fun SettingsScreen(
                                 this.toggleableItem(
                                     checked = currentTheme == AppTheme.DARK,
                                     label = "Dark",
+                                    weight = if (currentTheme == AppTheme.DARK) 1F else 0.9F,
                                     onCheckedChange = {
                                         onThemeSelected(AppTheme.DARK)
                                     },
@@ -312,18 +330,23 @@ fun SettingsScreen(
                             painterResource(R.drawable.rounded_palette_24), null
                         )
                     },
+                    enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                     content = {
                         Text("Dynamic Colors")
                     },
+                    supportingContent = {
+                        Text("Follow colors from your device theme", modifier = Modifier.padding(top = 4.dp))
+                    },
                     trailingContent = {
                         Switch(
-                            checked = dynamicColors,
-                            onCheckedChange = { value ->
-                                onDynamicColorsSelected(value)
-                            },
+                            checked = dynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
+                            onCheckedChange = null,
+                            enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
                         )
                     },
-                    onClick = {},
+                    onClick = {
+                        onDynamicColorsSelected(!dynamicColors)
+                    },
                 )
                 SectionHeader("App Info")
                 SegmentedListItem(
@@ -380,7 +403,7 @@ fun SettingsScreen(
                     },
                     onClick = {
                         // TODO - implement this to open an email client / browser
-                        Log.d("SettingsScreen", "Contact Developer")
+                        // Log.d("SettingsScreen", "Contact Developer")
                     },
                 )
                 Spacer(modifier = Modifier.height(100.dp))
@@ -396,7 +419,7 @@ fun SectionHeader(title: String, top: Boolean = false) {
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .padding(horizontal = 4.dp)
-            .padding(top = if (top) 8.dp else 16.dp, bottom = 8.dp)
+            .padding(top = if (top) 4.dp else 16.dp, bottom = 8.dp)
     )
 }
 
@@ -406,9 +429,6 @@ fun SettingsPreview() {
     SettingsScreen(
         selectedCurrency = "USD",
         currentTheme = AppTheme.LIGHT,
-        dynamicColors = true,
-        onCurrencySelected = {},
-        onThemeSelected = {},
-        onDynamicColorsSelected = {}
+        dynamicColors = true
     )
 }
