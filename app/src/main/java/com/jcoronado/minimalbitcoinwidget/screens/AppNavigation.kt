@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -90,7 +91,7 @@ fun AppNavigation() {
     val motionScheme = motionScheme
     val backStack = rememberNavBackStack(Screen.Dashboard)
     val priceViewModel: PriceViewModel = viewModel()
-    val settingsViewModel : SettingsViewModel = viewModel()
+    val settingsViewModel: SettingsViewModel = viewModel()
 
     // Show NavBar only on top-level routes (Dashboard or Settings Main)
     val isNavBarVisible by remember {
@@ -100,11 +101,57 @@ fun AppNavigation() {
         }
     }
 
-    Scaffold(bottomBar = {
+    Box(modifier = Modifier.fillMaxSize()) {
+        NavDisplay(
+            backStack = backStack,
+            onBack = {
+                if (backStack.size > 1) backStack.removeLastOrNull()
+            },
+            transitionSpec = {
+                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
+            },
+            popTransitionSpec = {
+                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
+            },
+            predictivePopTransitionSpec = {
+                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
+            },
+            entryProvider = entryProvider {
+                entry<Screen.Dashboard> {
+                    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
+                    MainScreen(
+                        uiState = uiState,
+                        onRefresh = { priceViewModel.fetchPrice() },
+                    )
+                }
+                entry<Screen.Settings> {
+                    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
+                    val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
+                    val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
+
+                    SettingsScreen(
+                        selectedCurrency = uiState.selectedCurrency,
+                        onCurrencySelected = { newCurrency ->
+                            priceViewModel.updateCurrency(
+                                newCurrency
+                            )
+                        },
+                        currentTheme = currentTheme,
+                        onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
+                        dynamicColors = dynamicColors,
+                        onDynamicColorsSelected = { newDynamicColors ->
+                            settingsViewModel.updateDynamicColorsFlag(
+                                newDynamicColors
+                            )
+                        })
+                }
+            },
+        )
         AnimatedVisibility(
             enter = slideInVertically(motionScheme.slowSpatialSpec()) { it },
             exit = slideOutVertically(motionScheme.slowSpatialSpec()) { it },
-            visible = isNavBarVisible
+            visible = isNavBarVisible,
+            modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Box(
                 Modifier
@@ -112,16 +159,13 @@ fun AppNavigation() {
                     .padding(
                         start = cutoutInsets.calculateStartPadding(LocalLayoutDirection.current),
                         end = cutoutInsets.calculateEndPadding(LocalLayoutDirection.current)
-                    ), Alignment.Center
+                    ), Alignment.BottomCenter
             ) {
                 HorizontalFloatingToolbar(
-                    expanded = true,
-                    colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
+                    expanded = true, colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
                         toolbarContainerColor = MaterialTheme.colorScheme.primaryContainer,
                         toolbarContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    ),
-                    scrollBehavior = toolbarScrollBehavior,
-                    modifier = Modifier
+                    ), scrollBehavior = toolbarScrollBehavior, modifier = Modifier
                         .padding(
                             top = ScreenOffset,
                             bottom = systemBarsInsets.calculateBottomPadding() + ScreenOffset
@@ -162,14 +206,12 @@ fun AppNavigation() {
                                         // Reset to Dashboard
                                         while (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
                                     }
-                                },
-                                colors = ToggleButtonDefaults.toggleButtonColors(
+                                }, colors = ToggleButtonDefaults.toggleButtonColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                     checkedContainerColor = MaterialTheme.colorScheme.primary,
                                     checkedContentColor = MaterialTheme.colorScheme.onPrimary
-                                ),
-                                shapes = ToggleButtonDefaults.shapes(
+                                ), shapes = ToggleButtonDefaults.shapes(
                                     CircleShape, CircleShape, CircleShape
                                 ), modifier = Modifier.height(56.dp)
                             ) {
@@ -198,47 +240,8 @@ fun AppNavigation() {
                     }
                 }
             }
-        }
-    }, containerColor = MaterialTheme.colorScheme.surfaceContainer,) { contentPadding ->
-        val silencePaddingWarning = contentPadding
-        NavDisplay(
-            backStack = backStack,
-            onBack = {
-                if (backStack.size > 1) backStack.removeLastOrNull()
-            },
-            transitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
-            },
-            popTransitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
-            },
-            predictivePopTransitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
-            },
-            entryProvider = entryProvider {
-                entry<Screen.Dashboard> {
-                    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
-                    MainScreen(
-                        uiState = uiState,
-                        onRefresh = { priceViewModel.fetchPrice() },
-                    )
-                }
-                entry<Screen.Settings> {
-                    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
-                    val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
-                    val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
 
-                    SettingsScreen(
-                        selectedCurrency = uiState.selectedCurrency,
-                        onCurrencySelected = { newCurrency -> priceViewModel.updateCurrency(newCurrency) },
-                        currentTheme = currentTheme,
-                        onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
-                        dynamicColors = dynamicColors,
-                        onDynamicColorsSelected = { newDynamicColors -> settingsViewModel.updateDynamicColorsFlag(newDynamicColors) }
-                    )
-                }
-            },
-        )
+        }
     }
 }
 
