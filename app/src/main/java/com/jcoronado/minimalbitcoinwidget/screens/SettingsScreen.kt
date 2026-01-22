@@ -62,7 +62,7 @@ fun SettingsScreen(
 ) {
     val scrollState = rememberScrollState()
     val showCurrencyDialog = remember { mutableStateOf(false) }
-    var newSelection by remember { mutableStateOf(selectedCurrency.lowercase()) }
+    var newSelection by remember { mutableStateOf(selectedCurrency) }
     val currencyDescriptions = stringArrayResource(R.array.currency_entries)
     val currencyValues = stringArrayResource(R.array.currency_values)
     var refreshInterval by remember { mutableIntStateOf(0) }
@@ -72,6 +72,7 @@ fun SettingsScreen(
         AlertDialog(
             modifier = Modifier.heightIn(min = 200.dp, max = 400.dp),
             onDismissRequest = { showCurrencyDialog.value = false },
+            // TODO - replace with string resource value
             title = { Text("Update Currency") },
             text = {
                 Column(Modifier.fillMaxWidth()) {
@@ -86,10 +87,8 @@ fun SettingsScreen(
                                     .fillMaxWidth()
                                     .selectable(
                                         selected = (currency.equals(
-                                            newSelection,
-                                            ignoreCase = true
-                                        )),
-                                        onClick = {
+                                            newSelection, ignoreCase = true
+                                        )), onClick = {
                                             newSelection = currency
                                         })
                                     .padding(vertical = 12.dp),
@@ -115,11 +114,13 @@ fun SettingsScreen(
                     showCurrencyDialog.value = false
                     onCurrencySelected(newSelection)
                 }) {
+                    // TODO - replace with string resource value
                     Text("Save")
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showCurrencyDialog.value = false }) {
+                    // TODO - replace with string resource value
                     Text("Cancel")
                 }
             })
@@ -130,13 +131,12 @@ fun SettingsScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(stringResource(R.string.settings))
-                },
-                colors = TopAppBarDefaults.topAppBarColors().copy(
+                }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 )
             )
         },
-        contentWindowInsets = WindowInsets(0, 0, 0, 0,),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
     ) { innerPadding ->
         Column(
@@ -150,6 +150,7 @@ fun SettingsScreen(
             val colors =
                 ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
             Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+                // TODO - replace hard-coded strings with string resources in SectionHeaders
                 SectionHeader("Data", true)
                 SegmentedListItem(
                     colors = colors,
@@ -165,6 +166,7 @@ fun SettingsScreen(
                         Text(currencyDescriptions[currencyValues.indexOf(selectedCurrency)])
                     },
                     supportingContent = {
+                        // TODO - replace with string resource value
                         Text("Local Currency", modifier = Modifier.padding(top = 4.dp))
                     },
                     onClick = {
@@ -184,7 +186,8 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text("Change Percentage")
+                        // TODO - implement change percentage setting (requires API change)
+                        Text("Change Percentage (coming soon)")
                     },
                     supportingContent = {
                         ButtonGroup(
@@ -196,6 +199,7 @@ fun SettingsScreen(
                             content = {
                                 this.toggleableItem(
                                     checked = changePercentage == 0,
+                                    // TODO - replace with string resource value
                                     label = "24 Hours",
                                     weight = if (changePercentage == 0) 1F else 0.9F,
                                     onCheckedChange = {
@@ -204,6 +208,7 @@ fun SettingsScreen(
                                 )
                                 this.toggleableItem(
                                     checked = changePercentage == 1,
+                                    // TODO - replace with string resource value
                                     label = "7 Days",
                                     weight = if (changePercentage == 1) 1F else 0.9F,
                                     onCheckedChange = {
@@ -212,6 +217,7 @@ fun SettingsScreen(
                                 )
                                 this.toggleableItem(
                                     checked = changePercentage == 2,
+                                    // TODO - replace with string resource value
                                     label = "30 Days",
                                     weight = if (changePercentage == 2) 1F else 0.9F,
                                     onCheckedChange = {
@@ -234,7 +240,8 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text("Refresh Interval")
+                        // TODO - implement refresh interval setting
+                        Text("Refresh Interval (coming soon)")
                     },
                     supportingContent = {
                         ButtonGroup(
@@ -246,6 +253,7 @@ fun SettingsScreen(
                             content = {
                                 this.toggleableItem(
                                     checked = refreshInterval == 0,
+                                    // TODO - replace with string resource value
                                     label = "30 Mins",
                                     weight = if (refreshInterval == 0) 1F else 0.9F,
                                     onCheckedChange = {
@@ -254,6 +262,7 @@ fun SettingsScreen(
                                 )
                                 this.toggleableItem(
                                     checked = refreshInterval == 1,
+                                    // TODO - replace with string resource value
                                     label = "1 Hour",
                                     weight = if (refreshInterval == 1) 1F else 0.9F,
                                     onCheckedChange = {
@@ -262,6 +271,7 @@ fun SettingsScreen(
                                 )
                                 this.toggleableItem(
                                     checked = refreshInterval == 2,
+                                    // TODO - replace with string resource value
                                     label = "4 Hours",
                                     weight = if (refreshInterval == 2) 1F else 0.9F,
                                     onCheckedChange = {
@@ -285,6 +295,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
+                        // TODO - replace with string resource value
                         Text("App Theme")
                     },
                     supportingContent = {
@@ -297,6 +308,7 @@ fun SettingsScreen(
                             content = {
                                 this.toggleableItem(
                                     checked = currentTheme == AppTheme.SYSTEM,
+                                    // TODO - replace with string resource value
                                     label = "System",
                                     weight = if (currentTheme == AppTheme.SYSTEM) 1F else 0.9F,
                                     onCheckedChange = {
@@ -305,6 +317,7 @@ fun SettingsScreen(
                                 )
                                 this.toggleableItem(
                                     checked = currentTheme == AppTheme.LIGHT,
+                                    // TODO - replace with string resource value
                                     label = "Light",
                                     weight = if (currentTheme == AppTheme.LIGHT) 1F else 0.9F,
                                     onCheckedChange = {
@@ -313,6 +326,7 @@ fun SettingsScreen(
                                 )
                                 this.toggleableItem(
                                     checked = currentTheme == AppTheme.DARK,
+                                    // TODO - replace with string resource value
                                     label = "Dark",
                                     weight = if (currentTheme == AppTheme.DARK) 1F else 0.9F,
                                     onCheckedChange = {
@@ -336,10 +350,15 @@ fun SettingsScreen(
                     },
                     enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                     content = {
+                        // TODO - replace with string resource value
                         Text("Dynamic Colors")
                     },
                     supportingContent = {
-                        Text("Follow colors from your device theme", modifier = Modifier.padding(top = 4.dp))
+                        Text(
+                            // TODO - replace with string resource value
+                            "Follow colors from your device theme",
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
                     },
                     trailingContent = {
                         Switch(
@@ -367,6 +386,7 @@ fun SettingsScreen(
                         Text(stringResource(R.string.version_only_main))
                     },
                     supportingContent = {
+                        // TODO - replace with string resource value
                         Text("Version")
                     },
                     onClick = {},
@@ -385,6 +405,7 @@ fun SettingsScreen(
                         Text(stringResource(R.string.version_only_build))
                     },
                     supportingContent = {
+                        // TODO - replace with string resource value
                         Text("Build Number")
                     },
                     onClick = {},
@@ -403,11 +424,11 @@ fun SettingsScreen(
                         Text("jcoronado.dev")
                     },
                     supportingContent = {
+                        // TODO - replace with string resource value
                         Text("Contact Developer")
                     },
                     onClick = {
                         // TODO - implement this to open an email client / browser
-                        // Log.d("SettingsScreen", "Contact Developer")
                     },
                 )
                 // to prevent list items from hiding under the floating horizontal bar
@@ -436,8 +457,6 @@ fun SectionHeader(title: String, top: Boolean = false) {
 @Preview(showBackground = true, showSystemUi = true)
 fun SettingsPreview() {
     SettingsScreen(
-        selectedCurrency = "USD",
-        currentTheme = AppTheme.LIGHT,
-        dynamicColors = true
+        selectedCurrency = "usd", currentTheme = AppTheme.LIGHT, dynamicColors = true
     )
 }

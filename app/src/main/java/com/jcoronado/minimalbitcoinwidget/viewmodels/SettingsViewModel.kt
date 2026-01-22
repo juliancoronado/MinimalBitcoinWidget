@@ -23,6 +23,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
 
     private fun getSavedTheme(): AppTheme {
+        // default to SYSTEM if not set
         val themeName = prefs.getString(Prefs.SELECTED_THEME, AppTheme.SYSTEM.name)
         return AppTheme.valueOf(themeName ?: AppTheme.SYSTEM.name)
     }
@@ -34,6 +35,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun getDynamicColorsFlag(): Boolean {
+        // default to true if running on Android 12+
         return prefs.getBoolean(Prefs.DYNAMIC_COLORS, Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
     }
 

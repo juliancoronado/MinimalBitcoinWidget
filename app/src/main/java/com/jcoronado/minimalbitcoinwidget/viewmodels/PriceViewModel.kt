@@ -10,9 +10,6 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
@@ -41,8 +38,7 @@ import java.util.Locale
 
 private const val LOG_TAG = "PriceViewModel"
 
-class PriceViewModel(application: Application) : AndroidViewModel(application),
-    DefaultLifecycleObserver {
+class PriceViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(PriceUiState(isLoading = true))
 
     // read-only state
@@ -52,25 +48,6 @@ class PriceViewModel(application: Application) : AndroidViewModel(application),
     private val gson = Gson()
 
     init {
-        loadInitialData()
-        // add observer to ProcessLifecycleOwner to detect app foregrounding
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-        Log.d(LOG_TAG, "App resumed - refreshing data")
-        refresh()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        // clean up observer
-        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
-    }
-
-    /** Helper to run the initial/resume logic. */
-    private fun refresh() {
         loadInitialData()
         fetchPrice()
     }
@@ -186,7 +163,6 @@ class PriceViewModel(application: Application) : AndroidViewModel(application),
      */
     private fun redrawWidgets() {
         val context = getApplication<Application>()
-        val state = _uiState.value
 
         // update glance widgets using PriceWidgetStateDefinition
         viewModelScope.launch {
@@ -201,10 +177,10 @@ class PriceViewModel(application: Application) : AndroidViewModel(application),
                 glanceIds.forEach { glanceId ->
                     updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
                         PriceWidgetState.Available(
-                            price = state.price,
-                            changePercentage = state.percentageChange,
-                            currency = state.selectedCurrency,
-                            symbol = getCurrencyInfo(state.selectedCurrency).symbol,
+                            price = _uiState.value.price,
+                            changePercentage = _uiState.value.percentageChange,
+                            currency = _uiState.value.selectedCurrency,
+                            symbol = getCurrencyInfo(_uiState.value.selectedCurrency).symbol,
                             lastUpdated = currentTime,
                             debug = AppConstants.DEBUG_MODE
                         )
