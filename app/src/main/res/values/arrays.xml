@@ -1,8 +1,9 @@
 <resources>
-    <!-- Currency List Preference -->
-    <string-array name="currency_entries">
+    <!-- Currency Names -->
+    <string-array name="currency_descriptions">
         <item>US Dollar ($)</item>
         <item>British Pound (£)</item>
+        <item>Japanese Yen (¥)</item>
         <item>Euro (€)</item>
         <item>Canadian Dollar ($)</item>
         <item>Mexican Peso ($)</item>
@@ -10,13 +11,28 @@
         <item>Brazilian Real (R$)</item>
     </string-array>
 
-    <string-array name="currency_values">
+    <!-- Currency Codes -->
+    <string-array name="currency_codes">
         <item>usd</item>
         <item>gbp</item>
+        <item>jpy</item>
         <item>eur</item>
         <item>cad</item>
         <item>mxn</item>
         <item>aud</item>
         <item>brl</item>
+    </string-array>
+
+    <!-- Currency List Symbols -->
+    <!-- TODO - not sure if this is needed -->
+    <string-array name="currency_symbols">
+        <item>$</item>
+        <item>£</item>
+        <item>¥</item>
+        <item>€</item>
+        <item>$</item>
+        <item>$</item>
+        <item>$</item>
+        <item>R$</item>
     </string-array>
 </resources>

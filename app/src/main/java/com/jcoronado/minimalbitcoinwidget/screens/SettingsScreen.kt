@@ -1,6 +1,7 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,8 +64,8 @@ fun SettingsScreen(
     val scrollState = rememberScrollState()
     val showCurrencyDialog = remember { mutableStateOf(false) }
     var newSelection by remember { mutableStateOf(selectedCurrency) }
-    val currencyDescriptions = stringArrayResource(R.array.currency_entries)
-    val currencyValues = stringArrayResource(R.array.currency_values)
+    val currencyDescriptions = stringArrayResource(R.array.currency_descriptions)
+    val currencyCodes = stringArrayResource(R.array.currency_codes)
     var refreshInterval by remember { mutableIntStateOf(0) }
     var changePercentage by remember { mutableIntStateOf(0) }
 
@@ -81,7 +82,7 @@ fun SettingsScreen(
                             .fillMaxWidth()
                             .verticalScroll(rememberScrollState())
                     ) {
-                        currencyValues.forEachIndexed { index, currency ->
+                        currencyCodes.forEachIndexed { index, currency ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -163,7 +164,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(currencyDescriptions[currencyValues.indexOf(selectedCurrency)])
+                        Text(currencyDescriptions[currencyCodes.indexOf(selectedCurrency)])
                     },
                     supportingContent = {
                         // TODO - replace with string resource value

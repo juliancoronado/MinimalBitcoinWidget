@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -112,7 +113,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     )
                 }
                 Text(
-                    text = FormatUtils.formatPrice(uiState.price),
+                    text = FormatUtils.formatPrice(uiState.price, uiState.selectedCurrency),
                     style = MaterialTheme.typography.headlineMedium.copy(fontFamily = googleSansCodeFontFamily),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
