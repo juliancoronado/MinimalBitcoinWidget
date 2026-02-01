@@ -49,7 +49,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         loadInitialData()
-        fetchPrice()
+        fetchPrice(fromInit = true)
     }
 
     /** Load initial data from SharedPreferences. */
@@ -90,7 +90,12 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /** Fetch data from the Coingecko API. */
-    fun fetchPrice(force: Boolean = false) {
+    fun fetchPrice(force: Boolean = false, fromInit: Boolean = false) {
+        if (!fromInit && _uiState.value.isLoading) {
+            Log.d(LOG_TAG, "Already loading, skipping this fetch")
+            return
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = _uiState.value.copy(isLoading = true)
 
@@ -103,7 +108,10 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
             if (!force && hasCache && isFresh) {
                 Log.d(LOG_TAG, "Using cached data")
                 delay(750)
-                _uiState.value = _uiState.value.copy(isLoading = false)
+                _uiState.value = _uiState.value.copy(
+                    lastUpdated = lastApiCallTime,
+                    isLoading = false
+                )
                 redrawWidgets()
                 return@launch
             }
@@ -126,9 +134,11 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                     val price = priceDataJson[currency] ?: 0.0
                     val change24h = priceDataJson["${currency}_24h_change"] ?: 0.0
 
+                    val lastUpdated = System.currentTimeMillis()
+
                     // update cached values
                     prefs.edit {
-                        putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
+                        putLong(Prefs.LAST_API_CALL_TIMESTAMP, lastUpdated)
                         putString(Prefs.CACHED_PRICE_DATA, gson.toJson(PriceData(price, change24h)))
                     }
 
@@ -138,7 +148,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                         price = price,
                         percentageChange = change24h,
                         isLoading = false,
-                        lastUpdated = System.currentTimeMillis()
+                        lastUpdated = lastUpdated
                     )
 
                     // trigger widget update to sync with new data
