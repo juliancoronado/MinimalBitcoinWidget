@@ -5,8 +5,6 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -16,7 +14,6 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -69,14 +66,12 @@ val navigationScreenList = listOf(
     NavItem(
         route = Screen.Dashboard, icon = R.drawable.rounded_dashboard_24, label = R.string.dashboard
     ), NavItem(
-        Screen.Settings, R.drawable.rounded_settings_24, R.string.settings
+        route = Screen.Settings, R.drawable.rounded_settings_24, label = R.string.settings
     )
 )
 
 @OptIn(
-    ExperimentalMaterial3ExpressiveApi::class,
-    ExperimentalMaterial3Api::class,
-    androidx.compose.animation.ExperimentalSharedTransitionApi::class
+    ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class
 )
 @Composable
 fun AppNavigation() {
@@ -91,13 +86,10 @@ fun AppNavigation() {
     val backStack = rememberNavBackStack(Screen.Dashboard)
     val priceViewModel: PriceViewModel = viewModel()
     val settingsViewModel: SettingsViewModel = viewModel()
+    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
 
-    // Show NavBar only on top-level routes (Dashboard or Settings Main)
-    val isNavBarVisible by remember {
-        derivedStateOf {
-            val current = backStack.lastOrNull()
-            current == Screen.Dashboard || current == Screen.Settings
-        }
+    val currentRoute by remember(backStack.size) {
+        derivedStateOf { backStack.lastOrNull() }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -107,24 +99,22 @@ fun AppNavigation() {
                 if (backStack.size > 1) backStack.removeLastOrNull()
             },
             transitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
+                fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
             },
             popTransitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
+                fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
             },
             predictivePopTransitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()).togetherWith(fadeOut(motionScheme.defaultEffectsSpec()))
+                fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
             },
             entryProvider = entryProvider {
                 entry<Screen.Dashboard> {
-                    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
                     MainScreen(
                         uiState = uiState,
                         onRefresh = { priceViewModel.fetchPrice() },
                     )
                 }
                 entry<Screen.Settings> {
-                    val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
                     val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
                     val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
 
@@ -146,101 +136,80 @@ fun AppNavigation() {
                 }
             },
         )
-        AnimatedVisibility(
-            enter = slideInVertically(motionScheme.slowSpatialSpec()) { it },
-            exit = slideOutVertically(motionScheme.slowSpatialSpec()) { it },
-            visible = isNavBarVisible,
-            modifier = Modifier.align(Alignment.BottomCenter)
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(
+                    start = cutoutInsets.calculateStartPadding(LocalLayoutDirection.current),
+                    end = cutoutInsets.calculateEndPadding(LocalLayoutDirection.current)
+                ), Alignment.BottomCenter
         ) {
-            Box(
-                Modifier
-                    .fillMaxWidth()
+            HorizontalFloatingToolbar(
+                expanded = true, colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
+                    toolbarContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    toolbarContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                ), scrollBehavior = toolbarScrollBehavior, modifier = Modifier
                     .padding(
-                        start = cutoutInsets.calculateStartPadding(LocalLayoutDirection.current),
-                        end = cutoutInsets.calculateEndPadding(LocalLayoutDirection.current)
-                    ), Alignment.BottomCenter
+                        top = ScreenOffset,
+                        bottom = systemBarsInsets.calculateBottomPadding() + ScreenOffset
+                    )
+                    .zIndex(1f)
             ) {
-                HorizontalFloatingToolbar(
-                    expanded = true, colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
-                        toolbarContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                        toolbarContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    ), scrollBehavior = toolbarScrollBehavior, modifier = Modifier
-                        .padding(
-                            top = ScreenOffset,
-                            bottom = systemBarsInsets.calculateBottomPadding() + ScreenOffset
-                        )
-                        .zIndex(1f)
-                ) {
-                    navigationScreenList.fastForEach { item ->
-                        val selected by remember {
-                            derivedStateOf {
-                                val current = backStack.lastOrNull()
-                                if (item.route == Screen.Dashboard) {
-                                    current == Screen.Dashboard
-                                } else {
-                                    current is Screen.Settings
-                                }
-                            }
-                        }
-                        TooltipBox(
-                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                TooltipAnchorPosition.Above
-                            ),
-                            tooltip = { PlainTooltip { Text(stringResource(item.label)) } },
-                            state = rememberTooltipState(),
-                        ) {
-                            ToggleButton(
-                                checked = selected, onCheckedChange = {
-                                    if (item.route != Screen.Dashboard) {
-                                        // If we are deep in settings, go back to Settings Main
-                                        // Otherwise, just add Settings Main
-                                        if (backStack.any { it is Screen.Settings }) {
-                                            while (backStack.lastOrNull() !is Screen.Settings) {
-                                                backStack.removeLastOrNull()
-                                            }
-                                        } else {
-                                            backStack.add(item.route)
-                                        }
-                                    } else {
+                navigationScreenList.fastForEach { item ->
+                    val selected = item.route == currentRoute
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                            TooltipAnchorPosition.Above
+                        ),
+                        tooltip = { PlainTooltip { Text(stringResource(item.label)) } },
+                        state = rememberTooltipState(),
+                    ) {
+                        ToggleButton(
+                            checked = selected, onCheckedChange = { checked ->
+                                if (checked && !selected) {
+                                    if (item.route == Screen.Dashboard) {
                                         // Reset to Dashboard
                                         while (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
+                                    } else {
+                                        backStack.add(item.route)
                                     }
-                                }, colors = ToggleButtonDefaults.toggleButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    checkedContainerColor = MaterialTheme.colorScheme.primary,
-                                    checkedContentColor = MaterialTheme.colorScheme.onPrimary
-                                ), shapes = ToggleButtonDefaults.shapes(
-                                    CircleShape, CircleShape, CircleShape
-                                ), modifier = Modifier.height(56.dp)
-                            ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        painterResource(item.icon), stringResource(item.label)
+                                }
+                            }, colors = ToggleButtonDefaults.toggleButtonColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                checkedContainerColor = MaterialTheme.colorScheme.primary,
+                                checkedContentColor = MaterialTheme.colorScheme.onPrimary
+                            ), shapes = ToggleButtonDefaults.shapes(
+                                CircleShape, CircleShape, CircleShape
+                            ), modifier = Modifier.height(56.dp)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    painterResource(item.icon), stringResource(item.label)
+                                )
+                                AnimatedVisibility(
+                                    visible = selected,
+                                    enter = expandHorizontally(motionScheme.defaultSpatialSpec()),
+                                    exit = shrinkHorizontally(motionScheme.defaultSpatialSpec())
+                                ) {
+                                    Text(
+                                        text = stringResource(item.label),
+                                        fontSize = 16.sp,
+                                        lineHeight = 24.sp,
+                                        maxLines = 1,
+                                        softWrap = false,
+                                        overflow = TextOverflow.Clip,
+                                        modifier = Modifier.padding(start = ButtonDefaults.IconSpacing)
                                     )
-                                    AnimatedVisibility(
-                                        visible = selected,
-                                        enter = expandHorizontally(motionScheme.defaultSpatialSpec()),
-                                        exit = shrinkHorizontally(motionScheme.defaultSpatialSpec())
-                                    ) {
-                                        Text(
-                                            text = stringResource(item.label),
-                                            fontSize = 16.sp,
-                                            lineHeight = 24.sp,
-                                            maxLines = 1,
-                                            softWrap = false,
-                                            overflow = TextOverflow.Clip,
-                                            modifier = Modifier.padding(start = ButtonDefaults.IconSpacing)
-                                        )
-                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-
         }
+
+
     }
 }
 
