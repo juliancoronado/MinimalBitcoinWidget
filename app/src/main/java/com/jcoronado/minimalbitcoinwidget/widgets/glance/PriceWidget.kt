@@ -37,7 +37,6 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
-import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import java.text.NumberFormat
 
 class PriceWidget : GlanceAppWidget() {
@@ -191,6 +190,8 @@ class PriceWidget : GlanceAppWidget() {
             Triple(R.drawable.rounded_trending_flat_24, GlanceTheme.colors.secondary, "Trending flat icon")
         }
 
+        val formatPattern = if (changePercentage > 0) "%+.2f%%" else "%.2f%%"
+
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -202,7 +203,7 @@ class PriceWidget : GlanceAppWidget() {
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Text(
-                text = String.format("%.2f%%", changePercentage), style = TextStyle(
+                text = String.format(formatPattern, changePercentage), style = TextStyle(
                     color = GlanceTheme.colors.secondary,
                     fontSize = 12.sp
                 )
