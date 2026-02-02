@@ -1,7 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
 import android.os.Build
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,9 +42,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.R
@@ -62,6 +63,7 @@ fun SettingsScreen(
     onDynamicColorsSelected: (Boolean) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
+    val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val showCurrencyDialog = remember { mutableStateOf(false) }
     var newSelection by remember { mutableStateOf(selectedCurrency) }
     val currencyDescriptions = stringArrayResource(R.array.currency_descriptions)
@@ -128,13 +130,15 @@ fun SettingsScreen(
     }
 
     Scaffold(
+        modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(stringResource(R.string.settings))
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
-                )
+                ),
+                scrollBehavior = topAppBarScrollBehavior
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -164,11 +168,14 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(currencyDescriptions[currencyCodes.indexOf(selectedCurrency)])
+                        Text(
+                            currencyDescriptions[currencyCodes.indexOf(selectedCurrency)],
+                            fontWeight = FontWeight.Bold
+                        )
                     },
                     supportingContent = {
                         // TODO - replace with string resource value
-                        Text("Local Currency", modifier = Modifier.padding(top = 4.dp))
+                        Text("Update Currency", modifier = Modifier.padding(top = 4.dp))
                     },
                     onClick = {
                         // show options dialog
@@ -183,12 +190,12 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_price_change_24), null
+                            painterResource(R.drawable.rounded_percent_24), null
                         )
                     },
                     content = {
                         // TODO - implement change percentage setting (requires API change)
-                        Text("Change Percentage (coming soon)")
+                        Text("Change Percentage", fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         ButtonGroup(
@@ -242,7 +249,7 @@ fun SettingsScreen(
                     },
                     content = {
                         // TODO - implement refresh interval setting
-                        Text("Refresh Interval (coming soon)")
+                        Text("Refresh Interval", fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         ButtonGroup(
@@ -297,7 +304,7 @@ fun SettingsScreen(
                     },
                     content = {
                         // TODO - replace with string resource value
-                        Text("App Theme")
+                        Text("App Theme", fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         ButtonGroup(
@@ -352,7 +359,7 @@ fun SettingsScreen(
                     enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                     content = {
                         // TODO - replace with string resource value
-                        Text("Dynamic Colors")
+                        Text("Dynamic Colors", fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         Text(
@@ -384,7 +391,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.version_only_main))
+                        Text(stringResource(R.string.version_only_main), fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         // TODO - replace with string resource value
@@ -403,7 +410,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.version_only_build))
+                        Text(stringResource(R.string.version_only_build), fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         // TODO - replace with string resource value
@@ -422,11 +429,11 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text("jcoronado.dev")
+                        Text("jcoronado.dev", fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         // TODO - replace with string resource value
-                        Text("Contact Developer")
+                        Text("Contact")
                     },
                     onClick = {
                         // TODO - implement this to open an email client / browser

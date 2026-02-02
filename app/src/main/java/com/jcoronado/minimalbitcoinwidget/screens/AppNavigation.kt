@@ -23,7 +23,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingToolbarDefaults
 import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
-import androidx.compose.material3.FloatingToolbarExitDirection
 import androidx.compose.material3.HorizontalFloatingToolbar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -77,10 +76,6 @@ val navigationScreenList = listOf(
 fun AppNavigation() {
     val systemBarsInsets = WindowInsets.systemBars.asPaddingValues()
     val cutoutInsets = WindowInsets.displayCutout.asPaddingValues()
-
-    val toolbarScrollBehavior = FloatingToolbarDefaults.exitAlwaysScrollBehavior(
-        FloatingToolbarExitDirection.Bottom
-    )
 
     val motionScheme = motionScheme
     val backStack = rememberNavBackStack(Screen.Dashboard)
@@ -148,7 +143,7 @@ fun AppNavigation() {
                 expanded = true, colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
                     toolbarContainerColor = MaterialTheme.colorScheme.primaryContainer,
                     toolbarContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ), scrollBehavior = toolbarScrollBehavior, modifier = Modifier
+                ), modifier = Modifier
                     .padding(
                         top = ScreenOffset,
                         bottom = systemBarsInsets.calculateBottomPadding() + ScreenOffset
