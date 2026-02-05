@@ -6,6 +6,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.workers.PriceUpdateWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,9 +19,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
     private val _theme = MutableStateFlow(getSavedTheme())
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
+    private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
 
     val theme: StateFlow<AppTheme> = _theme.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
+    val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
 
     private fun getSavedTheme(): AppTheme {
         // default to SYSTEM if not set
@@ -43,5 +46,22 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         // update UI state immediately and then save to SharedPrefs
         _dynamicColors.value = toggleValue
         prefs.edit { putBoolean(Prefs.DYNAMIC_COLORS, toggleValue) }
+    }
+
+    private fun getSavedRefreshInterval(): Int {
+        return prefs.getInt(Prefs.REFRESH_INTERVAL, 0)
+    }
+
+    fun setRefreshInterval(index: Int) {
+        _refreshInterval.value = index
+        prefs.edit { putInt(Prefs.REFRESH_INTERVAL, index) }
+
+        val minutes = when (index) {
+            0 -> 30L
+            1 -> 60L
+            2 -> 240L
+            else -> 30L
+        }
+        PriceUpdateWorker.enqueue(getApplication(), minutes)
     }
 }

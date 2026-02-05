@@ -62,7 +62,9 @@ fun SettingsScreen(
     currentTheme: AppTheme,
     onThemeSelected: (AppTheme) -> Unit = {},
     dynamicColors: Boolean,
-    onDynamicColorsSelected: (Boolean) -> Unit = {}
+    onDynamicColorsSelected: (Boolean) -> Unit = {},
+    refreshInterval: Int = 0,
+    onRefreshIntervalSelected: (Int) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -70,7 +72,6 @@ fun SettingsScreen(
     var newSelection by remember { mutableStateOf(selectedCurrency) }
     val currencyDescriptions = stringArrayResource(R.array.currency_descriptions)
     val currencyCodes = stringArrayResource(R.array.currency_codes)
-    var refreshInterval by remember { mutableIntStateOf(0) }
     var changePercentage by remember { mutableIntStateOf(0) }
 
     if (showCurrencyDialog.value) {
@@ -270,7 +271,7 @@ fun SettingsScreen(
                                         label = "30 Mins",
                                         weight = if (refreshInterval == 0) 1F else 0.9F,
                                         onCheckedChange = {
-                                            refreshInterval = 0
+                                            onRefreshIntervalSelected(0)
                                         },
                                     )
                                     this.toggleableItem(
@@ -279,7 +280,7 @@ fun SettingsScreen(
                                         label = "1 Hour",
                                         weight = if (refreshInterval == 1) 1F else 0.9F,
                                         onCheckedChange = {
-                                            refreshInterval = 1
+                                            onRefreshIntervalSelected(1)
                                         },
                                     )
                                     this.toggleableItem(
@@ -288,7 +289,7 @@ fun SettingsScreen(
                                         label = "4 Hours",
                                         weight = if (refreshInterval == 2) 1F else 0.9F,
                                         onCheckedChange = {
-                                            refreshInterval = 2
+                                            onRefreshIntervalSelected(2)
                                         },
                                     )
                                 },
@@ -483,6 +484,6 @@ fun SectionHeader(title: String, top: Boolean = false) {
 @Preview(showBackground = true, showSystemUi = true)
 fun SettingsPreview() {
     SettingsScreen(
-        selectedCurrency = "usd", currentTheme = AppTheme.LIGHT, dynamicColors = true
+        selectedCurrency = "usd", currentTheme = AppTheme.LIGHT, dynamicColors = true, refreshInterval = 0
     )
 }

@@ -151,12 +151,12 @@ class PriceUpdateWorker(
     companion object {
         private const val WORK_NAME = "PriceUpdateWork"
 
-        fun enqueue(context: Context) {
+        fun enqueue(context: Context, intervalMinutes: Long = 30) {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-            val request = PeriodicWorkRequestBuilder<PriceUpdateWorker>(30, TimeUnit.MINUTES)
+            val request = PeriodicWorkRequestBuilder<PriceUpdateWorker>(intervalMinutes, TimeUnit.MINUTES)
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,
                     WorkRequest.MIN_BACKOFF_MILLIS,

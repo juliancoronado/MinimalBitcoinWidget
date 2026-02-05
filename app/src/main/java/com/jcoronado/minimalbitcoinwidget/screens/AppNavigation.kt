@@ -112,6 +112,7 @@ fun AppNavigation() {
                 entry<Screen.Settings> {
                     val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
                     val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
+                    val refreshInterval by settingsViewModel.refreshInterval.collectAsStateWithLifecycle()
 
                     SettingsScreen(
                         selectedCurrency = uiState.selectedCurrency,
@@ -127,7 +128,12 @@ fun AppNavigation() {
                             settingsViewModel.updateDynamicColorsFlag(
                                 newDynamicColors
                             )
-                        })
+                        },
+                        refreshInterval = refreshInterval,
+                        onRefreshIntervalSelected = { newInterval ->
+                            settingsViewModel.setRefreshInterval(newInterval)
+                        }
+                    )
                 }
             },
         )

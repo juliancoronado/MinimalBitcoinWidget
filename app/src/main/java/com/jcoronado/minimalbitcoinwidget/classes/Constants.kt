@@ -14,6 +14,7 @@ object Prefs {
     const val SELECTED_CURRENCY = "currency"
     const val DYNAMIC_COLORS = "dynamic_colors"
     const val SELECTED_THEME = "selected_theme"
+    const val REFRESH_INTERVAL = "refresh_interval"
 }
 
 /**
