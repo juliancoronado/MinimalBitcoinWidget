@@ -43,3 +43,8 @@ object Api {
     /** Complete URL for fetching Bitcoin price data from CoinGecko. */
     const val COINGECKO_API_URL = COINGECKO_BASE_URL + COINGECKO_ENDPOINT + QUERY_PARAMS
 }
+
+// TODO - implement using this API endpoint instead
+// Question: encode commas for the URL?
+// Question: does the order of query params matter?
+// NEW ENDPOINT: https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&price_change_percentage=24h,7d,30d
