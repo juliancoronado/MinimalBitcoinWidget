@@ -198,7 +198,7 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            // TODO - implement change percentage setting (requires API change)
+                            // TODO - convert to translated string resource
                             Text("Change Percentage", fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
@@ -209,37 +209,22 @@ fun SettingsScreen(
                                 horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                                 verticalAlignment = Alignment.Top,
                                 content = {
-                                    this.toggleableItem(
-                                        checked = changePercentage == 0,
-                                        // TODO - replace with string resource value
-                                        label = "24 Hours",
-                                        weight = if (changePercentage == 0) 1F else 0.9F,
-                                        onCheckedChange = {
-                                            changePercentage = 0
-                                        },
-                                    )
-                                    this.toggleableItem(
-                                        checked = changePercentage == 1,
-                                        // TODO - replace with string resource value
-                                        label = "7 Days",
-                                        weight = if (changePercentage == 1) 1F else 0.9F,
-                                        onCheckedChange = {
-                                            changePercentage = 1
-                                        },
-                                    )
-                                    this.toggleableItem(
-                                        checked = changePercentage == 2,
-                                        // TODO - replace with string resource value
-                                        label = "30 Days",
-                                        weight = if (changePercentage == 2) 1F else 0.9F,
-                                        onCheckedChange = {
-                                            changePercentage = 2
-                                        },
-                                    )
+                                    // TODO - convert to translated string resources
+                                    arrayOf("24 hours", "7 days", "30 days").forEachIndexed { index, value ->
+                                        this.toggleableItem(
+                                            checked = changePercentage == index,
+                                            label = value,
+                                            weight = if (changePercentage == index) 1F else 0.9F,
+                                            onCheckedChange = {
+                                                // TODO - implement change percentage setting (requires API change)
+                                                changePercentage = index
+                                            },
+                                        )
+                                    }
                                 },
                             )
                         },
-                        onClick = {},
+                        onClick = {}, // this method is intentionally left empty
                     )
                 }
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
@@ -254,7 +239,6 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            // TODO - implement refresh interval setting
                             Text("Widget Refresh Interval", fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
@@ -265,37 +249,21 @@ fun SettingsScreen(
                                 horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                                 verticalAlignment = Alignment.Top,
                                 content = {
-                                    this.toggleableItem(
-                                        checked = refreshInterval == 0,
-                                        // TODO - replace with string resource value
-                                        label = "30 Mins",
-                                        weight = if (refreshInterval == 0) 1F else 0.9F,
-                                        onCheckedChange = {
-                                            onRefreshIntervalSelected(0)
-                                        },
-                                    )
-                                    this.toggleableItem(
-                                        checked = refreshInterval == 1,
-                                        // TODO - replace with string resource value
-                                        label = "1 Hour",
-                                        weight = if (refreshInterval == 1) 1F else 0.9F,
-                                        onCheckedChange = {
-                                            onRefreshIntervalSelected(1)
-                                        },
-                                    )
-                                    this.toggleableItem(
-                                        checked = refreshInterval == 2,
-                                        // TODO - replace with string resource value
-                                        label = "4 Hours",
-                                        weight = if (refreshInterval == 2) 1F else 0.9F,
-                                        onCheckedChange = {
-                                            onRefreshIntervalSelected(2)
-                                        },
-                                    )
+                                    // TODO - convert these into translated string resources
+                                    arrayOf("30 mins", "1 hour", "4 hours").forEachIndexed { index, value ->
+                                        this.toggleableItem(
+                                            checked = refreshInterval == index,
+                                            label = value,
+                                            weight = if (refreshInterval == index) 1F else 0.9F,
+                                            onCheckedChange = {
+                                                onRefreshIntervalSelected(index)
+                                            },
+                                        )
+                                    }
                                 },
                             )
                         },
-                        onClick = {},
+                        onClick = {}, // this method is intentionally left empty
                     )
                 }
                 SectionHeader("Appearance")
@@ -410,7 +378,7 @@ fun SettingsScreen(
                             // TODO - replace with string resource value
                             Text("Version Number")
                         },
-                        onClick = {},
+                        onClick = {}, // this method is intentionally left empty
                     )
                 }
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
@@ -434,7 +402,7 @@ fun SettingsScreen(
                             // TODO - replace with string resource value
                             Text("Build Number")
                         },
-                        onClick = {},
+                        onClick = {}, // this method is intentionally left empty
                     )
                 }
                 SegmentedListItem(
