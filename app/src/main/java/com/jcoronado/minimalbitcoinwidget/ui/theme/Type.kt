@@ -27,7 +27,7 @@ val googleSansFontFamily = FontFamily(
     Font(googleFont = googleSans, fontProvider = gFontsProvider)
 )
 
-val currentFont = googleSansFlexFontFamily
+val currentFont = googleSansFontFamily
 
 // default Material typography to start with
 val defaultTypography = Typography()

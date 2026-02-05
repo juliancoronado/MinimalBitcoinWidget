@@ -26,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -35,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -183,169 +185,175 @@ fun SettingsScreen(
                         showCurrencyDialog.value = true
                     },
                 )
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 1, count = 3
-                    ),
-                    leadingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_percent_24), null
-                        )
-                    },
-                    content = {
-                        // TODO - implement change percentage setting (requires API change)
-                        Text("Change Percentage", fontWeight = FontWeight.Bold)
-                    },
-                    supportingContent = {
-                        ButtonGroup(
-                            overflowIndicator = { },
-                            modifier = Modifier.padding(top = 8.dp),
-                            expandedRatio = 0.02F,
-                            horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
-                            verticalAlignment = Alignment.Top,
-                            content = {
-                                this.toggleableItem(
-                                    checked = changePercentage == 0,
-                                    // TODO - replace with string resource value
-                                    label = "24 Hours",
-                                    weight = if (changePercentage == 0) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        changePercentage = 0
-                                    },
-                                )
-                                this.toggleableItem(
-                                    checked = changePercentage == 1,
-                                    // TODO - replace with string resource value
-                                    label = "7 Days",
-                                    weight = if (changePercentage == 1) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        changePercentage = 1
-                                    },
-                                )
-                                this.toggleableItem(
-                                    checked = changePercentage == 2,
-                                    // TODO - replace with string resource value
-                                    label = "30 Days",
-                                    weight = if (changePercentage == 2) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        changePercentage = 2
-                                    },
-                                )
-                            },
-                        )
-                    },
-                    onClick = {},
-                )
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 2, count = 3
-                    ),
-                    leadingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_timer_24), null
-                        )
-                    },
-                    content = {
-                        // TODO - implement refresh interval setting
-                        Text("Refresh Interval", fontWeight = FontWeight.Bold)
-                    },
-                    supportingContent = {
-                        ButtonGroup(
-                            overflowIndicator = { },
-                            modifier = Modifier.padding(top = 8.dp),
-                            expandedRatio = 0.02F,
-                            horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
-                            verticalAlignment = Alignment.Top,
-                            content = {
-                                this.toggleableItem(
-                                    checked = refreshInterval == 0,
-                                    // TODO - replace with string resource value
-                                    label = "30 Mins",
-                                    weight = if (refreshInterval == 0) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        refreshInterval = 0
-                                    },
-                                )
-                                this.toggleableItem(
-                                    checked = refreshInterval == 1,
-                                    // TODO - replace with string resource value
-                                    label = "1 Hour",
-                                    weight = if (refreshInterval == 1) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        refreshInterval = 1
-                                    },
-                                )
-                                this.toggleableItem(
-                                    checked = refreshInterval == 2,
-                                    // TODO - replace with string resource value
-                                    label = "4 Hours",
-                                    weight = if (refreshInterval == 2) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        refreshInterval = 2
-                                    },
-                                )
-                            },
-                        )
-                    },
-                    onClick = {},
-                )
+                CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                    SegmentedListItem(
+                        colors = colors,
+                        shapes = ListItemDefaults.segmentedShapes(
+                            index = 1, count = 3
+                        ),
+                        leadingContent = {
+                            Icon(
+                                painterResource(R.drawable.rounded_percent_24), null
+                            )
+                        },
+                        content = {
+                            // TODO - implement change percentage setting (requires API change)
+                            Text("Change Percentage", fontWeight = FontWeight.Bold)
+                        },
+                        supportingContent = {
+                            ButtonGroup(
+                                overflowIndicator = { },
+                                modifier = Modifier.padding(top = 8.dp),
+                                expandedRatio = 0.02F,
+                                horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+                                verticalAlignment = Alignment.Top,
+                                content = {
+                                    this.toggleableItem(
+                                        checked = changePercentage == 0,
+                                        // TODO - replace with string resource value
+                                        label = "24 Hours",
+                                        weight = if (changePercentage == 0) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            changePercentage = 0
+                                        },
+                                    )
+                                    this.toggleableItem(
+                                        checked = changePercentage == 1,
+                                        // TODO - replace with string resource value
+                                        label = "7 Days",
+                                        weight = if (changePercentage == 1) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            changePercentage = 1
+                                        },
+                                    )
+                                    this.toggleableItem(
+                                        checked = changePercentage == 2,
+                                        // TODO - replace with string resource value
+                                        label = "30 Days",
+                                        weight = if (changePercentage == 2) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            changePercentage = 2
+                                        },
+                                    )
+                                },
+                            )
+                        },
+                        onClick = {},
+                    )
+                }
+                CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                    SegmentedListItem(
+                        colors = colors,
+                        shapes = ListItemDefaults.segmentedShapes(
+                            index = 2, count = 3
+                        ),
+                        leadingContent = {
+                            Icon(
+                                painterResource(R.drawable.rounded_timer_24), null
+                            )
+                        },
+                        content = {
+                            // TODO - implement refresh interval setting
+                            Text("Widget Refresh Interval", fontWeight = FontWeight.Bold)
+                        },
+                        supportingContent = {
+                            ButtonGroup(
+                                overflowIndicator = { },
+                                modifier = Modifier.padding(top = 8.dp),
+                                expandedRatio = 0.02F,
+                                horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+                                verticalAlignment = Alignment.Top,
+                                content = {
+                                    this.toggleableItem(
+                                        checked = refreshInterval == 0,
+                                        // TODO - replace with string resource value
+                                        label = "30 Mins",
+                                        weight = if (refreshInterval == 0) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            refreshInterval = 0
+                                        },
+                                    )
+                                    this.toggleableItem(
+                                        checked = refreshInterval == 1,
+                                        // TODO - replace with string resource value
+                                        label = "1 Hour",
+                                        weight = if (refreshInterval == 1) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            refreshInterval = 1
+                                        },
+                                    )
+                                    this.toggleableItem(
+                                        checked = refreshInterval == 2,
+                                        // TODO - replace with string resource value
+                                        label = "4 Hours",
+                                        weight = if (refreshInterval == 2) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            refreshInterval = 2
+                                        },
+                                    )
+                                },
+                            )
+                        },
+                        onClick = {},
+                    )
+                }
                 SectionHeader("Appearance")
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 0, count = 2
-                    ),
-                    leadingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_brightness_6_24), null
-                        )
-                    },
-                    content = {
-                        // TODO - replace with string resource value
-                        Text("App Theme", fontWeight = FontWeight.Bold)
-                    },
-                    supportingContent = {
-                        ButtonGroup(
-                            overflowIndicator = { },
-                            modifier = Modifier.padding(top = 8.dp),
-                            expandedRatio = 0.02F,
-                            horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
-                            verticalAlignment = Alignment.Top,
-                            content = {
-                                this.toggleableItem(
-                                    checked = currentTheme == AppTheme.SYSTEM,
-                                    // TODO - replace with string resource value
-                                    label = "System",
-                                    weight = if (currentTheme == AppTheme.SYSTEM) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        onThemeSelected(AppTheme.SYSTEM)
-                                    },
-                                )
-                                this.toggleableItem(
-                                    checked = currentTheme == AppTheme.LIGHT,
-                                    // TODO - replace with string resource value
-                                    label = "Light",
-                                    weight = if (currentTheme == AppTheme.LIGHT) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        onThemeSelected(AppTheme.LIGHT)
-                                    },
-                                )
-                                this.toggleableItem(
-                                    checked = currentTheme == AppTheme.DARK,
-                                    // TODO - replace with string resource value
-                                    label = "Dark",
-                                    weight = if (currentTheme == AppTheme.DARK) 1F else 0.9F,
-                                    onCheckedChange = {
-                                        onThemeSelected(AppTheme.DARK)
-                                    },
-                                )
-                            },
-                        )
-                    },
-                    onClick = {},
-                )
+                CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                    SegmentedListItem(
+                        colors = colors,
+                        shapes = ListItemDefaults.segmentedShapes(
+                            index = 0, count = 2
+                        ),
+                        leadingContent = {
+                            Icon(
+                                painterResource(R.drawable.rounded_brightness_6_24), null
+                            )
+                        },
+                        content = {
+                            // TODO - replace with string resource value
+                            Text("App Theme", fontWeight = FontWeight.Bold)
+                        },
+                        supportingContent = {
+                            ButtonGroup(
+                                overflowIndicator = { },
+                                modifier = Modifier.padding(top = 8.dp),
+                                expandedRatio = 0.02F,
+                                horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+                                verticalAlignment = Alignment.Top,
+                                content = {
+                                    this.toggleableItem(
+                                        checked = currentTheme == AppTheme.SYSTEM,
+                                        // TODO - replace with string resource value
+                                        label = "System",
+                                        weight = if (currentTheme == AppTheme.SYSTEM) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            onThemeSelected(AppTheme.SYSTEM)
+                                        },
+                                    )
+                                    this.toggleableItem(
+                                        checked = currentTheme == AppTheme.LIGHT,
+                                        // TODO - replace with string resource value
+                                        label = "Light",
+                                        weight = if (currentTheme == AppTheme.LIGHT) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            onThemeSelected(AppTheme.LIGHT)
+                                        },
+                                    )
+                                    this.toggleableItem(
+                                        checked = currentTheme == AppTheme.DARK,
+                                        // TODO - replace with string resource value
+                                        label = "Dark",
+                                        weight = if (currentTheme == AppTheme.DARK) 1F else 0.9F,
+                                        onCheckedChange = {
+                                            onThemeSelected(AppTheme.DARK)
+                                        },
+                                    )
+                                },
+                            )
+                        },
+                        onClick = {},
+                    )
+                }
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
@@ -380,44 +388,54 @@ fun SettingsScreen(
                     },
                 )
                 SectionHeader("App Info")
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 0, count = 3
-                    ),
-                    leadingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_info_24), "TBD"
-                        )
-                    },
-                    content = {
-                        Text(stringResource(R.string.version_only_main), fontWeight = FontWeight.Bold)
-                    },
-                    supportingContent = {
-                        // TODO - replace with string resource value
-                        Text("Version")
-                    },
-                    onClick = {},
-                )
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 1, count = 3
-                    ),
-                    leadingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_build_24), "TBD"
-                        )
-                    },
-                    content = {
-                        Text(stringResource(R.string.version_only_build), fontWeight = FontWeight.Bold)
-                    },
-                    supportingContent = {
-                        // TODO - replace with string resource value
-                        Text("Build Number")
-                    },
-                    onClick = {},
-                )
+                CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                    SegmentedListItem(
+                        colors = colors,
+                        shapes = ListItemDefaults.segmentedShapes(
+                            index = 0, count = 3
+                        ),
+                        leadingContent = {
+                            Icon(
+                                painterResource(R.drawable.rounded_info_24), "TBD"
+                            )
+                        },
+                        content = {
+                            Text(
+                                stringResource(R.string.version_only_main),
+                                fontWeight = FontWeight.Bold
+                            )
+                        },
+                        supportingContent = {
+                            // TODO - replace with string resource value
+                            Text("Version Number")
+                        },
+                        onClick = {},
+                    )
+                }
+                CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                    SegmentedListItem(
+                        colors = colors,
+                        shapes = ListItemDefaults.segmentedShapes(
+                            index = 1, count = 3
+                        ),
+                        leadingContent = {
+                            Icon(
+                                painterResource(R.drawable.rounded_build_24), "TBD"
+                            )
+                        },
+                        content = {
+                            Text(
+                                stringResource(R.string.version_only_build),
+                                fontWeight = FontWeight.Bold
+                            )
+                        },
+                        supportingContent = {
+                            // TODO - replace with string resource value
+                            Text("Build Number")
+                        },
+                        onClick = {},
+                    )
+                }
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(

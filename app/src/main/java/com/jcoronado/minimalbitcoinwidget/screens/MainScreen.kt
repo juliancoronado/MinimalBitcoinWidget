@@ -1,6 +1,5 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +25,7 @@ import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -102,13 +103,13 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(
                         text = "/",
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
                         color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.padding(end = 6.dp)
                     )
                     Text(
                         text = uiState.selectedCurrency.uppercase(),
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
                         color = MaterialTheme.colorScheme.secondary
                     )
                 }
@@ -165,15 +166,17 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
             }
         }
     }
-    SegmentedListItem(
-        modifier = Modifier.padding(horizontal = 12.dp),
-        onClick = {},
-        colors = colors,
-        shapes = ListItemDefaults.segmentedShapes(
-            index = 1, count = 2
-        )
-    ) {
-        Text("Last Updated: $formattedTime")
+    CompositionLocalProvider(LocalRippleConfiguration provides null) {
+        SegmentedListItem(
+            modifier = Modifier.padding(horizontal = 12.dp),
+            onClick = {},
+            colors = colors,
+            shapes = ListItemDefaults.segmentedShapes(
+                index = 1, count = 2
+            )
+        ) {
+            Text("Last Updated: $formattedTime")
+        }
     }
 
 }
