@@ -10,8 +10,10 @@ sealed class Screen : NavKey {
     object Dashboard : Screen()
 
     @Serializable
-    object Settings : Screen() {
-    }
+    object Debug : Screen()
+
+    @Serializable
+    object Settings : Screen()
 }
 
 data class NavItem(

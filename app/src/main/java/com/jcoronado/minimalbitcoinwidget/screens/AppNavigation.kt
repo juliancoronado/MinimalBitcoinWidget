@@ -66,6 +66,8 @@ val navigationScreenList = listOf(
         route = Screen.Dashboard, icon = R.drawable.rounded_dashboard_24, label = R.string.dashboard
     ), NavItem(
         route = Screen.Settings, R.drawable.rounded_settings_24, label = R.string.settings
+    ), NavItem(
+        route = Screen.Debug, R.drawable.rounded_bug_report_24, label = R.string.debug
     )
 )
 
@@ -134,6 +136,9 @@ fun AppNavigation() {
                             settingsViewModel.setRefreshInterval(newInterval)
                         }
                     )
+                }
+                entry<Screen.Debug> {
+                    DebugScreen()
                 }
             },
         )

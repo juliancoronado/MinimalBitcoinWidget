@@ -19,6 +19,8 @@ import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.jcoronado.minimalbitcoinwidget.AppDatabase
+import com.jcoronado.minimalbitcoinwidget.DebugLog
 import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
@@ -46,6 +48,11 @@ class PriceUpdateWorker(
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         Log.d(LOG_TAG, "Worker started (doWork())")
+
+        val db = AppDatabase.getInstance(applicationContext)
+        val dao = db.debugDao()
+
+        dao.insert(DebugLog(message = "Worker Started: Fetching Data"))
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
@@ -96,6 +103,8 @@ class PriceUpdateWorker(
                     // update widgets
                     updateWidgets(newState)
 
+                    dao.insert(DebugLog(message = "Worker Success: Data fetched"))
+
                     Result.success()
                 } else {
                     Result.retry()
@@ -108,10 +117,12 @@ class PriceUpdateWorker(
                 throw Exception("Server error: ${response.code}")
             }
         } catch (e: IOException) {
+            dao.insert(DebugLog(message = "Worker Failed (Network Error): ${e.localizedMessage}"))
             // network timeout or no connection - retry with backoff
             Log.e(LOG_TAG, "Network error", e)
             return@withContext handleError(e)
         } catch (e: Exception) {
+            dao.insert(DebugLog(message = "Worker Failed (Other Error): ${e.localizedMessage}"))
             // other error
             Log.e(LOG_TAG, "Fatal error", e)
             return@withContext handleError(e)
@@ -151,12 +162,25 @@ class PriceUpdateWorker(
     companion object {
         private const val WORK_NAME = "PriceUpdateWork"
 
-        fun enqueue(context: Context, intervalMinutes: Long = 30) {
+        fun enqueue(context: Context, intervalMinutes: Long? = null) {
+            val minutesToUse = intervalMinutes ?: run {
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+                val intervalIndex = prefs.getInt(Prefs.REFRESH_INTERVAL, 0)
+                when (intervalIndex) {
+                    0 -> 30L
+                    1 -> 60L
+                    2 -> 240L
+                    else -> 30L
+                }
+            }
+
+            Log.d(LOG_TAG, "Enqueuing work with interval: $minutesToUse minutes")
+
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-            val request = PeriodicWorkRequestBuilder<PriceUpdateWorker>(intervalMinutes, TimeUnit.MINUTES)
+            val request = PeriodicWorkRequestBuilder<PriceUpdateWorker>(minutesToUse, TimeUnit.MINUTES)
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,
                     WorkRequest.MIN_BACKOFF_MILLIS,

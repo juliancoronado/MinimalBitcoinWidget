@@ -56,12 +56,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         _refreshInterval.value = index
         prefs.edit { putInt(Prefs.REFRESH_INTERVAL, index) }
 
-        val minutes = when (index) {
-            0 -> 30L
-            1 -> 60L
-            2 -> 240L
-            else -> 30L
-        }
-        PriceUpdateWorker.enqueue(getApplication(), minutes)
+        // Enqueue with null to use the newly saved preference value
+        PriceUpdateWorker.enqueue(getApplication())
     }
 }
