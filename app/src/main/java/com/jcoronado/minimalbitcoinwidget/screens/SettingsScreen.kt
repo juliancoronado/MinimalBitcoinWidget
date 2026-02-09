@@ -38,7 +38,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -64,7 +63,9 @@ fun SettingsScreen(
     dynamicColors: Boolean,
     onDynamicColorsSelected: (Boolean) -> Unit = {},
     refreshInterval: Int = 0,
-    onRefreshIntervalSelected: (Int) -> Unit = {}
+    onRefreshIntervalSelected: (Int) -> Unit = {},
+    changePercentage: Int = 0,
+    onChangePercentageSelected: (Int) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -72,7 +73,6 @@ fun SettingsScreen(
     var newSelection by remember { mutableStateOf(selectedCurrency) }
     val currencyDescriptions = stringArrayResource(R.array.currency_descriptions)
     val currencyCodes = stringArrayResource(R.array.currency_codes)
-    var changePercentage by remember { mutableIntStateOf(0) }
 
     if (showCurrencyDialog.value) {
         AlertDialog(
@@ -171,10 +171,13 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(
-                            currencyDescriptions[currencyCodes.indexOf(selectedCurrency)],
-                            fontWeight = FontWeight.Bold
-                        )
+                        val index = currencyCodes.indexOf(selectedCurrency)
+                        if (index != -1) {
+                            Text(
+                                currencyDescriptions[index],
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     },
                     supportingContent = {
                         // TODO - replace with string resource value
@@ -216,8 +219,7 @@ fun SettingsScreen(
                                             label = value,
                                             weight = if (changePercentage == index) 1F else 0.9F,
                                             onCheckedChange = {
-                                                // TODO - implement change percentage setting (requires API change)
-                                                changePercentage = index
+                                                onChangePercentageSelected(index)
                                             },
                                         )
                                     }

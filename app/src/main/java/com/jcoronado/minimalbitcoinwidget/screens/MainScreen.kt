@@ -137,7 +137,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                         tint = MaterialTheme.colorScheme.secondary
                     )
                     Text(
-                        text = FormatUtils.formatChange(uiState.percentageChange),
+                        text = "${FormatUtils.formatChange(uiState.percentageChange)}・${uiState.changeIntervalLabel}",
                         style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
                         color = MaterialTheme.colorScheme.secondary,
                         textAlign = TextAlign.Center

@@ -71,13 +71,26 @@ class PriceUpdateWorker(
             if (response.isSuccessful) {
                 val body = response.body.string()
 
-                val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
-                val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
-                val priceDataMap = data["bitcoin"]
+                val type = object : TypeToken<List<PriceData>>() {}.type
+                val dataList: List<PriceData> = gson.fromJson(body, type)
 
-                if (priceDataMap != null) {
-                    val price = priceDataMap[currencyCode] ?: 0.0
-                    val change24h = priceDataMap["${currencyCode}_24h_change"] ?: 0.0
+                if (dataList.isNotEmpty()) {
+                    val priceData = dataList[0]
+                    
+                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                    val percentage = when (selectedInterval) {
+                        0 -> priceData.priceChangePercentage24h
+                        1 -> priceData.priceChangePercentage7d
+                        2 -> priceData.priceChangePercentage30d
+                        else -> priceData.priceChangePercentage24h
+                    }
+
+                    val intervalLabel = when (selectedInterval) {
+                        0 -> "24H"
+                        1 -> "7D"
+                        2 -> "30D"
+                        else -> "24H"
+                    }
 
                     val symbol = getCurrencyInfo(currencyCode).symbol
 
@@ -85,8 +98,9 @@ class PriceUpdateWorker(
                         SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
 
                     val newState = PriceWidgetState.Available(
-                        price = price,
-                        changePercentage = change24h,
+                        price = priceData.currentPrice,
+                        changePercentage = percentage,
+                        intervalLabel = intervalLabel,
                         currency = currencyCode,
                         symbol = symbol,
                         lastUpdated = currentTime,
@@ -94,7 +108,6 @@ class PriceUpdateWorker(
                     )
 
                     // update shared prefs cache for the MainActivity display
-                    val priceData = PriceData(price, change24h)
                     prefs.edit {
                         putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
                         putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))

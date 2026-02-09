@@ -1,12 +1,17 @@
 package com.jcoronado.minimalbitcoinwidget.classes
 
+import com.google.gson.annotations.SerializedName
+
 /**
- * A simplified data class to hold only the required information from the API response.
- *
- * @property currentPrice The current price of Bitcoin in the selected currency.
- * @property priceChangePercentage24h The price change percentage in the last 24 hours.
+ * A data class to hold the Bitcoin price data from the CoinGecko markets API.
  */
 data class PriceData(
+    @SerializedName("current_price")
     val currentPrice: Double,
-    val priceChangePercentage24h: Double
+    @SerializedName("price_change_percentage_24h_in_currency")
+    val priceChangePercentage24h: Double,
+    @SerializedName("price_change_percentage_7d_in_currency")
+    val priceChangePercentage7d: Double,
+    @SerializedName("price_change_percentage_30d_in_currency")
+    val priceChangePercentage30d: Double
 )

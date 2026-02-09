@@ -115,6 +115,7 @@ fun AppNavigation() {
                     val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
                     val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
                     val refreshInterval by settingsViewModel.refreshInterval.collectAsStateWithLifecycle()
+                    val changePercentage by settingsViewModel.changePercentageInterval.collectAsStateWithLifecycle()
 
                     SettingsScreen(
                         selectedCurrency = uiState.selectedCurrency,
@@ -134,6 +135,11 @@ fun AppNavigation() {
                         refreshInterval = refreshInterval,
                         onRefreshIntervalSelected = { newInterval ->
                             settingsViewModel.setRefreshInterval(newInterval)
+                        },
+                        changePercentage = changePercentage,
+                        onChangePercentageSelected = { newChangePercentage ->
+                            settingsViewModel.setChangePercentageInterval(newChangePercentage)
+                            priceViewModel.refreshFromCache()
                         }
                     )
                 }
@@ -202,8 +208,7 @@ fun AppNavigation() {
                                         text = stringResource(item.label),
                                         fontSize = 16.sp,
                                         lineHeight = 24.sp,
-                                        maxLines = 1,
-                                        softWrap = false,
+                                        maxLines = 1, softWrap = false,
                                         overflow = TextOverflow.Clip,
                                         modifier = Modifier.padding(start = ButtonDefaults.IconSpacing)
                                     )

@@ -1,6 +1,7 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -26,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -71,22 +73,28 @@ fun DebugScreen() {
                 .padding(horizontal = 12.dp)
                 .fillMaxSize()
         ) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
-            ) {
-                itemsIndexed(logs) { index, log ->
-                    if (index != logs.size - 1) {
-                        LogItem(index, log, logs.size)
-                    } else {
-                        LogItem(index, log, logs.size)
-                        Spacer(
-                            Modifier.height(
-                                WindowInsets.systemBars.asPaddingValues()
-                                    .calculateBottomPadding() + 100.dp
+            if (logs.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("No logs available.")
+                }
+            } else {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
+                ) {
+                    itemsIndexed(logs) { index, log ->
+                        if (index != logs.size - 1) {
+                            LogItem(index, log, logs.size)
+                        } else {
+                            LogItem(index, log, logs.size)
+                            Spacer(
+                                Modifier.height(
+                                    WindowInsets.systemBars.asPaddingValues()
+                                        .calculateBottomPadding() + 100.dp
+                                )
                             )
-                        )
-                    }
+                        }
 
+                    }
                 }
             }
         }

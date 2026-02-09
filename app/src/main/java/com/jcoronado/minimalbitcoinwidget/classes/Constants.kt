@@ -15,6 +15,7 @@ object Prefs {
     const val DYNAMIC_COLORS = "dynamic_colors"
     const val SELECTED_THEME = "selected_theme"
     const val REFRESH_INTERVAL = "refresh_interval"
+    const val SELECTED_CHANGE_PERCENTAGE = "selected_change_percentage"
 }
 
 /**
@@ -35,16 +36,11 @@ object AppConstants {
  */
 object Api {
     /** Base URL for the CoinGecko API. */
-    private const val COINGECKO_BASE_URL = "https://api.coingecko.com/api/v3"
-    /** Endpoint for fetching simple price data. */
-    private const val COINGECKO_ENDPOINT = "/simple/price"
+    private const val COINGECKO_BASE_URL = "https://api.coingecko.com/api/v3/"
+    /** Endpoint for fetching coin market price data. */
+    private const val COINGECKO_ENDPOINT = "coins/markets"
     /** Query parameters for the Bitcoin price request, including 24h change and precision. */
-    private const val QUERY_PARAMS = "?ids=bitcoin&include_24hr_change=true&precision=2&vs_currencies="
+    private const val QUERY_PARAMS = "?ids=bitcoin&precision=2&price_change_percentage=24h,7d,30d&vs_currency="
     /** Complete URL for fetching Bitcoin price data from CoinGecko. */
     const val COINGECKO_API_URL = COINGECKO_BASE_URL + COINGECKO_ENDPOINT + QUERY_PARAMS
 }
-
-// TODO - implement using this API endpoint instead
-// Question: encode commas for the URL?
-// Question: does the order of query params matter?
-// NEW ENDPOINT: https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&price_change_percentage=24h,7d,30d

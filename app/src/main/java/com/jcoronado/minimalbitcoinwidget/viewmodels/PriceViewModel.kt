@@ -62,10 +62,26 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 try {
                     val lastUpdated = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
                     val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
+                    
+                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                    val percentage = when (selectedInterval) {
+                        0 -> cachedData.priceChangePercentage24h
+                        1 -> cachedData.priceChangePercentage7d
+                        2 -> cachedData.priceChangePercentage30d
+                        else -> cachedData.priceChangePercentage24h
+                    }
+                    val intervalLabel = when (selectedInterval) {
+                        0 -> "24H"
+                        1 -> "7D"
+                        2 -> "30D"
+                        else -> "24H"
+                    }
+
                     // update state immediately
                     _uiState.value = _uiState.value.copy(
                         price = cachedData.currentPrice,
-                        percentageChange = cachedData.priceChangePercentage24h,
+                        percentageChange = percentage,
+                        changeIntervalLabel = intervalLabel,
                         selectedCurrency = cachedCurrency,
                         lastUpdated = lastUpdated
                     )
@@ -74,6 +90,11 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         }
+    }
+
+    fun refreshFromCache() {
+        loadInitialData()
+        redrawWidgets()
     }
 
     /** Update the selected currency and persist it. */
@@ -108,8 +129,18 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
             if (!force && hasCache && isFresh) {
                 Log.d(LOG_TAG, "Using cached data")
                 delay(750)
+                
+                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                val intervalLabel = when (selectedInterval) {
+                    0 -> "24H"
+                    1 -> "7D"
+                    2 -> "30D"
+                    else -> "24H"
+                }
+
                 _uiState.value = _uiState.value.copy(
                     lastUpdated = lastApiCallTime,
+                    changeIntervalLabel = intervalLabel,
                     isLoading = false
                 )
                 redrawWidgets()
@@ -125,28 +156,43 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.isSuccessful) {
                     Log.d(LOG_TAG, "Successful GET request: ${response.code}")
                     val body = response.body.string()
-                    val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
-                    val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
+                    
+                    val type = object : TypeToken<List<PriceData>>() {}.type
+                    val dataList: List<PriceData> = gson.fromJson(body, type)
 
                     Log.d("PriceViewModel", "Body: $body")
 
-                    val priceDataJson = data["bitcoin"] ?: throw Exception("Invalid JSON")
-                    val price = priceDataJson[currency] ?: 0.0
-                    val change24h = priceDataJson["${currency}_24h_change"] ?: 0.0
-
+                    if (dataList.isEmpty()) throw Exception("Empty response")
+                    
+                    val priceData = dataList[0]
                     val lastUpdated = System.currentTimeMillis()
 
                     // update cached values
                     prefs.edit {
                         putLong(Prefs.LAST_API_CALL_TIMESTAMP, lastUpdated)
-                        putString(Prefs.CACHED_PRICE_DATA, gson.toJson(PriceData(price, change24h)))
+                        putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))
+                    }
+
+                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                    val percentage = when (selectedInterval) {
+                        0 -> priceData.priceChangePercentage24h
+                        1 -> priceData.priceChangePercentage7d
+                        2 -> priceData.priceChangePercentage30d
+                        else -> priceData.priceChangePercentage24h
+                    }
+                    val intervalLabel = when (selectedInterval) {
+                        0 -> "24H"
+                        1 -> "7D"
+                        2 -> "30D"
+                        else -> "24H"
                     }
 
                     delay(750)
 
                     _uiState.value = _uiState.value.copy(
-                        price = price,
-                        percentageChange = change24h,
+                        price = priceData.currentPrice,
+                        percentageChange = percentage,
+                        changeIntervalLabel = intervalLabel,
                         isLoading = false,
                         lastUpdated = lastUpdated
                     )
@@ -183,12 +229,21 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 Log.d(LOG_TAG, "Updating ${glanceIds.size} widgets: $glanceIds")
 
                 val currentTime = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
+                
+                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                val intervalLabel = when (selectedInterval) {
+                    0 -> "24H"
+                    1 -> "7D"
+                    2 -> "30D"
+                    else -> "24H"
+                }
 
                 glanceIds.forEach { glanceId ->
                     updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
                         PriceWidgetState.Available(
                             price = _uiState.value.price,
                             changePercentage = _uiState.value.percentageChange,
+                            intervalLabel = intervalLabel,
                             currency = _uiState.value.selectedCurrency,
                             symbol = getCurrencyInfo(_uiState.value.selectedCurrency).symbol,
                             lastUpdated = currentTime,

@@ -20,10 +20,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _theme = MutableStateFlow(getSavedTheme())
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
     private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
+    private val _changePercentageInterval = MutableStateFlow(getSavedChangePercentageInterval())
 
     val theme: StateFlow<AppTheme> = _theme.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
+    val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
 
     private fun getSavedTheme(): AppTheme {
         // default to SYSTEM if not set
@@ -56,7 +58,15 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         _refreshInterval.value = index
         prefs.edit { putInt(Prefs.REFRESH_INTERVAL, index) }
 
-        // Enqueue with null to use the newly saved preference value
         PriceUpdateWorker.enqueue(getApplication())
+    }
+
+    private fun getSavedChangePercentageInterval(): Int {
+        return prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+    }
+
+    fun setChangePercentageInterval(index: Int) {
+        _changePercentageInterval.value = index
+        prefs.edit { putInt(Prefs.SELECTED_CHANGE_PERCENTAGE, index) }
     }
 }

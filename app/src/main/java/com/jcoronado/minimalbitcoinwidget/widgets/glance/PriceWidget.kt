@@ -98,7 +98,7 @@ class PriceWidget : GlanceAppWidget() {
         Spacer(modifier)
         PriceValue(state)
         Spacer(modifier)
-        PriceChange(state.changePercentage, error)
+        PriceChange(state.changePercentage, state.intervalLabel, error)
         if (state.debug) {
             LastUpdated(state)
         }
@@ -181,7 +181,7 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun PriceChange(changePercentage: Double, error: Boolean) {
+    private fun PriceChange(changePercentage: Double, intervalLabel: String, error: Boolean) {
         val (iconRes, color, iconDesc) = if (changePercentage > 0) {
             Triple(R.drawable.rounded_trending_up_24, GlanceTheme.colors.primary, "Trending up icon")
         } else if (changePercentage < 0) {
@@ -203,7 +203,8 @@ class PriceWidget : GlanceAppWidget() {
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Text(
-                text = String.format(formatPattern, changePercentage), style = TextStyle(
+                text = "${String.format(formatPattern, changePercentage)}・$intervalLabel",
+                style = TextStyle(
                     color = GlanceTheme.colors.secondary,
                     fontSize = 12.sp
                 )
@@ -230,6 +231,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = 1.23,
+            intervalLabel = "24H",
             currency = "USD",
             symbol = "$",
             lastUpdated = "12:34:56 PM"
@@ -245,6 +247,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = -2.34,
+            intervalLabel = "7D",
             currency = "USD",
             symbol = "$",
             lastUpdated = "12:34:56 PM"
@@ -260,6 +263,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = 0.00,
+            intervalLabel = "24H",
             currency = "USD",
             symbol = "$",
             lastUpdated = "12:34:56 PM"
@@ -275,6 +279,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 1234560.78,
             changePercentage = 3.45,
+            intervalLabel = "30D",
             currency = "USD",
             symbol = "$",
             lastUpdated = "12:34:56 PM"
@@ -290,6 +295,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 1234560.78,
             changePercentage = -1.23,
+            intervalLabel = "24H",
             currency = "USD",
             symbol = "$",
             lastUpdated = "12:34:56 PM"
@@ -305,6 +311,7 @@ class PriceWidget : GlanceAppWidget() {
         val lastValidState = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = 2.34,
+            intervalLabel = "24H",
             currency = "USD",
             symbol = "$",
             lastUpdated = "12:34:56 PM"

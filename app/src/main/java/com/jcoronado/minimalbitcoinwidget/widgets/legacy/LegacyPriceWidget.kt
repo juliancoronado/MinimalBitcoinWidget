@@ -24,7 +24,6 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 import java.text.NumberFormat
-import kotlin.collections.get
 
 /**
  * Implementation of App Widget functionality.
@@ -154,10 +153,16 @@ fun fetchFromNetwork(
 
                 if (cachedDataJson == null) {
                     // if no cached data, show zeros as default values
-                    setWidgetViews(context, views,
-                        PriceData(currentPrice = 0.0, priceChangePercentage24h = 0.0), currencyInfo, loading = false)
+                    setWidgetViews(
+                        context, views, PriceData(
+                            currentPrice = 0.0, priceChangePercentage24h = 0.0,
+                            priceChangePercentage7d = 0.0,
+                            priceChangePercentage30d = 0.0,
+                        ), currencyInfo, loading = false
+                    )
                 } else {
-                    val cachedPriceData: PriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
+                    val cachedPriceData: PriceData =
+                        gson.fromJson(cachedDataJson, PriceData::class.java)
                     setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)
                 }
 
@@ -172,15 +177,11 @@ fun fetchFromNetwork(
             val body = response.body.string()
 
             // extracts data from JSON
-            val type = object : TypeToken<Map<String, Map<String, Double>>>() {}.type
-            // Map<"bitcoin", Map<"$currency", Value>>
-            val data: Map<String, Map<String, Double>> = gson.fromJson(body, type)
+            val type = object : TypeToken<List<PriceData>>() {}.type
+            val data: List<PriceData> = gson.fromJson(body, type)
 
-            val priceDataJson = data["bitcoin"] ?: return
-
-            val price = priceDataJson[currency] ?: 0.0
-            val change24h = priceDataJson["${currency}_24h_change"] ?: 0.0
-            val priceData = PriceData(price, change24h)
+            if (data.isEmpty()) return
+            val priceData = data[0]
 
             prefs.edit {
                 putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
@@ -204,10 +205,17 @@ fun fetchFromNetwork(
             val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
             if (cachedDataJson == null) {
                 // if no cached data, show zeros as default values
-                setWidgetViews(context, views,
-                    PriceData(currentPrice = 0.0, priceChangePercentage24h = 0.0), currencyInfo, loading = false)
+                setWidgetViews(
+                    context, views, PriceData(
+                        currentPrice = 0.0,
+                        priceChangePercentage24h = 0.0,
+                        priceChangePercentage7d = 0.0,
+                        priceChangePercentage30d = 0.0
+                    ), currencyInfo, loading = false
+                )
             } else {
-                val cachedPriceData: PriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
+                val cachedPriceData: PriceData =
+                    gson.fromJson(cachedDataJson, PriceData::class.java)
                 setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)
             }
 
@@ -247,15 +255,29 @@ fun setWidgetViews(
             maximumFractionDigits = 2
         }
 
-        views.setTextViewText(R.id.widget_text_price, numberFormatter.format(priceData!!.currentPrice))
         views.setTextViewText(
-            R.id.widget_day_change, percentFormatter.format(priceData.priceChangePercentage24h / 100)
+            R.id.widget_text_price, numberFormatter.format(priceData!!.currentPrice)
+        )
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+        // TODO - update XML layout to reflect this change percentage interval
+        val percentage = when (selectedInterval) {
+            0 -> priceData.priceChangePercentage24h
+            1 -> priceData.priceChangePercentage7d
+            2 -> priceData.priceChangePercentage30d
+            else -> priceData.priceChangePercentage24h
+        }
+
+        views.setTextViewText(
+            R.id.widget_day_change,
+            percentFormatter.format(percentage / 100)
         )
         views.setTextViewText(R.id.widget_iso_code, currencyInfo.isoCode)
         views.setTextViewText(R.id.widget_symbol, currencyInfo.symbol)
 
         // determine the specific color for the day change view (red or green)
-        val isPositive = priceData.priceChangePercentage24h >= 0
+        val isPositive = percentage >= 0
         val dayChangeColor = if (isPositive) {
             ContextCompat.getColor(context, R.color.positive_green)
         } else {
