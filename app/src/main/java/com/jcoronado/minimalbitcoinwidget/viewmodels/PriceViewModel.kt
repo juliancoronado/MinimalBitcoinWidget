@@ -195,6 +195,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                         percentageChange = percentage,
                         changeIntervalLabel = intervalLabel,
                         isLoading = false,
+                        errorMessage = null,
                         lastUpdated = lastUpdated
                     )
 

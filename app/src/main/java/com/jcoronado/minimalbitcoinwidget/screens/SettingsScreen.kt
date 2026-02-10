@@ -107,7 +107,7 @@ fun SettingsScreen(
                                 )
                                 Spacer(Modifier.width(8.dp))
                                 Text(
-                                    text = "${currencyDescriptions[index]} - ${currency.uppercase()}",
+                                    text = "${currencyDescriptions[index]} (${currency.uppercase()})",
                                     style = MaterialTheme.typography.bodyLarge
                                 )
                             }
@@ -172,13 +172,13 @@ fun SettingsScreen(
                     },
                     content = {
                         // TODO - replace with string resource value
-                        Text("Change Selected Currency", fontWeight = FontWeight.Bold)
+                        Text("Update Currency", fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         val index = currencyCodes.indexOf(selectedCurrency)
                         if (index != -1) {
                             Text(
-                                currencyDescriptions[index], modifier = Modifier.padding(top = 4.dp)
+                                "${currencyDescriptions[index]} (${currencyCodes[index].uppercase()})", modifier = Modifier.padding(top = 4.dp)
                             )
                         }
                     },
