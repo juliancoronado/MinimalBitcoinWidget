@@ -18,7 +18,7 @@ import java.util.Locale
 data class DebugLog(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val message: String,
-    val timestamp: String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
+    val timestamp: String = SimpleDateFormat("yyyy-MM-dd ・ hh:mm:ss a", Locale.US).format(Date())
 )
 
 @Dao
