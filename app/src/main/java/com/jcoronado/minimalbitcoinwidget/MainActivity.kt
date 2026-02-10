@@ -8,6 +8,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.preference.PreferenceManager
+import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.screens.AppNavigation
 import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
@@ -18,6 +20,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        
+        // invalidate last fetch api timestamp if app was updated
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        Prefs.checkAppUpdateAndInvalidateCache(prefs)
+
         setContent {
             val settingsViewModel : SettingsViewModel =  viewModel()
             val themePreference by settingsViewModel.theme.collectAsStateWithLifecycle()

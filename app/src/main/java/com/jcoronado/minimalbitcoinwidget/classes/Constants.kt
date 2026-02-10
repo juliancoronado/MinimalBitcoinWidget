@@ -1,5 +1,9 @@
 package com.jcoronado.minimalbitcoinwidget.classes
 
+import android.content.SharedPreferences
+import android.util.Log
+import androidx.core.content.edit
+import com.jcoronado.minimalbitcoinwidget.BuildConfig
 import java.util.concurrent.TimeUnit
 
 /**
@@ -16,6 +20,25 @@ object Prefs {
     const val SELECTED_THEME = "selected_theme"
     const val REFRESH_INTERVAL = "refresh_interval"
     const val SELECTED_CHANGE_PERCENTAGE = "selected_change_percentage"
+    /** Key for storing the app version code to detect updates. */
+    const val LAST_VERSION_CODE = "last_version_code"
+
+    /**
+     * Checks if the app was updated and invalidates the cache if so.
+     * Uses commit = true to ensure the reset is immediate and visible across components.
+     */
+    fun checkAppUpdateAndInvalidateCache(prefs: SharedPreferences) {
+        val currentVersionCode = BuildConfig.VERSION_CODE
+        val lastVersionCode = prefs.getInt(LAST_VERSION_CODE, 0)
+
+        if (currentVersionCode > lastVersionCode) {
+            Log.i("Prefs", "App updated ($lastVersionCode -> $currentVersionCode). Invalidating price cache.")
+            prefs.edit(commit = true) {
+                putLong(LAST_API_CALL_TIMESTAMP, 0L)
+                putInt(LAST_VERSION_CODE, currentVersionCode)
+            }
+        }
+    }
 }
 
 /**

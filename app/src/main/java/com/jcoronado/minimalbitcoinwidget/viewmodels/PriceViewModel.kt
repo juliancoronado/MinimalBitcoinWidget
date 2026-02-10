@@ -48,6 +48,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
     private val gson = Gson()
 
     init {
+        Prefs.checkAppUpdateAndInvalidateCache(prefs)
         loadInitialData()
         fetchPrice(fromInit = true)
     }
