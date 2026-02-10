@@ -46,7 +46,7 @@ fun getCurrencyInfo(currency: String?): CurrencyInfo {
 
 data class CurrencyInfo(val symbol: String, val isoCode: String)
 
-class LegacyPriceWidget : AppWidgetProvider() {
+open class LegacyPriceWidget : AppWidgetProvider() {
 
     override fun onUpdate(
         context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray

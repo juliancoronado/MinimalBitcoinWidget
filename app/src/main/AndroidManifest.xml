@@ -15,7 +15,7 @@
 
         <!-- Legacy Widget Code-->
         <receiver
-            android:name=".widgets.legacy.LegacyPriceWidget"
+            android:name=".PriceWidget"
             android:label="@string/legacy_widget_picker_name"
             android:exported="true">
             <intent-filter>
