@@ -50,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jcoronado.minimalbitcoinwidget.BuildConfig
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
 
@@ -140,8 +141,7 @@ fun SettingsScreen(
                     Text(stringResource(R.string.settings))
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
-                ),
-                scrollBehavior = topAppBarScrollBehavior
+                ), scrollBehavior = topAppBarScrollBehavior
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -171,17 +171,16 @@ fun SettingsScreen(
                         )
                     },
                     content = {
+                        // TODO - replace with string resource value
+                        Text("Change Selected Currency", fontWeight = FontWeight.Bold)
+                    },
+                    supportingContent = {
                         val index = currencyCodes.indexOf(selectedCurrency)
                         if (index != -1) {
                             Text(
-                                currencyDescriptions[index],
-                                fontWeight = FontWeight.Bold
+                                currencyDescriptions[index], modifier = Modifier.padding(top = 4.dp)
                             )
                         }
-                    },
-                    supportingContent = {
-                        // TODO - replace with string resource value
-                        Text("Update Currency", modifier = Modifier.padding(top = 4.dp))
                     },
                     onClick = {
                         // show options dialog
@@ -213,7 +212,9 @@ fun SettingsScreen(
                                 verticalAlignment = Alignment.Top,
                                 content = {
                                     // TODO - convert to translated string resources
-                                    arrayOf("24 hours", "7 days", "30 days").forEachIndexed { index, value ->
+                                    arrayOf(
+                                        "24 hours", "7 days", "30 days"
+                                    ).forEachIndexed { index, value ->
                                         this.toggleableItem(
                                             checked = changePercentage == index,
                                             label = value,
@@ -252,7 +253,9 @@ fun SettingsScreen(
                                 verticalAlignment = Alignment.Top,
                                 content = {
                                     // TODO - convert these into translated string resources
-                                    arrayOf("30 mins", "1 hour", "4 hours").forEachIndexed { index, value ->
+                                    arrayOf(
+                                        "30 mins", "1 hour", "4 hours"
+                                    ).forEachIndexed { index, value ->
                                         this.toggleableItem(
                                             checked = refreshInterval == index,
                                             label = value,
@@ -371,14 +374,13 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(
-                                stringResource(R.string.version_only_main),
-                                fontWeight = FontWeight.Bold
-                            )
+                            // TODO - replace with string resource value
+                            Text("Version", fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
-                            // TODO - replace with string resource value
-                            Text("Version Number")
+                            Text(
+                                "${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE})"
+                            )
                         },
                         onClick = {}, // this method is intentionally left empty
                     )
@@ -395,14 +397,13 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(
-                                stringResource(R.string.version_only_build),
-                                fontWeight = FontWeight.Bold
-                            )
+                            // TODO - replace with string resource value
+                            Text("Build Number", fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
-                            // TODO - replace with string resource value
-                            Text("Build Number")
+                            Text(
+                                "${BuildConfig.VERSION_CODE}"
+                            )
                         },
                         onClick = {}, // this method is intentionally left empty
                     )
@@ -418,11 +419,11 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text("jcoronado.dev", fontWeight = FontWeight.Bold)
+                        // TODO - replace with string resource value
+                        Text("Contact", fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
-                        // TODO - replace with string resource value
-                        Text("Contact")
+                        Text("jcoronado.dev")
                     },
                     onClick = {
                         // TODO - implement this to open an email client / browser
@@ -454,6 +455,9 @@ fun SectionHeader(title: String, top: Boolean = false) {
 @Preview(showBackground = true, showSystemUi = true)
 fun SettingsPreview() {
     SettingsScreen(
-        selectedCurrency = "usd", currentTheme = AppTheme.LIGHT, dynamicColors = true, refreshInterval = 0
+        selectedCurrency = "usd",
+        currentTheme = AppTheme.LIGHT,
+        dynamicColors = true,
+        refreshInterval = 0
     )
 }
