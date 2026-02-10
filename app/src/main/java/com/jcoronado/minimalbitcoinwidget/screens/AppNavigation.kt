@@ -67,7 +67,7 @@ val navigationScreenList = listOfNotNull(
         route = Screen.Dashboard, icon = R.drawable.rounded_dashboard_24, label = R.string.dashboard
     ), NavItem(
         route = Screen.Settings, R.drawable.rounded_settings_24, label = R.string.settings
-    ), if (AppConstants.DEBUG_MODE) NavItem(
+    ), if (AppConstants.APP_DEBUG_MODE) NavItem(
         route = Screen.Debug, R.drawable.rounded_bug_report_24, label = R.string.debug
     ) else null
 )

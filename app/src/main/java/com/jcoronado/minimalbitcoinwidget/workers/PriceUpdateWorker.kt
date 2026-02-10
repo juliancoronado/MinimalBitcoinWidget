@@ -104,7 +104,7 @@ class PriceUpdateWorker(
                         currency = currencyCode,
                         symbol = symbol,
                         lastUpdated = currentTime,
-                        debug = AppConstants.DEBUG_MODE
+                        debug = AppConstants.WIDGET_DEBUG_MODE
                     )
 
                     // update shared prefs cache for the MainActivity display

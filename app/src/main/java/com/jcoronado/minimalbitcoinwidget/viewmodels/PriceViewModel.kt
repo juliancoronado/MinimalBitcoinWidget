@@ -249,7 +249,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                             currency = _uiState.value.selectedCurrency,
                             symbol = getCurrencyInfo(_uiState.value.selectedCurrency).symbol,
                             lastUpdated = currentTime,
-                            debug = AppConstants.DEBUG_MODE
+                            debug = AppConstants.WIDGET_DEBUG_MODE
                         )
                     }
                 }
