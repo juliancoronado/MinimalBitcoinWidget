@@ -56,21 +56,10 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.jcoronado.minimalbitcoinwidget.R
-import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.NavItem
 import com.jcoronado.minimalbitcoinwidget.classes.Screen
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.viewmodels.SettingsViewModel
-
-val navigationScreenList = listOfNotNull(
-    NavItem(
-        route = Screen.Dashboard, icon = R.drawable.rounded_dashboard_24, label = R.string.dashboard
-    ), NavItem(
-        route = Screen.Settings, R.drawable.rounded_settings_24, label = R.string.settings
-    ), if (AppConstants.APP_DEBUG_MODE) NavItem(
-        route = Screen.Debug, R.drawable.rounded_bug_report_24, label = R.string.debug
-    ) else null
-)
 
 @OptIn(
     ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class
@@ -85,9 +74,24 @@ fun AppNavigation() {
     val priceViewModel: PriceViewModel = viewModel()
     val settingsViewModel: SettingsViewModel = viewModel()
     val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
+    val debugModeEnabled by settingsViewModel.debugModeEnabled.collectAsStateWithLifecycle()
 
     val currentRoute by remember(backStack.size) {
         derivedStateOf { backStack.lastOrNull() }
+    }
+
+    val navigationScreenList = remember(debugModeEnabled) {
+        listOfNotNull(
+            NavItem(
+                route = Screen.Dashboard,
+                icon = R.drawable.rounded_dashboard_24,
+                label = R.string.dashboard
+            ), NavItem(
+                route = Screen.Settings, R.drawable.rounded_settings_24, label = R.string.settings
+            ), if (debugModeEnabled) NavItem(
+                route = Screen.Debug, R.drawable.rounded_bug_report_24, label = R.string.debug
+            ) else null
+        )
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -141,6 +145,10 @@ fun AppNavigation() {
                         onChangePercentageSelected = { newChangePercentage ->
                             settingsViewModel.setChangePercentageInterval(newChangePercentage)
                             priceViewModel.refreshFromCache()
+                        },
+                        debugModeEnabled = debugModeEnabled,
+                        onDebugModeToggle = { enabled ->
+                            settingsViewModel.setDebugModeEnabled(enabled)
                         }
                     )
                 }

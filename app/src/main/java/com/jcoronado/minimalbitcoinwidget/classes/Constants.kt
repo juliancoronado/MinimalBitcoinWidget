@@ -20,6 +20,7 @@ object Prefs {
     const val SELECTED_THEME = "selected_theme"
     const val REFRESH_INTERVAL = "refresh_interval"
     const val SELECTED_CHANGE_PERCENTAGE = "selected_change_percentage"
+    const val DEBUG_MODE_ENABLED = "debug_mode_enabled"
     /** Key for storing the app version code to detect updates. */
     const val LAST_VERSION_CODE = "last_version_code"
 
@@ -51,7 +52,6 @@ object AppConstants {
     private const val CACHE_DURATION_MINUTES = 30L
     /** Duration in milliseconds for which the cached price data is considered valid. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
-    const val APP_DEBUG_MODE = true
     const val WIDGET_DEBUG_MODE = false
 }
 

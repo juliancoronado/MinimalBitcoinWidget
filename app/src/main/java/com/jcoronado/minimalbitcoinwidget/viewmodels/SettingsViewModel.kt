@@ -21,11 +21,13 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
     private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
     private val _changePercentageInterval = MutableStateFlow(getSavedChangePercentageInterval())
+    private val _debugModeEnabled = MutableStateFlow(getDebugModeEnabled())
 
     val theme: StateFlow<AppTheme> = _theme.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
     val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
+    val debugModeEnabled: StateFlow<Boolean> = _debugModeEnabled.asStateFlow()
 
     private fun getSavedTheme(): AppTheme {
         // default to SYSTEM if not set
@@ -68,5 +70,14 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun setChangePercentageInterval(index: Int) {
         _changePercentageInterval.value = index
         prefs.edit { putInt(Prefs.SELECTED_CHANGE_PERCENTAGE, index) }
+    }
+
+    private fun getDebugModeEnabled(): Boolean {
+        return prefs.getBoolean(Prefs.DEBUG_MODE_ENABLED, false)
+    }
+
+    fun setDebugModeEnabled(enabled: Boolean) {
+        _debugModeEnabled.value = enabled
+        prefs.edit { putBoolean(Prefs.DEBUG_MODE_ENABLED, enabled) }
     }
 }
