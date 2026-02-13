@@ -9,6 +9,20 @@ Date Format: YYYY-MM-DD
 
 ## [Unreleased]
 
+### Added
+- Upgrade app UI to use Jetpack Compose and Material 3 Expressive.
+- Upgrade homescreen widget to use Jetpack Glance.
+- Support for 7-day and 30-day price change percentages.
+- Support for Japanese Yen (JPY) currency.
+- Configurable widget refresh intervals (1, 4, or 8 hours).
+- Modern, type-safe navigation using Navigation 3.
+- Support for Material You dynamic colors on Android 12+.
+- Hidden "Debug Mode" unlocked via tapping Build Number.
+
+### Changed
+- Improved background update reliability using WorkManager.
+- Enhanced theme switching with support for Light, Dark, and System modes.
+
 ## [2.6.1]
 
 ### Fixed
@@ -45,4 +59,3 @@ Date Format: YYYY-MM-DD
 
 ## [2.4] - 2023-10-03
 - Previous changes not included in this file. Check in commit history on the master branch.
-
