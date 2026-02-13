@@ -18,4 +18,7 @@
     <color name="gray">#B6B6B6</color>
     <color name="dark_gray">#393939</color>
 
+    <color name="widget_preview_background_light">#F8F9FF</color>
+    <color name="widget_preview_background_dark">#111418</color>
+
 </resources>

@@ -1,0 +1,9 @@
+<resources>
+    <!-- The app theme can just inherit from the base, no changes needed for dark mode here -->
+    <style name="Theme.MinimalBitcoinWidget" parent="Theme.Material3.DayNight.NoActionBar" />
+
+    <style name="ThemeOverlay.MinimalBitcoinWidget.AppWidgetContainer" parent="">
+        <item name="appWidgetBackgroundColor">@color/dark_widget</item>
+        <item name="appWidgetTextColor">@color/white</item>
+    </style>
+</resources>
