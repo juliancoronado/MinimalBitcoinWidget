@@ -94,11 +94,11 @@ class PriceWidget : GlanceAppWidget() {
 
     @Composable
     private fun AvailableUI(state: PriceWidgetState.Available, modifier: GlanceModifier, error: Boolean = false) {
-        Header(state.currency)
+        Header(state.currency, state.intervalLabel)
         Spacer(modifier)
         PriceValue(state)
         Spacer(modifier)
-        PriceChange(state.changePercentage, state.intervalLabel, error)
+        PriceChange(state.changePercentage, error)
         if (state.debug) {
             LastUpdated(state)
         }
@@ -131,7 +131,7 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun Header(currency: String) {
+    private fun Header(currency: String, intervalLabel: String) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -143,6 +143,18 @@ class PriceWidget : GlanceAppWidget() {
             )
             Text(
                 "/ ${currency.uppercase()}", style = TextStyle(
+                    color = GlanceTheme.colors.secondary,
+                    fontSize = 12.sp
+                )
+            )
+            Text(
+                "・", style = TextStyle(
+                    color = GlanceTheme.colors.secondary,
+                    fontSize = 12.sp
+                )
+            )
+            Text(
+                intervalLabel, style = TextStyle(
                     color = GlanceTheme.colors.secondary,
                     fontSize = 12.sp
                 )
@@ -181,7 +193,7 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun PriceChange(changePercentage: Double, intervalLabel: String, error: Boolean) {
+    private fun PriceChange(changePercentage: Double, error: Boolean) {
         val (iconRes, color, iconDesc) = if (changePercentage > 0) {
             Triple(R.drawable.rounded_trending_up_24, GlanceTheme.colors.primary, "Trending up icon")
         } else if (changePercentage < 0) {
@@ -203,7 +215,7 @@ class PriceWidget : GlanceAppWidget() {
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Text(
-                text = "${String.format(formatPattern, changePercentage)}・$intervalLabel",
+                text = String.format(formatPattern, changePercentage),
                 style = TextStyle(
                     color = GlanceTheme.colors.secondary,
                     fontSize = 12.sp
