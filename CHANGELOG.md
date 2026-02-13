@@ -23,12 +23,12 @@ Date Format: YYYY-MM-DD
 - Improved background update reliability using WorkManager.
 - Enhanced theme switching with support for Light, Dark, and System modes.
 
-## [2.6.1]
+## [2.6.1] - 2025-12-21
 
 ### Fixed
 - Handle network failures when the widget refreshes data
 
-## [2.6.0]
+## [2.6.0] - 2025-12-19
 
 ### Added
 - Local cache to store the price data locally
@@ -39,7 +39,7 @@ Date Format: YYYY-MM-DD
 - Updated Android dependencies
 - Updated Coingecko endpoint to use simple/price/
 
-## [2.5.0] 
+## [2.5.0] - 2025-12-13
 
 ### Added
 - "What's New" dialog to show changes after an update.
