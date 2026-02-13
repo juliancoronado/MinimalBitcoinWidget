@@ -178,12 +178,12 @@ class PriceUpdateWorker(
         fun enqueue(context: Context, intervalMinutes: Long? = null) {
             val minutesToUse = intervalMinutes ?: run {
                 val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-                val intervalIndex = prefs.getInt(Prefs.REFRESH_INTERVAL, 0)
+                val intervalIndex = prefs.getInt(Prefs.REFRESH_INTERVAL, 1)
                 when (intervalIndex) {
-                    0 -> 30L
-                    1 -> 60L
-                    2 -> 240L
-                    else -> 30L
+                    0 -> 60L
+                    1 -> 240L
+                    2 -> 480L
+                    else -> 240L
                 }
             }
 

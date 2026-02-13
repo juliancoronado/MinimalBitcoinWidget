@@ -53,7 +53,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun getSavedRefreshInterval(): Int {
-        return prefs.getInt(Prefs.REFRESH_INTERVAL, 0)
+        return prefs.getInt(Prefs.REFRESH_INTERVAL, 1)
     }
 
     fun setRefreshInterval(index: Int) {

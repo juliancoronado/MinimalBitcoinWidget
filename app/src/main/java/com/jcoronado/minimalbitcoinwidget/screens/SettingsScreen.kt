@@ -66,7 +66,7 @@ fun SettingsScreen(
     onThemeSelected: (AppTheme) -> Unit = {},
     dynamicColors: Boolean,
     onDynamicColorsSelected: (Boolean) -> Unit = {},
-    refreshInterval: Int = 0,
+    refreshInterval: Int = 1,
     onRefreshIntervalSelected: (Int) -> Unit = {},
     changePercentage: Int = 0,
     onChangePercentageSelected: (Int) -> Unit = {},
@@ -262,7 +262,7 @@ fun SettingsScreen(
                                 content = {
                                     // TODO - convert these into translated string resources
                                     arrayOf(
-                                        "30 mins", "1 hour", "4 hours"
+                                        "1 hour", "4 hours", "8 hours"
                                     ).forEachIndexed { index, value ->
                                         this.toggleableItem(
                                             checked = refreshInterval == index,
@@ -513,6 +513,6 @@ fun SettingsPreview() {
         selectedCurrency = "usd",
         currentTheme = AppTheme.LIGHT,
         dynamicColors = true,
-        refreshInterval = 0
+        refreshInterval = 1
     )
 }
