@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/widget_preview_background_light"
     android:gravity="center"
     android:orientation="vertical"
@@ -18,7 +19,7 @@
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:src="@drawable/rounded_currency_bitcoin_24"
-            android:tint="#535F70"
+            app:tint="#535F70"
             />
 
         <TextView
@@ -26,6 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="/ USD"
+            android:textColor="#535F70"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="・24H"
             android:textColor="#535F70"
             android:textSize="12sp" />
     </LinearLayout>
@@ -48,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="95,289.41"
+            android:text="85,284.91"
             android:textColor="#191C20"
             android:textSize="24sp" />
     </LinearLayout>
@@ -63,8 +72,9 @@
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
+            android:contentDescription="TODO"
             android:src="@drawable/rounded_trending_up_24"
-            android:tint="#36618E"/>
+            app:tint="#36618E"/>
 
         <TextView
             android:layout_width="wrap_content"
