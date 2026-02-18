@@ -30,24 +30,20 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val debugModeEnabled: StateFlow<Boolean> = _debugModeEnabled.asStateFlow()
 
     private fun getSavedTheme(): AppTheme {
-        // default to SYSTEM if not set
         val themeName = prefs.getString(Prefs.SELECTED_THEME, AppTheme.SYSTEM.name)
         return AppTheme.valueOf(themeName ?: AppTheme.SYSTEM.name)
     }
 
     fun setTheme(newTheme: AppTheme) {
-        // update UI state immediately and then save to SharedPrefs
         _theme.value = newTheme
         prefs.edit { putString(Prefs.SELECTED_THEME, newTheme.name) }
     }
 
     private fun getDynamicColorsFlag(): Boolean {
-        // default to true if running on Android 12+
         return prefs.getBoolean(Prefs.DYNAMIC_COLORS, Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
     }
 
     fun updateDynamicColorsFlag(toggleValue: Boolean) {
-        // update UI state immediately and then save to SharedPrefs
         _dynamicColors.value = toggleValue
         prefs.edit { putBoolean(Prefs.DYNAMIC_COLORS, toggleValue) }
     }
@@ -59,7 +55,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun setRefreshInterval(index: Int) {
         _refreshInterval.value = index
         prefs.edit { putInt(Prefs.REFRESH_INTERVAL, index) }
-
         PriceUpdateWorker.enqueue(getApplication())
     }
 
@@ -70,6 +65,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun setChangePercentageInterval(index: Int) {
         _changePercentageInterval.value = index
         prefs.edit { putInt(Prefs.SELECTED_CHANGE_PERCENTAGE, index) }
+        
+        // update all widgets immediately using helper in PriceViewModel
+        PriceViewModel.refreshWidgetsFromCache(getApplication())
     }
 
     private fun getDebugModeEnabled(): Boolean {

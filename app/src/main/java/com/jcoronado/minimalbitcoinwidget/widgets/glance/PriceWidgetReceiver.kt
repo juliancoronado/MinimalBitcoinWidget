@@ -14,7 +14,7 @@ class PriceWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
-        Log.d("TestWidgetReceiver", "onEnabled called")
+        Log.d("PriceWidgetReceiver", "onEnabled called")
         PriceUpdateWorker.enqueue(context)
     }
 
@@ -24,7 +24,7 @@ class PriceWidgetReceiver : GlanceAppWidgetReceiver() {
         appWidgetIds: IntArray
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        Log.d("TestWidgetReceiver", "onUpdate called")
+        Log.d("PriceWidgetReceiver", "onUpdate called")
 
         PriceUpdateWorker.enqueue(context)
 
@@ -35,7 +35,7 @@ class PriceWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
-        Log.d("TestWidgetReceiver", "onDisabled called")
+        Log.d("PriceWidgetReceiver", "onDisabled called")
         PriceUpdateWorker.cancel(context)
     }
 }
