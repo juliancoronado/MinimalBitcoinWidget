@@ -3,8 +3,9 @@ package com.jcoronado.minimalbitcoinwidget.viewmodels
 import android.app.Application
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
-import android.content.Intent
+import android.content.Context
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.core.content.edit
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
@@ -14,6 +15,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
@@ -22,8 +24,9 @@ import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
-import com.jcoronado.minimalbitcoinwidget.widgets.legacy.LegacyPriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.legacy.getCurrencyInfo
+import com.jcoronado.minimalbitcoinwidget.widgets.legacy.setWidgetViews
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -219,54 +222,100 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Triggers a manual update for all placed instances of both legacy and Glance widgets.
      */
-    private fun redrawWidgets() {
-        val context = getApplication<Application>()
+    fun redrawWidgets() {
+        refreshWidgetsFromCache(getApplication())
+    }
 
-        // update glance widgets using PriceWidgetStateDefinition
-        viewModelScope.launch {
+    companion object {
+        const val LEGACY_WIDGET_WRAPPER_CLASS = "com.jcoronado.minimalbitcoinwidget.PriceWidget"
+
+        /**
+         * Re-reads the cached price data and updates all widget instances (Glance and Legacy).
+         * This is useful for UI-only updates when settings like currency or interval change.
+         */
+        fun refreshWidgetsFromCache(context: Context) {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null) ?: return
+            val gson = Gson()
+            
             try {
-                val manager = GlanceAppWidgetManager(context)
-                val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
-
-                Log.d(LOG_TAG, "Updating ${glanceIds.size} widgets: $glanceIds")
-
-                val currentTime = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
+                val priceData = gson.fromJson(cachedDataJson, PriceData::class.java)
+                val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT) ?: AppConstants.CURRENCY_DEFAULT
                 
+                // define glance widget state
                 val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                val percentage = when (selectedInterval) {
+                    0 -> priceData.priceChangePercentage24h
+                    1 -> priceData.priceChangePercentage7d
+                    2 -> priceData.priceChangePercentage30d
+                    else -> priceData.priceChangePercentage24h
+                }
                 val intervalLabel = when (selectedInterval) {
                     0 -> "24H"
                     1 -> "7D"
                     2 -> "30D"
                     else -> "24H"
                 }
-
-                glanceIds.forEach { glanceId ->
-                    updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
-                        PriceWidgetState.Available(
-                            price = _uiState.value.price,
-                            changePercentage = _uiState.value.percentageChange,
-                            intervalLabel = intervalLabel,
-                            currency = _uiState.value.selectedCurrency,
-                            symbol = getCurrencyInfo(_uiState.value.selectedCurrency).symbol,
-                            lastUpdated = currentTime,
-                            debug = AppConstants.WIDGET_DEBUG_MODE
-                        )
-                    }
+                
+                val currentTime = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
+                
+                val glanceState = PriceWidgetState.Available(
+                    price = priceData.currentPrice,
+                    changePercentage = percentage,
+                    intervalLabel = intervalLabel,
+                    currency = currencyCode,
+                    symbol = getCurrencyInfo(currencyCode).symbol,
+                    lastUpdated = currentTime,
+                    debug = AppConstants.WIDGET_DEBUG_MODE
+                )
+                
+                // update glance widgets
+                CoroutineScope(Dispatchers.IO).launch {
+                    updateGlanceWidgets(context, glanceState)
                 }
-                PriceWidget().updateAll(context)
+                
+                // update legacy widgets
+                updateLegacyWidgets(context, priceData)
+                
             } catch (e: Exception) {
-                Log.e(LOG_TAG, "Failed to update Glance widgets: $e")
+                Log.e(LOG_TAG, "Failed to refresh widgets from cache: $e")
             }
         }
 
-        // Update Legacy Widgets (PriceWidget)
-        val intent = Intent(context, LegacyPriceWidget::class.java).apply {
-            action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-            val ids = AppWidgetManager.getInstance(context).getAppWidgetIds(
-                ComponentName(context, LegacyPriceWidget::class.java)
-            )
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        /**
+         * Updates all Glance widgets with the given state.
+         */
+        suspend fun updateGlanceWidgets(context: Context, state: PriceWidgetState) {
+            val manager = GlanceAppWidgetManager(context)
+            val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
+            glanceIds.forEach { glanceId ->
+                updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
+                    state
+                }
+            }
+            PriceWidget().updateAll(context)
         }
-        context.sendBroadcast(intent)
+
+        /**
+         * Updates all legacy widgets with the given price data.
+         */
+        fun updateLegacyWidgets(context: Context, priceData: PriceData) {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val componentName = ComponentName(context, LEGACY_WIDGET_WRAPPER_CLASS)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+
+            if (appWidgetIds.isEmpty()) return
+
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT) ?: AppConstants.CURRENCY_DEFAULT
+            val currencyInfo = getCurrencyInfo(currencyCode)
+
+            val views = RemoteViews(context.packageName, R.layout.legacy_price_widget)
+            setWidgetViews(context, views, priceData, currencyInfo, loading = false)
+
+            appWidgetIds.forEach { appWidgetId ->
+                appWidgetManager.updateAppWidget(appWidgetId, views)
+            }
+        }
     }
 }

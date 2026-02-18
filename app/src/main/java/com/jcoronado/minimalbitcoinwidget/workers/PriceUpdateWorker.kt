@@ -1,12 +1,12 @@
 package com.jcoronado.minimalbitcoinwidget.workers
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.getAppWidgetState
-import androidx.glance.appwidget.state.updateAppWidgetState
-import androidx.glance.appwidget.updateAll
 import androidx.preference.PreferenceManager
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -25,18 +25,16 @@ import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
+import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
-import com.jcoronado.minimalbitcoinwidget.widgets.legacy.getCurrencyInfo
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
-import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 private const val LOG_TAG = "PriceUpdateWorker"
@@ -77,44 +75,14 @@ class PriceUpdateWorker(
                 if (dataList.isNotEmpty()) {
                     val priceData = dataList[0]
                     
-                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
-                    val percentage = when (selectedInterval) {
-                        0 -> priceData.priceChangePercentage24h
-                        1 -> priceData.priceChangePercentage7d
-                        2 -> priceData.priceChangePercentage30d
-                        else -> priceData.priceChangePercentage24h
-                    }
-
-                    val intervalLabel = when (selectedInterval) {
-                        0 -> "24H"
-                        1 -> "7D"
-                        2 -> "30D"
-                        else -> "24H"
-                    }
-
-                    val symbol = getCurrencyInfo(currencyCode).symbol
-
-                    val currentTime =
-                        SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
-
-                    val newState = PriceWidgetState.Available(
-                        price = priceData.currentPrice,
-                        changePercentage = percentage,
-                        intervalLabel = intervalLabel,
-                        currency = currencyCode,
-                        symbol = symbol,
-                        lastUpdated = currentTime,
-                        debug = AppConstants.WIDGET_DEBUG_MODE
-                    )
-
                     // update shared prefs cache for the MainActivity display
                     prefs.edit {
                         putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
                         putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))
                     }
 
-                    // update widgets
-                    updateWidgets(newState)
+                    // update widgets using the helper in PriceViewModel
+                    PriceViewModel.refreshWidgetsFromCache(context)
 
                     dao.insert(DebugLog(message = "Worker Success: Data fetched"))
 
@@ -123,20 +91,16 @@ class PriceUpdateWorker(
                     Result.retry()
                 }
             } else if (response.code == 429) {
-                // rate limit error - retry with backoff
                 Result.retry()
             } else {
-                // other error - display error state
                 throw Exception("Server error: ${response.code}")
             }
         } catch (e: IOException) {
             dao.insert(DebugLog(message = "Worker Failed (Network Error): ${e.localizedMessage}"))
-            // network timeout or no connection - retry with backoff
             Log.e(LOG_TAG, "Network error", e)
             return@withContext handleError(e)
         } catch (e: Exception) {
             dao.insert(DebugLog(message = "Worker Failed (Other Error): ${e.localizedMessage}"))
-            // other error
             Log.e(LOG_TAG, "Fatal error", e)
             return@withContext handleError(e)
         }
@@ -156,20 +120,9 @@ class PriceUpdateWorker(
             }
         }
 
-        updateWidgets(PriceWidgetState.Error(e.message ?: "Unknown Error" ,  lastValid))
+        // update glance widgets to error state
+        PriceViewModel.updateGlanceWidgets(context, PriceWidgetState.Error(e.message ?: "Unknown Error", lastValid))
         return Result.retry()
-    }
-    private suspend fun updateWidgets(state: PriceWidgetState) {
-        val manager = GlanceAppWidgetManager(context)
-        val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
-        glanceIds.forEach { glanceId ->
-            updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
-                state
-            }
-        }
-        Log.d(LOG_TAG, "Updating widgets using .updateAll()")
-        // notify widgets to redraw
-        PriceWidget().updateAll(context)
     }
 
     companion object {
@@ -187,18 +140,12 @@ class PriceUpdateWorker(
                 }
             }
 
-            Log.d(LOG_TAG, "Enqueuing work with interval: $minutesToUse minutes")
-
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
             val request = PeriodicWorkRequestBuilder<PriceUpdateWorker>(minutesToUse, TimeUnit.MINUTES)
-                .setBackoffCriteria(
-                    BackoffPolicy.EXPONENTIAL,
-                    WorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS
-                )
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
                 .setConstraints(constraints)
                 .build()
 
@@ -210,7 +157,18 @@ class PriceUpdateWorker(
         }
 
         fun cancel(context: Context) {
-            WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+            CoroutineScope(Dispatchers.IO).launch {
+                val glanceManager = GlanceAppWidgetManager(context)
+                val glanceIds = glanceManager.getGlanceIds(PriceWidget::class.java)
+
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val legacyIds = appWidgetManager.getAppWidgetIds(ComponentName(context, PriceViewModel.LEGACY_WIDGET_WRAPPER_CLASS))
+
+                if (glanceIds.isEmpty() && legacyIds.isEmpty()) {
+                    Log.d(LOG_TAG, "No widgets left. Cancelling work.")
+                    WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+                }
+            }
         }
     }
 }
