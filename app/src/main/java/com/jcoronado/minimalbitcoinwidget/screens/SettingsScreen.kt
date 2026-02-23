@@ -171,7 +171,8 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_currency_exchange_24), "TBD"
+                            painterResource(R.drawable.rounded_currency_exchange_24),
+                            stringResource(R.string.update_currency_icon_description)
                         )
                     },
                     content = {
@@ -200,7 +201,8 @@ fun SettingsScreen(
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_percent_24), null
+                                painterResource(R.drawable.rounded_percent_24),
+                                stringResource(R.string.change_percentage_icon_description)
                             )
                         },
                         content = {
@@ -246,7 +248,8 @@ fun SettingsScreen(
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_timer_24), null
+                                painterResource(R.drawable.rounded_timer_24),
+                                stringResource(R.string.widget_refresh_interval_icon_description)
                             )
                         },
                         content = {
@@ -293,7 +296,8 @@ fun SettingsScreen(
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_brightness_6_24), null
+                                painterResource(R.drawable.rounded_brightness_6_24),
+                                stringResource(R.string.app_theme_icon_description)
                             )
                         },
                         content = {
@@ -347,7 +351,8 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_palette_24), null
+                            painterResource(R.drawable.rounded_palette_24),
+                            stringResource(R.string.dynamic_colors_icon_description)
                         )
                     },
                     enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
@@ -380,14 +385,21 @@ fun SettingsScreen(
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_info_24), "TBD"
+                                painterResource(R.drawable.rounded_info_24),
+                                stringResource(R.string.info_icon_description)
                             )
                         },
                         content = {
                             Text(stringResource(R.string.version), fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
-                            Text(stringResource(R.string.version_format, BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE))
+                            Text(
+                                stringResource(
+                                    R.string.version_format,
+                                    BuildConfig.VERSION_NAME,
+                                    BuildConfig.BUILD_TYPE
+                                )
+                            )
                         },
                         onClick = {}, // this method is intentionally left empty
                     )
@@ -402,18 +414,18 @@ fun SettingsScreen(
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_build_24), "TBD"
+                                painterResource(R.drawable.rounded_build_24),
+                                stringResource(R.string.build_icon_description)
                             )
                         },
                         content = {
                             Text(
-                                stringResource(R.string.build_number),
-                                fontWeight = FontWeight.Bold
+                                stringResource(R.string.build_number), fontWeight = FontWeight.Bold
                             )
                         },
                         supportingContent = {
                             Text(
-                                "${BuildConfig.VERSION_CODE}"
+                                BuildConfig.VERSION_CODE.toString()
                             )
                         },
                         onClick = {
@@ -422,16 +434,12 @@ fun SettingsScreen(
                                 if (tapCount >= 10) {
                                     onDebugModeToggle(true)
                                     Toast.makeText(
-                                        context,
-                                        enabledMessage,
-                                        Toast.LENGTH_SHORT
+                                        context, enabledMessage, Toast.LENGTH_SHORT
                                     ).show()
                                     tapCount = 0
                                 } else if (tapCount > 5) {
                                     Toast.makeText(
-                                        context,
-                                        stepsMessage,
-                                        Toast.LENGTH_SHORT
+                                        context, stepsMessage, Toast.LENGTH_SHORT
                                     ).show()
                                 }
                             }
@@ -445,7 +453,8 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_alternate_email_24), null
+                            painterResource(R.drawable.rounded_alternate_email_24),
+                            stringResource(R.string.contact_icon_description)
                         )
                     },
                     content = {
@@ -466,7 +475,8 @@ fun SettingsScreen(
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_bug_report_24), null
+                                painterResource(R.drawable.rounded_bug_report_24),
+                                stringResource(R.string.debug_icon_description)
                             )
                         },
                         content = {
@@ -477,8 +487,7 @@ fun SettingsScreen(
                         },
                         trailingContent = {
                             Switch(
-                                checked = debugModeEnabled,
-                                onCheckedChange = null
+                                checked = debugModeEnabled, onCheckedChange = null
                             )
                         },
                         onClick = {

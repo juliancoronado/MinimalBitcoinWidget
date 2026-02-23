@@ -115,6 +115,17 @@
     <string name="debug_enabled">Debug mode enabled!</string>
     <string name="developer_steps">You are now %1$d steps away from being a developer!</string>
 
+    <!-- Accessibility Descriptions -->
+    <string name="update_currency_icon_description">Currency icon</string>
+    <string name="change_percentage_icon_description">Percent icon</string>
+    <string name="widget_refresh_interval_icon_description">Timer icon</string>
+    <string name="app_theme_icon_description">Theme icon</string>
+    <string name="dynamic_colors_icon_description">Dynamic Colors icon</string>
+    <string name="info_icon_description">Info icon</string>
+    <string name="build_icon_description">Build icon</string>
+    <string name="contact_icon_description">Contact icon</string>
+    <string name="debug_icon_description">Debug icon</string>
+
     <!-- Buttons / Actions -->
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
