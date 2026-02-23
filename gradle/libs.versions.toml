@@ -15,11 +15,11 @@ gson = "2.13.2"
 androidxComposeBom = "2026.01.00"
 activityCompose = "1.12.2"
 lifecycleViewmodelCompose = "2.8.7"
-material3Expressive = "1.5.0-alpha12" # alpha
+material3Expressive = "1.5.0-alpha14" # alpha
 # glance
 glance = "1.1.1"
 # navigation3
-nav3Core = "1.0.0"
+nav3Core = "1.0.1"
 # serialization
 kotlinxSerialization = "1.7.3"
 # workmanager
