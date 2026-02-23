@@ -12,6 +12,9 @@
     <string name="settings">Settings</string>
     <string name="debug" translatable="false">Debug</string>
 
+    <!-- Main Screen -->
+    <string name="last_updated">Last Updated: %1$s</string>
+
     <!-- Legacy Price Widget -->
     <string name="bitcoin_title" translatable="false">Bitcoin /</string>
     <string name="loading_text" translatable="false">Loading…</string>
@@ -63,9 +66,14 @@
     <string name="build_icon_description">Build icon</string>
     <string name="contact_icon_description">Contact icon</string>
     <string name="debug_icon_description">Debug icon</string>
+    <string name="bitcoin_icon_description">Bitcoin icon</string>
+    <string name="trending_up_icon_description">Trending up icon</string>
+    <string name="trending_down_icon_description">Trending down icon</string>
+    <string name="trending_flat_icon_description">Trending flat icon</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
 
 </resources>

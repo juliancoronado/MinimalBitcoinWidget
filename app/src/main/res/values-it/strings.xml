@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Impostazioni</string>
+    <string name="last_updated">Ultimo aggiornamento: %1$s</string>
     <string name="data_header">Dati</string>
     <string name="appearance_header">Aspetto</string>
     <string name="app_info_header">Info App</string>
@@ -35,6 +36,11 @@
     <string name="build_icon_description">Icona build</string>
     <string name="contact_icon_description">Icona contatti</string>
     <string name="debug_icon_description">Icona debug</string>
+    <string name="bitcoin_icon_description">Icona Bitcoin</string>
+    <string name="trending_up_icon_description">Icona tendenza in rialzo</string>
+    <string name="trending_down_icon_description">Icona tendenza in ribasso</string>
+    <string name="trending_flat_icon_description">Icona tendenza stabile</string>
     <string name="save">Salva</string>
     <string name="cancel">Annulla</string>
+    <string name="clear">Cancella</string>
 </resources>

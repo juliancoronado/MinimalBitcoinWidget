@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Paramètres</string>
+    <string name="last_updated">Dernière mise à jour : %1$s</string>
     <string name="data_header">Données</string>
     <string name="appearance_header">Apparence</string>
     <string name="app_info_header">Infos sur l\'appli</string>
@@ -35,6 +36,11 @@
     <string name="build_icon_description">Icône de build</string>
     <string name="contact_icon_description">Icône de contact</string>
     <string name="debug_icon_description">Icône de débogage</string>
+    <string name="bitcoin_icon_description">Icône Bitcoin</string>
+    <string name="trending_up_icon_description">Icône tendance hausse</string>
+    <string name="trending_down_icon_description">Icône tendance baisse</string>
+    <string name="trending_flat_icon_description">Icône tendance stable</string>
     <string name="save">Enregistrer</string>
     <string name="cancel">Annuler</string>
+    <string name="clear">Effacer</string>
 </resources>
