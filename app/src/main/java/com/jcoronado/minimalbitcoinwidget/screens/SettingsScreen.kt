@@ -87,8 +87,7 @@ fun SettingsScreen(
         AlertDialog(
             modifier = Modifier.heightIn(min = 200.dp, max = 400.dp),
             onDismissRequest = { showCurrencyDialog.value = false },
-            // TODO - replace with string resource value
-            title = { Text("Update Currency") },
+            title = { Text(stringResource(R.string.update_currency)) },
             text = {
                 Column(Modifier.fillMaxWidth()) {
                     Column(
@@ -129,14 +128,12 @@ fun SettingsScreen(
                     showCurrencyDialog.value = false
                     onCurrencySelected(newSelection)
                 }) {
-                    // TODO - replace with string resource value
-                    Text("Save")
+                    Text(stringResource(R.string.save))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showCurrencyDialog.value = false }) {
-                    // TODO - replace with string resource value
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             })
     }
@@ -166,8 +163,7 @@ fun SettingsScreen(
             val colors =
                 ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
             Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
-                // TODO - replace hard-coded strings with string resources in SectionHeaders
-                SectionHeader("Data", true)
+                SectionHeader(stringResource(R.string.data_header), true)
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
@@ -179,14 +175,14 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        // TODO - replace with string resource value
-                        Text("Update Currency", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.update_currency), fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         val index = currencyCodes.indexOf(selectedCurrency)
                         if (index != -1) {
                             Text(
-                                "${currencyDescriptions[index]} (${currencyCodes[index].uppercase()})", modifier = Modifier.padding(top = 4.dp)
+                                "${currencyDescriptions[index]} (${currencyCodes[index].uppercase()})",
+                                modifier = Modifier.padding(top = 4.dp)
                             )
                         }
                     },
@@ -208,10 +204,17 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            // TODO - convert to translated string resource
-                            Text("Change Percentage", fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.change_percentage),
+                                fontWeight = FontWeight.Bold
+                            )
                         },
                         supportingContent = {
+                            val changePercentageOptions = arrayOf(
+                                stringResource(R.string.cp_interval1),
+                                stringResource(R.string.cp_interval2),
+                                stringResource(R.string.cp_interval3)
+                            )
                             ButtonGroup(
                                 overflowIndicator = { },
                                 modifier = Modifier.padding(top = 8.dp),
@@ -219,10 +222,7 @@ fun SettingsScreen(
                                 horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                                 verticalAlignment = Alignment.Top,
                                 content = {
-                                    // TODO - convert to translated string resources
-                                    arrayOf(
-                                        "24 hours", "7 days", "30 days"
-                                    ).forEachIndexed { index, value ->
+                                    changePercentageOptions.forEachIndexed { index, value ->
                                         this.toggleableItem(
                                             checked = changePercentage == index,
                                             label = value,
@@ -250,9 +250,17 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text("Widget Refresh Interval", fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.widget_refresh_interval),
+                                fontWeight = FontWeight.Bold
+                            )
                         },
                         supportingContent = {
+                            val intervalOptions = arrayOf(
+                                stringResource(R.string.wr_interval1),
+                                stringResource(R.string.wr_interval2),
+                                stringResource(R.string.wr_interval3)
+                            )
                             ButtonGroup(
                                 overflowIndicator = { },
                                 modifier = Modifier.padding(top = 8.dp),
@@ -260,10 +268,7 @@ fun SettingsScreen(
                                 horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                                 verticalAlignment = Alignment.Top,
                                 content = {
-                                    // TODO - convert these into translated string resources
-                                    arrayOf(
-                                        "1 hour", "4 hours", "8 hours"
-                                    ).forEachIndexed { index, value ->
+                                    intervalOptions.forEachIndexed { index, value ->
                                         this.toggleableItem(
                                             checked = refreshInterval == index,
                                             label = value,
@@ -279,7 +284,7 @@ fun SettingsScreen(
                         onClick = {}, // this method is intentionally left empty
                     )
                 }
-                SectionHeader("Appearance")
+                SectionHeader(stringResource(R.string.appearance_header))
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     SegmentedListItem(
                         colors = colors,
@@ -292,10 +297,12 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            // TODO - replace with string resource value
-                            Text("App Theme", fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.app_theme), fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
+                            val systemThemeLabel = stringResource(R.string.app_theme_system)
+                            val lightThemeLabel = stringResource(R.string.app_theme_light)
+                            val darkThemeLabel = stringResource(R.string.app_theme_dark)
                             ButtonGroup(
                                 overflowIndicator = { },
                                 modifier = Modifier.padding(top = 8.dp),
@@ -305,8 +312,7 @@ fun SettingsScreen(
                                 content = {
                                     this.toggleableItem(
                                         checked = currentTheme == AppTheme.SYSTEM,
-                                        // TODO - replace with string resource value
-                                        label = "System",
+                                        label = systemThemeLabel,
                                         weight = if (currentTheme == AppTheme.SYSTEM) 1F else 0.9F,
                                         onCheckedChange = {
                                             onThemeSelected(AppTheme.SYSTEM)
@@ -314,8 +320,7 @@ fun SettingsScreen(
                                     )
                                     this.toggleableItem(
                                         checked = currentTheme == AppTheme.LIGHT,
-                                        // TODO - replace with string resource value
-                                        label = "Light",
+                                        label = lightThemeLabel,
                                         weight = if (currentTheme == AppTheme.LIGHT) 1F else 0.9F,
                                         onCheckedChange = {
                                             onThemeSelected(AppTheme.LIGHT)
@@ -323,8 +328,7 @@ fun SettingsScreen(
                                     )
                                     this.toggleableItem(
                                         checked = currentTheme == AppTheme.DARK,
-                                        // TODO - replace with string resource value
-                                        label = "Dark",
+                                        label = darkThemeLabel,
                                         weight = if (currentTheme == AppTheme.DARK) 1F else 0.9F,
                                         onCheckedChange = {
                                             onThemeSelected(AppTheme.DARK)
@@ -348,13 +352,11 @@ fun SettingsScreen(
                     },
                     enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                     content = {
-                        // TODO - replace with string resource value
-                        Text("Dynamic Colors", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.dynamic_colors), fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
                         Text(
-                            // TODO - replace with string resource value
-                            "Follow colors from your device theme",
+                            stringResource(R.string.dynamic_colors_subtitle),
                             modifier = Modifier.padding(top = 4.dp)
                         )
                     },
@@ -369,7 +371,7 @@ fun SettingsScreen(
                         onDynamicColorsSelected(!dynamicColors)
                     },
                 )
-                SectionHeader("App Info")
+                SectionHeader(stringResource(R.string.app_info_header))
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     SegmentedListItem(
                         colors = colors,
@@ -382,18 +384,17 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            // TODO - replace with string resource value
-                            Text("Version", fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.version), fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
-                            Text(
-                                "${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE})"
-                            )
+                            Text(stringResource(R.string.version_format, BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE))
                         },
                         onClick = {}, // this method is intentionally left empty
                     )
                 }
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                    val enabledMessage = stringResource(R.string.debug_enabled)
+                    val stepsMessage = stringResource(R.string.developer_steps, 10 - tapCount)
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
@@ -405,8 +406,10 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            // TODO - replace with string resource value
-                            Text("Build Number", fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.build_number),
+                                fontWeight = FontWeight.Bold
+                            )
                         },
                         supportingContent = {
                             Text(
@@ -420,14 +423,14 @@ fun SettingsScreen(
                                     onDebugModeToggle(true)
                                     Toast.makeText(
                                         context,
-                                        "Debug mode enabled!",
+                                        enabledMessage,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     tapCount = 0
                                 } else if (tapCount > 5) {
                                     Toast.makeText(
                                         context,
-                                        "You are now ${10 - tapCount} steps away from being a developer!",
+                                        stepsMessage,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -446,14 +449,13 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        // TODO - replace with string resource value
-                        Text("Contact", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.contact), fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
-                        Text("jcoronado.dev")
+                        Text(stringResource(R.string.developer))
                     },
                     onClick = {
-                        // TODO - implement this to open an email client / browser
+                        // TODO - open an email client / browser when tapped
                     },
                 )
                 if (debugModeEnabled) {
@@ -468,10 +470,10 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text("Debug Mode", fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.debug_mode), fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
-                            Text("Disable debug features")
+                            Text(stringResource(R.string.debug_mode_subtitle))
                         },
                         trailingContent = {
                             Switch(

@@ -81,6 +81,43 @@
     <string name="release_notes_title">Release Notes</string>
     <string name="release_notes_date">(December 2025)</string>
     <string name="release_notes_summary">- Store price data locally between refreshes\n- Use simpler Coingecko endpoint\n- Display a circular loading indicator on the home screen widget</string>
+
+    <!-- Setting Section Headers -->
+    <string name="data_header">Data</string>
+    <string name="appearance_header">Appearance</string>
+    <string name="app_info_header">App Info</string>
+
+    <!-- SettingsScreen ListItems -->
+    <string name="change_percentage">Change Percentage</string>
+    <string name="cp_interval1">24 hours</string>
+    <string name="cp_interval2">7 days</string>
+    <string name="cp_interval3">30 days</string>
+    <string name="widget_refresh_interval">Widget Refresh Interval</string>
+    <string name="wr_interval1">1 hour</string>
+    <string name="wr_interval2">4 hours</string>
+    <string name="wr_interval3">8 hours</string>
+    <string name="update_currency">Update Currency</string>
+    <string name="app_theme">App Theme</string>
+    <string name="app_theme_system">System</string>
+    <string name="app_theme_light">Light</string>
+    <string name="app_theme_dark">Dark</string>
+    <string name="dynamic_colors">Dynamic Colors</string>
+    <string name="dynamic_colors_subtitle">Follow colors from your device theme</string>
+    <string name="version">Version</string>
+    <string name="version_format" translatable="false">%1$s (%2$s)</string>
+    <string name="build_number">Build Number</string>
+    <string name="contact">Contact</string>
+    <string name="developer" translatable="false">jcoronado.dev</string>
+    <string name="debug_mode">Debug Mode</string>
+    <string name="debug_mode_subtitle">Disable debug features</string>
+
+    <!-- Debug -->
+    <string name="debug_enabled">Debug mode enabled!</string>
+    <string name="developer_steps">You are now %1$d steps away from being a developer!</string>
+
+    <!-- Buttons / Actions -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
     <string name="close">Close</string>
 
 </resources>
