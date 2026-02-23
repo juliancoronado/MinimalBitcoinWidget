@@ -1,4 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Ayarlar</string>
+    <string name="data_header">Veri</string>
+    <string name="appearance_header">Görünüm</string>
+    <string name="app_info_header">Uygulama Bilgisi</string>
+    <string name="change_percentage">Değişim Yüzdesi</string>
+    <string name="cp_interval1">24 saat</string>
+    <string name="cp_interval2">7 gün</string>
+    <string name="cp_interval3">30 gün</string>
+    <string name="widget_refresh_interval">Widget Yenileme Aralığı</string>
+    <string name="wr_interval1">1 saat</string>
+    <string name="wr_interval2">4 saat</string>
+    <string name="wr_interval3">8 saat</string>
+    <string name="update_currency">Para Birimini Güncelle</string>
+    <string name="app_theme">Uygulama Teması</string>
+    <string name="app_theme_system">Sistem</string>
+    <string name="app_theme_light">Açık</string>
+    <string name="app_theme_dark">Koyu</string>
+    <string name="dynamic_colors">Dinamik Renkler</string>
+    <string name="dynamic_colors_subtitle">Cihaz temasındaki renkleri kullan</string>
+    <string name="version">Sürüm</string>
+    <string name="build_number">Yapı Numarası</string>
+    <string name="contact">İletişim</string>
+    <string name="debug_mode">Hata Ayıklama Modu</string>
+    <string name="debug_mode_subtitle">Hata ayıklama özelliklerini devre dışı bırak</string>
+    <string name="debug_enabled">Hata ayıklama modu etkin!</string>
+    <string name="developer_steps">Geliştirici olmanıza %1$d adım kaldı!</string>
+    <string name="update_currency_icon_description">Para birimi simgesi</string>
+    <string name="change_percentage_icon_description">Yüzde simgesi</string>
+    <string name="widget_refresh_interval_icon_description">Zamanlayıcı simgesi</string>
+    <string name="app_theme_icon_description">Tema simgesi</string>
+    <string name="dynamic_colors_icon_description">Dinamik Renkler simgesi</string>
+    <string name="info_icon_description">Bilgi simgesi</string>
+    <string name="build_icon_description">Yapı simgesi</string>
+    <string name="contact_icon_description">İletişim simgesi</string>
+    <string name="debug_icon_description">Hata ayıklama simgesi</string>
+    <string name="save">Kaydet</string>
+    <string name="cancel">İptal</string>
 </resources>

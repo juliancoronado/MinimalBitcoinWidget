@@ -1,4 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Einstellungen</string>
+    <string name="data_header">Daten</string>
+    <string name="appearance_header">Aussehen</string>
+    <string name="app_info_header">App-Info</string>
+    <string name="change_percentage">Änderungsprozentsatz</string>
+    <string name="cp_interval1">24 Stunden</string>
+    <string name="cp_interval2">7 Tage</string>
+    <string name="cp_interval3">30 Tage</string>
+    <string name="widget_refresh_interval">Widget-Aktualisierungsintervall</string>
+    <string name="wr_interval1">1 Stunde</string>
+    <string name="wr_interval2">4 Stunden</string>
+    <string name="wr_interval3">8 Stunden</string>
+    <string name="update_currency">Währung aktualisieren</string>
+    <string name="app_theme">App-Design</string>
+    <string name="app_theme_system">System</string>
+    <string name="app_theme_light">Hell</string>
+    <string name="app_theme_dark">Dunkel</string>
+    <string name="dynamic_colors">Dynamische Farben</string>
+    <string name="dynamic_colors_subtitle">Farben vom Gerätedesign übernehmen</string>
+    <string name="version">Version</string>
+    <string name="build_number">Build-Nummer</string>
+    <string name="contact">Kontakt</string>
+    <string name="debug_mode">Debug-Modus</string>
+    <string name="debug_mode_subtitle">Debug-Funktionen deaktivieren</string>
+    <string name="debug_enabled">Debug-Modus aktiviert!</string>
+    <string name="developer_steps">Sie sind noch %1$d Schritte davon entfernt, ein Entwickler zu sein!</string>
+    <string name="update_currency_icon_description">Währungssymbol</string>
+    <string name="change_percentage_icon_description">Prozentsymbol</string>
+    <string name="widget_refresh_interval_icon_description">Timer-Symbol</string>
+    <string name="app_theme_icon_description">Design-Symbol</string>
+    <string name="dynamic_colors_icon_description">Symbol für dynamische Farben</string>
+    <string name="info_icon_description">Info-Symbol</string>
+    <string name="build_icon_description">Build-Symbol</string>
+    <string name="contact_icon_description">Kontakt-Symbol</string>
+    <string name="debug_icon_description">Debug-Symbol</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
 </resources>

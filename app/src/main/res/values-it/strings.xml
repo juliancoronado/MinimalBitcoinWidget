@@ -1,4 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Impostazioni</string>
+    <string name="data_header">Dati</string>
+    <string name="appearance_header">Aspetto</string>
+    <string name="app_info_header">Info App</string>
+    <string name="change_percentage">Percentuale di variazione</string>
+    <string name="cp_interval1">24 ore</string>
+    <string name="cp_interval2">7 giorni</string>
+    <string name="cp_interval3">30 giorni</string>
+    <string name="widget_refresh_interval">Intervallo aggiornamento widget</string>
+    <string name="wr_interval1">1 ora</string>
+    <string name="wr_interval2">4 ore</string>
+    <string name="wr_interval3">8 ore</string>
+    <string name="update_currency">Aggiorna valuta</string>
+    <string name="app_theme">Tema App</string>
+    <string name="app_theme_system">Sistema</string>
+    <string name="app_theme_light">Chiaro</string>
+    <string name="app_theme_dark">Scuro</string>
+    <string name="dynamic_colors">Colori dinamici</string>
+    <string name="dynamic_colors_subtitle">Segui i colori del tema del tuo dispositivo</string>
+    <string name="version">Versione</string>
+    <string name="build_number">Numero build</string>
+    <string name="contact">Contatti</string>
+    <string name="debug_mode">Modalità debug</string>
+    <string name="debug_mode_subtitle">Disabilita funzioni di debug</string>
+    <string name="debug_enabled">Modalità debug abilitata!</string>
+    <string name="developer_steps">Sei a %1$d passi dall\'essere uno sviluppatore!</string>
+    <string name="update_currency_icon_description">Icona valuta</string>
+    <string name="change_percentage_icon_description">Icona percentuale</string>
+    <string name="widget_refresh_interval_icon_description">Icona timer</string>
+    <string name="app_theme_icon_description">Icona tema</string>
+    <string name="dynamic_colors_icon_description">Icona colori dinamici</string>
+    <string name="info_icon_description">Icona info</string>
+    <string name="build_icon_description">Icona build</string>
+    <string name="contact_icon_description">Icona contatti</string>
+    <string name="debug_icon_description">Icona debug</string>
+    <string name="save">Salva</string>
+    <string name="cancel">Annulla</string>
 </resources>

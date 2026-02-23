@@ -1,4 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Ajustes</string>
+    <string name="data_header">Datos</string>
+    <string name="appearance_header">Apariencia</string>
+    <string name="app_info_header">Info de la App</string>
+    <string name="change_percentage">Porcentaje de cambio</string>
+    <string name="cp_interval1">24 horas</string>
+    <string name="cp_interval2">7 días</string>
+    <string name="cp_interval3">30 días</string>
+    <string name="widget_refresh_interval">Intervalo de actualización del widget</string>
+    <string name="wr_interval1">1 hora</string>
+    <string name="wr_interval2">4 horas</string>
+    <string name="wr_interval3">8 horas</string>
+    <string name="update_currency">Actualizar moneda</string>
+    <string name="app_theme">Tema de la App</string>
+    <string name="app_theme_system">Sistema</string>
+    <string name="app_theme_light">Claro</string>
+    <string name="app_theme_dark">Oscuro</string>
+    <string name="dynamic_colors">Colores dinámicos</string>
+    <string name="dynamic_colors_subtitle">Usar colores del tema del dispositivo</string>
+    <string name="version">Versión</string>
+    <string name="build_number">Número de compilación</string>
+    <string name="contact">Contacto</string>
+    <string name="debug_mode">Modo de depuração</string>
+    <string name="debug_mode_subtitle">Desactivar funciones de depuración</string>
+    <string name="debug_enabled">¡Modo de depuración activado!</string>
+    <string name="developer_steps">¡Estás a %1$d pasos de ser desarrollador!</string>
+    <string name="update_currency_icon_description">Icono de moneda</string>
+    <string name="change_percentage_icon_description">Icono de porcentaje</string>
+    <string name="widget_refresh_interval_icon_description">Icono de temporizador</string>
+    <string name="app_theme_icon_description">Icono de tema</string>
+    <string name="dynamic_colors_icon_description">Icono de colores dinámicos</string>
+    <string name="info_icon_description">Icono de información</string>
+    <string name="build_icon_description">Icono de compilación</string>
+    <string name="contact_icon_description">Icono de contacto</string>
+    <string name="debug_icon_description">Icono de depuración</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
 </resources>
