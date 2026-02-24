@@ -43,4 +43,5 @@
     <string name="save">Kaydet</string>
     <string name="cancel">İptal</string>
     <string name="clear">Temizle</string>
+    <string name="error">Hata</string>
 </resources>

@@ -43,4 +43,5 @@
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
     <string name="clear">Borrar</string>
+    <string name="error">Error</string>
 </resources>

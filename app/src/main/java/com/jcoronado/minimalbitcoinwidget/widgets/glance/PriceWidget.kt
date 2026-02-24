@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.ColorFilter
@@ -77,7 +78,11 @@ class PriceWidget : GlanceAppWidget() {
 
                         is PriceWidgetState.Error -> {
                             if (state.lastValidState != null) {
-                                AvailableUI(state.lastValidState, GlanceModifier.defaultWeight(), error = true)
+                                AvailableUI(
+                                    state.lastValidState,
+                                    GlanceModifier.defaultWeight(),
+                                    error = true
+                                )
                             } else {
                                 ErrorUI(state)
                             }
@@ -93,7 +98,9 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun AvailableUI(state: PriceWidgetState.Available, modifier: GlanceModifier, error: Boolean = false) {
+    private fun AvailableUI(
+        state: PriceWidgetState.Available, modifier: GlanceModifier, error: Boolean = false
+    ) {
         Header(state.currency, state.intervalLabel)
         Spacer(modifier)
         PriceValue(state)
@@ -107,10 +114,9 @@ class PriceWidget : GlanceAppWidget() {
     @Composable
     private fun LastUpdated(state: PriceWidgetState.Available) {
         Text(
-            text = "Last Updated: ${state.lastUpdated}",
+            text = "${stringResource(R.string.last_updated)} ${state.lastUpdated}",
             style = TextStyle(
-                color = GlanceTheme.colors.primary,
-                fontSize = 10.sp
+                color = GlanceTheme.colors.primary, fontSize = 10.sp
             )
         )
     }
@@ -118,14 +124,13 @@ class PriceWidget : GlanceAppWidget() {
     @Composable
     private fun ErrorUI(state: PriceWidgetState.Error) {
         Text(
-            "Error:", style = TextStyle(
+            "${stringResource(R.string.error)}:", style = TextStyle(
                 fontSize = 12.sp
             )
         )
         Text(
             state.message, style = TextStyle(
-                color = GlanceTheme.colors.onSurface,
-                fontSize = 12.sp
+                color = GlanceTheme.colors.onSurface, fontSize = 12.sp
             )
         )
     }
@@ -137,26 +142,23 @@ class PriceWidget : GlanceAppWidget() {
         ) {
             Image(
                 provider = ImageProvider(R.drawable.rounded_currency_bitcoin_24),
-                contentDescription = "Bitcoin Icon",
+                contentDescription = stringResource(R.string.bitcoin_icon_description),
                 colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary),
                 modifier = GlanceModifier.size(14.dp)
             )
             Text(
                 "/ ${currency.uppercase()}", style = TextStyle(
-                    color = GlanceTheme.colors.secondary,
-                    fontSize = 12.sp
+                    color = GlanceTheme.colors.secondary, fontSize = 12.sp
                 )
             )
             Text(
                 "・", style = TextStyle(
-                    color = GlanceTheme.colors.secondary,
-                    fontSize = 12.sp
+                    color = GlanceTheme.colors.secondary, fontSize = 12.sp
                 )
             )
             Text(
                 intervalLabel, style = TextStyle(
-                    color = GlanceTheme.colors.secondary,
-                    fontSize = 12.sp
+                    color = GlanceTheme.colors.secondary, fontSize = 12.sp
                 )
             )
         }
@@ -178,15 +180,13 @@ class PriceWidget : GlanceAppWidget() {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = state.symbol, style = TextStyle(
-                    color = GlanceTheme.colors.onBackground,
-                    fontSize = 16.sp
+                    color = GlanceTheme.colors.onBackground, fontSize = 16.sp
                 )
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Text(
                 text = numberFormatter.format(state.price), style = TextStyle(
-                    color = GlanceTheme.colors.onSurface,
-                    fontSize = fontSize
+                    color = GlanceTheme.colors.onSurface, fontSize = fontSize
                 )
             )
         }
@@ -195,11 +195,23 @@ class PriceWidget : GlanceAppWidget() {
     @Composable
     private fun PriceChange(changePercentage: Double, error: Boolean) {
         val (iconRes, color, iconDesc) = if (changePercentage > 0) {
-            Triple(R.drawable.rounded_trending_up_24, GlanceTheme.colors.primary, "Trending up icon")
+            Triple(
+                R.drawable.rounded_trending_up_24,
+                GlanceTheme.colors.primary,
+                stringResource(R.string.trending_up_icon_description)
+            )
         } else if (changePercentage < 0) {
-            Triple(R.drawable.rounded_trending_down_24, GlanceTheme.colors.error, "Trending down icon")
+            Triple(
+                R.drawable.rounded_trending_down_24,
+                GlanceTheme.colors.error,
+                stringResource(R.string.trending_down_icon_description)
+            )
         } else {
-            Triple(R.drawable.rounded_trending_flat_24, GlanceTheme.colors.secondary, "Trending flat icon")
+            Triple(
+                R.drawable.rounded_trending_flat_24,
+                GlanceTheme.colors.secondary,
+                stringResource(R.string.trending_flat_icon_description)
+            )
         }
 
         val formatPattern = if (changePercentage > 0) "%+.2f%%" else "%.2f%%"
@@ -215,22 +227,16 @@ class PriceWidget : GlanceAppWidget() {
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Text(
-                text = String.format(formatPattern, changePercentage),
-                style = TextStyle(
-                    color = GlanceTheme.colors.secondary,
-                    fontSize = 12.sp
+                text = String.format(formatPattern, changePercentage), style = TextStyle(
+                    color = GlanceTheme.colors.secondary, fontSize = 12.sp
                 )
             )
             if (error) {
                 Spacer(modifier = GlanceModifier.width(4.dp))
                 Box(
-                    modifier = GlanceModifier
-                        .size(3.dp)
-                        .background(
+                    modifier = GlanceModifier.size(3.dp).background(
                             GlanceTheme.colors.error
-                        ).cornerRadius(32.dp),
-                    content = {}
-                )
+                        ).cornerRadius(32.dp), content = {})
             }
         }
     }
@@ -329,8 +335,7 @@ class PriceWidget : GlanceAppWidget() {
             lastUpdated = "12:34:56 PM"
         )
         val state = PriceWidgetState.Error(
-            lastValidState = lastValidState,
-            message = "Error Message"
+            lastValidState = lastValidState, message = "Error Message"
         )
         WidgetContent(state)
     }
@@ -343,8 +348,7 @@ class PriceWidget : GlanceAppWidget() {
         val lastValidState = null
         // no last valid state
         val state = PriceWidgetState.Error(
-            lastValidState = lastValidState,
-            message = "Price data could not be fetched"
+            lastValidState = lastValidState, message = "Price data could not be fetched"
         )
         WidgetContent(state)
     }
