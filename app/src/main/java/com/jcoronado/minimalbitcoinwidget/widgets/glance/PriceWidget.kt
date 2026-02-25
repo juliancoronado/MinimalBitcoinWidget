@@ -152,18 +152,30 @@ class PriceWidget : GlanceAppWidget() {
 
     @Composable
     private fun PriceValue(state: PriceWidgetState.Available) {
-        val fontSize = when {
+        val priceFontSize = when {
             state.price >= 1000000 -> 20.sp
             state.price >= 100000 -> 22.sp
             else -> 24.sp
         }
 
+        val formattedPrice = FormatUtils.formatPrice(state.price)
+        val symbol = FormatUtils.getCurrencySymbolFromCode(state.currency)
+
+        val symbolFontSize = when {
+            symbol.length > 2 -> 16.sp
+            else -> 18.sp
+        }
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = FormatUtils.formatPrice(
-                    price = state.price, selectedCurrency = state.currency
-                ), style = TextStyle(
-                    color = GlanceTheme.colors.onSurface, fontSize = fontSize
+                text = symbol, style = TextStyle(
+                    color = GlanceTheme.colors.onSurface, fontSize = symbolFontSize
+                )
+            )
+            Spacer(modifier = GlanceModifier.width(2.dp))
+            Text(
+                text = formattedPrice, style = TextStyle(
+                    color = GlanceTheme.colors.onSurface, fontSize = priceFontSize
                 )
             )
         }

@@ -1,14 +1,21 @@
 package com.jcoronado.minimalbitcoinwidget.utils
+
 import java.text.NumberFormat
 
 object FormatUtils {
-    fun formatPrice(price: Double, selectedCurrency: String): String {
-        val formatter = NumberFormat.getCurrencyInstance().apply {
+    fun formatPrice(price: Double): String {
+
+        val formatter = NumberFormat.getNumberInstance().apply {
             minimumFractionDigits = 2
             maximumFractionDigits = 2
-            currency = java.util.Currency.getInstance(selectedCurrency.uppercase())
         }
+
         return formatter.format(price)
+    }
+
+    fun getCurrencySymbolFromCode(currencyCode: String): String {
+        val currency = java.util.Currency.getInstance(currencyCode.uppercase())
+        return currency.symbol
     }
 
     fun formatChange(change: Double): String {

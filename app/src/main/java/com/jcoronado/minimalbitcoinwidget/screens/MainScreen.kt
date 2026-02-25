@@ -90,6 +90,8 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                val formattedPrice = FormatUtils.formatPrice(uiState.price)
+                val symbol = FormatUtils.getCurrencySymbolFromCode(uiState.selectedCurrency)
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -124,7 +126,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     )
                 }
                 Text(
-                    text = FormatUtils.formatPrice(uiState.price, uiState.selectedCurrency),
+                    text = "$symbol$formattedPrice",
                     style = MaterialTheme.typography.headlineMedium.copy(fontFamily = googleSansCodeFontFamily),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
