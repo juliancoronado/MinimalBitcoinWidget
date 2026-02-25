@@ -71,7 +71,8 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
-    val formattedTime = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(uiState.lastUpdated)
+    val formattedTime =
+        SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(uiState.lastUpdated)
     SegmentedListItem(
         modifier = Modifier.padding(horizontal = 12.dp),
         onClick = onRefresh,
@@ -79,8 +80,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
         shapes = ListItemDefaults.segmentedShapes(
             index = 0, count = 2
         )
-    )
-    {
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -97,7 +97,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.rounded_currency_bitcoin_24),
-                        contentDescription = "Bitcoin Icon",
+                        contentDescription = stringResource(R.string.bitcoin_icon_description),
                         tint = MaterialTheme.colorScheme.secondary
                     )
                     Spacer(modifier = Modifier.width(2.dp))
@@ -135,15 +135,15 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 ) {
                     if (uiState.percentageChange > 0) Icon(
                         painter = painterResource(id = R.drawable.rounded_trending_up_24),
-                        contentDescription = "Trending up icon",
+                        contentDescription = stringResource(R.string.trending_up_icon_description),
                         tint = MaterialTheme.colorScheme.primary
                     ) else if (uiState.percentageChange < 0) Icon(
                         painter = painterResource(id = R.drawable.rounded_trending_down_24),
-                        contentDescription = "Trending down icon",
+                        contentDescription = stringResource(R.string.trending_down_icon_description),
                         tint = MaterialTheme.colorScheme.error
                     ) else Icon(
                         painter = painterResource(id = R.drawable.rounded_trending_flat_24),
-                        contentDescription = "Trending flat icon",
+                        contentDescription = stringResource(R.string.trending_flat_icon_description),
                         tint = MaterialTheme.colorScheme.secondary
                     )
                     Text(
@@ -185,7 +185,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 index = 1, count = 2
             )
         ) {
-            Text("Last Updated: $formattedTime")
+            Text(stringResource(R.string.last_updated, formattedTime))
         }
     }
 
@@ -197,9 +197,7 @@ fun MainScreenPreview() {
     MainScreen(
         uiState = PriceUiState(
             price = 95234.12, percentageChange = 0.45, isLoading = false
-        ),
-        onRefresh = { }
-    )
+        ), onRefresh = { })
 }
 
 @Preview(showBackground = true)

@@ -97,7 +97,7 @@ dependencies {
     // serialization
     implementation(libs.kotlinx.serialization.json)
 
-    // workmanager
+    // work manager
     implementation(libs.androidx.work.runtime.ktx)
 
     // room / db

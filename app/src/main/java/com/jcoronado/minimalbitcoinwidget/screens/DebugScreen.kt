@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import com.jcoronado.minimalbitcoinwidget.R
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jcoronado.minimalbitcoinwidget.AppDatabase
@@ -60,7 +62,7 @@ fun DebugScreen() {
                         onClick = { scope.launch { db.debugDao().clearAll() } },
                         enabled = logs.isNotEmpty()
                     ) {
-                        Text("Clear")
+                        Text(stringResource(R.string.clear))
                     }
                 })
         },
