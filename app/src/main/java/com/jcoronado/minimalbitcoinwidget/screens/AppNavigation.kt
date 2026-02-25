@@ -87,9 +87,13 @@ fun AppNavigation() {
                 icon = R.drawable.rounded_dashboard_24,
                 label = R.string.dashboard
             ), NavItem(
-                route = Screen.Settings, R.drawable.rounded_settings_24, label = R.string.settings
+                route = Screen.Settings,
+                icon = R.drawable.rounded_settings_24,
+                label = R.string.settings
             ), if (debugModeEnabled) NavItem(
-                route = Screen.Debug, R.drawable.rounded_bug_report_24, label = R.string.debug
+                route = Screen.Debug,
+                icon = R.drawable.rounded_bug_report_24,
+                label = R.string.debug
             ) else null
         )
     }
@@ -149,8 +153,7 @@ fun AppNavigation() {
                         debugModeEnabled = debugModeEnabled,
                         onDebugModeToggle = { enabled ->
                             settingsViewModel.setDebugModeEnabled(enabled)
-                        }
-                    )
+                        })
                 }
                 entry<Screen.Debug> {
                     DebugScreen()
@@ -217,7 +220,8 @@ fun AppNavigation() {
                                         text = stringResource(item.label),
                                         fontSize = 16.sp,
                                         lineHeight = 24.sp,
-                                        maxLines = 1, softWrap = false,
+                                        maxLines = 1,
+                                        softWrap = false,
                                         overflow = TextOverflow.Clip,
                                         modifier = Modifier.padding(start = ButtonDefaults.IconSpacing)
                                     )
