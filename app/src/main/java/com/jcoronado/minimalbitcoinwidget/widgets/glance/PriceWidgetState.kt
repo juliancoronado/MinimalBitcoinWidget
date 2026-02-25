@@ -12,10 +12,7 @@ sealed class PriceWidgetState {
         val price: Double,
         val changePercentage: Double,
         val intervalLabel: String,
-        val currency: String,
-        val symbol: String,
-        val lastUpdated: String = "",
-        val debug : Boolean = false
+        val currency: String
     ) : PriceWidgetState()
 
     @Serializable

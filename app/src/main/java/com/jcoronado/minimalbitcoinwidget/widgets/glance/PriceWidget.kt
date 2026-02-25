@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.ColorFilter
@@ -38,7 +37,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
-import java.text.NumberFormat
+import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 
 class PriceWidget : GlanceAppWidget() {
 
@@ -106,25 +105,12 @@ class PriceWidget : GlanceAppWidget() {
         PriceValue(state)
         Spacer(modifier)
         PriceChange(state.changePercentage, error)
-        if (state.debug) {
-            LastUpdated(state)
-        }
-    }
-
-    @Composable
-    private fun LastUpdated(state: PriceWidgetState.Available) {
-        Text(
-            text = "${stringResource(R.string.last_updated)} ${state.lastUpdated}",
-            style = TextStyle(
-                color = GlanceTheme.colors.primary, fontSize = 10.sp
-            )
-        )
     }
 
     @Composable
     private fun ErrorUI(state: PriceWidgetState.Error) {
         Text(
-            "${stringResource(R.string.error)}:", style = TextStyle(
+            "${LocalContext.current.getString(R.string.error)}:", style = TextStyle(
                 fontSize = 12.sp
             )
         )
@@ -142,7 +128,7 @@ class PriceWidget : GlanceAppWidget() {
         ) {
             Image(
                 provider = ImageProvider(R.drawable.rounded_currency_bitcoin_24),
-                contentDescription = stringResource(R.string.bitcoin_icon_description),
+                contentDescription = LocalContext.current.getString(R.string.bitcoin_icon_description),
                 colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary),
                 modifier = GlanceModifier.size(14.dp)
             )
@@ -166,11 +152,6 @@ class PriceWidget : GlanceAppWidget() {
 
     @Composable
     private fun PriceValue(state: PriceWidgetState.Available) {
-        val numberFormatter = NumberFormat.getNumberInstance().apply {
-            minimumFractionDigits = 2
-            maximumFractionDigits = 2
-        }
-
         val fontSize = when {
             state.price >= 1000000 -> 20.sp
             state.price >= 100000 -> 22.sp
@@ -179,13 +160,9 @@ class PriceWidget : GlanceAppWidget() {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = state.symbol, style = TextStyle(
-                    color = GlanceTheme.colors.onBackground, fontSize = 16.sp
-                )
-            )
-            Spacer(modifier = GlanceModifier.width(4.dp))
-            Text(
-                text = numberFormatter.format(state.price), style = TextStyle(
+                text = FormatUtils.formatPrice(
+                    price = state.price, selectedCurrency = state.currency
+                ), style = TextStyle(
                     color = GlanceTheme.colors.onSurface, fontSize = fontSize
                 )
             )
@@ -198,19 +175,19 @@ class PriceWidget : GlanceAppWidget() {
             Triple(
                 R.drawable.rounded_trending_up_24,
                 GlanceTheme.colors.primary,
-                stringResource(R.string.trending_up_icon_description)
+                LocalContext.current.getString(R.string.trending_up_icon_description)
             )
         } else if (changePercentage < 0) {
             Triple(
                 R.drawable.rounded_trending_down_24,
                 GlanceTheme.colors.error,
-                stringResource(R.string.trending_down_icon_description)
+                LocalContext.current.getString(R.string.trending_down_icon_description)
             )
         } else {
             Triple(
                 R.drawable.rounded_trending_flat_24,
                 GlanceTheme.colors.secondary,
-                stringResource(R.string.trending_flat_icon_description)
+                LocalContext.current.getString(R.string.trending_flat_icon_description)
             )
         }
 
@@ -235,8 +212,8 @@ class PriceWidget : GlanceAppWidget() {
                 Spacer(modifier = GlanceModifier.width(4.dp))
                 Box(
                     modifier = GlanceModifier.size(3.dp).background(
-                            GlanceTheme.colors.error
-                        ).cornerRadius(32.dp), content = {})
+                        GlanceTheme.colors.error
+                    ).cornerRadius(32.dp), content = {})
             }
         }
     }
@@ -251,8 +228,6 @@ class PriceWidget : GlanceAppWidget() {
             changePercentage = 1.23,
             intervalLabel = "24H",
             currency = "USD",
-            symbol = "$",
-            lastUpdated = "12:34:56 PM"
         )
         WidgetContent(state)
     }
@@ -267,8 +242,6 @@ class PriceWidget : GlanceAppWidget() {
             changePercentage = -2.34,
             intervalLabel = "7D",
             currency = "USD",
-            symbol = "$",
-            lastUpdated = "12:34:56 PM"
         )
         WidgetContent(state)
     }
@@ -283,8 +256,6 @@ class PriceWidget : GlanceAppWidget() {
             changePercentage = 0.00,
             intervalLabel = "24H",
             currency = "USD",
-            symbol = "$",
-            lastUpdated = "12:34:56 PM"
         )
         WidgetContent(state)
     }
@@ -299,8 +270,6 @@ class PriceWidget : GlanceAppWidget() {
             changePercentage = 3.45,
             intervalLabel = "30D",
             currency = "USD",
-            symbol = "$",
-            lastUpdated = "12:34:56 PM"
         )
         WidgetContent(state)
     }
@@ -311,12 +280,7 @@ class PriceWidget : GlanceAppWidget() {
     @Composable
     private fun WidgetPreviewDataLargeNeg() {
         val state = PriceWidgetState.Available(
-            price = 1234560.78,
-            changePercentage = -1.23,
-            intervalLabel = "24H",
-            currency = "USD",
-            symbol = "$",
-            lastUpdated = "12:34:56 PM"
+            price = 1234560.78, changePercentage = -1.23, intervalLabel = "24H", currency = "USD"
         )
         WidgetContent(state)
     }
@@ -326,13 +290,9 @@ class PriceWidget : GlanceAppWidget() {
     @Preview(widthDp = 250, heightDp = 100)
     @Composable
     private fun WidgetPreviewPosError() {
+        // error but with a valid previous state
         val lastValidState = PriceWidgetState.Available(
-            price = 123456.78,
-            changePercentage = 2.34,
-            intervalLabel = "24H",
-            currency = "USD",
-            symbol = "$",
-            lastUpdated = "12:34:56 PM"
+            price = 123456.78, changePercentage = 2.34, intervalLabel = "24H", currency = "USD"
         )
         val state = PriceWidgetState.Error(
             lastValidState = lastValidState, message = "Error Message"

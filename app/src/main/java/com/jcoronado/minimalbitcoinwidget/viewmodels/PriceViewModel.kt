@@ -35,9 +35,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 private const val LOG_TAG = "PriceViewModel"
 
@@ -66,7 +63,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 try {
                     val lastUpdated = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
                     val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
-                    
+
                     val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
                     val percentage = when (selectedInterval) {
                         0 -> cachedData.priceChangePercentage24h
@@ -74,6 +71,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                         2 -> cachedData.priceChangePercentage30d
                         else -> cachedData.priceChangePercentage24h
                     }
+                    // TODO - use translated string values
                     val intervalLabel = when (selectedInterval) {
                         0 -> "24H"
                         1 -> "7D"
@@ -133,8 +131,9 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
             if (!force && hasCache && isFresh) {
                 Log.d(LOG_TAG, "Using cached data")
                 delay(750)
-                
+
                 val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                // TODO - use translated string values
                 val intervalLabel = when (selectedInterval) {
                     0 -> "24H"
                     1 -> "7D"
@@ -160,14 +159,14 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.isSuccessful) {
                     Log.d(LOG_TAG, "Successful GET request: ${response.code}")
                     val body = response.body.string()
-                    
+
                     val type = object : TypeToken<List<PriceData>>() {}.type
                     val dataList: List<PriceData> = gson.fromJson(body, type)
 
                     Log.d("PriceViewModel", "Body: $body")
 
                     if (dataList.isEmpty()) throw Exception("Empty response")
-                    
+
                     val priceData = dataList[0]
                     val lastUpdated = System.currentTimeMillis()
 
@@ -184,6 +183,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                         2 -> priceData.priceChangePercentage30d
                         else -> priceData.priceChangePercentage24h
                     }
+                    // TODO - use translated string values
                     val intervalLabel = when (selectedInterval) {
                         0 -> "24H"
                         1 -> "7D"
@@ -237,11 +237,13 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null) ?: return
             val gson = Gson()
-            
+
             try {
                 val priceData = gson.fromJson(cachedDataJson, PriceData::class.java)
-                val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT) ?: AppConstants.CURRENCY_DEFAULT
-                
+                val currencyCode =
+                    prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
+                        ?: AppConstants.CURRENCY_DEFAULT
+
                 // define glance widget state
                 val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
                 val percentage = when (selectedInterval) {
@@ -250,33 +252,29 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                     2 -> priceData.priceChangePercentage30d
                     else -> priceData.priceChangePercentage24h
                 }
+                // TODO - use translated string values
                 val intervalLabel = when (selectedInterval) {
                     0 -> "24H"
                     1 -> "7D"
                     2 -> "30D"
                     else -> "24H"
                 }
-                
-                val currentTime = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
-                
+
                 val glanceState = PriceWidgetState.Available(
                     price = priceData.currentPrice,
                     changePercentage = percentage,
                     intervalLabel = intervalLabel,
-                    currency = currencyCode,
-                    symbol = getCurrencyInfo(currencyCode).symbol,
-                    lastUpdated = currentTime,
-                    debug = AppConstants.WIDGET_DEBUG_MODE
+                    currency = currencyCode
                 )
-                
+
                 // update glance widgets
                 CoroutineScope(Dispatchers.IO).launch {
                     updateGlanceWidgets(context, glanceState)
                 }
-                
+
                 // update legacy widgets
                 updateLegacyWidgets(context, priceData)
-                
+
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Failed to refresh widgets from cache: $e")
             }
@@ -307,7 +305,9 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
             if (appWidgetIds.isEmpty()) return
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-            val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT) ?: AppConstants.CURRENCY_DEFAULT
+            val currencyCode =
+                prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
+                    ?: AppConstants.CURRENCY_DEFAULT
             val currencyInfo = getCurrencyInfo(currencyCode)
 
             val views = RemoteViews(context.packageName, R.layout.legacy_price_widget)
