@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.ColorFilter
@@ -38,6 +40,7 @@ import androidx.glance.text.TextStyle
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
+import java.text.NumberFormat
 
 class PriceWidget : GlanceAppWidget() {
 
@@ -152,32 +155,43 @@ class PriceWidget : GlanceAppWidget() {
 
     @Composable
     private fun PriceValue(state: PriceWidgetState.Available) {
-        val priceFontSize = when {
+
+        val priceData = FormatUtils.formatPriceSeparated(state.price, state.currency)
+
+        val fontSize = when {
             state.price >= 1000000 -> 20.sp
             state.price >= 100000 -> 22.sp
             else -> 24.sp
         }
 
-        val formattedPrice = FormatUtils.formatPrice(state.price)
-        val symbol = FormatUtils.getCurrencySymbolFromCode(state.currency)
+        val symbolFontSize = 16.sp
 
-        val symbolFontSize = when {
-            symbol.length > 2 -> 16.sp
-            else -> 18.sp
-        }
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = symbol, style = TextStyle(
-                    color = GlanceTheme.colors.onSurface, fontSize = symbolFontSize
+        Row(
+            verticalAlignment = Alignment.CenterVertically // Align text baselines
+        ) {
+            if (priceData.symbolAtStart) {
+                // Symbol on Left
+                Text(
+                    text = priceData.symbol,
+                    style = TextStyle(fontSize = symbolFontSize)
                 )
-            )
-            Spacer(modifier = GlanceModifier.width(2.dp))
-            Text(
-                text = formattedPrice, style = TextStyle(
-                    color = GlanceTheme.colors.onSurface, fontSize = priceFontSize
+                Spacer(modifier = GlanceModifier.width(2.dp))
+                Text(
+                    text = priceData.price,
+                    style = TextStyle(fontSize = fontSize)
                 )
-            )
+            } else {
+                // Symbol on Right (e.g., Euros in some regions)
+                Text(
+                    text = priceData.price,
+                    style = TextStyle(fontSize = fontSize)
+                )
+                Spacer(modifier = GlanceModifier.width(2.dp))
+                Text(
+                    text = priceData.symbol,
+                    style = TextStyle(fontSize = symbolFontSize)
+                )
+            }
         }
     }
 

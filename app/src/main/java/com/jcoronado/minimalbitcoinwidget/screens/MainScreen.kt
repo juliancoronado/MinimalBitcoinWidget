@@ -90,8 +90,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val formattedPrice = FormatUtils.formatPrice(uiState.price)
-                val symbol = FormatUtils.getCurrencySymbolFromCode(uiState.selectedCurrency)
+                val priceData = FormatUtils.formatPriceSeparated(uiState.price, uiState.selectedCurrency)
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -125,12 +124,47 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                         color = MaterialTheme.colorScheme.secondary
                     )
                 }
-                Text(
-                    text = "$symbol$formattedPrice",
-                    style = MaterialTheme.typography.headlineMedium.copy(fontFamily = googleSansCodeFontFamily),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Define styles
+                    val priceStyle = MaterialTheme.typography.headlineMedium.copy(
+                        fontFamily = googleSansCodeFontFamily
+                    )
+                    // Make symbol smaller and secondary color for that "subtle" look
+                    val symbolStyle = MaterialTheme.typography.headlineSmall.copy(
+                        fontFamily = googleSansCodeFontFamily,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+
+                    if (priceData.symbolAtStart) {
+                        // SYMBOL LEFT (e.g. $ 95,000)
+                        Text(
+                            text = priceData.symbol,
+                            style = symbolStyle,
+                            modifier = Modifier.padding(end = 4.dp) // Lift slightly to align visually
+                        )
+                        Text(
+                            text = priceData.price,
+                            style = priceStyle,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    } else {
+                        // SYMBOL RIGHT (e.g. 95.000 €)
+                        Text(
+                            text = priceData.price,
+                            style = priceStyle,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = priceData.symbol,
+                            style = symbolStyle,
+                            modifier = Modifier.padding(bottom = 4.dp, start = 4.dp)
+                        )
+                    }
+                }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(all = 12.dp)
