@@ -82,7 +82,7 @@ object FormatUtils {
                         // Return the symbol as displayed in THAT locale.
                         return currency.getSymbol(locale)
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     // Some locales are weird, ignore errors
                 }
             }
