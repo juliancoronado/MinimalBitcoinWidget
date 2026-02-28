@@ -20,7 +20,7 @@ object FormatUtils {
         // 1. Get the basic currency object
         val currency = try {
             Currency.getInstance(currencyCode.uppercase())
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Currency.getInstance("USD") // Fallback
         }
 
