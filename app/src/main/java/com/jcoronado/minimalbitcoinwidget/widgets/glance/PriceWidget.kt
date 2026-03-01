@@ -100,7 +100,7 @@ class PriceWidget : GlanceAppWidget() {
     private fun AvailableUI(
         state: PriceWidgetState.Available, modifier: GlanceModifier, error: Boolean = false
     ) {
-        Header(state.currency, state.intervalLabel)
+        Header(state.currency, state.intervalLabelResId)
         Spacer(modifier)
         PriceValue(state)
         Spacer(modifier)
@@ -122,7 +122,7 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun Header(currency: String, intervalLabel: String) {
+    private fun Header(currency: String, intervalLabel: Int) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -143,7 +143,7 @@ class PriceWidget : GlanceAppWidget() {
                 )
             )
             Text(
-                intervalLabel, style = TextStyle(
+                LocalContext.current.getString(intervalLabel), style = TextStyle(
                     color = GlanceTheme.colors.secondary, fontSize = 12.sp
                 )
             )
@@ -255,7 +255,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = 1.23,
-            intervalLabel = "24H",
+            intervalLabelResId = R.string.interval_24h,
             currency = "USD",
         )
         WidgetContent(state)
@@ -269,7 +269,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = -2.34,
-            intervalLabel = "7D",
+            intervalLabelResId = R.string.interval_7d,
             currency = "USD",
         )
         WidgetContent(state)
@@ -283,7 +283,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = 0.00,
-            intervalLabel = "24H",
+            intervalLabelResId = R.string.interval_24h,
             currency = "USD",
         )
         WidgetContent(state)
@@ -297,7 +297,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 1234560.78,
             changePercentage = 3.45,
-            intervalLabel = "30D",
+            intervalLabelResId = R.string.interval_30d,
             currency = "USD",
         )
         WidgetContent(state)
@@ -309,7 +309,10 @@ class PriceWidget : GlanceAppWidget() {
     @Composable
     private fun WidgetPreviewDataLargeNeg() {
         val state = PriceWidgetState.Available(
-            price = 1234560.78, changePercentage = -1.23, intervalLabel = "24H", currency = "USD"
+            price = 1234560.78,
+            changePercentage = -1.23,
+            intervalLabelResId = R.string.interval_24h,
+            currency = "USD"
         )
         WidgetContent(state)
     }
@@ -321,7 +324,10 @@ class PriceWidget : GlanceAppWidget() {
     private fun WidgetPreviewPosError() {
         // error but with a valid previous state
         val lastValidState = PriceWidgetState.Available(
-            price = 123456.78, changePercentage = 2.34, intervalLabel = "24H", currency = "USD"
+            price = 123456.78,
+            changePercentage = 2.34,
+            intervalLabelResId = R.string.interval_24h,
+            currency = "USD"
         )
         val state = PriceWidgetState.Error(
             lastValidState = lastValidState, message = "Error Message"

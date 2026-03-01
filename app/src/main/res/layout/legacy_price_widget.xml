@@ -91,6 +91,7 @@
             android:id="@+id/widget_change_label"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
             android:layout_marginEnd="3dp"
             android:fontFamily="@font/manrope_regular"
             android:gravity="center_vertical"

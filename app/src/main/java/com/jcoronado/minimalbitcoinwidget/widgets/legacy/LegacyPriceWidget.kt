@@ -2,7 +2,6 @@ package com.jcoronado.minimalbitcoinwidget.widgets.legacy
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
@@ -20,6 +19,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
+import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 import com.jcoronado.minimalbitcoinwidget.workers.PriceUpdateWorker
 import okhttp3.Call
 import okhttp3.Callback
@@ -85,51 +85,6 @@ open class LegacyPriceWidget : AppWidgetProvider() {
     override fun onDeleted(context: Context?, appWidgetIds: IntArray) {
         for (appWidgetId in appWidgetIds) {
             Log.d(TAG, "Deleted widget with ID: $appWidgetId")
-        }
-    }
-
-    companion object {
-        /**
-         * Updates all legacy widgets with the currently cached data.
-         * This avoids making a network call and is used for UI-only updates (e.g. settings changes).
-         */
-        fun updateLegacyWidgetsUI(context: Context) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            // Use the wrapper class name as defined in manifest
-            val componentName = ComponentName(context, "com.jcoronado.minimalbitcoinwidget.PriceWidget")
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-
-            if (appWidgetIds.isEmpty()) {
-                Log.d(TAG, "No legacy widgets found to update.")
-                return
-            }
-
-            Log.d(TAG, "Updating legacy widgets UI from cache. Count: ${appWidgetIds.size}")
-
-            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-            val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
-            val currency = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
-            val currencyInfo = getCurrencyInfo(currency)
-            val gson = Gson()
-
-            val views = RemoteViews(context.packageName, R.layout.legacy_price_widget)
-
-            if (cachedDataJson != null) {
-                try {
-                    val cachedPriceData = gson.fromJson(cachedDataJson, PriceData::class.java)
-                    setWidgetViews(context, views, cachedPriceData, currencyInfo, loading = false)
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error parsing cached data", e)
-                    return
-                }
-            } else {
-                // no cached data - display error state?
-                return
-            }
-
-            for (appWidgetId in appWidgetIds) {
-                appWidgetManager.updateAppWidget(appWidgetId, views)
-            }
         }
     }
 }
@@ -338,20 +293,15 @@ fun setWidgetViews(
             2 -> priceData.priceChangePercentage30d
             else -> priceData.priceChangePercentage24h
         }
-        
-        val intervalLabel = when (selectedInterval) {
-            0 -> "24H"
-            1 -> "7D"
-            2 -> "30D"
-            else -> "24H"
-        }
+
+        val interval = TimeInterval.fromValue(selectedInterval)
 
         views.setTextViewText(
             R.id.widget_day_change,
             percentFormatter.format(percentage / 100)
         )
         
-        views.setTextViewText(R.id.widget_change_label, intervalLabel)
+        views.setTextViewText(R.id.widget_change_label, context.getString(interval.labelResId))
 
         views.setTextViewText(R.id.widget_iso_code, currencyInfo.isoCode)
         views.setTextViewText(R.id.widget_symbol, currencyInfo.symbol)
