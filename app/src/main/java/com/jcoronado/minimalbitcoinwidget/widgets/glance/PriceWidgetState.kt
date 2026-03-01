@@ -11,7 +11,7 @@ sealed class PriceWidgetState {
     data class Available(
         val price: Double,
         val changePercentage: Double,
-        val intervalLabel: String,
+        val intervalLabelResId: Int,
         val currency: String
     ) : PriceWidgetState()
 

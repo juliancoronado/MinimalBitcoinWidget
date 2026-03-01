@@ -120,7 +120,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                         color = MaterialTheme.colorScheme.secondary
                     )
                     Text(
-                        text = uiState.changeIntervalLabel,
+                        text = stringResource(uiState.changeIntervalLabelResId),
                         style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
                         color = MaterialTheme.colorScheme.secondary
                     )

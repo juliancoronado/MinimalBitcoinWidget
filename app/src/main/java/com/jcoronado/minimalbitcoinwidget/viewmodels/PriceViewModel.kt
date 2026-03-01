@@ -21,6 +21,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
+import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
@@ -71,19 +72,14 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                         2 -> cachedData.priceChangePercentage30d
                         else -> cachedData.priceChangePercentage24h
                     }
-                    // TODO - use translated string values
-                    val intervalLabel = when (selectedInterval) {
-                        0 -> "24H"
-                        1 -> "7D"
-                        2 -> "30D"
-                        else -> "24H"
-                    }
+
+                    val interval = TimeInterval.fromValue(selectedInterval)
 
                     // update state immediately
                     _uiState.value = _uiState.value.copy(
                         price = cachedData.currentPrice,
                         percentageChange = percentage,
-                        changeIntervalLabel = intervalLabel,
+                        changeIntervalLabelResId = interval.labelResId,
                         selectedCurrency = cachedCurrency,
                         lastUpdated = lastUpdated
                     )
@@ -133,17 +129,11 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 delay(750)
 
                 val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
-                // TODO - use translated string values
-                val intervalLabel = when (selectedInterval) {
-                    0 -> "24H"
-                    1 -> "7D"
-                    2 -> "30D"
-                    else -> "24H"
-                }
+                val interval = TimeInterval.fromValue(selectedInterval)
 
                 _uiState.value = _uiState.value.copy(
                     lastUpdated = lastApiCallTime,
-                    changeIntervalLabel = intervalLabel,
+                    changeIntervalLabelResId = interval.labelResId,
                     isLoading = false
                 )
                 redrawWidgets()
@@ -183,20 +173,15 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                         2 -> priceData.priceChangePercentage30d
                         else -> priceData.priceChangePercentage24h
                     }
-                    // TODO - use translated string values
-                    val intervalLabel = when (selectedInterval) {
-                        0 -> "24H"
-                        1 -> "7D"
-                        2 -> "30D"
-                        else -> "24H"
-                    }
+
+                    val interval = TimeInterval.fromValue(selectedInterval)
 
                     delay(750)
 
                     _uiState.value = _uiState.value.copy(
                         price = priceData.currentPrice,
                         percentageChange = percentage,
-                        changeIntervalLabel = intervalLabel,
+                        changeIntervalLabelResId = interval.labelResId,
                         isLoading = false,
                         errorMessage = null,
                         lastUpdated = lastUpdated
@@ -252,18 +237,13 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                     2 -> priceData.priceChangePercentage30d
                     else -> priceData.priceChangePercentage24h
                 }
-                // TODO - use translated string values
-                val intervalLabel = when (selectedInterval) {
-                    0 -> "24H"
-                    1 -> "7D"
-                    2 -> "30D"
-                    else -> "24H"
-                }
+
+                val interval = TimeInterval.fromValue(selectedInterval)
 
                 val glanceState = PriceWidgetState.Available(
                     price = priceData.currentPrice,
                     changePercentage = percentage,
-                    intervalLabel = intervalLabel,
+                    intervalLabelResId = interval.labelResId,
                     currency = currencyCode
                 )
 
