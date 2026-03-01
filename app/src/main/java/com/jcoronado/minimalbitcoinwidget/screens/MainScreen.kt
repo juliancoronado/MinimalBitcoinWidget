@@ -90,7 +90,8 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val priceData = FormatUtils.formatPriceSeparated(uiState.price, uiState.selectedCurrency)
+                val priceData =
+                    FormatUtils.formatPriceSeparated(uiState.price, uiState.selectedCurrency)
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -129,11 +130,9 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Define styles
                     val priceStyle = MaterialTheme.typography.headlineMedium.copy(
                         fontFamily = googleSansCodeFontFamily
                     )
-                    // Make symbol smaller and secondary color for that "subtle" look
                     val symbolStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontFamily = googleSansCodeFontFamily,
                         color = MaterialTheme.colorScheme.secondary
@@ -144,7 +143,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                         Text(
                             text = priceData.symbol,
                             style = symbolStyle,
-                            modifier = Modifier.padding(end = 4.dp) // Lift slightly to align visually
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         Text(
                             text = priceData.price,
@@ -161,7 +160,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                         Text(
                             text = priceData.symbol,
                             style = symbolStyle,
-                            modifier = Modifier.padding(bottom = 4.dp, start = 4.dp)
+                            modifier = Modifier.padding(start = 4.dp)
                         )
                     }
                 }

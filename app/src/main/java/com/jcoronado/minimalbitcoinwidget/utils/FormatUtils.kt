@@ -20,7 +20,7 @@ object FormatUtils {
         val currency = try {
             Currency.getInstance(currencyCode.uppercase())
         } catch (_: Exception) {
-            Currency.getInstance("USD") // Fallback
+            Currency.getInstance("USD") // default / fallback
         }
 
         // iterate available locales to find one where this currency is the default
