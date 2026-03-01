@@ -164,29 +164,35 @@ class PriceWidget : GlanceAppWidget() {
         val symbolFontSize = 16.sp
 
         Row(
-            verticalAlignment = Alignment.CenterVertically // Align text baselines
+            verticalAlignment = Alignment.CenterVertically
         ) {
             if (priceData.symbolAtStart) {
-                // Symbol on Left
+                // symbol on left
                 Text(
                     text = priceData.symbol,
-                    style = TextStyle(fontSize = symbolFontSize)
+                    style = TextStyle(
+                        color = GlanceTheme.colors.onSurface,
+                        fontSize = symbolFontSize
+                    )
                 )
                 Spacer(modifier = GlanceModifier.width(2.dp))
                 Text(
                     text = priceData.price,
-                    style = TextStyle(fontSize = fontSize)
+                    style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = fontSize)
                 )
             } else {
-                // Symbol on Right (e.g., Euros in some regions)
+                // symbol on right (Euros in some regions)
                 Text(
                     text = priceData.price,
-                    style = TextStyle(fontSize = fontSize)
+                    style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = fontSize)
                 )
                 Spacer(modifier = GlanceModifier.width(2.dp))
                 Text(
                     text = priceData.symbol,
-                    style = TextStyle(fontSize = symbolFontSize)
+                    style = TextStyle(
+                        color = GlanceTheme.colors.onSurface,
+                        fontSize = symbolFontSize
+                    )
                 )
             }
         }
