@@ -1,11 +1,14 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/glance_default_loading_layout"
     android:description="@string/glance_widget_picker_description"
-    android:previewImage="@drawable/glance_widget_preview"
+    android:previewLayout="@layout/glance_widget_preview"
+
     android:minWidth="140dp"
     android:minHeight="40dp"
 
     android:resizeMode="horizontal"
+    android:targetCellWidth="2"
+    android:targetCellHeight="1"
 
     android:minResizeWidth="140dp"
     android:minResizeHeight="40dp"
