@@ -21,12 +21,12 @@
     <string name="dynamic_colors">Couleurs dynamiques</string>
     <string name="dynamic_colors_subtitle">Suivre les couleurs du thème de votre appareil</string>
     <string name="version">Version</string>
-    <string name="build_number">Numéro de build</string>
+    <string name="build_number">Número de build</string>
     <string name="contact">Contact</string>
     <string name="debug_mode">Mode débogage</string>
     <string name="debug_mode_subtitle">Désactiver les fonctionnalités de débogage</string>
     <string name="debug_enabled">Mode débogage activé !</string>
-    <string name="developer_steps">Vous êtes maintenant à %1$d étapes d\'être un développeur !</string>
+    <string name="developer_taps">Vous êtes maintenant à %1$d pressions d\'être un développeur !</string>
     <string name="update_currency_icon_description">Icône de devise</string>
     <string name="change_percentage_icon_description">Icône de pourcentage</string>
     <string name="widget_refresh_interval_icon_description">Icône de minuterie</string>

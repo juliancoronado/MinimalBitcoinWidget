@@ -26,7 +26,7 @@
     <string name="debug_mode">Modo de depuração</string>
     <string name="debug_mode_subtitle">Desativar funcionalidades de depuração</string>
     <string name="debug_enabled">Modo de depuração ativado!</string>
-    <string name="developer_steps">Está agora a %1$d passos de ser um programador!</string>
+    <string name="developer_taps">Está agora a %1$d toques de ser um programador!</string>
     <string name="update_currency_icon_description">Ícone de moeda</string>
     <string name="change_percentage_icon_description">Ícone de percentagem</string>
     <string name="widget_refresh_interval_icon_description">Ícone de temporizador</string>

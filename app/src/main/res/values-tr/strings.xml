@@ -26,7 +26,7 @@
     <string name="debug_mode">Hata Ayıklama Modu</string>
     <string name="debug_mode_subtitle">Hata ayıklama özelliklerini devre dışı bırak</string>
     <string name="debug_enabled">Hata ayıklama modu etkin!</string>
-    <string name="developer_steps">Geliştirici olmanıza %1$d adım kaldı!</string>
+    <string name="developer_taps">Geliştirici olmanıza %1$d dokunma kaldı!</string>
     <string name="update_currency_icon_description">Para birimi simgesi</string>
     <string name="change_percentage_icon_description">Yüzde simgesi</string>
     <string name="widget_refresh_interval_icon_description">Zamanlayıcı simgesi</string>

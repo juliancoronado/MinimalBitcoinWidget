@@ -26,7 +26,7 @@
     <string name="debug_mode">Modalità debug</string>
     <string name="debug_mode_subtitle">Disabilita funzioni di debug</string>
     <string name="debug_enabled">Modalità debug abilitata!</string>
-    <string name="developer_steps">Sei a %1$d passi dall\'essere uno sviluppatore!</string>
+    <string name="developer_taps">Ora sei a %1$d tocchi dal diventare uno sviluppatore!</string>
     <string name="update_currency_icon_description">Icona valuta</string>
     <string name="change_percentage_icon_description">Icona percentuale</string>
     <string name="widget_refresh_interval_icon_description">Icona timer</string>

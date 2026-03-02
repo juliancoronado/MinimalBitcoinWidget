@@ -59,7 +59,7 @@
 
     <!-- Debug -->
     <string name="debug_enabled">Debug mode enabled!</string>
-    <string name="developer_steps">You are now %1$d steps away from being a developer!</string>
+    <string name="developer_taps">You are now %1$d taps away from being a developer!</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Currency icon</string>

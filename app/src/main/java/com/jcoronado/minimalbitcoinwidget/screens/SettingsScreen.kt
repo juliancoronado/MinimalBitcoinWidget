@@ -82,6 +82,7 @@ fun SettingsScreen(
     val currencyCodes = stringArrayResource(R.array.currency_codes)
 
     var tapCount by remember { mutableIntStateOf(0) }
+    var currentToast by remember { mutableStateOf<Toast?>(null) }
 
     if (showCurrencyDialog.value) {
         AlertDialog(
@@ -406,7 +407,7 @@ fun SettingsScreen(
                 }
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     val enabledMessage = stringResource(R.string.debug_enabled)
-                    val stepsMessage = stringResource(R.string.developer_steps, 10 - tapCount)
+                    val stepsMessage = stringResource(R.string.developer_taps, 9 - tapCount)
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
@@ -431,16 +432,18 @@ fun SettingsScreen(
                         onClick = {
                             if (!debugModeEnabled) {
                                 tapCount++
+                                // small helper method
+                                val showToast: (String) -> Unit = { message ->
+                                    currentToast?.cancel() // cancel previous toast message
+                                    currentToast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                                    currentToast?.show()
+                                }
                                 if (tapCount >= 10) {
                                     onDebugModeToggle(true)
-                                    Toast.makeText(
-                                        context, enabledMessage, Toast.LENGTH_SHORT
-                                    ).show()
+                                    showToast(enabledMessage)
                                     tapCount = 0
                                 } else if (tapCount > 5) {
-                                    Toast.makeText(
-                                        context, stepsMessage, Toast.LENGTH_SHORT
-                                    ).show()
+                                    showToast(stepsMessage)
                                 }
                             }
                         },
