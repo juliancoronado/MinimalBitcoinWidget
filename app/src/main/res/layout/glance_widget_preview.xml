@@ -6,7 +6,7 @@
     android:background="@color/widget_preview_background_light"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="4dp">
 
     <!-- Header: Icon / USD -->
     <LinearLayout
@@ -18,6 +18,7 @@
         <ImageView
             android:layout_width="12dp"
             android:layout_height="12dp"
+            android:contentDescription="@string/bitcoin_icon_description"
             android:src="@drawable/rounded_currency_bitcoin_24"
             app:tint="#535F70"
             />
@@ -25,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="2dp"
             android:text="/ USD"
             android:textColor="#535F70"
             android:textSize="12sp" />
@@ -33,8 +34,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="・24H"
+            android:layout_marginStart="2dp"
+            android:text=" ・ 24H"
             android:textColor="#535F70"
             android:textSize="12sp" />
     </LinearLayout>
@@ -44,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:layout_marginVertical="4dp"
         android:orientation="horizontal">
 
         <TextView
@@ -59,7 +61,7 @@
             android:layout_marginStart="4dp"
             android:text="85,284.91"
             android:textColor="#191C20"
-            android:textSize="24sp" />
+            android:textSize="22sp" />
     </LinearLayout>
 
     <!-- PriceChange -->
@@ -72,7 +74,7 @@
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/trending_up_icon_description"
             android:src="@drawable/rounded_trending_up_24"
             app:tint="#36618E"/>
 
@@ -80,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="2.45%"
+            android:text="+2.45%"
             android:textColor="#535F70"
             android:textSize="12sp" />
     </LinearLayout>
