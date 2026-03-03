@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -53,6 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.jcoronado.minimalbitcoinwidget.BuildConfig
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
@@ -83,6 +85,11 @@ fun SettingsScreen(
 
     var tapCount by remember { mutableIntStateOf(0) }
     var currentToast by remember { mutableStateOf<Toast?>(null) }
+
+    // strings
+    val mailTo = stringResource(R.string.mail_to)
+    val subject = stringResource(R.string.mail_subject)
+    val mailError = stringResource(R.string.mail_error)
 
     if (showCurrencyDialog.value) {
         AlertDialog(
@@ -435,7 +442,8 @@ fun SettingsScreen(
                                 // small helper method
                                 val showToast: (String) -> Unit = { message ->
                                     currentToast?.cancel() // cancel previous toast message
-                                    currentToast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                                    currentToast =
+                                        Toast.makeText(context, message, Toast.LENGTH_SHORT)
                                     currentToast?.show()
                                 }
                                 if (tapCount >= 10) {
@@ -466,8 +474,22 @@ fun SettingsScreen(
                     supportingContent = {
                         Text(stringResource(R.string.developer))
                     },
+                    trailingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_arrow_outward_24),
+                            stringResource(R.string.open_arrow_icon_description)
+                        )
+                    },
                     onClick = {
-                        // TODO - open an email client / browser when tapped
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = mailTo.toUri()
+                            putExtra(Intent.EXTRA_SUBJECT, subject)
+                        }
+                        try {
+                            context.startActivity(intent)
+                        } catch (_: Exception) {
+                            Toast.makeText(context, mailError, Toast.LENGTH_SHORT).show()
+                        }
                     },
                 )
                 if (debugModeEnabled) {

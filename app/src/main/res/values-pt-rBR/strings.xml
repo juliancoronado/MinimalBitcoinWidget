@@ -35,6 +35,7 @@
     <string name="info_icon_description">Ícone de informações</string>
     <string name="build_icon_description">Ícone de versão</string>
     <string name="contact_icon_description">Ícone de contato</string>
+    <string name="open_arrow_icon_description">Ícone de seta de abertura</string>
     <string name="debug_icon_description">Ícone de depuração</string>
     <string name="bitcoin_icon_description">Ícone do Bitcoin</string>
     <string name="trending_up_icon_description">Ícone de tendência de alta</string>
@@ -44,4 +45,5 @@
     <string name="cancel">Cancelar</string>
     <string name="clear">Limpar</string>
     <string name="error">Erro</string>
+    <string name="mail_error">Nenhum aplicativo de e-mail encontrado</string>
 </resources>

@@ -35,6 +35,7 @@
     <string name="info_icon_description">Icône d\'info</string>
     <string name="build_icon_description">Icône de build</string>
     <string name="contact_icon_description">Icône de contact</string>
+    <string name="open_arrow_icon_description">Icône de flèche d\'ouverture</string>
     <string name="debug_icon_description">Icône de débogage</string>
     <string name="bitcoin_icon_description">Icône Bitcoin</string>
     <string name="trending_up_icon_description">Icône tendance hausse</string>
@@ -44,4 +45,5 @@
     <string name="cancel">Annuler</string>
     <string name="clear">Effacer</string>
     <string name="error">Erreur</string>
+    <string name="mail_error">Aucune application de messagerie trouvée</string>
 </resources>

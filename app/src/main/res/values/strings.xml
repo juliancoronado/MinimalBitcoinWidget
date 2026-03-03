@@ -70,6 +70,7 @@
     <string name="info_icon_description">Info icon</string>
     <string name="build_icon_description">Build icon</string>
     <string name="contact_icon_description">Contact icon</string>
+    <string name="open_arrow_icon_description">Open arrow icon</string>
     <string name="debug_icon_description">Debug icon</string>
     <string name="bitcoin_icon_description">Bitcoin icon</string>
     <string name="trending_up_icon_description">Trending up icon</string>
@@ -81,5 +82,10 @@
     <string name="cancel">Cancel</string>
     <string name="clear">Clear</string>
     <string name="error">Error</string>
+
+    <!-- Email / Contact -->
+    <string name="mail_to" translatable="false">mailto:contact@jcoronado.dev</string>
+    <string name="mail_subject" translatable="false">Minimal Bitcoin Widget App Support</string>
+    <string name="mail_error" translatable="true">No email app found</string>
 
 </resources>
