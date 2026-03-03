@@ -35,6 +35,7 @@
     <string name="info_icon_description">Info-Symbol</string>
     <string name="build_icon_description">Build-Symbol</string>
     <string name="contact_icon_description">Kontakt-Symbol</string>
+    <string name="open_arrow_icon_description">Symbol für Pfeil zum Öffnen</string>
     <string name="debug_icon_description">Debug-Symbol</string>
     <string name="bitcoin_icon_description">Bitcoin-Symbol</string>
     <string name="trending_up_icon_description">Aufwärtstrend-Symbol</string>
@@ -44,4 +45,5 @@
     <string name="cancel">Abbrechen</string>
     <string name="clear">Löschen</string>
     <string name="error">Fehler</string>
+    <string name="mail_error">Keine E-Mail-App gefunden</string>
 </resources>
