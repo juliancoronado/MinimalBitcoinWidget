@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun DebugScreen() {
+fun DeveloperOptionsScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -54,7 +54,7 @@ fun DebugScreen() {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text("Debug Logs")
+                    Text("Developer Options")
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ), actions = {
@@ -75,9 +75,10 @@ fun DebugScreen() {
                 .padding(horizontal = 12.dp)
                 .fillMaxSize()
         ) {
+            // to do - move logs to an inner settings screen
             if (logs.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No logs available.")
+                    Text("No logs stored.")
                 }
             } else {
                 LazyColumn(

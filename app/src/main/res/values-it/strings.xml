@@ -2,9 +2,13 @@
 <resources>
     <string name="settings">Impostazioni</string>
     <string name="last_updated">Ultimo aggiornamento: %1$s</string>
+
+    <!-- Setting Section Headers -->
     <string name="data_header">Dati</string>
     <string name="appearance_header">Aspetto</string>
     <string name="app_info_header">Info App</string>
+
+    <!-- SettingsScreen ListItems -->
     <string name="change_percentage">Percentuale di variazione</string>
     <string name="cp_interval1">24 ore</string>
     <string name="cp_interval2">7 giorni</string>
@@ -23,10 +27,16 @@
     <string name="version">Versione</string>
     <string name="build_number">Numero build</string>
     <string name="contact">Contatti</string>
-    <string name="debug_mode">Modalità debug</string>
-    <string name="debug_mode_subtitle">Disabilita funzioni di debug</string>
+    <string name="data_source">Fonte dati</string>
+    <string name="data_source_subtitle">API CoinGecko</string>
+    <string name="developer_mode">Modalità sviluppatore</string>
+    <string name="developer_mode_subtitle">Funzionalità per sviluppatori abilitate</string>
+
+    <!-- Debug -->
     <string name="debug_enabled">Modalità debug abilitata!</string>
     <string name="developer_taps">Ora sei a %1$d tocchi dal diventare uno sviluppatore!</string>
+
+    <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Icona valuta</string>
     <string name="change_percentage_icon_description">Icona percentuale</string>
     <string name="widget_refresh_interval_icon_description">Icona timer</string>
@@ -36,14 +46,19 @@
     <string name="build_icon_description">Icona build</string>
     <string name="contact_icon_description">Icona contatti</string>
     <string name="open_arrow_icon_description">Icona freccia di apertura</string>
-    <string name="debug_icon_description">Icona debug</string>
+    <string name="chart_data_icon_description">Icona dati grafico</string>
+    <string name="developer_mode_icon_description">Icona modalità sviluppatore</string>
     <string name="bitcoin_icon_description">Icona Bitcoin</string>
     <string name="trending_up_icon_description">Icona tendenza in rialzo</string>
     <string name="trending_down_icon_description">Icona tendenza in ribasso</string>
     <string name="trending_flat_icon_description">Icona tendenza stabile</string>
+
+    <!-- Buttons / Actions -->
     <string name="save">Salva</string>
     <string name="cancel">Annulla</string>
     <string name="clear">Cancella</string>
     <string name="error">Errore</string>
+
+    <!-- Email / Contact -->
     <string name="mail_error">Nessuna app di posta trovata</string>
 </resources>

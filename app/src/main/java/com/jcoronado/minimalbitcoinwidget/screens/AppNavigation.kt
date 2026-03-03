@@ -26,8 +26,8 @@ import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.material3.HorizontalFloatingToolbar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.motionScheme
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.ToggleButtonDefaults
@@ -69,18 +69,18 @@ fun AppNavigation() {
     val systemBarsInsets = WindowInsets.systemBars.asPaddingValues()
     val cutoutInsets = WindowInsets.displayCutout.asPaddingValues()
 
-    val motionScheme = motionScheme
+    val motionScheme = MaterialTheme.motionScheme
     val backStack = rememberNavBackStack(Screen.Dashboard)
     val priceViewModel: PriceViewModel = viewModel()
     val settingsViewModel: SettingsViewModel = viewModel()
     val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
-    val debugModeEnabled by settingsViewModel.debugModeEnabled.collectAsStateWithLifecycle()
+    val developerModeEnabled by settingsViewModel.developerModeEnabled.collectAsStateWithLifecycle()
 
     val currentRoute by remember(backStack.size) {
         derivedStateOf { backStack.lastOrNull() }
     }
 
-    val navigationScreenList = remember(debugModeEnabled) {
+    val navigationScreenList = remember(developerModeEnabled) {
         listOfNotNull(
             NavItem(
                 route = Screen.Dashboard,
@@ -90,150 +90,154 @@ fun AppNavigation() {
                 route = Screen.Settings,
                 icon = R.drawable.rounded_settings_24,
                 label = R.string.settings
-            ), if (debugModeEnabled) NavItem(
-                route = Screen.Debug,
-                icon = R.drawable.rounded_bug_report_24,
-                label = R.string.debug
+            ), if (developerModeEnabled) NavItem(
+                route = Screen.DeveloperOptions,
+                icon = R.drawable.rounded_code_24,
+                label = R.string.developer_title
             ) else null
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        NavDisplay(
-            backStack = backStack,
-            onBack = {
-                if (backStack.size > 1) backStack.removeLastOrNull()
-            },
-            transitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
-            },
-            popTransitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
-            },
-            predictivePopTransitionSpec = {
-                fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
-            },
-            entryProvider = entryProvider {
-                entry<Screen.Dashboard> {
-                    MainScreen(
-                        uiState = uiState,
-                        onRefresh = { priceViewModel.fetchPrice() },
-                    )
-                }
-                entry<Screen.Settings> {
-                    val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
-                    val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
-                    val refreshInterval by settingsViewModel.refreshInterval.collectAsStateWithLifecycle()
-                    val changePercentage by settingsViewModel.changePercentageInterval.collectAsStateWithLifecycle()
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            NavDisplay(
+                backStack = backStack,
+                onBack = {
+                    if (backStack.size > 1) backStack.removeLastOrNull()
+                },
+                transitionSpec = {
+                    fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
+                },
+                popTransitionSpec = {
+                    fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
+                },
+                predictivePopTransitionSpec = {
+                    fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.defaultEffectsSpec())
+                },
+                entryProvider = entryProvider {
+                    entry<Screen.Dashboard> {
+                        MainScreen(
+                            uiState = uiState,
+                            onRefresh = { priceViewModel.fetchPrice() },
+                        )
+                    }
+                    entry<Screen.Settings> {
+                        val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
+                        val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
+                        val refreshInterval by settingsViewModel.refreshInterval.collectAsStateWithLifecycle()
+                        val changePercentage by settingsViewModel.changePercentageInterval.collectAsStateWithLifecycle()
 
-                    SettingsScreen(
-                        selectedCurrency = uiState.selectedCurrency,
-                        onCurrencySelected = { newCurrency ->
-                            priceViewModel.updateCurrency(
-                                newCurrency
-                            )
-                        },
-                        currentTheme = currentTheme,
-                        onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
-                        dynamicColors = dynamicColors,
-                        onDynamicColorsSelected = { newDynamicColors ->
-                            settingsViewModel.updateDynamicColorsFlag(
-                                newDynamicColors
-                            )
-                        },
-                        refreshInterval = refreshInterval,
-                        onRefreshIntervalSelected = { newInterval ->
-                            settingsViewModel.setRefreshInterval(newInterval)
-                        },
-                        changePercentage = changePercentage,
-                        onChangePercentageSelected = { newChangePercentage ->
-                            settingsViewModel.setChangePercentageInterval(newChangePercentage)
-                            priceViewModel.refreshFromCache()
-                        },
-                        debugModeEnabled = debugModeEnabled,
-                        onDebugModeToggle = { enabled ->
-                            settingsViewModel.setDebugModeEnabled(enabled)
-                        })
-                }
-                entry<Screen.Debug> {
-                    DebugScreen()
-                }
-            },
-        )
-        Box(
-            Modifier
-                .fillMaxSize()
-                .padding(
-                    start = cutoutInsets.calculateStartPadding(LocalLayoutDirection.current),
-                    end = cutoutInsets.calculateEndPadding(LocalLayoutDirection.current)
-                ), Alignment.BottomCenter
-        ) {
-            HorizontalFloatingToolbar(
-                expanded = true, colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
-                    toolbarContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                    toolbarContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ), modifier = Modifier
-                    .padding(
-                        top = ScreenOffset,
-                        bottom = systemBarsInsets.calculateBottomPadding() + ScreenOffset
-                    )
-                    .zIndex(1f)
-            ) {
-                navigationScreenList.fastForEach { item ->
-                    val selected = item.route == currentRoute
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                            TooltipAnchorPosition.Above
-                        ),
-                        tooltip = { PlainTooltip { Text(stringResource(item.label)) } },
-                        state = rememberTooltipState(),
-                    ) {
-                        ToggleButton(
-                            checked = selected, onCheckedChange = { checked ->
-                                if (checked && !selected) {
-                                    if (item.route == Screen.Dashboard) {
-                                        // Reset to Dashboard
-                                        while (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
-                                    } else {
-                                        backStack.add(item.route)
-                                    }
-                                }
-                            }, colors = ToggleButtonDefaults.toggleButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                                checkedContainerColor = MaterialTheme.colorScheme.primary,
-                                checkedContentColor = MaterialTheme.colorScheme.onPrimary
-                            ), shapes = ToggleButtonDefaults.shapes(
-                                CircleShape, CircleShape, CircleShape
-                            ), modifier = Modifier.height(56.dp)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    painterResource(item.icon), stringResource(item.label)
+                        SettingsScreen(
+                            selectedCurrency = uiState.selectedCurrency,
+                            onCurrencySelected = { newCurrency ->
+                                priceViewModel.updateCurrency(
+                                    newCurrency
                                 )
-                                AnimatedVisibility(
-                                    visible = selected,
-                                    enter = expandHorizontally(motionScheme.defaultSpatialSpec()),
-                                    exit = shrinkHorizontally(motionScheme.defaultSpatialSpec())
-                                ) {
-                                    Text(
-                                        text = stringResource(item.label),
-                                        fontSize = 16.sp,
-                                        lineHeight = 24.sp,
-                                        maxLines = 1,
-                                        softWrap = false,
-                                        overflow = TextOverflow.Clip,
-                                        modifier = Modifier.padding(start = ButtonDefaults.IconSpacing)
+                            },
+                            currentTheme = currentTheme,
+                            onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
+                            dynamicColors = dynamicColors,
+                            onDynamicColorsSelected = { newDynamicColors ->
+                                settingsViewModel.updateDynamicColorsFlag(
+                                    newDynamicColors
+                                )
+                            },
+                            refreshInterval = refreshInterval,
+                            onRefreshIntervalSelected = { newInterval ->
+                                settingsViewModel.setRefreshInterval(newInterval)
+                            },
+                            changePercentage = changePercentage,
+                            onChangePercentageSelected = { newChangePercentage ->
+                                settingsViewModel.setChangePercentageInterval(newChangePercentage)
+                                priceViewModel.refreshFromCache()
+                            },
+                            developerModeEnabled = developerModeEnabled,
+                            onDebugModeToggle = { enabled ->
+                                settingsViewModel.setDeveloperModeEnabled(enabled)
+                            })
+                    }
+                    entry<Screen.DeveloperOptions> {
+                        DeveloperOptionsScreen()
+                    }
+                },
+            )
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(
+                        start = cutoutInsets.calculateStartPadding(LocalLayoutDirection.current),
+                        end = cutoutInsets.calculateEndPadding(LocalLayoutDirection.current)
+                    ), Alignment.BottomCenter
+            ) {
+                HorizontalFloatingToolbar(
+                    expanded = true, colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
+                        toolbarContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        toolbarContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ), modifier = Modifier
+                        .padding(
+                            top = ScreenOffset,
+                            bottom = systemBarsInsets.calculateBottomPadding() + ScreenOffset
+                        )
+                        .zIndex(1f)
+                ) {
+                    navigationScreenList.fastForEach { item ->
+                        val selected = item.route == currentRoute
+                        TooltipBox(
+                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                TooltipAnchorPosition.Above
+                            ),
+                            tooltip = { PlainTooltip { Text(stringResource(item.label)) } },
+                            state = rememberTooltipState(),
+                        ) {
+                            ToggleButton(
+                                checked = selected, onCheckedChange = { checked ->
+                                    if (checked && !selected) {
+                                        // Keep only Dashboard in the stack before adding the new route
+                                        while (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
+                                        if (item.route != Screen.Dashboard) {
+                                            backStack.add(item.route)
+                                        }
+                                    }
+                                }, colors = ToggleButtonDefaults.toggleButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    checkedContainerColor = MaterialTheme.colorScheme.primary,
+                                    checkedContentColor = MaterialTheme.colorScheme.onPrimary
+                                ), shapes = ToggleButtonDefaults.shapes(
+                                    CircleShape, CircleShape, CircleShape
+                                ), modifier = Modifier.height(56.dp)
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        painterResource(item.icon), stringResource(item.label)
                                     )
+                                    AnimatedVisibility(
+                                        visible = selected,
+                                        enter = expandHorizontally(motionScheme.defaultSpatialSpec()),
+                                        exit = shrinkHorizontally(motionScheme.defaultSpatialSpec())
+                                    ) {
+                                        Text(
+                                            text = stringResource(item.label),
+                                            fontSize = 16.sp,
+                                            lineHeight = 24.sp,
+                                            maxLines = 1,
+                                            softWrap = false,
+                                            overflow = TextOverflow.Clip,
+                                            modifier = Modifier.padding(start = ButtonDefaults.IconSpacing)
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
+
         }
-
-
     }
 }
 

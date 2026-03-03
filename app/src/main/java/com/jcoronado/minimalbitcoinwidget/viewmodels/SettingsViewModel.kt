@@ -21,13 +21,13 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
     private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
     private val _changePercentageInterval = MutableStateFlow(getSavedChangePercentageInterval())
-    private val _debugModeEnabled = MutableStateFlow(getDebugModeEnabled())
+    private val _developerModeEnabled = MutableStateFlow(getDeveloperModeEnabled())
 
     val theme: StateFlow<AppTheme> = _theme.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
     val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
-    val debugModeEnabled: StateFlow<Boolean> = _debugModeEnabled.asStateFlow()
+    val developerModeEnabled: StateFlow<Boolean> = _developerModeEnabled.asStateFlow()
 
     private fun getSavedTheme(): AppTheme {
         val themeName = prefs.getString(Prefs.SELECTED_THEME, AppTheme.SYSTEM.name)
@@ -70,12 +70,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         PriceViewModel.refreshWidgetsFromCache(getApplication())
     }
 
-    private fun getDebugModeEnabled(): Boolean {
-        return prefs.getBoolean(Prefs.DEBUG_MODE_ENABLED, false)
+    private fun getDeveloperModeEnabled(): Boolean {
+        return prefs.getBoolean(Prefs.DEVELOPER_MODE_ENABLED, false)
     }
 
-    fun setDebugModeEnabled(enabled: Boolean) {
-        _debugModeEnabled.value = enabled
-        prefs.edit { putBoolean(Prefs.DEBUG_MODE_ENABLED, enabled) }
+    fun setDeveloperModeEnabled(enabled: Boolean) {
+        _developerModeEnabled.value = enabled
+        prefs.edit { putBoolean(Prefs.DEVELOPER_MODE_ENABLED, enabled) }
     }
 }

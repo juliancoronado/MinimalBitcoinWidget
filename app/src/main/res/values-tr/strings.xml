@@ -2,9 +2,13 @@
 <resources>
     <string name="settings">Ayarlar</string>
     <string name="last_updated">Son Güncelleme: %1$s</string>
+
+    <!-- Setting Section Headers -->
     <string name="data_header">Veri</string>
     <string name="appearance_header">Görünüm</string>
     <string name="app_info_header">Uygulama Bilgisi</string>
+
+    <!-- SettingsScreen ListItems -->
     <string name="change_percentage">Değişim Yüzdesi</string>
     <string name="cp_interval1">24 saat</string>
     <string name="cp_interval2">7 gün</string>
@@ -23,10 +27,16 @@
     <string name="version">Sürüm</string>
     <string name="build_number">Yapı Numarası</string>
     <string name="contact">İletişim</string>
-    <string name="debug_mode">Hata Ayıklama Modu</string>
-    <string name="debug_mode_subtitle">Hata ayıklama özelliklerini devre dışı bırak</string>
+    <string name="data_source">Veri Kaynağı</string>
+    <string name="data_source_subtitle">CoinGecko API</string>
+    <string name="developer_mode">Geliştirici Modu</string>
+    <string name="developer_mode_subtitle">Geliştirici özellikleri etkinleştirildi</string>
+
+    <!-- Debug -->
     <string name="debug_enabled">Hata ayıklama modu etkin!</string>
     <string name="developer_taps">Geliştirici olmanıza %1$d dokunma kaldı!</string>
+
+    <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Para birimi simgesi</string>
     <string name="change_percentage_icon_description">Yüzde simgesi</string>
     <string name="widget_refresh_interval_icon_description">Zamanlayıcı simgesi</string>
@@ -36,14 +46,19 @@
     <string name="build_icon_description">Yapı simgesi</string>
     <string name="contact_icon_description">İletişim simgesi</string>
     <string name="open_arrow_icon_description">Açılış oku simgesi</string>
-    <string name="debug_icon_description">Hata ayıklama simgesi</string>
+    <string name="chart_data_icon_description">Grafik verileri simgesi</string>
+    <string name="developer_mode_icon_description">Geliştirici modu simgesi</string>
     <string name="bitcoin_icon_description">Bitcoin simgesi</string>
     <string name="trending_up_icon_description">Yükseliş trendi simgesi</string>
     <string name="trending_down_icon_description">Düşüş trendi simgesi</string>
     <string name="trending_flat_icon_description">Yatay trend simgesi</string>
+
+    <!-- Buttons / Actions -->
     <string name="save">Kaydet</string>
     <string name="cancel">İptal</string>
     <string name="clear">Temizle</string>
     <string name="error">Hata</string>
+
+    <!-- Email / Contact -->
     <string name="mail_error">E-posta uygulaması bulunamadı</string>
 </resources>

@@ -2,9 +2,13 @@
 <resources>
     <string name="settings">Definições</string>
     <string name="last_updated">Última atualização: %1$s</string>
+
+    <!-- Setting Section Headers -->
     <string name="data_header">Dados</string>
     <string name="appearance_header">Aparência</string>
     <string name="app_info_header">Info da App</string>
+
+    <!-- SettingsScreen ListItems -->
     <string name="change_percentage">Percentagem de alteração</string>
     <string name="cp_interval1">24 horas</string>
     <string name="cp_interval2">7 dias</string>
@@ -23,10 +27,16 @@
     <string name="version">Versão</string>
     <string name="build_number">Número de compilação</string>
     <string name="contact">Contacto</string>
-    <string name="debug_mode">Modo de depuração</string>
-    <string name="debug_mode_subtitle">Desativar funcionalidades de depuração</string>
+    <string name="data_source">Fonte de dados</string>
+    <string name="data_source_subtitle">CoinGecko API</string>
+    <string name="developer_mode">Modo de programador</string>
+    <string name="developer_mode_subtitle">Funcionalidades de programador ativadas</string>
+
+    <!-- Debug -->
     <string name="debug_enabled">Modo de depuração ativado!</string>
     <string name="developer_taps">Está agora a %1$d toques de ser um programador!</string>
+
+    <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Ícone de moeda</string>
     <string name="change_percentage_icon_description">Ícone de percentagem</string>
     <string name="widget_refresh_interval_icon_description">Ícone de temporizador</string>
@@ -36,14 +46,19 @@
     <string name="build_icon_description">Ícone de compilação</string>
     <string name="contact_icon_description">Ícone de contacto</string>
     <string name="open_arrow_icon_description">Ícone de seta de abertura</string>
-    <string name="debug_icon_description">Ícone de depuração</string>
+    <string name="chart_data_icon_description">Ícone de dados do gráfico</string>
+    <string name="developer_mode_icon_description">Ícone de modo de programador</string>
     <string name="bitcoin_icon_description">Ícone Bitcoin</string>
     <string name="trending_up_icon_description">Ícone tendência de alta</string>
     <string name="trending_down_icon_description">Ícone tendência de baixa</string>
     <string name="trending_flat_icon_description">Ícone tendência estável</string>
+
+    <!-- Buttons / Actions -->
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
     <string name="clear">Limpar</string>
     <string name="error">Erro</string>
+
+    <!-- Email / Contact -->
     <string name="mail_error">Nenhuma aplicação de e-mail encontrada</string>
 </resources>

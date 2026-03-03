@@ -72,7 +72,7 @@ fun SettingsScreen(
     onRefreshIntervalSelected: (Int) -> Unit = {},
     changePercentage: Int = 0,
     onChangePercentageSelected: (Int) -> Unit = {},
-    debugModeEnabled: Boolean = false,
+    developerModeEnabled: Boolean = false,
     onDebugModeToggle: (Boolean) -> Unit = {}
 ) {
     val context = LocalContext.current
@@ -389,7 +389,28 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 0, count = if (debugModeEnabled) 4 else 3
+                            index = 0, count = if (developerModeEnabled) 5 else 4
+                        ),
+                        leadingContent = {
+                            Icon(
+                                painterResource(R.drawable.rounded_chart_data_24),
+                                stringResource(R.string.chart_data_icon_description)
+                            )
+                        },
+                        content = {
+                            Text(stringResource(R.string.data_source), fontWeight = FontWeight.Bold)
+                        },
+                        supportingContent = {
+                            Text(stringResource(R.string.data_source_subtitle))
+                        },
+                        onClick = { },
+                    )
+                }
+                CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                    SegmentedListItem(
+                        colors = colors,
+                        shapes = ListItemDefaults.segmentedShapes(
+                            index = 1, count = if (developerModeEnabled) 5 else 4
                         ),
                         leadingContent = {
                             Icon(
@@ -418,7 +439,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 1, count = if (debugModeEnabled) 4 else 3
+                            index = 2, count = if (developerModeEnabled) 5 else 4
                         ),
                         leadingContent = {
                             Icon(
@@ -437,7 +458,7 @@ fun SettingsScreen(
                             )
                         },
                         onClick = {
-                            if (!debugModeEnabled) {
+                            if (!developerModeEnabled) {
                                 tapCount++
                                 // small helper method
                                 val showToast: (String) -> Unit = { message ->
@@ -460,7 +481,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 2, count = if (debugModeEnabled) 4 else 3
+                        index = 3, count = if (developerModeEnabled) 5 else 4
                     ),
                     leadingContent = {
                         Icon(
@@ -492,27 +513,27 @@ fun SettingsScreen(
                         }
                     },
                 )
-                if (debugModeEnabled) {
+                if (developerModeEnabled) {
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 3, count = 4
+                            index = 4, count = 5
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_bug_report_24),
-                                stringResource(R.string.debug_icon_description)
+                                painterResource(R.drawable.rounded_code_24),
+                                stringResource(R.string.developer_mode_icon_description)
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.debug_mode), fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.developer_mode), fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
-                            Text(stringResource(R.string.debug_mode_subtitle))
+                            Text(stringResource(R.string.developer_mode_subtitle))
                         },
                         trailingContent = {
                             Switch(
-                                checked = debugModeEnabled, onCheckedChange = null
+                                checked = developerModeEnabled, onCheckedChange = null
                             )
                         },
                         onClick = {

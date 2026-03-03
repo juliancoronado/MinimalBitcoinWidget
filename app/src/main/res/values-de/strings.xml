@@ -2,9 +2,13 @@
 <resources>
     <string name="settings">Einstellungen</string>
     <string name="last_updated">Zuletzt aktualisiert: %1$s</string>
+
+    <!-- Setting Section Headers -->
     <string name="data_header">Daten</string>
     <string name="appearance_header">Aussehen</string>
     <string name="app_info_header">App-Info</string>
+
+    <!-- SettingsScreen ListItems -->
     <string name="change_percentage">Änderungsprozentsatz</string>
     <string name="cp_interval1">24 Stunden</string>
     <string name="cp_interval2">7 Tage</string>
@@ -23,10 +27,16 @@
     <string name="version">Version</string>
     <string name="build_number">Build-Nummer</string>
     <string name="contact">Kontakt</string>
-    <string name="debug_mode">Debug-Modus</string>
-    <string name="debug_mode_subtitle">Debug-Funktionen deaktivieren</string>
+    <string name="data_source">Datenquelle</string>
+    <string name="data_source_subtitle">CoinGecko-API</string>
+    <string name="developer_mode">Entwicklermodus</string>
+    <string name="developer_mode_subtitle">Entwicklerfunktionen aktiviert</string>
+
+    <!-- Debug -->
     <string name="debug_enabled">Debug-Modus aktiviert!</string>
     <string name="developer_taps">Sie sind jetzt noch %1$d Tipps davon entfernt, ein Entwickler zu sein!</string>
+
+    <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Währungssymbol</string>
     <string name="change_percentage_icon_description">Prozentsymbol</string>
     <string name="widget_refresh_interval_icon_description">Timer-Symbol</string>
@@ -36,14 +46,19 @@
     <string name="build_icon_description">Build-Symbol</string>
     <string name="contact_icon_description">Kontakt-Symbol</string>
     <string name="open_arrow_icon_description">Symbol für Pfeil zum Öffnen</string>
-    <string name="debug_icon_description">Debug-Symbol</string>
+    <string name="chart_data_icon_description">Diagrammdaten-Symbol</string>
+    <string name="developer_mode_icon_description">Symbol für Entwicklermodus</string>
     <string name="bitcoin_icon_description">Bitcoin-Symbol</string>
     <string name="trending_up_icon_description">Aufwärtstrend-Symbol</string>
     <string name="trending_down_icon_description">Abwärtstrend-Symbol</string>
     <string name="trending_flat_icon_description">Seitwärtstrend-Symbol</string>
+
+    <!-- Buttons / Actions -->
     <string name="save">Speichern</string>
     <string name="cancel">Abbrechen</string>
     <string name="clear">Löschen</string>
     <string name="error">Fehler</string>
+
+    <!-- Email / Contact -->
     <string name="mail_error">Keine E-Mail-App gefunden</string>
 </resources>
