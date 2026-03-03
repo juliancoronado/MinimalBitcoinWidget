@@ -52,6 +52,8 @@
     <string name="trending_up_icon_description">Icône tendance hausse</string>
     <string name="trending_down_icon_description">Icône tendance baisse</string>
     <string name="trending_flat_icon_description">Icône tendance stable</string>
+    <string name="notes_icon_description">Icône de journaux</string>
+    <string name="back_icon_description">Icône de retour</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Enregistrer</string>

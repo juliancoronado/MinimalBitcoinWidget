@@ -52,6 +52,8 @@
     <string name="trending_up_icon_description">Ícone de tendência de alta</string>
     <string name="trending_down_icon_description">Ícone de tendência de baixa</string>
     <string name="trending_flat_icon_description">Ícone de tendência estável</string>
+    <string name="notes_icon_description">Ícone de registros</string>
+    <string name="back_icon_description">Ícone de voltar</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Salvar</string>
