@@ -50,9 +50,21 @@ class PriceUpdateWorker(
         val db = AppDatabase.getInstance(applicationContext)
         val dao = db.debugDao()
 
-        dao.insert(DebugLog(message = "Worker Started: Fetching Data"))
+        dao.insert(DebugLog(message = "PriceWorker: Fetching Data"))
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        
+        val lastApiCallTime = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
+        val currentTime = System.currentTimeMillis()
+        val cacheDuration = 15 * 60 * 1000L // 15 minutes
+
+        if (currentTime - lastApiCallTime < cacheDuration) {
+            dao.insert(DebugLog(message = "PriceWorker: Skipping Data Fetch - Data is fresh (< 15 mins)"))
+            Log.d(LOG_TAG, "Data is fresh, skipping fetch")
+            PriceViewModel.refreshWidgetsFromCache(context)
+            return@withContext Result.success()
+        }
+
         val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
             ?: AppConstants.CURRENCY_DEFAULT
 
@@ -84,7 +96,7 @@ class PriceUpdateWorker(
                     // update widgets using the helper in PriceViewModel
                     PriceViewModel.refreshWidgetsFromCache(context)
 
-                    dao.insert(DebugLog(message = "Worker Success: Data fetched"))
+                    dao.insert(DebugLog(message = "PriceWorker: Data Fetched"))
 
                     Result.success()
                 } else {
@@ -93,14 +105,14 @@ class PriceUpdateWorker(
             } else if (response.code == 429) {
                 Result.retry()
             } else {
-                throw Exception("Server error: ${response.code}")
+                throw Exception("Error: ${response.code}")
             }
         } catch (e: IOException) {
-            dao.insert(DebugLog(message = "Worker Failed (Network Error): ${e.localizedMessage}"))
+            dao.insert(DebugLog(message = "PriceWorker: Failed (Network) - ${e.localizedMessage}"))
             Log.e(LOG_TAG, "Network error", e)
             return@withContext handleError(e)
         } catch (e: Exception) {
-            dao.insert(DebugLog(message = "Worker Failed (Other Error): ${e.localizedMessage}"))
+            dao.insert(DebugLog(message = "PriceWorker: Failed (Other) - ${e.localizedMessage}"))
             Log.e(LOG_TAG, "Fatal error", e)
             return@withContext handleError(e)
         }
