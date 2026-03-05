@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -99,25 +101,27 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                 item {
                     val colors =
                         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
-                    SegmentedListItem(
-                        colors = colors,
-                        shapes = ListItemDefaults.segmentedShapes(
-                            index = 1, count = 2
-                        ),
-                        leadingContent = {
-                            Icon(
-                                painterResource(R.drawable.rounded_bug_report_24),
-                                "TODO"
-                            )
-                        },
-                        content = {
-                            Text("TODO", fontWeight = FontWeight.Bold)
-                        },
-                        supportingContent = {
-                            Text("TODO")
-                        },
-                        onClick = {},
-                    )
+                    CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                        SegmentedListItem(
+                            colors = colors,
+                            shapes = ListItemDefaults.segmentedShapes(
+                                index = 1, count = 2
+                            ),
+                            leadingContent = {
+                                Icon(
+                                    painterResource(R.drawable.rounded_bug_report_24),
+                                    "TODO"
+                                )
+                            },
+                            content = {
+                                Text("TODO", fontWeight = FontWeight.Bold)
+                            },
+                            supportingContent = {
+                                Text("TODO")
+                            },
+                            onClick = {},
+                        )
+                    }
                 }
             }
         }
@@ -204,21 +208,23 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
 fun LogItem(index: Int, log: DebugLog, length: Int) {
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
-    SegmentedListItem(
-        colors = colors,
-        shapes = ListItemDefaults.segmentedShapes(
-            index = index, count = length
-        ),
-        content = {
-            Text(
-                text = log.timestamp, fontSize = 12.sp
-            )
-        },
-        supportingContent = {
-            Text(
-                text = log.message, fontSize = 16.sp
-            )
-        },
-        onClick = {},
-    )
+    CompositionLocalProvider(LocalRippleConfiguration provides null) {
+        SegmentedListItem(
+            colors = colors,
+            shapes = ListItemDefaults.segmentedShapes(
+                index = index, count = length
+            ),
+            content = {
+                Text(
+                    text = log.timestamp, fontSize = 12.sp
+                )
+            },
+            supportingContent = {
+                Text(
+                    text = log.message, fontSize = 16.sp
+                )
+            },
+            onClick = {},
+        )
+    }
 }

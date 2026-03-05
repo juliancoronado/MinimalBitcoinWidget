@@ -59,7 +59,7 @@ class PriceUpdateWorker(
         val cacheDuration = 15 * 60 * 1000L // 15 minutes
 
         if (currentTime - lastApiCallTime < cacheDuration) {
-            dao.insert(DebugLog(message = "PriceWorker: Skipping Data Fetch - Data is fresh (< 15 mins)"))
+            dao.insert(DebugLog(message = "PriceWorker: Skipping Data Fetch (< 15 mins)"))
             Log.d(LOG_TAG, "Data is fresh, skipping fetch")
             PriceViewModel.refreshWidgetsFromCache(context)
             return@withContext Result.success()
