@@ -14,6 +14,9 @@ sealed class Screen : NavKey {
 
     @Serializable
     object DeveloperOptions : Screen()
+
+    @Serializable
+    object WidgetLogs : Screen()
 }
 
 data class NavItem(

@@ -58,10 +58,13 @@
     <string name="data_source_subtitle">CoinGecko API</string>
     <string name="developer_mode">Developer Mode</string>
     <string name="developer_mode_subtitle">Developer features enabled</string>
-
-    <!-- Debug -->
     <string name="debug_enabled">Debug mode enabled!</string>
     <string name="developer_taps">You are now %1$d taps away from being a developer!</string>
+
+    <!-- Developer Options Screen - don't translate these for now -->
+    <string name="developer_options_title" translatable="false">Developer Options</string>
+    <string name="widget_logs" translatable="false">Widget Logs</string>
+    <string name="widget_logs_description" translatable="false">View logs for the widget update worker</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Currency icon</string>
@@ -79,6 +82,8 @@
     <string name="trending_up_icon_description">Trending up icon</string>
     <string name="trending_down_icon_description">Trending down icon</string>
     <string name="trending_flat_icon_description">Trending flat icon</string>
+    <string name="notes_icon_description">Logs icon</string>
+    <string name="back_icon_description">Back icon</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Save</string>

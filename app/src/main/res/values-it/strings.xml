@@ -52,6 +52,8 @@
     <string name="trending_up_icon_description">Icona tendenza in rialzo</string>
     <string name="trending_down_icon_description">Icona tendenza in ribasso</string>
     <string name="trending_flat_icon_description">Icona tendenza stabile</string>
+    <string name="notes_icon_description">Icona dei log</string>
+    <string name="back_icon_description">Icona indietro</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Salva</string>

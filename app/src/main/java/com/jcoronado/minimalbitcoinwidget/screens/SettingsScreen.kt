@@ -435,7 +435,7 @@ fun SettingsScreen(
                 }
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     val enabledMessage = stringResource(R.string.debug_enabled)
-                    val stepsMessage = stringResource(R.string.developer_taps, 9 - tapCount)
+                    val stepsMessage = stringResource(R.string.developer_taps, 14 - tapCount)
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
@@ -467,11 +467,11 @@ fun SettingsScreen(
                                         Toast.makeText(context, message, Toast.LENGTH_SHORT)
                                     currentToast?.show()
                                 }
-                                if (tapCount >= 10) {
+                                if (tapCount >= 15) {
                                     onDebugModeToggle(true)
                                     showToast(enabledMessage)
                                     tapCount = 0
-                                } else if (tapCount > 5) {
+                                } else if (tapCount > 10) {
                                     showToast(stepsMessage)
                                 }
                             }
