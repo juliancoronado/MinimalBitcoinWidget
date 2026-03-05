@@ -301,7 +301,7 @@ fun setWidgetViews(
             percentFormatter.format(percentage / 100)
         )
         
-        views.setTextViewText(R.id.widget_change_label, context.getString(interval.labelResId))
+        views.setTextViewText(R.id.widget_change_label, "${context.getString(interval.labelResId)}:")
 
         views.setTextViewText(R.id.widget_iso_code, currencyInfo.isoCode)
         views.setTextViewText(R.id.widget_symbol, currencyInfo.symbol)
