@@ -87,6 +87,12 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                         supportingContent = {
                             Text(stringResource(R.string.widget_logs_description))
                         },
+                        trailingContent = {
+                            Icon(
+                                painterResource(R.drawable.rounded_chevron_forward_24),
+                                "TODO"
+                            )
+                        },
                         onClick = onNavigateToLogs,
                     )
                 }
