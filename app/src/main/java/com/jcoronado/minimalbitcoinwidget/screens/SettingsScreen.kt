@@ -19,7 +19,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ButtonGroup
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -33,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -92,15 +94,26 @@ fun SettingsScreen(
     val mailError = stringResource(R.string.mail_error)
 
     if (showCurrencyDialog.value) {
-        AlertDialog(
+        BasicAlertDialog(
             modifier = Modifier.heightIn(min = 200.dp, max = 400.dp),
-            onDismissRequest = { showCurrencyDialog.value = false },
-            title = { Text(stringResource(R.string.update_currency)) },
-            text = {
-                Column(Modifier.fillMaxWidth()) {
+            onDismissRequest = { showCurrencyDialog.value = false }) {
+            Surface(
+                shape = MaterialTheme.shapes.large,
+                tonalElevation = AlertDialogDefaults.TonalElevation,
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        stringResource(R.string.update_currency),
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.padding(all = 16.dp)
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 0.dp))
                     Column(
                         Modifier
                             .fillMaxWidth()
+                            .weight(weight = 1.0F)
                             .verticalScroll(rememberScrollState())
                     ) {
                         currencyCodes.forEachIndexed { index, currency ->
@@ -116,6 +129,7 @@ fun SettingsScreen(
                                     .padding(vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
+                                Spacer(Modifier.width(16.dp))
                                 RadioButton(
                                     selected = (currency.equals(newSelection, ignoreCase = true)),
                                     onClick = null // row handles click
@@ -125,25 +139,31 @@ fun SettingsScreen(
                                     text = "${currencyDescriptions[index]} (${currency.uppercase()})",
                                     style = MaterialTheme.typography.bodyLarge
                                 )
+                                Spacer(Modifier.width(16.dp))
                             }
                         }
                     }
                     HorizontalDivider(modifier = Modifier.padding(vertical = 0.dp))
+                    Row(
+                        modifier = Modifier
+                            .padding(all = 16.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextButton(onClick = { showCurrencyDialog.value = false }) {
+                            Text(stringResource(R.string.cancel))
+                        }
+                        TextButton(onClick = {
+                            showCurrencyDialog.value = false
+                            onCurrencySelected(newSelection)
+                        }) {
+                            Text(stringResource(R.string.save))
+                        }
+                    }
                 }
-            },
-            confirmButton = {
-                TextButton(onClick = {
-                    showCurrencyDialog.value = false
-                    onCurrencySelected(newSelection)
-                }) {
-                    Text(stringResource(R.string.save))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showCurrencyDialog.value = false }) {
-                    Text(stringResource(R.string.cancel))
-                }
-            })
+            }
+        }
     }
 
     Scaffold(
@@ -179,7 +199,7 @@ fun SettingsScreen(
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_currency_exchange_24),
+                            painterResource(R.drawable.rounded_price_change_24),
                             stringResource(R.string.update_currency_icon_description)
                         )
                     },
@@ -526,7 +546,10 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.developer_mode), fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.developer_mode),
+                                fontWeight = FontWeight.Bold
+                            )
                         },
                         supportingContent = {
                             Text(stringResource(R.string.developer_mode_subtitle))

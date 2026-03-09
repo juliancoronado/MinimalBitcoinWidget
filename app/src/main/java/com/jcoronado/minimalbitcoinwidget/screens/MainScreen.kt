@@ -39,6 +39,7 @@ import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.compose.ui.platform.LocalLocale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -71,8 +72,9 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
-    val formattedTime =
-        SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(uiState.lastUpdated)
+    val formattedTime = SimpleDateFormat(
+        "hh:mm:ss a", LocalLocale.current.platformLocale
+    ).format(uiState.lastUpdated)
     SegmentedListItem(
         modifier = Modifier.padding(horizontal = 12.dp),
         onClick = onRefresh,

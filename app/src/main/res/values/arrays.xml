@@ -1,14 +1,14 @@
 <resources>
     <!-- Currency Names -->
     <string-array name="currency_descriptions">
-        <item>US Dollar - $</item>
-        <item>British Pound - £</item>
-        <item>Japanese Yen - ¥</item>
-        <item>Euro - €</item>
-        <item>Canadian Dollar - $</item>
-        <item>Mexican Peso - $</item>
-        <item>Australian Dollar - $</item>
-        <item>Brazilian Real - R$</item>
+        <item>US Dollar $</item>
+        <item>British Pound £</item>
+        <item>Japanese Yen ¥</item>
+        <item>Euro €</item>
+        <item>Canadian Dollar $</item>
+        <item>Mexican Peso $</item>
+        <item>Australian Dollar $</item>
+        <item>Brazilian Real R$</item>
     </string-array>
 
     <!-- Currency Codes -->
