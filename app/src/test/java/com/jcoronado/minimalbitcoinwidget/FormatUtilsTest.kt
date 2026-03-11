@@ -19,12 +19,12 @@ class FormatUtilsTest {
     @Test
     fun `formatChange with negative value adds minus sign and percentage`() {
         val result = FormatUtils.formatChange(-5.678)
-        assertEquals("-5.68%", result)
+        assertEquals(" -5.68%", result)
     }
 
     @Test
     fun `formatChange with zero value`() {
         val result = FormatUtils.formatChange(0.0)
-        assertEquals("0.00%", result.trim())
+        assertEquals(" 0.00%", result)
     }
 }
