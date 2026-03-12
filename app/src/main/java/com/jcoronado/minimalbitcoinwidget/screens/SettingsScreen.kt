@@ -567,7 +567,7 @@ fun SettingsScreen(
                 // to prevent list items from hiding under the floating horizontal bar
                 Spacer(
                     Modifier.height(
-                        WindowInsets.systemBars.asPaddingValues().calculateBottomPadding() + 100.dp
+                        WindowInsets.systemBars.asPaddingValues().calculateBottomPadding() + 25.dp
                     )
                 )
             }

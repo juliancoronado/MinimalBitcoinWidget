@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,14 +48,16 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(stringResource(R.string.developer_options_title))
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
-                )
+                ), scrollBehavior = scrollBehavior
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -134,6 +137,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
 fun WidgetLogsScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     // get the db
     val db = remember { AppDatabase.getInstance(context) }
@@ -142,6 +146,7 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
     val logs by db.debugDao().getAllLogs().collectAsState(initial = emptyList())
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -164,7 +169,7 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                     ) {
                         Text(stringResource(R.string.clear))
                     }
-                })
+                }, scrollBehavior = scrollBehavior)
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -191,7 +196,7 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                             Spacer(
                                 Modifier.height(
                                     WindowInsets.systemBars.asPaddingValues()
-                                        .calculateBottomPadding() + 100.dp
+                                        .calculateBottomPadding() + 0.dp
                                 )
                             )
                         }

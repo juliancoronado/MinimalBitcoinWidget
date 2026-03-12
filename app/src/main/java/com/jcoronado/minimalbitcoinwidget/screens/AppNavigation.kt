@@ -5,6 +5,8 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -36,11 +38,18 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -86,6 +95,29 @@ fun AppNavigation() {
         }
     }
 
+    var isNavBarVisibleByScroll by remember { mutableStateOf(true) }
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (available.y < -1f) {
+                    isNavBarVisibleByScroll = false
+                } else if (available.y > 1f) {
+                    isNavBarVisibleByScroll = true
+                }
+                return Offset.Zero
+            }
+        }
+    }
+
+    var navBarSelectedItem by remember { mutableStateOf(currentRoute) }
+
+    LaunchedEffect(currentRoute) {
+        isNavBarVisibleByScroll = true
+        if (showNavBar) {
+            navBarSelectedItem = currentRoute
+        }
+    }
+
     val navigationScreenList = remember(developerModeEnabled) {
         listOfNotNull(
             NavItem(
@@ -105,7 +137,9 @@ fun AppNavigation() {
     }
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(nestedScrollConnection),
         color = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -186,10 +220,13 @@ fun AppNavigation() {
                     ), Alignment.BottomCenter
             ) {
                 AnimatedVisibility(
-                    visible = showNavBar,
-                    // TODO - tweak these a bit to better match M3E
-                    enter = fadeIn(motionScheme.defaultSpatialSpec()),
-                    exit = fadeOut(motionScheme.defaultSpatialSpec()),
+                    visible = showNavBar && isNavBarVisibleByScroll,
+                    enter = fadeIn(motionScheme.defaultSpatialSpec()) + slideInVertically(
+                        motionScheme.defaultSpatialSpec()
+                    ) { it },
+                    exit = fadeOut(motionScheme.defaultSpatialSpec()) + slideOutVertically(
+                        motionScheme.defaultSpatialSpec()
+                    ) { it },
                 ) {
                     HorizontalFloatingToolbar(
                         expanded = true, colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(
@@ -203,7 +240,7 @@ fun AppNavigation() {
                             .zIndex(1f)
                     ) {
                         navigationScreenList.fastForEach { item ->
-                            val selected = item.route == currentRoute
+                            val selected = item.route == navBarSelectedItem
                             TooltipBox(
                                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                                     TooltipAnchorPosition.Above
