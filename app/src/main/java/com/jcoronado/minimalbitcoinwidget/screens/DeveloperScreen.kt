@@ -54,7 +54,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.developer_options_title))
+                    Text(stringResource(R.string.developer_title))
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ), scrollBehavior = scrollBehavior

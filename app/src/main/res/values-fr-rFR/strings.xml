@@ -33,8 +33,8 @@
     <string name="developer_mode_subtitle">Fonctionnalités de développement activées</string>
 
     <!-- Debug -->
-    <string name="debug_enabled">Mode débogage activé !</string>
-    <string name="developer_taps">Vous êtes maintenant à %1$d pressions d\'être un développeur !</string>
+    <string name="developer_mode_enabled">Mode développeur activé !</string>
+    <string name="developer_taps">Vous êtes maintenant à %1$d pressions d\'être un développeur</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Icône de devise</string>

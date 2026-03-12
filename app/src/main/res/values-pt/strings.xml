@@ -21,7 +21,7 @@
     <string name="app_theme">Tema da App</string>
     <string name="app_theme_system">Sistema</string>
     <string name="app_theme_light">Claro</string>
-    <string name="app_theme_dark">Oscuro</string>
+    <string name="app_theme_dark">Escuro</string>
     <string name="dynamic_colors">Cores dinâmicas</string>
     <string name="dynamic_colors_subtitle">Seguir cores do tema do dispositivo</string>
     <string name="version">Versão</string>
@@ -33,8 +33,8 @@
     <string name="developer_mode_subtitle">Funcionalidades de programador ativadas</string>
 
     <!-- Debug -->
-    <string name="debug_enabled">Modo de depuração ativado!</string>
-    <string name="developer_taps">Está agora a %1$d toques de ser um programador!</string>
+    <string name="developer_mode_enabled">Modo de programador ativado!</string>
+    <string name="developer_taps">Está agora a %1$d toques de ser um programador</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Ícone de moeda</string>

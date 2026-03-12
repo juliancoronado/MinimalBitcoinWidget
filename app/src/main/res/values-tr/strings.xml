@@ -33,8 +33,8 @@
     <string name="developer_mode_subtitle">Geliştirici özellikleri etkinleştirildi</string>
 
     <!-- Debug -->
-    <string name="debug_enabled">Hata ayıklama modu etkin!</string>
-    <string name="developer_taps">Geliştirici olmanıza %1$d dokunma kaldı!</string>
+    <string name="developer_mode_enabled">Geliştirici modu etkin!</string>
+    <string name="developer_taps">Geliştirici olmanıza %1$d dokunma kaldı</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Para birimi simgesi</string>

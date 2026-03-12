@@ -454,7 +454,7 @@ fun SettingsScreen(
                     )
                 }
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
-                    val enabledMessage = stringResource(R.string.debug_enabled)
+                    val enabledMessage = stringResource(R.string.developer_mode_enabled)
                     val stepsMessage = stringResource(R.string.developer_taps, 14 - tapCount)
                     SegmentedListItem(
                         colors = colors,

@@ -33,8 +33,8 @@
     <string name="developer_mode_subtitle">Recursos de desenvolvedor ativados</string>
 
     <!-- Debug -->
-    <string name="debug_enabled">Modo de depuração ativado!</string>
-    <string name="developer_taps">Você está agora a %1$d toques de ser um desenvolvedor!</string>
+    <string name="developer_mode_enabled">Modo de desenvolvedor ativado!</string>
+    <string name="developer_taps">Você está agora a %1$d toques de ser um desenvolvedor</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Ícone de moeda</string>

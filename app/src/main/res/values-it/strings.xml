@@ -33,8 +33,8 @@
     <string name="developer_mode_subtitle">Funzionalità per sviluppatori abilitate</string>
 
     <!-- Debug -->
-    <string name="debug_enabled">Modalità debug abilitata!</string>
-    <string name="developer_taps">Ora sei a %1$d tocchi dal diventare uno sviluppatore!</string>
+    <string name="developer_mode_enabled">Modalità sviluppatore abilitata!</string>
+    <string name="developer_taps">Ora sei a %1$d tocchi dal diventare uno sviluppatore</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Icona valuta</string>
