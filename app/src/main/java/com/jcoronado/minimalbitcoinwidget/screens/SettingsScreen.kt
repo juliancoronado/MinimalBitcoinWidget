@@ -453,51 +453,48 @@ fun SettingsScreen(
                         onClick = {}, // this method is intentionally left empty
                     )
                 }
-                CompositionLocalProvider(LocalRippleConfiguration provides null) {
-                    val enabledMessage = stringResource(R.string.developer_mode_enabled)
-                    val stepsMessage = stringResource(R.string.developer_taps, 14 - tapCount)
-                    SegmentedListItem(
-                        colors = colors,
-                        shapes = ListItemDefaults.segmentedShapes(
-                            index = 2, count = if (developerModeEnabled) 5 else 4
-                        ),
-                        leadingContent = {
-                            Icon(
-                                painterResource(R.drawable.rounded_build_24),
-                                stringResource(R.string.build_icon_description)
-                            )
-                        },
-                        content = {
-                            Text(
-                                stringResource(R.string.build_number), fontWeight = FontWeight.Bold
-                            )
-                        },
-                        supportingContent = {
-                            Text(
-                                BuildConfig.VERSION_CODE.toString()
-                            )
-                        },
-                        onClick = {
-                            if (!developerModeEnabled) {
-                                tapCount++
-                                // small helper method
-                                val showToast: (String) -> Unit = { message ->
-                                    currentToast?.cancel() // cancel previous toast message
-                                    currentToast =
-                                        Toast.makeText(context, message, Toast.LENGTH_SHORT)
-                                    currentToast?.show()
-                                }
-                                if (tapCount >= 15) {
-                                    onDebugModeToggle(true)
-                                    showToast(enabledMessage)
-                                    tapCount = 0
-                                } else if (tapCount > 10) {
-                                    showToast(stepsMessage)
-                                }
+                val enabledMessage = stringResource(R.string.developer_mode_enabled)
+                val stepsMessage = stringResource(R.string.developer_taps, 14 - tapCount)
+                SegmentedListItem(
+                    colors = colors,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        index = 2, count = if (developerModeEnabled) 5 else 4
+                    ),
+                    leadingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_build_24),
+                            stringResource(R.string.build_icon_description)
+                        )
+                    },
+                    content = {
+                        Text(
+                            stringResource(R.string.build_number), fontWeight = FontWeight.Bold
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            BuildConfig.VERSION_CODE.toString()
+                        )
+                    },
+                    onClick = {
+                        if (!developerModeEnabled) {
+                            tapCount++
+                            // small helper method
+                            val showToast: (String) -> Unit = { message ->
+                                currentToast?.cancel() // cancel previous toast message
+                                currentToast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                                currentToast?.show()
                             }
-                        },
-                    )
-                }
+                            if (tapCount >= 15) {
+                                onDebugModeToggle(true)
+                                showToast(enabledMessage)
+                                tapCount = 0
+                            } else if (tapCount > 10) {
+                                showToast(stepsMessage)
+                            }
+                        }
+                    },
+                )
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
