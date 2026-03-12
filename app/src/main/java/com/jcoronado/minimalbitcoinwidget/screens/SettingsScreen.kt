@@ -579,7 +579,7 @@ fun SectionHeader(title: String, top: Boolean = false) {
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .padding(horizontal = 4.dp)
-            .padding(top = if (top) 4.dp else 16.dp, bottom = 8.dp)
+            .padding(top = if (top) 0.dp else 16.dp, bottom = 8.dp)
     )
 }
 
