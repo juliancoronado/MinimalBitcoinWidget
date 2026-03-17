@@ -10,6 +10,6 @@
     <color name="positive_green">#26BF2C</color>
     <color name="negative_red">#DC2323</color>
 
-    <color name="widget_preview_background_light">#EFEFF6</color>
+    <color name="widget_preview_background_light">#FAFAFF</color>
 
 </resources>

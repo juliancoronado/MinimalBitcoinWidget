@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/layout_bg"
@@ -44,15 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="48dp">
 
-        <ProgressBar
-            android:id="@+id/widget_progress_bar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="gone" />
-
         <LinearLayout
             android:id="@+id/widget_price_container"
             android:layout_width="match_parent"
@@ -75,9 +67,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/manrope_bold"
-                android:text="35,284.91"
+                android:text="52,849.10"
                 android:textColor="?attr/appWidgetTextColor"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </FrameLayout>
@@ -93,7 +86,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
-            android:layout_marginEnd="3dp"
             android:fontFamily="@font/manrope_regular"
             android:gravity="center_vertical"
             android:text="@string/interval_24h"
@@ -101,14 +93,27 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/colon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
+            android:fontFamily="@font/manrope_regular"
+            android:gravity="center_vertical"
+            android:text=":"
+            android:textColor="?attr/appWidgetTextColor"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
             android:id="@+id/widget_day_change"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:fontFamily="@font/manrope_regular"
             android:gravity="center_vertical"
-            android:text="-1.03%"
-            android:textColor="@color/negative_red"
-            android:textSize="12sp" />
+            android:text="2.45%"
+            android:textColor="@color/positive_green"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 
