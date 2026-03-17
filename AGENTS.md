@@ -1,0 +1,57 @@
+# Minimal Bitcoin Widget - Context for AI Agents
+
+This file provides context, architectural guidelines, and conventions for AI assistants and agents interacting with this repository.
+
+## Overview
+**Minimal Bitcoin Widget** is an Android application that provides homescreen widgets to display the current price of Bitcoin. It includes a companion app for configuration and relies heavily on Modern Android Development (MAD) practices.
+
+## Tech Stack
+- **Language:** Kotlin (JVM 11 target)
+- **SDK Versions:** Min SDK 28, Target/Compile SDK 36
+- **UI Framework:** Jetpack Compose (Material 3)
+- **Widgets:** Jetpack Glance for modern widgets, with support for legacy AppWidgets.
+- **Background Work:** WorkManager (for periodic API polling)
+- **Networking:** OkHttp, Gson (Fetches data from CoinGecko API)
+- **Local Storage:** SharedPreferences (for user settings and caching), Room Database (primarily for debugging/logs)
+- **Architecture:** MVVM (Model-View-ViewModel)
+
+## Project Structure
+The project consists of a single `:app` module. The main source code is under `app/src/main/java/com/jcoronado/minimalbitcoinwidget/`.
+
+Key directories and files:
+- **`MainActivity.kt`**: The main entry point for the companion Compose app.
+- **`screens/` & `ui/`**: Jetpack Compose UI screens, theming, and reusable components.
+- **`viewmodels/`**: ViewModels (e.g., `PriceViewModel`) that handle business logic, UI state, and bridge the data to the widgets.
+- **`widgets/`**: Contains widget implementations. Divided into Glance widgets (`PriceWidget`) and legacy implementations (`LegacyPriceWidget`).
+- **`workers/`**: Contains `PriceUpdateWorker.kt` which uses WorkManager to periodically fetch Bitcoin prices in the background.
+- **`classes/`**: Data models, constants (`AppConstants`), preference keys (`Prefs`), and API configuration (`Api`).
+- **`AppDatabase.kt`**: Room database setup, mainly used for storing internal `DebugLog` entries.
+
+## Development Conventions & Guidelines
+
+### 1. UI & Theming
+- **Strictly use Jetpack Compose** for all new app UI development. Avoid introducing new XML layouts.
+- Follow **Material 3 & Material 3 Expressive** design guidelines.
+
+### 2. Widget Development
+- Prefer **Jetpack Glance** for building and updating widget UI. Maintain existing legacy XML for backwards compatibility.
+- Ensure state updates (like new price data or errors) are propagated to both Glance and legacy widgets where necessary. Widget states are often managed through `PriceViewModel` helper functions.
+
+### 3. Background Processing & Networking
+- All periodic data fetching must go through **WorkManager** (`PriceUpdateWorker`).
+- **Respect API limits:** The app fetches from CoinGecko. Maintain the existing caching logic (e.g., the 15-minute cache buffer) to avoid `429 Too Many Requests` errors.
+- Handle network failures gracefully. If a fetch fails, the widget should be updated to an error state (`PriceWidgetState.Error`) rather than crashing, and WorkManager should handle the retry backoff.
+
+### 4. Data Storage
+- **SharedPreferences:** Used for lightweight data, user preferences (e.g., selected currency, refresh interval), and caching the most recent JSON response.
+- **Room Database:** Currently used for internal debugging/logging (`DebugLog`). Avoid using it for heavy relational data unless the app's scope expands.
+
+### 5. State Management
+- Use `ViewModel` combined with Kotlin Coroutines for managing app state.
+- Keep the worker logic separate from the UI. Workers should fetch data, save it to persistent storage (Preferences/DB), and trigger a widget refresh.
+
+## General AI Instructions
+- When making changes to the UI, verify compatibility with Jetpack Compose Material 3.
+- When modifying data fetching logic, ensure background constraints (like network connectivity) and caching rules are preserved.
+- Prioritize Kotlin idioms, Coroutines, and Flow where appropriate.
+- When providing stringResource translations, ensure translations exist for all strings.xml files (currently 9 total).
