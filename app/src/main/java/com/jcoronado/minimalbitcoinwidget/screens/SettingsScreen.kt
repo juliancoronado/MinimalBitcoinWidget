@@ -428,7 +428,9 @@ fun SettingsScreen(
                             stringResource(R.string.open_arrow_icon_description)
                         )
                     },
-                    onClick = { },
+                    onClick = {
+                        // TODO - implement opening URL in browser
+                    },
                 )
                 SegmentedListItem(
                     colors = colors,
@@ -438,17 +440,14 @@ fun SettingsScreen(
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_folder_code_24),
-                            // TODO - create stringResource and provide translations
                             stringResource(R.string.folder_code_icon_description)
                         )
                     },
                     content = {
-                        // TODO - convert to stringResource and create translations
-                        Text("Source Code", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.source_code), fontWeight = FontWeight.Bold)
                     },
                     supportingContent = {
-                        // TODO - convert to stringResource and create translations
-                        Text("View on GitHub")
+                        Text(stringResource(R.string.view_on_github))
                     },
                     trailingContent = {
                         Icon(
@@ -456,7 +455,9 @@ fun SettingsScreen(
                             stringResource(R.string.open_arrow_icon_description)
                         )
                     },
-                    onClick = { },
+                    onClick = {
+                        // TODO - implement opening URL in browser
+                    },
                 )
 
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
@@ -468,17 +469,14 @@ fun SettingsScreen(
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_license_24),
-                                // TODO - create stringResource and provide translations
                                 stringResource(R.string.license_icon_description)
                             )
                         },
                         content = {
-                            // TODO - convert to stringResource and provide translations
-                            Text("License", fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.license), fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
-                            // TODO - convert to stringResource and provide translations
-                            Text("GNU General Public License v3.0")
+                            Text(stringResource(R.string.license_subtitle))
                         },
                         onClick = { },
                     )
