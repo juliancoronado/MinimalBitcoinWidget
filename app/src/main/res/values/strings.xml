@@ -60,6 +60,10 @@
     <string name="developer_mode_subtitle">Developer features enabled</string>
     <string name="developer_mode_enabled">Developer mode enabled!</string>
     <string name="developer_taps">You are now %1$d taps away from being a developer.</string>
+    <string name="source_code">Source Code</string>
+    <string name="view_on_github">View on GitHub</string>
+    <string name="license">License</string>
+    <string name="license_subtitle" translatable="false">GNU General Public License v3.0</string>
 
     <!-- Developer Options Screen - don't translate these for now -->
     <string name="widget_logs" translatable="false">Widget Logs</string>
@@ -83,6 +87,8 @@
     <string name="trending_flat_icon_description">Trending flat icon</string>
     <string name="notes_icon_description">Logs icon</string>
     <string name="back_icon_description">Back icon</string>
+    <string name="folder_code_icon_description">Folder code icon</string>
+    <string name="license_icon_description">License icon</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Save</string>

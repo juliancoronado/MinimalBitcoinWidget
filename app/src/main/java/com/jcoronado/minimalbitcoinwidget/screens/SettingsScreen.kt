@@ -405,23 +405,80 @@ fun SettingsScreen(
                     },
                 )
                 SectionHeader(stringResource(R.string.app_info_header))
+                SegmentedListItem(
+                    colors = colors,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        index = 0, count = if (developerModeEnabled) 7 else 6
+                    ),
+                    leadingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_chart_data_24),
+                            stringResource(R.string.chart_data_icon_description)
+                        )
+                    },
+                    content = {
+                        Text(stringResource(R.string.data_source), fontWeight = FontWeight.Bold)
+                    },
+                    supportingContent = {
+                        Text(stringResource(R.string.data_source_subtitle))
+                    },
+                    trailingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_arrow_outward_24),
+                            stringResource(R.string.open_arrow_icon_description)
+                        )
+                    },
+                    onClick = { },
+                )
+                SegmentedListItem(
+                    colors = colors,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        index = 1, count = if (developerModeEnabled) 7 else 6
+                    ),
+                    leadingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_folder_code_24),
+                            // TODO - create stringResource and provide translations
+                            stringResource(R.string.folder_code_icon_description)
+                        )
+                    },
+                    content = {
+                        // TODO - convert to stringResource and create translations
+                        Text("Source Code", fontWeight = FontWeight.Bold)
+                    },
+                    supportingContent = {
+                        // TODO - convert to stringResource and create translations
+                        Text("View on GitHub")
+                    },
+                    trailingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_arrow_outward_24),
+                            stringResource(R.string.open_arrow_icon_description)
+                        )
+                    },
+                    onClick = { },
+                )
+
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 0, count = if (developerModeEnabled) 5 else 4
+                            index = 2, count = if (developerModeEnabled) 7 else 6
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_chart_data_24),
-                                stringResource(R.string.chart_data_icon_description)
+                                painterResource(R.drawable.rounded_license_24),
+                                // TODO - create stringResource and provide translations
+                                stringResource(R.string.license_icon_description)
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.data_source), fontWeight = FontWeight.Bold)
+                            // TODO - convert to stringResource and provide translations
+                            Text("License", fontWeight = FontWeight.Bold)
                         },
                         supportingContent = {
-                            Text(stringResource(R.string.data_source_subtitle))
+                            // TODO - convert to stringResource and provide translations
+                            Text("GNU General Public License v3.0")
                         },
                         onClick = { },
                     )
@@ -430,7 +487,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 1, count = if (developerModeEnabled) 5 else 4
+                            index = 3, count = if (developerModeEnabled) 7 else 6
                         ),
                         leadingContent = {
                             Icon(
@@ -458,7 +515,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 2, count = if (developerModeEnabled) 5 else 4
+                        index = 4, count = if (developerModeEnabled) 7 else 6
                     ),
                     leadingContent = {
                         Icon(
@@ -498,11 +555,11 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 3, count = if (developerModeEnabled) 5 else 4
+                        index = 5, count = if (developerModeEnabled) 7 else 6
                     ),
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_alternate_email_24),
+                            painterResource(R.drawable.rounded_mail_24),
                             stringResource(R.string.contact_icon_description)
                         )
                     },
@@ -534,7 +591,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 4, count = 5
+                            index = 6, count = 7
                         ),
                         leadingContent = {
                             Icon(

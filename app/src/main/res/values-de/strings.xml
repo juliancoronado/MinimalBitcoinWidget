@@ -31,6 +31,9 @@
     <string name="data_source_subtitle">CoinGecko-API</string>
     <string name="developer_mode">Entwicklermodus</string>
     <string name="developer_mode_subtitle">Entwicklerfunktionen aktiviert</string>
+    <string name="source_code">Quellcode</string>
+    <string name="view_on_github">Auf GitHub ansehen</string>
+    <string name="license">Lizenz</string>
 
     <!-- Debug -->
     <string name="developer_mode_enabled">Entwicklermodus aktiviert!</string>
@@ -54,6 +57,8 @@
     <string name="trending_flat_icon_description">Seitwärtstrend-Symbol</string>
     <string name="notes_icon_description">Protokollsymbol</string>
     <string name="back_icon_description">Zurück-Symbol</string>
+    <string name="folder_code_icon_description">Ordnercode-Symbol</string>
+    <string name="license_icon_description">Lizenz-Symbol</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Speichern</string>

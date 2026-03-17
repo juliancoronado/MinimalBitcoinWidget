@@ -31,6 +31,9 @@
     <string name="data_source_subtitle">API CoinGecko</string>
     <string name="developer_mode">Modalità sviluppatore</string>
     <string name="developer_mode_subtitle">Funzionalità per sviluppatori abilitate</string>
+    <string name="source_code">Codice Sorgente</string>
+    <string name="view_on_github">Visualizza su GitHub</string>
+    <string name="license">Licenza</string>
 
     <!-- Debug -->
     <string name="developer_mode_enabled">Modalità sviluppatore abilitata!</string>
@@ -54,6 +57,8 @@
     <string name="trending_flat_icon_description">Icona tendenza stabile</string>
     <string name="notes_icon_description">Icona dei log</string>
     <string name="back_icon_description">Icona indietro</string>
+    <string name="folder_code_icon_description">Icona cartella codice</string>
+    <string name="license_icon_description">Icona licenza</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Salva</string>

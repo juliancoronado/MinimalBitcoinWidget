@@ -31,6 +31,9 @@
     <string name="data_source_subtitle">CoinGecko API</string>
     <string name="developer_mode">Geliştirici Modu</string>
     <string name="developer_mode_subtitle">Geliştirici özellikleri etkinleştirildi</string>
+    <string name="source_code">Kaynak Kod</string>
+    <string name="view_on_github">GitHub\'da Görüntüle</string>
+    <string name="license">Lisans</string>
 
     <!-- Debug -->
     <string name="developer_mode_enabled">Geliştirici modu etkin!</string>
@@ -54,6 +57,8 @@
     <string name="trending_flat_icon_description">Yatay trend simgesi</string>
     <string name="notes_icon_description">Günlükler simgesi</string>
     <string name="back_icon_description">Geri simgesi</string>
+    <string name="folder_code_icon_description">Klasör kodu simgesi</string>
+    <string name="license_icon_description">Lisans simgesi</string>
 
     <!-- Buttons / Actions -->
     <string name="save">Kaydet</string>
