@@ -1,6 +1,7 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -429,7 +430,8 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
-                        // TODO - implement opening URL in browser
+                        val intent = Intent(Intent.ACTION_VIEW, "https://www.coingecko.com/api".toUri())
+                        context.startActivity(intent)
                     },
                 )
                 SegmentedListItem(
@@ -456,7 +458,8 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
-                        // TODO - implement opening URL in browser
+                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/juliancoronado/MinimalBitcoinWidget".toUri())
+                        context.startActivity(intent)
                     },
                 )
 
@@ -575,8 +578,7 @@ fun SettingsScreen(
                     },
                     onClick = {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = mailTo.toUri()
-                            putExtra(Intent.EXTRA_SUBJECT, subject)
+                            data = "$mailTo?subject=${Uri.encode(subject)}".toUri()
                         }
                         try {
                             context.startActivity(intent)
