@@ -64,17 +64,18 @@ This document serves as a structured technical specification for an AI agent to 
   2. Update the Repository to return `Flow<Resource<PriceData>>`.
   3. Update `PriceUiState` and `PriceWidgetState` to map directly from these `Resource` states.
 
+### Task 6: Comprehensive Unit Testing
+- **Goal:** Ensure reliability and prevent regressions by implementing a suite of unit tests for data and business logic.
+- **Tools:** JUnit 4/5, MockK, and `kotlinx-coroutines-test`.
+- **Instructions:**
+  1. **Test `PriceData` logic:** Verify `getPercentageForInterval(index: Int)` handles all valid indices correctly and gracefully manages out-of-bounds or null data.
+  2. **Test `PriceRepository`:** Mock the network and DataStore to verify data fetching, local caching, and the correct emission of `Resource` states (`Success`, `Error`).
+  3. **Test `PriceViewModel`:** Use a `TestDispatcher` to assert that the `UIState` correctly reflects Repository emissions (e.g., verifying `isLoading` is true when the flow starts).
+  4. **Test `DataStoreManager`:** Verify settings (currency, interval) are persisted and retrieved correctly using a temporary DataStore instance.
+
 ---
 
 ## Phase 3: UI/UX Enhancements
-
-### Task 6: Implement Pull-to-Refresh
-- **Goal:** Add standard refresh gesture to the main screen.
-- **Target Files:** `MainScreen.kt`
-- **Instructions:**
-  1. Wrap the content of `MainScreen` in a `PullToRefreshBox` (Material 3).
-  2. Link the `isRefreshing` state to `PriceUiState.isLoading`.
-  3. Trigger `priceViewModel.fetchPrice(force = true)` on refresh.
 
 ### Task 7: Enhanced State Transitions
 - **Goal:** Smooth out UI jumps between loading and data states.
@@ -84,7 +85,7 @@ This document serves as a structured technical specification for an AI agent to 
   2. Add a fade or crossfade effect for price updates.
 
 ### Task 8: Widget Consolidation
-- **Goal:** Deprecate Legacy widget logic if feasible.
+- **Goal:** Deprecate Legacy widget logic at a future date (2027).
 - **Instructions:**
   1. Evaluate if Glance covers all necessary features.
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
