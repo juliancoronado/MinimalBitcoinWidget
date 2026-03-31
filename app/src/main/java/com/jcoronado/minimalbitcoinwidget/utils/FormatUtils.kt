@@ -18,7 +18,7 @@ object FormatUtils {
      */
     fun formatPriceSeparated(price: Double, currencyCode: String): FormattedPrice {
         val currency = try {
-            Currency.getInstance(currencyCode.uppercase())
+            Currency.getInstance(currencyCode.uppercase(Locale.ROOT))
         } catch (_: Exception) {
             Currency.getInstance("USD") // default / fallback
         }
@@ -56,7 +56,7 @@ object FormatUtils {
     }
 
     private fun getNativeSymbol(currency: Currency): String {
-        val textSymbol = currency.symbol // default fallback
+        val textSymbol = currency.getSymbol(Locale.getDefault()) // default fallback
 
         // if the default symbol is the same as the code (e.g. "MXN"),
         // it means we are getting a disambiguated international code.
@@ -79,7 +79,7 @@ object FormatUtils {
     }
 
     fun formatChange(change: Double): String {
-        val formatter = NumberFormat.getPercentInstance().apply {
+        val formatter = NumberFormat.getPercentInstance(Locale.getDefault()).apply {
             minimumFractionDigits = 2
             maximumFractionDigits = 2
         }
