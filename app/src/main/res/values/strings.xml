@@ -18,7 +18,6 @@
     <!-- Legacy Price Widget -->
     <string name="bitcoin_title" translatable="false">Bitcoin /</string>
     <string name="loading_text" translatable="false">Loading…</string>
-    <string name="str_24h" translatable="false">24h:</string>
     <string name="description1" translatable="false">Bitcoin logo</string>
     <string name="iso_code" translatable="false">USD</string>
     <string name="symbol" translatable="false">$</string>
@@ -85,7 +84,6 @@
     <string name="trending_up_icon_description">Trending up icon</string>
     <string name="trending_down_icon_description">Trending down icon</string>
     <string name="trending_flat_icon_description">Trending flat icon</string>
-    <string name="notes_icon_description">Logs icon</string>
     <string name="back_icon_description">Back icon</string>
     <string name="folder_code_icon_description">Folder code icon</string>
     <string name="license_icon_description">License icon</string>

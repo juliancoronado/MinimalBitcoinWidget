@@ -55,7 +55,6 @@
     <string name="trending_up_icon_description">Aufwärtstrend-Symbol</string>
     <string name="trending_down_icon_description">Abwärtstrend-Symbol</string>
     <string name="trending_flat_icon_description">Seitwärtstrend-Symbol</string>
-    <string name="notes_icon_description">Protokollsymbol</string>
     <string name="back_icon_description">Zurück-Symbol</string>
     <string name="folder_code_icon_description">Ordnercode-Symbol</string>
     <string name="license_icon_description">Lizenz-Symbol</string>

@@ -55,7 +55,6 @@
     <string name="trending_up_icon_description">Icono de tendencia al alza</string>
     <string name="trending_down_icon_description">Icono de tendencia a la baja</string>
     <string name="trending_flat_icon_description">Icono de tendencia plana</string>
-    <string name="notes_icon_description">Icono de registros</string>
     <string name="back_icon_description">Icono de volver</string>
     <string name="folder_code_icon_description">Icono de carpeta de código</string>
     <string name="license_icon_description">Icono de licencia</string>

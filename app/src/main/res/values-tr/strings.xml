@@ -55,7 +55,6 @@
     <string name="trending_up_icon_description">Yükseliş trendi simgesi</string>
     <string name="trending_down_icon_description">Düşüş trendi simgesi</string>
     <string name="trending_flat_icon_description">Yatay trend simgesi</string>
-    <string name="notes_icon_description">Günlükler simgesi</string>
     <string name="back_icon_description">Geri simgesi</string>
     <string name="folder_code_icon_description">Klasör kodu simgesi</string>
     <string name="license_icon_description">Lisans simgesi</string>
