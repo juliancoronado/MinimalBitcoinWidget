@@ -10,10 +10,10 @@ import org.junit.Test
 class FormatUtilsTest {
 
     @Test
-    fun `formatChange with positive value adds plus sign and percentage`() {
+    fun `formatChange with positive value adds percentage`() {
         val result = FormatUtils.formatChange(1.234)
-        // Note: NumberFormat depends on locale, but typically it would be " +1.23%"
-        assertEquals(" +1.23%", result)
+        // Note: NumberFormat depends on locale, but typically it would be " 1.23%"
+        assertEquals(" 1.23%", result)
     }
 
     @Test

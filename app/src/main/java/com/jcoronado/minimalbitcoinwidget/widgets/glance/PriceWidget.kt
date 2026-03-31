@@ -224,6 +224,7 @@ class PriceWidget : GlanceAppWidget() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     @Composable
     private fun PriceChange(changePercentage: Double, error: Boolean) {
         val (iconRes, color, iconDesc) = if (changePercentage > 0) {
@@ -246,7 +247,7 @@ class PriceWidget : GlanceAppWidget() {
             )
         }
 
-        val formatPattern = if (changePercentage > 0) "%+.2f%%" else "%.2f%%"
+        val formatPattern = "%.2f%%"
 
         Row(
             verticalAlignment = Alignment.CenterVertically

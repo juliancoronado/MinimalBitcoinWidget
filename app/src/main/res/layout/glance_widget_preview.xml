@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="+2.45%"
+            android:text="2.45%"
             android:textColor="#535F70"
             android:textSize="12sp"
             tools:ignore="HardcodedText" />

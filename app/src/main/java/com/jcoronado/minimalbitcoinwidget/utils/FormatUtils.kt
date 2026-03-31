@@ -83,10 +83,6 @@ object FormatUtils {
             minimumFractionDigits = 2
             maximumFractionDigits = 2
         }
-        return if (change > 0) {
-            " +${formatter.format(change / 100)}"
-        } else {
-            " ${formatter.format(change / 100)}"
-        }
+        return " ${formatter.format(change / 100)}"
     }
 }
