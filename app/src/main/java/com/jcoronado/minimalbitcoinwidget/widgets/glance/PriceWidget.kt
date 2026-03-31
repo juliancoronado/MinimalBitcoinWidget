@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.widgets.glance
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -17,7 +18,7 @@ import androidx.glance.action.clickable
 import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionStartActivity
-import androidx.glance.appwidget.components.Scaffold
+import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -50,6 +51,7 @@ class PriceWidget : GlanceAppWidget() {
         }
     }
 
+    @SuppressLint( "DiscouragedApi")
     @Composable
     private fun WidgetContent(state: PriceWidgetState) {
         val openAppIntent = Intent(LocalContext.current, MainActivity::class.java).apply {
@@ -63,9 +65,33 @@ class PriceWidget : GlanceAppWidget() {
                 GlanceColorScheme.colors
             }
         ) {
-            Scaffold {
+            var backgroundModifier = GlanceModifier.fillMaxSize()
+            
+            // Check if the device's launcher provides a system-wide widget corner radius (Android 12+)
+            val systemCornerRadiusDefined = LocalContext.current.resources
+                .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
+
+            backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
+                // On Android 12+ (API 31 and above):
+                // We use the system-provided corner radius to match other widgets on the homescreen.
+                // GlanceTheme.colors.widgetBackground automatically handles Material You dynamic colors.
+                backgroundModifier
+                    .background(GlanceTheme.colors.widgetBackground)
+                    .appWidgetBackground()
+                    .cornerRadius(android.R.dimen.system_app_widget_background_radius)
+            } else {
+                // On Android 11 and lower (API 30 and below):
+                // The .cornerRadius() modifier does not work. We must use an XML shape drawable.
+                // R.drawable.glance_widget_bg has a hardcoded 16dp radius and uses standard 
+                // light/dark mode colors defined in values/glance_colors.xml and values-night/glance_colors.xml.
+                backgroundModifier
+                    .background(ImageProvider(R.drawable.glance_widget_bg))
+                    .appWidgetBackground()
+            }
+
+            Box(modifier = backgroundModifier) {
                 Column(
-                    modifier = GlanceModifier.fillMaxSize().padding(vertical = 10.dp)
+                    modifier = GlanceModifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 10.dp)
                         .clickable(actionStartActivity(openAppIntent)),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalAlignment = Alignment.CenterHorizontally
