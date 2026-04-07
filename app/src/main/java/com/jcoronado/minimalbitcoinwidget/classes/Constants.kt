@@ -36,6 +36,7 @@ object Prefs {
             Log.i("Prefs", "App updated ($lastVersionCode -> $currentVersionCode). Invalidating price cache.")
             prefs.edit(commit = true) {
                 putLong(LAST_API_CALL_TIMESTAMP, 0L)
+                remove(CACHED_PRICE_DATA)
                 putInt(LAST_VERSION_CODE, currentVersionCode)
             }
         }

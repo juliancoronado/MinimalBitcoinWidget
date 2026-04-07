@@ -53,6 +53,7 @@ class PriceUpdateWorker(
         dao.insert(DebugLog(message = "PriceWorker: Fetching Data"))
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        Prefs.checkAppUpdateAndInvalidateCache(prefs)
         
         val lastApiCallTime = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
         val currentTime = System.currentTimeMillis()
