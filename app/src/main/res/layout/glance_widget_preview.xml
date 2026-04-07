@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/widget_preview_background_light"
     android:gravity="center"
     android:orientation="vertical"
@@ -21,13 +20,14 @@
             android:layout_height="12dp"
             android:contentDescription="@string/bitcoin_icon_description"
             android:src="@drawable/rounded_currency_bitcoin_24"
-            app:tint="#535F70"
+            android:tint="#535F70"
+            tools:ignore="UseAppTint"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="1dp"
             android:text="/ USD"
             android:textColor="#535F70"
             android:textSize="12sp"
@@ -36,7 +36,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
             android:text=" ・ 24H"
             android:textColor="#535F70"
             android:textSize="12sp"
@@ -55,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="$"
+            android:layout_marginTop="1dp"
             android:textColor="#191C20"
             android:textSize="16sp"
             tools:ignore="HardcodedText" />
