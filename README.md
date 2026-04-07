@@ -22,10 +22,10 @@ A minimal, open-source Bitcoin price widget for your Android home screen. Track 
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/listing1.png" width="20%" alt="screenshot1">
-  <img src="screenshots/listing2.png" width="20%" alt="screenshot2">
-  <img src="screenshots/listing3.png" width="20%" alt="screenshot3">
-  <img src="screenshots/listing4.png" width="20%" alt="screenshot4">
+  <img src="images/listing1.png" alt="listing 1 image">
+  <img src="images/listing2.png" alt="listing 2 image">
+  <img src="images/listing3.png" alt="listing 3 image">
+  <img src="images/listing4.png" alt="listing 4 image">
 </p>
 
 ## Getting Started
