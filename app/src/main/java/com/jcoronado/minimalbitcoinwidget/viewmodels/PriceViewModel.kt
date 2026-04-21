@@ -23,6 +23,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
 import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetReceiver
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
 import com.jcoronado.minimalbitcoinwidget.widgets.legacy.getCurrencyInfo
@@ -93,6 +94,23 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
     fun refreshFromCache() {
         loadInitialData()
         redrawWidgets()
+    }
+
+    /**
+     * Requests the system to pin the modern Glance widget to the homescreen.
+     */
+    fun requestPinWidget() {
+        viewModelScope.launch {
+            Log.d(LOG_TAG, "Requesting to pin Glance widget")
+            try {
+                GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
+                    receiver = PriceWidgetReceiver::class.java,
+                    preview = PriceWidget()
+                )
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Failed to request pin widget: $e")
+            }
+        }
     }
 
     /** Update the selected currency and persist it. */

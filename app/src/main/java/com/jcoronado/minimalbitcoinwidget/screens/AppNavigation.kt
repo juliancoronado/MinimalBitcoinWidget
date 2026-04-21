@@ -162,6 +162,7 @@ fun AppNavigation() {
                         MainScreen(
                             uiState = uiState,
                             onRefresh = { priceViewModel.fetchPrice() },
+                            onAddWidgetClick = { priceViewModel.requestPinWidget() }
                         )
                     }
                     entry<Screen.Settings> {

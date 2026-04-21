@@ -39,14 +39,16 @@ import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import java.text.SimpleDateFormat
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.core.tween
+import androidx.compose.ui.text.font.FontWeight
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
+fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: () -> Unit) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -62,12 +64,42 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .padding(horizontal = 12.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
         ) {
             PriceCard(uiState, onRefresh = onRefresh)
+            // Spacer(modifier = Modifier.height(12.dp))
+            NewWidgetNotice(onClick = onAddWidgetClick)
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun NewWidgetNotice(onClick: () -> Unit) {
+    // TODO - convert hardcoded values to stringResource and provide translations in strings.xml files
+    Text(
+        "New",
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+    )
+    SegmentedListItem(
+        shapes = ListItemDefaults.shapes(shape = RoundedCornerShape(16.dp)),
+        onClick = onClick,
+        content = {
+            Text(
+                "Refreshed & Modern Widget",
+                fontWeight = FontWeight.Bold
+            )
+        },
+        supportingContent = {
+            Text(
+                "Tap here to add it to your homescreen!",
+            )
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -79,10 +111,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
         "hh:mm:ss a", LocalLocale.current.platformLocale
     ).format(uiState.lastUpdated)
     SegmentedListItem(
-        modifier = Modifier.padding(horizontal = 12.dp),
-        onClick = onRefresh,
-        colors = colors,
-        shapes = ListItemDefaults.segmentedShapes(
+        onClick = onRefresh, colors = colors, shapes = ListItemDefaults.segmentedShapes(
             index = 0, count = 2
         )
     ) {
@@ -222,10 +251,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     }
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         SegmentedListItem(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            onClick = {},
-            colors = colors,
-            shapes = ListItemDefaults.segmentedShapes(
+            onClick = {}, colors = colors, shapes = ListItemDefaults.segmentedShapes(
                 index = 1, count = 2
             )
         ) {
@@ -241,7 +267,7 @@ fun MainScreenPreview() {
     MainScreen(
         uiState = PriceUiState(
             price = 95234.12, percentageChange = 0.45, isLoading = false
-        ), onRefresh = { })
+        ), onRefresh = { }, onAddWidgetClick = { })
 }
 
 @Preview(showBackground = true)
