@@ -39,6 +39,10 @@ import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import java.text.SimpleDateFormat
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -191,11 +195,15 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 }
             }
 
-            if (uiState.isLoading) {
+            // TODO - revisit this and see if we still want to keep this animation
+            AnimatedVisibility(
+                visible = uiState.isLoading,
+                enter = fadeIn(),
+                exit = fadeOut(animationSpec = tween(durationMillis = 100)),
+                modifier = Modifier.align(Alignment.BottomEnd)
+            ) {
                 LoadingIndicator(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .size(32.dp),
+                    modifier = Modifier.size(32.dp),
                     polygons = LoadingIndicatorDefaults.IndeterminateIndicatorPolygons.shuffled()
                 )
             }

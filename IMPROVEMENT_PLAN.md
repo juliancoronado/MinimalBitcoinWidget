@@ -77,14 +77,7 @@ This document serves as a structured technical specification for an AI agent to 
 
 ## Phase 3: UI/UX Enhancements
 
-### Task 7: Enhanced State Transitions
-- **Goal:** Smooth out UI jumps between loading and data states.
-- **Target Files:** `MainScreen.kt`
-- **Instructions:**
-  1. Use `AnimatedContent` to transition between the Loading indicator and the `PriceCard`.
-  2. Add a fade or crossfade effect for price updates.
-
-### Task 8: Widget Consolidation
+### Task 7: Widget Consolidation
 - **Goal:** Deprecate Legacy widget logic at a future date (2027).
 - **Instructions:**
   1. Evaluate if Glance covers all necessary features.
