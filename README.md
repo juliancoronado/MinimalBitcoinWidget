@@ -22,10 +22,10 @@ A minimal, open-source Bitcoin price widget for your Android home screen. Track 
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/image1.png" width="20%" alt="screenshot1">
-  <img src="screenshots/image2.png" width="20%" alt="screenshot2">
-  <img src="screenshots/image3.png" width="20%" alt="screenshot3">
-  <img src="screenshots/image4.png" width="20%" alt="screenshot4">
+  <img src="images/listing1.png" width="20%" alt="listing 1 image">
+  <img src="images/listing2.png" width="20%" alt="listing 2 image">
+  <img src="images/listing3.png" width="20%" alt="listing 3 image">
+  <img src="images/listing4.png" width="20%" alt="listing 4 image">
 </p>
 
 ## Getting Started
@@ -50,7 +50,7 @@ To build and run the project locally, you can clone the repository and open it i
 
 ## Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions made are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 
