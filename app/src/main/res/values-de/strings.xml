@@ -1,23 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Einstellungen</string>
-    <string name="version_info">Versionsinfos</string>
-    <string name="content_description_version_info">Versionsinfos</string>
-    <string name="content_description_settings">Einstellungen</string>
-    <string name="failure_toast">Fehler beim Abrufen der Preisdaten</string>
-    <string name="rate_limit_toast">Zu viele Anfragen. Bitte versuchen Sie es später erneut!</string>
-    <string name="whats_new_title">Neuerungen</string>
-    <string name="pref_data">Dateninformationen</string>
-    <string name="coingecko_title">Bereitgestellt von CoinGecko</string>
-    <string name="pref_info">App-Informationen</string>
-    <string name="version_title">App-Version</string>
-    <string name="license_title">Lizenz</string>
-    <string name="source_code_title">Quellcode</string>
-    <string name="currency_header">Lokale Währung</string>
-    <string name="currency_title">Ausgewählte Währung</string>
-    <string name="pref_developer">Entwickler</string>
-    <string name="release_notes_title">Versionshinweise</string>
-    <string name="release_notes_date">(Dezember 2025)</string>
-    <string name="release_notes_summary">- Preisdaten zwischen Aktualisierungen lokal speichern\n- Einfacheren Coingecko-Endpunkt verwenden\n- Einen kreisförmigen Ladeindikator im Home-Screen-Widget anzeigen</string>
-    <string name="close">Schließen</string>
+    <string name="last_updated">Zuletzt aktualisiert: %1$s</string>
+
+    <!-- Setting Section Headers -->
+    <string name="data_header">Daten</string>
+    <string name="appearance_header">Aussehen</string>
+    <string name="app_info_header">App-Info</string>
+
+    <!-- SettingsScreen ListItems -->
+    <string name="change_percentage">Änderungsprozentsatz</string>
+    <string name="cp_interval1">24 Stunden</string>
+    <string name="cp_interval2">7 Tage</string>
+    <string name="cp_interval3">30 Tage</string>
+    <string name="widget_refresh_interval">Widget-Aktualisierungsintervall</string>
+    <string name="wr_interval1">1 Stunde</string>
+    <string name="wr_interval2">4 Stunden</string>
+    <string name="wr_interval3">8 Stunden</string>
+    <string name="update_currency">Währung aktualisieren</string>
+    <string name="app_theme">App-Design</string>
+    <string name="app_theme_system">System</string>
+    <string name="app_theme_light">Hell</string>
+    <string name="app_theme_dark">Dunkel</string>
+    <string name="dynamic_colors">Dynamische Farben</string>
+    <string name="dynamic_colors_subtitle">Farben vom Gerätedesign übernehmen</string>
+    <string name="version">Version</string>
+    <string name="build_number">Build-Nummer</string>
+    <string name="contact">Kontakt</string>
+    <string name="data_source">Datenquelle</string>
+    <string name="data_source_subtitle">CoinGecko-API</string>
+    <string name="developer_mode">Entwicklermodus</string>
+    <string name="developer_mode_subtitle">Entwicklerfunktionen aktiviert</string>
+    <string name="source_code">Quellcode</string>
+    <string name="view_on_github">Auf GitHub ansehen</string>
+    <string name="license">Lizenz</string>
+
+    <!-- Debug -->
+    <string name="developer_mode_enabled">Entwicklermodus aktiviert!</string>
+    <string name="developer_taps">Sie sind jetzt noch %1$d Tipps davon entfernt, ein Entwickler zu sein</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="update_currency_icon_description">Währungssymbol</string>
+    <string name="change_percentage_icon_description">Prozentsymbol</string>
+    <string name="widget_refresh_interval_icon_description">Timer-Symbol</string>
+    <string name="app_theme_icon_description">Design-Symbol</string>
+    <string name="dynamic_colors_icon_description">Symbol für dynamische Farben</string>
+    <string name="info_icon_description">Info-Symbol</string>
+    <string name="build_icon_description">Build-Symbol</string>
+    <string name="contact_icon_description">Kontakt-Symbol</string>
+    <string name="open_arrow_icon_description">Symbol für Pfeil zum Öffnen</string>
+    <string name="chart_data_icon_description">Diagrammdaten-Symbol</string>
+    <string name="developer_mode_icon_description">Symbol für Entwicklermodus</string>
+    <string name="bitcoin_icon_description">Bitcoin-Symbol</string>
+    <string name="trending_up_icon_description">Aufwärtstrend-Symbol</string>
+    <string name="trending_down_icon_description">Abwärtstrend-Symbol</string>
+    <string name="trending_flat_icon_description">Seitwärtstrend-Symbol</string>
+    <string name="back_icon_description">Zurück-Symbol</string>
+    <string name="folder_code_icon_description">Ordnercode-Symbol</string>
+    <string name="license_icon_description">Lizenz-Symbol</string>
+
+    <!-- Buttons / Actions -->
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="clear">Löschen</string>
+    <string name="error">Fehler</string>
+
+    <!-- Email / Contact -->
+    <string name="mail_error">Keine E-Mail-App gefunden</string>
 </resources>

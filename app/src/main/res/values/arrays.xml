@@ -1,18 +1,21 @@
 <resources>
-    <!-- Currency List Preference -->
-    <string-array name="currency_entries">
-        <item>US Dollar ($)</item>
-        <item>British Pound (£)</item>
-        <item>Euro (€)</item>
-        <item>Canadian Dollar ($)</item>
-        <item>Mexican Peso ($)</item>
-        <item>Australian Dollar ($)</item>
-        <item>Brazilian Real (R$)</item>
+    <!-- Currency Names -->
+    <string-array name="currency_descriptions">
+        <item>US Dollar $</item>
+        <item>British Pound £</item>
+        <item>Japanese Yen ¥</item>
+        <item>Euro €</item>
+        <item>Canadian Dollar $</item>
+        <item>Mexican Peso $</item>
+        <item>Australian Dollar $</item>
+        <item>Brazilian Real R$</item>
     </string-array>
 
-    <string-array name="currency_values">
+    <!-- Currency Codes -->
+    <string-array name="currency_codes">
         <item>usd</item>
         <item>gbp</item>
+        <item>jpy</item>
         <item>eur</item>
         <item>cad</item>
         <item>mxn</item>

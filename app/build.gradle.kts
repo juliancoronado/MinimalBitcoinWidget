@@ -1,6 +1,13 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    // compose
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    // room / db
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -9,10 +16,10 @@ android {
 
     defaultConfig {
         applicationId = "com.jcoronado.minimalbitcoinwidget"
-        minSdk = 23
+        minSdk = 28
         targetSdk = 36
-        versionCode = 11
-        versionName = "2.6.1"
+        versionCode = 12
+        versionName = "3.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,8 +38,20 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 
 }
@@ -52,4 +71,44 @@ dependencies {
     // added libraries
     implementation(libs.okhttp)
     implementation(libs.gson)
+
+    // compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.fonts)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.process)
+
+    // compose testing
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(platform(libs.androidx.compose.bom))
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    // glance
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.material3)
+    implementation(libs.androidx.glance.appwidget.preview)
+    implementation(libs.androidx.glance.preview)
+
+    // navigation 3
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.navigation3.runtime)
+
+    // serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // work manager
+    implementation(libs.androidx.work.runtime.ktx)
+
+    // room / db
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 }

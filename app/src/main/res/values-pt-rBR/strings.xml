@@ -1,5 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Configurações</string>
-    <string name="pref_developer">Desenvolvedor</string>
+    <string name="last_updated">Última atualização: %1$s</string>
+
+    <!-- Setting Section Headers -->
+    <string name="data_header">Dados</string>
+    <string name="appearance_header">Aparência</string>
+    <string name="app_info_header">Informações do App</string>
+
+    <!-- SettingsScreen ListItems -->
+    <string name="change_percentage">Porcentagem de alteração</string>
+    <string name="cp_interval1">24 horas</string>
+    <string name="cp_interval2">7 dias</string>
+    <string name="cp_interval3">30 dias</string>
+    <string name="widget_refresh_interval">Intervalo de atualização do widget</string>
+    <string name="wr_interval1">1 hora</string>
+    <string name="wr_interval2">4 horas</string>
+    <string name="wr_interval3">8 horas</string>
+    <string name="update_currency">Atualizar moeda</string>
+    <string name="app_theme">Tema do App</string>
+    <string name="app_theme_system">Sistema</string>
+    <string name="app_theme_light">Claro</string>
+    <string name="app_theme_dark">Escuro</string>
+    <string name="dynamic_colors">Cores dinâmicas</string>
+    <string name="dynamic_colors_subtitle">Seguir cores do tema do dispositivo</string>
+    <string name="version">Versão</string>
+    <string name="build_number">Número da versão</string>
+    <string name="contact">Contato</string>
+    <string name="data_source">Fonte de dados</string>
+    <string name="data_source_subtitle">CoinGecko API</string>
+    <string name="developer_mode">Modo de desenvolvedor</string>
+    <string name="developer_mode_subtitle">Recursos de desenvolvedor ativados</string>
+    <string name="source_code">Código-Fonte</string>
+    <string name="view_on_github">Ver no GitHub</string>
+    <string name="license">Licença</string>
+
+    <!-- Debug -->
+    <string name="developer_mode_enabled">Modo de desenvolvedor ativado!</string>
+    <string name="developer_taps">Você está agora a %1$d toques de ser um desenvolvedor</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="update_currency_icon_description">Ícone de moeda</string>
+    <string name="change_percentage_icon_description">Ícone de porcentagem</string>
+    <string name="widget_refresh_interval_icon_description">Ícone de temporizador</string>
+    <string name="app_theme_icon_description">Ícone de tema</string>
+    <string name="dynamic_colors_icon_description">Ícone de cores dinâmicas</string>
+    <string name="info_icon_description">Ícone de informações</string>
+    <string name="build_icon_description">Ícone de versão</string>
+    <string name="contact_icon_description">Ícone de contato</string>
+    <string name="open_arrow_icon_description">Ícone de seta de abertura</string>
+    <string name="chart_data_icon_description">Ícone de dados do gráfico</string>
+    <string name="developer_mode_icon_description">Ícone de modo de desenvolvedor</string>
+    <string name="bitcoin_icon_description">Ícone do Bitcoin</string>
+    <string name="trending_up_icon_description">Ícone de tendência de alta</string>
+    <string name="trending_down_icon_description">Ícone de tendência de baixa</string>
+    <string name="trending_flat_icon_description">Ícone de tendência estável</string>
+    <string name="back_icon_description">Ícone de voltar</string>
+    <string name="folder_code_icon_description">Ícone de pasta de código</string>
+    <string name="license_icon_description">Ícone de licença</string>
+
+    <!-- Buttons / Actions -->
+    <string name="save">Salvar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="clear">Limpar</string>
+    <string name="error">Erro</string>
+
+    <!-- Email / Contact -->
+    <string name="mail_error">Nenhum aplicativo de e-mail encontrado</string>
 </resources>

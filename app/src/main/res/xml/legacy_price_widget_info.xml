@@ -1,0 +1,9 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/legacy_price_widget"
+    android:description="@string/legacy_widget_picker_description"
+    android:minWidth="140dp"
+    android:minHeight="40dp"
+    android:previewImage="@drawable/widget_preview"
+    android:resizeMode="horizontal"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen" />

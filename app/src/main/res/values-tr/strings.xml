@@ -1,23 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Ayarlar</string>
-    <string name="version_info">Sürüm Bilgisi</string>
-    <string name="content_description_version_info">Sürüm Bilgisi</string>
-    <string name="content_description_settings">Ayarlar</string>
-    <string name="failure_toast">Fiyat verileri alınamadı</string>
-    <string name="rate_limit_toast">Çok fazla istek. Lütfen daha sonra tekrar deneyin!</string>
-    <string name="whats_new_title">Yenilikler</string>
-    <string name="pref_data">Veri Bilgileri</string>
-    <string name="coingecko_title">CoinGecko tarafından sağlanmıştır</string>
-    <string name="pref_info">Uygulama Bilgileri</string>
-    <string name="version_title">Uygulama Sürümü</string>
-    <string name="license_title">Lisans</string>
-    <string name="source_code_title">Kaynak Kodu</string>
-    <string name="currency_header">Yerel Para Birimi</string>
-    <string name="currency_title">Seçilen Para Birimi</string>
-    <string name="pref_developer">Geliştirici</string>
-    <string name="release_notes_title">Sürüm Notları</string>
-    <string name="release_notes_date">(Aralık 2025)</string>
-    <string name="release_notes_summary">- Fiyat verilerini yenilemeler arasında yerel olarak sakla\n- Daha basit bir Coingecko uç noktası kullan\n- Ana ekran widget\'ında dairesel bir yükleme göstergesi göster</string>
-    <string name="close">Kapat</string>
+    <string name="last_updated">Son Güncelleme: %1$s</string>
+
+    <!-- Setting Section Headers -->
+    <string name="data_header">Veri</string>
+    <string name="appearance_header">Görünüm</string>
+    <string name="app_info_header">Uygulama Bilgisi</string>
+
+    <!-- SettingsScreen ListItems -->
+    <string name="change_percentage">Değişim Yüzdesi</string>
+    <string name="cp_interval1">24 saat</string>
+    <string name="cp_interval2">7 gün</string>
+    <string name="cp_interval3">30 gün</string>
+    <string name="widget_refresh_interval">Widget Yenileme Aralığı</string>
+    <string name="wr_interval1">1 saat</string>
+    <string name="wr_interval2">4 saat</string>
+    <string name="wr_interval3">8 saat</string>
+    <string name="update_currency">Para Birimini Güncelle</string>
+    <string name="app_theme">Uygulama Teması</string>
+    <string name="app_theme_system">Sistem</string>
+    <string name="app_theme_light">Açık</string>
+    <string name="app_theme_dark">Koyu</string>
+    <string name="dynamic_colors">Dinamik Renkler</string>
+    <string name="dynamic_colors_subtitle">Cihaz temasındaki renkleri kullan</string>
+    <string name="version">Sürüm</string>
+    <string name="build_number">Yapı Numarası</string>
+    <string name="contact">İletişim</string>
+    <string name="data_source">Veri Kaynağı</string>
+    <string name="data_source_subtitle">CoinGecko API</string>
+    <string name="developer_mode">Geliştirici Modu</string>
+    <string name="developer_mode_subtitle">Geliştirici özellikleri etkinleştirildi</string>
+    <string name="source_code">Kaynak Kod</string>
+    <string name="view_on_github">GitHub\'da Görüntüle</string>
+    <string name="license">Lisans</string>
+
+    <!-- Debug -->
+    <string name="developer_mode_enabled">Geliştirici modu etkin!</string>
+    <string name="developer_taps">Geliştirici olmanıza %1$d dokunma kaldı</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="update_currency_icon_description">Para birimi simgesi</string>
+    <string name="change_percentage_icon_description">Yüzde simgesi</string>
+    <string name="widget_refresh_interval_icon_description">Zamanlayıcı simgesi</string>
+    <string name="app_theme_icon_description">Tema simgesi</string>
+    <string name="dynamic_colors_icon_description">Dinamik Renkler simgesi</string>
+    <string name="info_icon_description">Bilgi simgesi</string>
+    <string name="build_icon_description">Yapı simgesi</string>
+    <string name="contact_icon_description">İletişim simgesi</string>
+    <string name="open_arrow_icon_description">Açılış oku simgesi</string>
+    <string name="chart_data_icon_description">Grafik verileri simgesi</string>
+    <string name="developer_mode_icon_description">Geliştirici modu simgesi</string>
+    <string name="bitcoin_icon_description">Bitcoin simgesi</string>
+    <string name="trending_up_icon_description">Yükseliş trendi simgesi</string>
+    <string name="trending_down_icon_description">Düşüş trendi simgesi</string>
+    <string name="trending_flat_icon_description">Yatay trend simgesi</string>
+    <string name="back_icon_description">Geri simgesi</string>
+    <string name="folder_code_icon_description">Klasör kodu simgesi</string>
+    <string name="license_icon_description">Lisans simgesi</string>
+
+    <!-- Buttons / Actions -->
+    <string name="save">Kaydet</string>
+    <string name="cancel">İptal</string>
+    <string name="clear">Temizle</string>
+    <string name="error">Hata</string>
+
+    <!-- Email / Contact -->
+    <string name="mail_error">E-posta uygulaması bulunamadı</string>
 </resources>

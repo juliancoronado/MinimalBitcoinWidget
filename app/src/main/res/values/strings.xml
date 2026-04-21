@@ -2,75 +2,101 @@
 <resources>
     <string name="app_name" translatable="false">Minimal Bitcoin Widget</string>
 
-    <string name="widget_picker_name" translatable="false">Price Widget</string>
+    <string name="legacy_widget_picker_name" translatable="false">Legacy Price Widget</string>
+    <string name="legacy_widget_picker_description" translatable="false">Quickly view the current BTC price</string>
+    <string name="glance_widget_picker_name" translatable="false">Price Widget (Beta)</string>
+    <string name="glance_widget_picker_description" translatable="false">Quickly view the current Bitcoin price</string>
 
-    <!-- Action Bar Items -->
+    <!-- Navigation Pages -->
+    <string name="dashboard" translatable="false">Dashboard</string>
     <string name="settings">Settings</string>
-    <string name="version_info">Version Info</string>
+    <string name="developer_title" translatable="false">Developer</string>
 
-    <!-- Content Descriptions -->
-    <string name="content_description_version_info">Version Info</string>
-    <string name="content_description_settings">Settings</string>
+    <!-- Main Screen -->
+    <string name="last_updated">Last Updated: %1$s</string>
 
-    <!-- Toast Messages -->
-    <string name="failure_toast">Failed to fetch price data</string>
-    <string name="rate_limit_toast">Too many requests. Try again later!</string>
-
-    <!-- information for the cardView -->
+    <!-- Legacy Price Widget -->
     <string name="bitcoin_title" translatable="false">Bitcoin /</string>
     <string name="loading_text" translatable="false">Loading…</string>
-    <string name="str_24h" translatable="false">24h:</string>
     <string name="description1" translatable="false">Bitcoin logo</string>
-    <string name="description2" translatable="false">Refresh button</string>
     <string name="iso_code" translatable="false">USD</string>
     <string name="symbol" translatable="false">$</string>
 
-    <string name="whats_new_title">What\'s New</string>
+    <!-- Widget Values -->
+    <string name="interval_24h" translatable="false">24H</string>
+    <string name="interval_7d" translatable="false">7D</string>
+    <string name="interval_30d" translatable="false">30D</string>
 
-    <!-- Data Info Category -->
-    <string name="pref_data">Data Information</string>
+    <!-- Setting Section Headers -->
+    <string name="data_header">Data</string>
+    <string name="appearance_header">Appearance</string>
+    <string name="app_info_header">App Info</string>
 
-    <string name="coingecko_title">Provided by CoinGecko</string>
-    <string name="coingecko_summary" translatable="false">coingecko.com</string>
-    <string name="coingecko_link" translatable="false">https://coingecko.com/</string>
+    <!-- SettingsScreen ListItems -->
+    <string name="change_percentage">Change Percentage</string>
+    <string name="cp_interval1">24 hours</string>
+    <string name="cp_interval2">7 days</string>
+    <string name="cp_interval3">30 days</string>
+    <string name="widget_refresh_interval">Widget Refresh Interval</string>
+    <string name="wr_interval1">1 hour</string>
+    <string name="wr_interval2">4 hours</string>
+    <string name="wr_interval3">8 hours</string>
+    <string name="update_currency">Update Currency</string>
+    <string name="app_theme">App Theme</string>
+    <string name="app_theme_system">System</string>
+    <string name="app_theme_light">Light</string>
+    <string name="app_theme_dark">Dark</string>
+    <string name="dynamic_colors">Dynamic Colors</string>
+    <string name="dynamic_colors_subtitle">Follow colors from your device theme</string>
+    <string name="version">Version</string>
+    <string name="version_format" translatable="false">%1$s (%2$s)</string>
+    <string name="build_number">Build Number</string>
+    <string name="contact">Contact</string>
+    <string name="developer" translatable="false">jcoronado.dev</string>
+    <string name="data_source">Data Source</string>
+    <string name="data_source_subtitle">CoinGecko API</string>
+    <string name="developer_mode">Developer Mode</string>
+    <string name="developer_mode_subtitle">Developer features enabled</string>
+    <string name="developer_mode_enabled">Developer mode enabled!</string>
+    <string name="developer_taps">You are now %1$d taps away from being a developer.</string>
+    <string name="source_code">Source Code</string>
+    <string name="view_on_github">View on GitHub</string>
+    <string name="license">License</string>
+    <string name="license_subtitle" translatable="false">GNU General Public License v3.0</string>
 
-    <!-- App Info Category -->
-    <string name="pref_info">App Information</string>
+    <!-- Developer Options Screen - don't translate these for now -->
+    <string name="widget_logs" translatable="false">Widget Logs</string>
+    <string name="widget_logs_description" translatable="false">View logs for the widget update worker</string>
 
-    <!-- + App Version -->
-    <string name="version_title">App Version</string>
-    <string name="version_summary" translatable="false">2.6.1 (Build 11)</string>
-    <string name="version_only_main" translatable="false">Version 2.6.1</string>
+    <!-- Accessibility Descriptions -->
+    <string name="update_currency_icon_description">Currency icon</string>
+    <string name="change_percentage_icon_description">Percent icon</string>
+    <string name="widget_refresh_interval_icon_description">Timer icon</string>
+    <string name="app_theme_icon_description">Theme icon</string>
+    <string name="dynamic_colors_icon_description">Dynamic Colors icon</string>
+    <string name="info_icon_description">Info icon</string>
+    <string name="build_icon_description">Build icon</string>
+    <string name="contact_icon_description">Contact icon</string>
+    <string name="open_arrow_icon_description">Open arrow icon</string>
+    <string name="chart_data_icon_description">Chart data icon</string>
+    <string name="developer_mode_icon_description">Developer Mode icon</string>
+    <string name="bitcoin_icon_description">Bitcoin icon</string>
+    <string name="trending_up_icon_description">Trending up icon</string>
+    <string name="trending_down_icon_description">Trending down icon</string>
+    <string name="trending_flat_icon_description">Trending flat icon</string>
+    <string name="back_icon_description">Back icon</string>
+    <string name="folder_code_icon_description">Folder code icon</string>
+    <string name="license_icon_description">License icon</string>
 
-    <!-- + License -->
-    <string name="license_title">License</string>
-    <string name="license_summary" translatable="false">GNU General Public License v3.0</string>
+    <!-- Buttons / Actions -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
+    <string name="error">Error</string>
 
-    <!-- + Source Code -->
-    <string name="source_code_title">Source Code</string>
-    <string name="source_code_summary" translatable="false">github.com/juliancoronado/MinimalBitcoinWidget</string>
-    <string name="source_code_link" translatable="false">https://github.com/juliancoronado/MinimalBitcoinWidget</string>
-
-    <!-- Developer Category -->
-    <string name="pref_developer">Developer</string>
-
-    <!-- + Julian Coronado (link) -->
-    <string name="dev_title" translatable="false">Julian Coronado</string>
-    <string name="dev_summary" translatable="false">jcoronado.dev</string>
-    <string name="dev_link" translatable="false">https://jcoronado.dev</string>
-
-    <!-- Activity Titles -->
-    <string name="title_activity_info" translatable="false">InfoActivity</string>
-    <string name="title_activity_settings" translatable="false">SettingsActivity</string>
-
-    <!-- Currency Preferences -->
-    <string name="currency_header">Local Currency</string>
-    <string name="currency_title">Currency Selected</string>
-
-    <!-- Release Notes -->
-    <string name="release_notes_title">Release Notes</string>
-    <string name="release_notes_date">(December 2025)</string>
-    <string name="release_notes_summary">- Store price data locally between refreshes\n- Use simpler Coingecko endpoint\n- Display a circular loading indicator on the home screen widget</string>
-    <string name="close">Close</string>
+    <!-- Email / Contact -->
+    <string name="mail_to" translatable="false">mailto:contact@jcoronado.dev</string>
+    <string name="mail_subject" translatable="false">Minimal Bitcoin Widget App Support</string>
+    <string name="mail_error" translatable="true">No email app found</string>
 
 </resources>

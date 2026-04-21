@@ -7,14 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Date Format: YYYY-MM-DD
 
-## [Unreleased]
+## [3.0.0] - YYYY-MM-DD
 
-## [2.6.1]
+### Added
+- Upgrade app UI to use Jetpack Compose and Material 3 Expressive.
+- Add new homescreen widget to use Jetpack Glance (Legacy app widget still exists).
+- Support for 24-hour, 7-day and 30-day price change percentages.
+- Support for Japanese Yen (JPY) currency.
+- Configurable widget refresh intervals (1, 4, or 8 hours).
+- Modern, type-safe navigation using Navigation 3.
+- Support for Material You dynamic colors on Android 12+.
+- Hidden "Developer Mode" unlocked via tapping Build Number.
+
+### Changed
+- Improved background update reliability using WorkManager.
+- Enhanced theme switching with support for Light, Dark, and System modes.
+
+## [2.6.1] - 2025-12-21
 
 ### Fixed
 - Handle network failures when the widget refreshes data
 
-## [2.6.0]
+## [2.6.0] - 2025-12-19
 
 ### Added
 - Local cache to store the price data locally
@@ -25,7 +39,7 @@ Date Format: YYYY-MM-DD
 - Updated Android dependencies
 - Updated Coingecko endpoint to use simple/price/
 
-## [2.5.0] 
+## [2.5.0] - 2025-12-13
 
 ### Added
 - "What's New" dialog to show changes after an update.
@@ -45,4 +59,3 @@ Date Format: YYYY-MM-DD
 
 ## [2.4] - 2023-10-03
 - Previous changes not included in this file. Check in commit history on the master branch.
-
