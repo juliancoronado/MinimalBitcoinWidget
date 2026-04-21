@@ -265,17 +265,6 @@ fun AppTheme(
         else -> lightScheme
     }
 
-    // set the system status bar icon colors to be opposite of dark theme
-    // ex. dark icons on a light background color and light icons on a dark background color
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = !darkTheme
-        }
-    }
-
     val appColorScheme : ColorScheme = if (darkTheme) {
         // swap surface and surfaceContainer colors when darkMode = true
         colorScheme.copy(
@@ -284,6 +273,16 @@ fun AppTheme(
         )
     } else {
         colorScheme
+    }
+
+    // system status bar icon colors are handled by SideEffect using modern APIs
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+        }
     }
 
     MaterialTheme(
