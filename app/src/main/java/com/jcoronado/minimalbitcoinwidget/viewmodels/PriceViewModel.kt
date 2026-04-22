@@ -102,10 +102,17 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
     fun requestPinWidget() {
         viewModelScope.launch {
             Log.d(LOG_TAG, "Requesting to pin Glance widget")
+            val currentState = uiState.value
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
                     receiver = PriceWidgetReceiver::class.java,
-                    preview = PriceWidget()
+                    preview = PriceWidget(),
+                    previewState = PriceWidgetState.Available(
+                        price = currentState.price,
+                        changePercentage = currentState.percentageChange,
+                        intervalLabelResId = currentState.changeIntervalLabelResId,
+                        currency = currentState.selectedCurrency
+                    )
                 )
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Failed to request pin widget: $e")
