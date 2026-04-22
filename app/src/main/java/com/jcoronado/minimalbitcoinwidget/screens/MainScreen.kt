@@ -45,6 +45,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.text.font.FontWeight
+import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -73,34 +74,35 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: (
             verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
         ) {
             PriceCard(uiState, onRefresh = onRefresh)
-            // Spacer(modifier = Modifier.height(12.dp))
-            NewWidgetNotice(onClick = onAddWidgetClick)
+            // TODO - shortcuts section - put this into a separate component later
+            Text(
+                // TODO - convert to stringResource and provide translations in strings.xml files
+                "Shortcuts",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            )
+            AddWidgetShortcut(onClick = onAddWidgetClick)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun NewWidgetNotice(onClick: () -> Unit) {
-    // TODO - convert hardcoded values to stringResource and provide translations in strings.xml files
-    Text(
-        "New",
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-    )
+fun AddWidgetShortcut(onClick: () -> Unit) {
+    // TODO - convert to stringResource and provide translations in strings.xml files
     SegmentedListItem(
         // since there's only 1 item in this section, round the corner manually
         shapes = ListItemDefaults.shapes(shape = RoundedCornerShape(16.dp)),
         onClick = onClick,
         content = {
             Text(
-                "Refreshed & Modern Widget", fontWeight = FontWeight.Bold
+                "Add to Home Screen", fontWeight = FontWeight.Bold
             )
         },
         supportingContent = {
             Text(
-                "Tap here to add it to your homescreen!",
+                "Tap here to pin a widget to your home screen",
             )
         })
 }
@@ -264,58 +266,13 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(
-        uiState = PriceUiState(
-        price = 95234.12, percentageChange = 0.45, isLoading = false
-    ), onRefresh = { }, onAddWidgetClick = { })
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PriceCardPreviewLoadedPos() {
-    MaterialTheme {
-        PriceCard(
+    AppTheme(darkTheme = false, dynamicColors = true) {
+        MainScreen(
             uiState = PriceUiState(
-                price = 95234.12, percentageChange = 0.45, isLoading = false
-            ), onRefresh = { })
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PriceCardPreviewLoadedNeg() {
-    MaterialTheme {
-        PriceCard(
-            uiState = PriceUiState(
-                price = 95234.12, percentageChange = -0.32, isLoading = false
-            ), onRefresh = { })
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PriceCardPreviewLoading() {
-    MaterialTheme {
-        PriceCard(
-            uiState = PriceUiState(
-                price = 95234.12, percentageChange = 2.45, isLoading = true
-            ), onRefresh = { })
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PriceCardPreviewError() {
-    MaterialTheme {
-        PriceCard(
-            uiState = PriceUiState(
-                price = 95234.12,
-                percentageChange = 1.95,
-                isLoading = false,
-                errorMessage = "Error: HTTP 400"
-            ), onRefresh = { })
+                price = 52849.10, percentageChange = 2.03, isLoading = false
+            ), onRefresh = { }, onAddWidgetClick = { })
     }
 }

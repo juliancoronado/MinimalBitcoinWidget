@@ -61,6 +61,7 @@ import androidx.core.net.toUri
 import com.jcoronado.minimalbitcoinwidget.BuildConfig
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
+import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -658,12 +659,14 @@ fun SectionHeader(title: String, top: Boolean = false) {
 }
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showSystemUi = true)
 fun SettingsPreview() {
-    SettingsScreen(
-        selectedCurrency = "usd",
-        currentTheme = AppTheme.LIGHT,
-        dynamicColors = true,
-        refreshInterval = 1
-    )
+    AppTheme(darkTheme = false, dynamicColors = true) {
+        SettingsScreen(
+            selectedCurrency = "usd",
+            currentTheme = AppTheme.LIGHT,
+            dynamicColors = true,
+            refreshInterval = 1
+        )
+    }
 }
