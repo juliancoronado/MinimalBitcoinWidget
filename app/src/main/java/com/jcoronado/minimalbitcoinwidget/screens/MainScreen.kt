@@ -53,7 +53,11 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: (
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.app_name))
+                    Text(
+                        stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 )
@@ -81,25 +85,24 @@ fun NewWidgetNotice(onClick: () -> Unit) {
     // TODO - convert hardcoded values to stringResource and provide translations in strings.xml files
     Text(
         "New",
-        style = MaterialTheme.typography.bodyLarge,
+        style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
     )
     SegmentedListItem(
+        // since there's only 1 item in this section, round the corner manually
         shapes = ListItemDefaults.shapes(shape = RoundedCornerShape(16.dp)),
         onClick = onClick,
         content = {
             Text(
-                "Refreshed & Modern Widget",
-                fontWeight = FontWeight.Bold
+                "Refreshed & Modern Widget", fontWeight = FontWeight.Bold
             )
         },
         supportingContent = {
             Text(
                 "Tap here to add it to your homescreen!",
             )
-        }
-    )
+        })
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -266,8 +269,8 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 fun MainScreenPreview() {
     MainScreen(
         uiState = PriceUiState(
-            price = 95234.12, percentageChange = 0.45, isLoading = false
-        ), onRefresh = { }, onAddWidgetClick = { })
+        price = 95234.12, percentageChange = 0.45, isLoading = false
+    ), onRefresh = { }, onAddWidgetClick = { })
 }
 
 @Preview(showBackground = true)

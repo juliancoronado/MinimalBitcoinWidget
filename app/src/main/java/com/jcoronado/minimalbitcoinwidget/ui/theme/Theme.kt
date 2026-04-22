@@ -3,7 +3,8 @@ package com.jcoronado.minimalbitcoinwidget.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -250,6 +251,7 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppTheme(
     darkTheme: Boolean,
@@ -285,7 +287,7 @@ fun AppTheme(
         }
     }
 
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = appColorScheme,
         typography = appTypography,
         motionScheme = MotionScheme.expressive(),

@@ -172,7 +172,11 @@ fun SettingsScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.settings))
+                    Text(
+                        stringResource(R.string.settings),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ), scrollBehavior = topAppBarScrollBehavior
@@ -205,7 +209,10 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.update_currency), fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(R.string.update_currency),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     },
                     supportingContent = {
                         val index = currencyCodes.indexOf(selectedCurrency)
@@ -237,7 +244,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.change_percentage),
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.SemiBold
                             )
                         },
                         supportingContent = {
@@ -284,7 +291,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.widget_refresh_interval),
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.SemiBold
                             )
                         },
                         supportingContent = {
@@ -330,7 +337,9 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.app_theme), fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.app_theme), fontWeight = FontWeight.SemiBold
+                            )
                         },
                         supportingContent = {
                             val systemThemeLabel = stringResource(R.string.app_theme_system)
@@ -386,7 +395,10 @@ fun SettingsScreen(
                     },
                     enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                     content = {
-                        Text(stringResource(R.string.dynamic_colors), fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(R.string.dynamic_colors),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     },
                     supportingContent = {
                         Text(
@@ -418,7 +430,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.data_source), fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.data_source), fontWeight = FontWeight.SemiBold)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.data_source_subtitle))
@@ -430,7 +442,8 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, "https://www.coingecko.com/api".toUri())
+                        val intent =
+                            Intent(Intent.ACTION_VIEW, "https://www.coingecko.com/api".toUri())
                         context.startActivity(intent)
                     },
                 )
@@ -446,7 +459,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.source_code), fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.source_code), fontWeight = FontWeight.SemiBold)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.view_on_github))
@@ -458,7 +471,10 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/juliancoronado/MinimalBitcoinWidget".toUri())
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            "https://github.com/juliancoronado/MinimalBitcoinWidget".toUri()
+                        )
                         context.startActivity(intent)
                     },
                 )
@@ -476,7 +492,7 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.license), fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.license), fontWeight = FontWeight.SemiBold)
                         },
                         supportingContent = {
                             Text(stringResource(R.string.license_subtitle))
@@ -497,7 +513,7 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.version), fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.version), fontWeight = FontWeight.SemiBold)
                         },
                         supportingContent = {
                             Text(
@@ -526,7 +542,7 @@ fun SettingsScreen(
                     },
                     content = {
                         Text(
-                            stringResource(R.string.build_number), fontWeight = FontWeight.Bold
+                            stringResource(R.string.build_number), fontWeight = FontWeight.SemiBold
                         )
                     },
                     supportingContent = {
@@ -565,7 +581,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.contact), fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.contact), fontWeight = FontWeight.SemiBold)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.developer))
@@ -602,7 +618,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.developer_mode),
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.SemiBold
                             )
                         },
                         supportingContent = {
@@ -634,6 +650,7 @@ fun SectionHeader(title: String, top: Boolean = false) {
     Text(
         title,
         color = MaterialTheme.colorScheme.primary,
+        style = MaterialTheme.typography.titleMedium,
         modifier = Modifier
             .padding(horizontal = 4.dp)
             .padding(top = if (top) 0.dp else 16.dp, bottom = 8.dp)

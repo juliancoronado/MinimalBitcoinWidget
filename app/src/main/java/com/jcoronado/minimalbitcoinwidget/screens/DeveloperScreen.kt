@@ -54,7 +54,11 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.developer_title))
+                    Text(
+                        stringResource(R.string.developer_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ), scrollBehavior = scrollBehavior
@@ -82,8 +86,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_notes_24),
-                                "TODO"
+                                painterResource(R.drawable.rounded_notes_24), "TODO"
                             )
                         },
                         content = {
@@ -94,8 +97,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                         },
                         trailingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_chevron_forward_24),
-                                "TODO"
+                                painterResource(R.drawable.rounded_chevron_forward_24), "TODO"
                             )
                         },
                         onClick = onNavigateToLogs,
@@ -112,8 +114,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                             ),
                             leadingContent = {
                                 Icon(
-                                    painterResource(R.drawable.rounded_bug_report_24),
-                                    "TODO"
+                                    painterResource(R.drawable.rounded_bug_report_24), "TODO"
                                 )
                             },
                             content = {
@@ -150,26 +151,29 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.widget_logs))
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            painter = painterResource(R.drawable.rounded_arrow_back_24),
-                            contentDescription = stringResource(R.string.back_icon_description)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors().copy(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
-                ), actions = {
-                    TextButton(
-                        onClick = { scope.launch { db.debugDao().clearAll() } },
-                        enabled = logs.isNotEmpty()
-                    ) {
-                        Text(stringResource(R.string.clear))
-                    }
-                }, scrollBehavior = scrollBehavior)
+                Text(
+                    stringResource(R.string.widget_logs),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+            }, navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        painter = painterResource(R.drawable.rounded_arrow_back_24),
+                        contentDescription = stringResource(R.string.back_icon_description)
+                    )
+                }
+            }, colors = TopAppBarDefaults.topAppBarColors().copy(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ), actions = {
+                TextButton(
+                    onClick = { scope.launch { db.debugDao().clearAll() } },
+                    enabled = logs.isNotEmpty()
+                ) {
+                    Text(stringResource(R.string.clear))
+                }
+            }, scrollBehavior = scrollBehavior
+            )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
