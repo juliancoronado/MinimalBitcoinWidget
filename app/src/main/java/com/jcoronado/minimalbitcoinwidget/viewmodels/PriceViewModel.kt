@@ -102,7 +102,17 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
     fun requestPinWidget() {
         viewModelScope.launch {
             Log.d(LOG_TAG, "Requesting to pin Glance widget")
-            val currentState = uiState.value
+            var currentState = uiState.value
+
+            // update currentState to use default values (if needed)
+            // so the widget previews look complete
+            currentState = PriceUiState(
+                isLoading = false,
+                percentageChange = if (currentState.percentageChange == 0.0) 2.03 else currentState.percentageChange,
+                price = if (currentState.price == 0.0) 52849.10 else currentState.price,
+                errorMessage = null
+            )
+
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
                     receiver = PriceWidgetReceiver::class.java,
