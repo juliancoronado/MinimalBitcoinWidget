@@ -108,6 +108,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
             // so the widget previews look complete
             currentState = PriceUiState(
                 isLoading = false,
+                changeIntervalLabelResId = currentState.changeIntervalLabelResId,
                 percentageChange = if (currentState.percentageChange == 0.0) 2.03 else currentState.percentageChange,
                 price = if (currentState.price == 0.0) 52849.10 else currentState.price,
                 errorMessage = null
