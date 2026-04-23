@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import java.text.SimpleDateFormat
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -90,11 +92,15 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: (
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AddWidgetShortcut(onClick: () -> Unit) {
+    val view = LocalView.current
     // TODO - convert to stringResource and provide translations in strings.xml files
     SegmentedListItem(
         // since there's only 1 item in this section, round the corner manually
         shapes = ListItemDefaults.shapes(shape = RoundedCornerShape(16.dp)),
-        onClick = onClick,
+        onClick = {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            onClick()
+        },
         content = {
             Text(
                 "Add to Home Screen", fontWeight = FontWeight.Bold
@@ -110,13 +116,17 @@ fun AddWidgetShortcut(onClick: () -> Unit) {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
+    val view = LocalView.current
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
     val formattedTime = SimpleDateFormat(
         "hh:mm:ss a", LocalLocale.current.platformLocale
     ).format(uiState.lastUpdated)
     SegmentedListItem(
-        onClick = onRefresh, colors = colors, shapes = ListItemDefaults.segmentedShapes(
+        onClick = {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            onRefresh()
+        }, colors = colors, shapes = ListItemDefaults.segmentedShapes(
             index = 0, count = 2
         )
     ) {

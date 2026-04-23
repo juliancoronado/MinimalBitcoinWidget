@@ -3,6 +3,7 @@ package com.jcoronado.minimalbitcoinwidget.screens
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.view.HapticFeedbackConstants
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -79,6 +81,7 @@ fun SettingsScreen(
     developerModeEnabled: Boolean = false,
     onDebugModeToggle: (Boolean) -> Unit = {}
 ) {
+    val view = LocalView.current
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -225,6 +228,7 @@ fun SettingsScreen(
                         }
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         // show options dialog
                         newSelection = selectedCurrency // reset to current value for UI
                         showCurrencyDialog.value = true
@@ -267,6 +271,7 @@ fun SettingsScreen(
                                             label = value,
                                             weight = if (changePercentage == index) 1F else 0.9F,
                                             onCheckedChange = {
+                                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                                 onChangePercentageSelected(index)
                                             },
                                         )
@@ -314,6 +319,7 @@ fun SettingsScreen(
                                             label = value,
                                             weight = if (refreshInterval == index) 1F else 0.9F,
                                             onCheckedChange = {
+                                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                                 onRefreshIntervalSelected(index)
                                             },
                                         )
@@ -358,6 +364,7 @@ fun SettingsScreen(
                                         label = systemThemeLabel,
                                         weight = if (currentTheme == AppTheme.SYSTEM) 1F else 0.9F,
                                         onCheckedChange = {
+                                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                             onThemeSelected(AppTheme.SYSTEM)
                                         },
                                     )
@@ -366,6 +373,7 @@ fun SettingsScreen(
                                         label = lightThemeLabel,
                                         weight = if (currentTheme == AppTheme.LIGHT) 1F else 0.9F,
                                         onCheckedChange = {
+                                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                             onThemeSelected(AppTheme.LIGHT)
                                         },
                                     )
@@ -374,6 +382,7 @@ fun SettingsScreen(
                                         label = darkThemeLabel,
                                         weight = if (currentTheme == AppTheme.DARK) 1F else 0.9F,
                                         onCheckedChange = {
+                                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                             onThemeSelected(AppTheme.DARK)
                                         },
                                     )
@@ -415,6 +424,7 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         onDynamicColorsSelected(!dynamicColors)
                     },
                 )
@@ -443,6 +453,7 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         val intent =
                             Intent(Intent.ACTION_VIEW, "https://www.coingecko.com/api".toUri())
                         context.startActivity(intent)
@@ -472,6 +483,7 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         val intent = Intent(
                             Intent.ACTION_VIEW,
                             "https://github.com/juliancoronado/MinimalBitcoinWidget".toUri()
@@ -552,6 +564,7 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         if (!developerModeEnabled) {
                             tapCount++
                             // small helper method
@@ -594,6 +607,7 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                             data = "$mailTo?subject=${Uri.encode(subject)}".toUri()
                         }
@@ -631,6 +645,7 @@ fun SettingsScreen(
                             )
                         },
                         onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             onDebugModeToggle(false)
                         },
                     )

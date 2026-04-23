@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +50,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
+    val view = LocalView.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -100,7 +103,10 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                                 painterResource(R.drawable.rounded_chevron_forward_24), "TODO"
                             )
                         },
-                        onClick = onNavigateToLogs,
+                        onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            onNavigateToLogs()
+                        },
                     )
                 }
                 item {
@@ -136,6 +142,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun WidgetLogsScreen(onBack: () -> Unit) {
+    val view = LocalView.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -157,7 +164,10 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                     fontWeight = FontWeight.Bold,
                 )
             }, navigationIcon = {
-                IconButton(onClick = onBack) {
+                IconButton(onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    onBack()
+                }) {
                     Icon(
                         painter = painterResource(R.drawable.rounded_arrow_back_24),
                         contentDescription = stringResource(R.string.back_icon_description)
@@ -167,7 +177,10 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                 containerColor = MaterialTheme.colorScheme.surfaceContainer
             ), actions = {
                 TextButton(
-                    onClick = { scope.launch { db.debugDao().clearAll() } },
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        scope.launch { db.debugDao().clearAll() }
+                    },
                     enabled = logs.isNotEmpty()
                 ) {
                     Text(stringResource(R.string.clear))
