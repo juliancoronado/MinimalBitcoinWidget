@@ -78,8 +78,7 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: (
             PriceCard(uiState, onRefresh = onRefresh)
             // TODO - shortcuts section - put this into a separate component later
             Text(
-                // TODO - convert to stringResource and provide translations in strings.xml files
-                "Shortcuts",
+                text = stringResource(R.string.shortcuts_header),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
@@ -93,7 +92,6 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: (
 @Composable
 fun AddWidgetShortcut(onClick: () -> Unit) {
     val view = LocalView.current
-    // TODO - convert to stringResource and provide translations in strings.xml files
     SegmentedListItem(
         // since there's only 1 item in this section, round the corner manually
         shapes = ListItemDefaults.shapes(shape = RoundedCornerShape(16.dp)),
@@ -103,12 +101,13 @@ fun AddWidgetShortcut(onClick: () -> Unit) {
         },
         content = {
             Text(
-                "Add to Home Screen", fontWeight = FontWeight.Bold
+                text = stringResource(R.string.add_widget_shortcut_title),
+                fontWeight = FontWeight.Bold
             )
         },
         supportingContent = {
             Text(
-                "Tap here to pin a widget to your home screen",
+                text = stringResource(R.string.add_widget_shortcut_description),
             )
         })
 }

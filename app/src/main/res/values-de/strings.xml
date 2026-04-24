@@ -39,6 +39,11 @@
     <string name="developer_mode_enabled">Entwicklermodus aktiviert!</string>
     <string name="developer_taps">Sie sind jetzt noch %1$d Tipps davon entfernt, ein Entwickler zu sein</string>
 
+    <!-- Shortcuts -->
+    <string name="shortcuts_header">Kurzbefehle</string>
+    <string name="add_widget_shortcut_title">Zum Startbildschirm hinzufügen</string>
+    <string name="add_widget_shortcut_description">Tippen Sie hier, um ein Widget zu Ihrem Startbildschirm hinzuzufügen</string>
+
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Währungssymbol</string>
     <string name="change_percentage_icon_description">Prozentsymbol</string>

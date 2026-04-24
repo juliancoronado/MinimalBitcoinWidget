@@ -39,6 +39,11 @@
     <string name="developer_mode_enabled">Geliştirici modu etkin!</string>
     <string name="developer_taps">Geliştirici olmanıza %1$d dokunma kaldı</string>
 
+    <!-- Shortcuts -->
+    <string name="shortcuts_header">Kısayollar</string>
+    <string name="add_widget_shortcut_title">Ana Ekrana Ekle</string>
+    <string name="add_widget_shortcut_description">Ana ekranınıza bir widget eklemek için buraya dokunun</string>
+
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Para birimi simgesi</string>
     <string name="change_percentage_icon_description">Yüzde simgesi</string>
