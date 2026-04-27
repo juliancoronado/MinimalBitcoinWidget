@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Date Format: YYYY-MM-DD
 
-## [3.0.0] - YYYY-MM-DD
+## [3.0.0] - 2026-04-21
 
 ### Added
 - Upgrade app UI to use Jetpack Compose and Material 3 Expressive.
