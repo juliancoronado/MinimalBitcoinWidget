@@ -32,10 +32,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // bundle debug symbols into aab file
-            ndk {
-                debugSymbolLevel = "FULL"
-            }
         }
     }
     compileOptions {
