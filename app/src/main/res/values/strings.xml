@@ -68,6 +68,11 @@
     <string name="widget_logs" translatable="false">Widget Logs</string>
     <string name="widget_logs_description" translatable="false">View logs for the widget update worker</string>
 
+    <!-- Shortcuts -->
+    <string name="shortcuts_header">Shortcuts</string>
+    <string name="add_widget_shortcut_title">Add to Home Screen</string>
+    <string name="add_widget_shortcut_description">Tap here to add a widget to your home screen</string>
+
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Currency icon</string>
     <string name="change_percentage_icon_description">Percent icon</string>

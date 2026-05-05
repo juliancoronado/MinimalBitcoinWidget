@@ -3,7 +3,8 @@ package com.jcoronado.minimalbitcoinwidget.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -250,6 +251,7 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppTheme(
     darkTheme: Boolean,
@@ -265,17 +267,6 @@ fun AppTheme(
         else -> lightScheme
     }
 
-    // set the system status bar icon colors to be opposite of dark theme
-    // ex. dark icons on a light background color and light icons on a dark background color
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = !darkTheme
-        }
-    }
-
     val appColorScheme : ColorScheme = if (darkTheme) {
         // swap surface and surfaceContainer colors when darkMode = true
         colorScheme.copy(
@@ -286,7 +277,17 @@ fun AppTheme(
         colorScheme
     }
 
-    MaterialTheme(
+    // system status bar icon colors are handled by SideEffect using modern APIs
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+        }
+    }
+
+    MaterialExpressiveTheme(
         colorScheme = appColorScheme,
         typography = appTypography,
         motionScheme = MotionScheme.expressive(),

@@ -23,6 +23,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
 import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetReceiver
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
 import com.jcoronado.minimalbitcoinwidget.widgets.legacy.getCurrencyInfo
@@ -93,6 +94,41 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
     fun refreshFromCache() {
         loadInitialData()
         redrawWidgets()
+    }
+
+    /**
+     * Requests the system to pin the modern Glance widget to the homescreen.
+     */
+    fun requestPinWidget() {
+        viewModelScope.launch {
+            Log.d(LOG_TAG, "Requesting to pin Glance widget")
+            var currentState = uiState.value
+
+            // update currentState to use default values (if needed)
+            // so the widget previews look complete
+            currentState = PriceUiState(
+                isLoading = false,
+                changeIntervalLabelResId = currentState.changeIntervalLabelResId,
+                percentageChange = if (currentState.percentageChange == 0.0) 2.03 else currentState.percentageChange,
+                price = if (currentState.price == 0.0) 52849.10 else currentState.price,
+                errorMessage = null
+            )
+
+            try {
+                GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
+                    receiver = PriceWidgetReceiver::class.java,
+                    preview = PriceWidget(),
+                    previewState = PriceWidgetState.Available(
+                        price = currentState.price,
+                        changePercentage = currentState.percentageChange,
+                        intervalLabelResId = currentState.changeIntervalLabelResId,
+                        currency = currentState.selectedCurrency
+                    )
+                )
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Failed to request pin widget: $e")
+            }
+        }
     }
 
     /** Update the selected currency and persist it. */

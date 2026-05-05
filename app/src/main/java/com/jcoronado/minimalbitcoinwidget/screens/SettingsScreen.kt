@@ -3,6 +3,7 @@ package com.jcoronado.minimalbitcoinwidget.screens
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.view.HapticFeedbackConstants
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -61,6 +63,7 @@ import androidx.core.net.toUri
 import com.jcoronado.minimalbitcoinwidget.BuildConfig
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
+import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -78,6 +81,7 @@ fun SettingsScreen(
     developerModeEnabled: Boolean = false,
     onDebugModeToggle: (Boolean) -> Unit = {}
 ) {
+    val view = LocalView.current
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -172,7 +176,11 @@ fun SettingsScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.settings))
+                    Text(
+                        stringResource(R.string.settings),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ), scrollBehavior = topAppBarScrollBehavior
@@ -205,7 +213,10 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.update_currency), fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(R.string.update_currency),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     },
                     supportingContent = {
                         val index = currencyCodes.indexOf(selectedCurrency)
@@ -217,6 +228,7 @@ fun SettingsScreen(
                         }
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         // show options dialog
                         newSelection = selectedCurrency // reset to current value for UI
                         showCurrencyDialog.value = true
@@ -237,7 +249,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.change_percentage),
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.SemiBold
                             )
                         },
                         supportingContent = {
@@ -259,6 +271,7 @@ fun SettingsScreen(
                                             label = value,
                                             weight = if (changePercentage == index) 1F else 0.9F,
                                             onCheckedChange = {
+                                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                                 onChangePercentageSelected(index)
                                             },
                                         )
@@ -284,7 +297,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.widget_refresh_interval),
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.SemiBold
                             )
                         },
                         supportingContent = {
@@ -306,6 +319,7 @@ fun SettingsScreen(
                                             label = value,
                                             weight = if (refreshInterval == index) 1F else 0.9F,
                                             onCheckedChange = {
+                                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                                 onRefreshIntervalSelected(index)
                                             },
                                         )
@@ -330,7 +344,9 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.app_theme), fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.app_theme), fontWeight = FontWeight.SemiBold
+                            )
                         },
                         supportingContent = {
                             val systemThemeLabel = stringResource(R.string.app_theme_system)
@@ -348,6 +364,7 @@ fun SettingsScreen(
                                         label = systemThemeLabel,
                                         weight = if (currentTheme == AppTheme.SYSTEM) 1F else 0.9F,
                                         onCheckedChange = {
+                                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                             onThemeSelected(AppTheme.SYSTEM)
                                         },
                                     )
@@ -356,6 +373,7 @@ fun SettingsScreen(
                                         label = lightThemeLabel,
                                         weight = if (currentTheme == AppTheme.LIGHT) 1F else 0.9F,
                                         onCheckedChange = {
+                                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                             onThemeSelected(AppTheme.LIGHT)
                                         },
                                     )
@@ -364,6 +382,7 @@ fun SettingsScreen(
                                         label = darkThemeLabel,
                                         weight = if (currentTheme == AppTheme.DARK) 1F else 0.9F,
                                         onCheckedChange = {
+                                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                             onThemeSelected(AppTheme.DARK)
                                         },
                                     )
@@ -386,7 +405,10 @@ fun SettingsScreen(
                     },
                     enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                     content = {
-                        Text(stringResource(R.string.dynamic_colors), fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(R.string.dynamic_colors),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     },
                     supportingContent = {
                         Text(
@@ -402,6 +424,7 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         onDynamicColorsSelected(!dynamicColors)
                     },
                 )
@@ -418,7 +441,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.data_source), fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.data_source), fontWeight = FontWeight.SemiBold)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.data_source_subtitle))
@@ -430,7 +453,9 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, "https://www.coingecko.com/api".toUri())
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        val intent =
+                            Intent(Intent.ACTION_VIEW, "https://www.coingecko.com/api".toUri())
                         context.startActivity(intent)
                     },
                 )
@@ -446,7 +471,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.source_code), fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.source_code), fontWeight = FontWeight.SemiBold)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.view_on_github))
@@ -458,7 +483,11 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/juliancoronado/MinimalBitcoinWidget".toUri())
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            "https://github.com/juliancoronado/MinimalBitcoinWidget".toUri()
+                        )
                         context.startActivity(intent)
                     },
                 )
@@ -476,7 +505,7 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.license), fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.license), fontWeight = FontWeight.SemiBold)
                         },
                         supportingContent = {
                             Text(stringResource(R.string.license_subtitle))
@@ -497,7 +526,7 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.version), fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.version), fontWeight = FontWeight.SemiBold)
                         },
                         supportingContent = {
                             Text(
@@ -526,7 +555,7 @@ fun SettingsScreen(
                     },
                     content = {
                         Text(
-                            stringResource(R.string.build_number), fontWeight = FontWeight.Bold
+                            stringResource(R.string.build_number), fontWeight = FontWeight.SemiBold
                         )
                     },
                     supportingContent = {
@@ -535,6 +564,7 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         if (!developerModeEnabled) {
                             tapCount++
                             // small helper method
@@ -565,7 +595,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.contact), fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.contact), fontWeight = FontWeight.SemiBold)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.developer))
@@ -577,6 +607,7 @@ fun SettingsScreen(
                         )
                     },
                     onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                             data = "$mailTo?subject=${Uri.encode(subject)}".toUri()
                         }
@@ -602,7 +633,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.developer_mode),
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.SemiBold
                             )
                         },
                         supportingContent = {
@@ -614,6 +645,7 @@ fun SettingsScreen(
                             )
                         },
                         onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             onDebugModeToggle(false)
                         },
                     )
@@ -634,6 +666,7 @@ fun SectionHeader(title: String, top: Boolean = false) {
     Text(
         title,
         color = MaterialTheme.colorScheme.primary,
+        style = MaterialTheme.typography.titleMedium,
         modifier = Modifier
             .padding(horizontal = 4.dp)
             .padding(top = if (top) 0.dp else 16.dp, bottom = 8.dp)
@@ -641,12 +674,14 @@ fun SectionHeader(title: String, top: Boolean = false) {
 }
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showSystemUi = true)
 fun SettingsPreview() {
-    SettingsScreen(
-        selectedCurrency = "usd",
-        currentTheme = AppTheme.LIGHT,
-        dynamicColors = true,
-        refreshInterval = 1
-    )
+    AppTheme(darkTheme = false, dynamicColors = true) {
+        SettingsScreen(
+            selectedCurrency = "usd",
+            currentTheme = AppTheme.LIGHT,
+            dynamicColors = true,
+            refreshInterval = 1
+        )
+    }
 }

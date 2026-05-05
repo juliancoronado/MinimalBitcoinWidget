@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Date Format: YYYY-MM-DD
 
-## [3.0.0] - YYYY-MM-DD
+## [3.1.0] - 2026-04-30
+### Added
+- Added haptic feedback when navigating the UI
+- Added "Shortcuts" section to quickly pin widget to homescreen
+
+### Changed
+- Changed default font from Google Sans to Google Sans Flex
+
+## [3.0.0] - 2026-04-21
 
 ### Added
 - Upgrade app UI to use Jetpack Compose and Material 3 Expressive.

@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
@@ -51,10 +52,10 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
@@ -75,6 +76,7 @@ import com.jcoronado.minimalbitcoinwidget.viewmodels.SettingsViewModel
 )
 @Composable
 fun AppNavigation() {
+    val view = LocalView.current
     val systemBarsInsets = WindowInsets.systemBars.asPaddingValues()
     val cutoutInsets = WindowInsets.displayCutout.asPaddingValues()
 
@@ -162,6 +164,7 @@ fun AppNavigation() {
                         MainScreen(
                             uiState = uiState,
                             onRefresh = { priceViewModel.fetchPrice() },
+                            onAddWidgetClick = { priceViewModel.requestPinWidget() }
                         )
                     }
                     entry<Screen.Settings> {
@@ -251,6 +254,7 @@ fun AppNavigation() {
                                 ToggleButton(
                                     checked = selected, onCheckedChange = { checked ->
                                         if (checked && !selected) {
+                                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                             // Keep only Dashboard in the stack before adding the new route
                                             while (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
                                             if (item.route != Screen.Dashboard) {
@@ -296,10 +300,4 @@ fun AppNavigation() {
 
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun NavigationPreview() {
-    AppNavigation()
 }

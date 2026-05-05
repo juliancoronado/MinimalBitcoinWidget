@@ -39,6 +39,11 @@
     <string name="developer_mode_enabled">Modo de desenvolvedor ativado!</string>
     <string name="developer_taps">Você está agora a %1$d toques de ser um desenvolvedor</string>
 
+    <!-- Shortcuts -->
+    <string name="shortcuts_header">Atalhos</string>
+    <string name="add_widget_shortcut_title">Adicionar à tela inicial</string>
+    <string name="add_widget_shortcut_description">Toque aqui para adicionar um widget à sua tela inicial</string>
+
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Ícone de moeda</string>
     <string name="change_percentage_icon_description">Ícone de porcentagem</string>

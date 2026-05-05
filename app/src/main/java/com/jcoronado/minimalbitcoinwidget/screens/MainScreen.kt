@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,15 +40,27 @@ import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import java.text.SimpleDateFormat
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.text.font.FontWeight
+import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
+fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: () -> Unit) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.app_name))
+                    Text(
+                        stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 )
@@ -58,27 +71,61 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit) {
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .padding(horizontal = 12.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
         ) {
             PriceCard(uiState, onRefresh = onRefresh)
+            // TODO - shortcuts section - put this into a separate component later
+            Text(
+                text = stringResource(R.string.shortcuts_header),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            )
+            AddWidgetShortcut(onClick = onAddWidgetClick)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
+fun AddWidgetShortcut(onClick: () -> Unit) {
+    val view = LocalView.current
+    SegmentedListItem(
+        // since there's only 1 item in this section, round the corner manually
+        shapes = ListItemDefaults.shapes(shape = RoundedCornerShape(16.dp)),
+        onClick = {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            onClick()
+        },
+        content = {
+            Text(
+                text = stringResource(R.string.add_widget_shortcut_title),
+                fontWeight = FontWeight.Bold
+            )
+        },
+        supportingContent = {
+            Text(
+                text = stringResource(R.string.add_widget_shortcut_description),
+            )
+        })
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
+    val view = LocalView.current
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
     val formattedTime = SimpleDateFormat(
         "hh:mm:ss a", LocalLocale.current.platformLocale
     ).format(uiState.lastUpdated)
     SegmentedListItem(
-        modifier = Modifier.padding(horizontal = 12.dp),
-        onClick = onRefresh,
-        colors = colors,
-        shapes = ListItemDefaults.segmentedShapes(
+        onClick = {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            onRefresh()
+        }, colors = colors, shapes = ListItemDefaults.segmentedShapes(
             index = 0, count = 2
         )
     ) {
@@ -191,11 +238,15 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 }
             }
 
-            if (uiState.isLoading) {
+            // TODO - revisit this and see if we still want to keep this animation
+            AnimatedVisibility(
+                visible = uiState.isLoading,
+                enter = fadeIn(),
+                exit = fadeOut(animationSpec = tween(durationMillis = 100)),
+                modifier = Modifier.align(Alignment.BottomEnd)
+            ) {
                 LoadingIndicator(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .size(32.dp),
+                    modifier = Modifier.size(32.dp),
                     polygons = LoadingIndicatorDefaults.IndeterminateIndicatorPolygons.shuffled()
                 )
             }
@@ -214,10 +265,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     }
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         SegmentedListItem(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            onClick = {},
-            colors = colors,
-            shapes = ListItemDefaults.segmentedShapes(
+            onClick = {}, colors = colors, shapes = ListItemDefaults.segmentedShapes(
                 index = 1, count = 2
             )
         ) {
@@ -227,58 +275,13 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(
-        uiState = PriceUiState(
-            price = 95234.12, percentageChange = 0.45, isLoading = false
-        ), onRefresh = { })
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PriceCardPreviewLoadedPos() {
-    MaterialTheme {
-        PriceCard(
+    AppTheme(darkTheme = false, dynamicColors = true) {
+        MainScreen(
             uiState = PriceUiState(
-                price = 95234.12, percentageChange = 0.45, isLoading = false
-            ), onRefresh = { })
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PriceCardPreviewLoadedNeg() {
-    MaterialTheme {
-        PriceCard(
-            uiState = PriceUiState(
-                price = 95234.12, percentageChange = -0.32, isLoading = false
-            ), onRefresh = { })
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PriceCardPreviewLoading() {
-    MaterialTheme {
-        PriceCard(
-            uiState = PriceUiState(
-                price = 95234.12, percentageChange = 2.45, isLoading = true
-            ), onRefresh = { })
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PriceCardPreviewError() {
-    MaterialTheme {
-        PriceCard(
-            uiState = PriceUiState(
-                price = 95234.12,
-                percentageChange = 1.95,
-                isLoading = false,
-                errorMessage = "Error: HTTP 400"
-            ), onRefresh = { })
+                price = 52849.10, percentageChange = 2.03, isLoading = false
+            ), onRefresh = { }, onAddWidgetClick = { })
     }
 }

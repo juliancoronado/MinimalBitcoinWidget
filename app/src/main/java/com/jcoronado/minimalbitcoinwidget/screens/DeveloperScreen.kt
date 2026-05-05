@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,13 +50,18 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
+    val view = LocalView.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.developer_title))
+                    Text(
+                        stringResource(R.string.developer_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ), scrollBehavior = scrollBehavior
@@ -82,8 +89,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                         ),
                         leadingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_notes_24),
-                                "TODO"
+                                painterResource(R.drawable.rounded_notes_24), "TODO"
                             )
                         },
                         content = {
@@ -94,11 +100,13 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                         },
                         trailingContent = {
                             Icon(
-                                painterResource(R.drawable.rounded_chevron_forward_24),
-                                "TODO"
+                                painterResource(R.drawable.rounded_chevron_forward_24), "TODO"
                             )
                         },
-                        onClick = onNavigateToLogs,
+                        onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            onNavigateToLogs()
+                        },
                     )
                 }
                 item {
@@ -112,8 +120,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                             ),
                             leadingContent = {
                                 Icon(
-                                    painterResource(R.drawable.rounded_bug_report_24),
-                                    "TODO"
+                                    painterResource(R.drawable.rounded_bug_report_24), "TODO"
                                 )
                             },
                             content = {
@@ -135,6 +142,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun WidgetLogsScreen(onBack: () -> Unit) {
+    val view = LocalView.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -150,26 +158,35 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.widget_logs))
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            painter = painterResource(R.drawable.rounded_arrow_back_24),
-                            contentDescription = stringResource(R.string.back_icon_description)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors().copy(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
-                ), actions = {
-                    TextButton(
-                        onClick = { scope.launch { db.debugDao().clearAll() } },
-                        enabled = logs.isNotEmpty()
-                    ) {
-                        Text(stringResource(R.string.clear))
-                    }
-                }, scrollBehavior = scrollBehavior)
+                Text(
+                    stringResource(R.string.widget_logs),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+            }, navigationIcon = {
+                IconButton(onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    onBack()
+                }) {
+                    Icon(
+                        painter = painterResource(R.drawable.rounded_arrow_back_24),
+                        contentDescription = stringResource(R.string.back_icon_description)
+                    )
+                }
+            }, colors = TopAppBarDefaults.topAppBarColors().copy(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ), actions = {
+                TextButton(
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        scope.launch { db.debugDao().clearAll() }
+                    },
+                    enabled = logs.isNotEmpty()
+                ) {
+                    Text(stringResource(R.string.clear))
+                }
+            }, scrollBehavior = scrollBehavior
+            )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
