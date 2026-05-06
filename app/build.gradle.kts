@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.jcoronado.minimalbitcoinwidget"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.jcoronado.minimalbitcoinwidget"
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 13
         versionName = "3.1.1-SNAPSHOT"
 
