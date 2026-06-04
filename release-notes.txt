@@ -4,31 +4,24 @@
 <en-US>
 Fixed a currency display bug on startup that caused incorrect Bitcoin prices to show under the wrong currency symbol.
 </en-US>
-
 <es-ES>
 Se ha corregido un error de visualización de moneda al inicio que hacía que se mostraran precios de Bitcoin incorrectos bajo el símbolo de moneda equivocado.
 </es-ES>
-
 <de-DE>
 Es wurde ein Fehler bei der Währungsanzeige beim Start behoben, durch den falsche Bitcoin-Preise unter dem falschen Währungssymbol angezeigt wurden.
 </de-DE>
-
 <fr-FR>
 Correction d'un bug d'affichage de la devise au démarrage qui entraînait l'affichage de prix du Bitcoin incorrects sous le mauvais symbole de devise.
 </fr-FR>
-
 <it-IT>
 Risolto un bug di visualizzazione della valuta all'avvio che causava la visualizzazione di prezzi di Bitcoin errati con il simbolo di valuta sbagliato.
 </it-IT>
-
 <pt-PT>
 Foi corrigido um erro de exibição de moeda no arranque que fazia com que preços de Bitcoin incorretos fossem mostrados sob o símbolo de moeda errado.
 </pt-PT>
-
 <pt-BR>
 Corrigido um erro de exibição de moeda na inicialização que fazia com que preços incorretos do Bitcoin fossem exibidos sob o símbolo de moeda errado.
 </pt-BR>
-
 <tr-TR>
 Başlangıçta yanlış para birimi simgesi altında yanlış Bitcoin fiyatlarının görünmesine neden olan bir para birimi görüntüleme hatası düzeltildi.
 </tr-TR>
