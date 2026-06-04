@@ -50,44 +50,51 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
     private val gson = Gson()
 
     init {
+        // First check if the app version updated to invalidate any outdated cache.
         Prefs.checkAppUpdateAndInvalidateCache(prefs)
+        
+        // Load settings and cached price synchronously to ensure the selected currency
+        // is fully populated in _uiState before starting any network calls.
         loadInitialData()
+        
+        // Trigger a fresh price fetch using the newly loaded currency preference.
         fetchPrice(fromInit = true)
     }
 
     /** Load initial data from SharedPreferences. */
     private fun loadInitialData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
-            val cachedCurrency =
-                prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)!!
-            if (cachedDataJson != null) {
-                try {
-                    val lastUpdated = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
-                    val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
+        val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
+        val cachedCurrency =
+            prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)!!
+        if (cachedDataJson != null) {
+            try {
+                val lastUpdated = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
+                val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
 
-                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
-                    val percentage = when (selectedInterval) {
-                        0 -> cachedData.priceChangePercentage24h
-                        1 -> cachedData.priceChangePercentage7d
-                        2 -> cachedData.priceChangePercentage30d
-                        else -> cachedData.priceChangePercentage24h
-                    }
-
-                    val interval = TimeInterval.fromValue(selectedInterval)
-
-                    // update state immediately
-                    _uiState.value = _uiState.value.copy(
-                        price = cachedData.currentPrice,
-                        percentageChange = percentage,
-                        changeIntervalLabelResId = interval.labelResId,
-                        selectedCurrency = cachedCurrency,
-                        lastUpdated = lastUpdated
-                    )
-                } catch (e: Exception) {
-                    Log.e(LOG_TAG, "Failed to parse initial cache $e")
+                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                val percentage = when (selectedInterval) {
+                    0 -> cachedData.priceChangePercentage24h
+                    1 -> cachedData.priceChangePercentage7d
+                    2 -> cachedData.priceChangePercentage30d
+                    else -> cachedData.priceChangePercentage24h
                 }
+
+                val interval = TimeInterval.fromValue(selectedInterval)
+
+                // update state immediately
+                _uiState.value = _uiState.value.copy(
+                    price = cachedData.currentPrice,
+                    percentageChange = percentage,
+                    changeIntervalLabelResId = interval.labelResId,
+                    selectedCurrency = cachedCurrency,
+                    lastUpdated = lastUpdated
+                )
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Failed to parse initial cache $e")
+                _uiState.value = _uiState.value.copy(selectedCurrency = cachedCurrency)
             }
+        } else {
+            _uiState.value = _uiState.value.copy(selectedCurrency = cachedCurrency)
         }
     }
 
