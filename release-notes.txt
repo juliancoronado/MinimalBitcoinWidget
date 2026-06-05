@@ -2,73 +2,26 @@
 // translations provided by Gemini AI
 
 <en-US>
-Version 3.0 is here!
-✨ Completely redesigned app
-📱 Brand new widget
-⚙️ Rebuilt settings menu
-💡 Shortcut to add a widget from inside the app
-Try adding the new widget to your home screen today!
+Fixed a currency display bug on startup that caused incorrect Bitcoin prices to show under the wrong currency symbol.
 </en-US>
-
 <es-ES>
-¡La versión 3.0 ya está aquí!
-✨ App completamente rediseñada
-📱 Nuevo widget
-⚙️ Menú de ajustes reconstruido
-💡 Acceso directo para añadir un widget desde la App
-¡Prueba a añadir el nuevo widget a tu pantalla de inicio hoy!
+Se ha corregido un error de visualización de moneda al inicio que hacía que se mostraran precios de Bitcoin incorrectos bajo el símbolo de moneda equivocado.
 </es-ES>
-
 <de-DE>
-Version 3.0 ist da!
-✨ Komplett neu gestaltete App
-📱 Brandneues Widget
-⚙️ Überarbeitetes Einstellungsmenü
-💡 Verknüpfung zum Hinzufügen eines Widgets direkt aus der App
-Füge das neue Widget am besten gleich heute deinem Startbildschirm hinzu!
+Es wurde ein Fehler bei der Währungsanzeige beim Start behoben, durch den falsche Bitcoin-Preise unter dem falschen Währungssymbol angezeigt wurden.
 </de-DE>
-
 <fr-FR>
-La version 3.0 est là !
-✨ Application entièrement repensée
-📱 Tout nouveau widget
-⚙️ Menu des paramètres reconstruit
-💡 Raccourci pour ajouter un widget depuis l'application
-Essayez d'ajouter le nouveau widget à votre écran d'accueil dès aujourd'hui !
+Correction d'un bug d'affichage de la devise au démarrage qui entraînait l'affichage de prix du Bitcoin incorrects sous le mauvais symbole de devise.
 </fr-FR>
-
 <it-IT>
-La versione 3.0 è qui!
-✨ App completamente ridisegnata
-📱 Nuovissimo widget
-⚙️ Menu delle impostazioni ricostruito
-💡 Scorciatoia per aggiungere un widget dall'interno dell'app
-Prova ad aggiungere il nuovo widget alla tua schermata iniziale oggi stesso!
+Risolto un bug di visualizzazione della valuta all'avvio che causava la visualizzazione di prezzi di Bitcoin errati con il simbolo di valuta sbagliato.
 </it-IT>
-
 <pt-PT>
-A versão 3.0 chegou!
-✨ App totalmente redesenhada
-📱 Novo widget
-⚙️ Menu de definições reconstruído
-💡 Atalho para adicionar um widget a partir da App
-Experimente adicionar o novo widget ao seu ecrã principal hoje!
+Foi corrigido um erro de exibição de moeda no arranque que fazia com que preços de Bitcoin incorretos fossem mostrados sob o símbolo de moeda errado.
 </pt-PT>
-
 <pt-BR>
-A versão 3.0 chegou!
-✨ App totalmente redesenhado
-📱 Novo widget
-⚙️ Menu de configurações reconstruído
-💡 Atalho para adicionar um widget de dentro do app
-Experimente adicionar o novo widget à sua tela inicial hoje!
+Corrigido um erro de exibição de moeda na inicialização que fazia com que preços incorretos do Bitcoin fossem exibidos sob o símbolo de moeda errado.
 </pt-BR>
-
 <tr-TR>
-Sürüm 3.0 burada!
-✨ Tamamen yeniden tasarlanmış uygulama
-📱 Yepyeni widget
-⚙️ Yeniden oluşturulmuş ayarlar menüsü
-💡 Uygulama içinden bir widget eklemek için kısayol
-Yeni widget'ı bugün ana ekranınıza eklemeyi deneyin!
+Başlangıçta yanlış para birimi simgesi altında yanlış Bitcoin fiyatlarının görünmesine neden olan bir para birimi görüntüleme hatası düzeltildi.
 </tr-TR>

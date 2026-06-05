@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- background drawable for the cardView (Android 12+) -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="?attr/appWidgetBackgroundColor"/>
+    <corners android:radius="@android:dimen/system_app_widget_background_radius"/>
+    <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
+</shape>
