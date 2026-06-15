@@ -14,4 +14,20 @@ data class PriceData(
     val priceChangePercentage7d: Double,
     @SerializedName("price_change_percentage_30d_in_currency")
     val priceChangePercentage30d: Double
-)
+) {
+    /**
+     * Returns the price change percentage for the given time interval index.
+     * Index mappings:
+     * - 0: 24h
+     * - 1: 7d
+     * - 2: 30d
+     */
+    fun getPercentageForInterval(index: Int): Double {
+        return when (index) {
+            0 -> priceChangePercentage24h
+            1 -> priceChangePercentage7d
+            2 -> priceChangePercentage30d
+            else -> priceChangePercentage24h
+        }
+    }
+}

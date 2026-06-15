@@ -72,12 +72,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                 val cachedData = gson.fromJson(cachedDataJson, PriceData::class.java)
 
                 val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
-                val percentage = when (selectedInterval) {
-                    0 -> cachedData.priceChangePercentage24h
-                    1 -> cachedData.priceChangePercentage7d
-                    2 -> cachedData.priceChangePercentage30d
-                    else -> cachedData.priceChangePercentage24h
-                }
+                val percentage = cachedData.getPercentageForInterval(selectedInterval)
 
                 val interval = TimeInterval.fromValue(selectedInterval)
 
@@ -210,12 +205,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
                     }
 
                     val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
-                    val percentage = when (selectedInterval) {
-                        0 -> priceData.priceChangePercentage24h
-                        1 -> priceData.priceChangePercentage7d
-                        2 -> priceData.priceChangePercentage30d
-                        else -> priceData.priceChangePercentage24h
-                    }
+                    val percentage = priceData.getPercentageForInterval(selectedInterval)
 
                     val interval = TimeInterval.fromValue(selectedInterval)
 
@@ -274,12 +264,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
 
                 // define glance widget state
                 val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
-                val percentage = when (selectedInterval) {
-                    0 -> priceData.priceChangePercentage24h
-                    1 -> priceData.priceChangePercentage7d
-                    2 -> priceData.priceChangePercentage30d
-                    else -> priceData.priceChangePercentage24h
-                }
+                val percentage = priceData.getPercentageForInterval(selectedInterval)
 
                 val interval = TimeInterval.fromValue(selectedInterval)
 
