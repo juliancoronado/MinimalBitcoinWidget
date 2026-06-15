@@ -83,3 +83,11 @@ This document serves as a structured technical specification for an AI agent to 
   1. Evaluate if Glance covers all necessary features.
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
   3. Ensure `PriceUpdateWorker` only needs to trigger Glance updates.
+
+### Task 8: Canvas-Based Price Trend Sparkline
+- **Goal:** Add visual historical charts to the dashboard.
+- **Target Files:** `MainScreen.kt`, `PriceViewModel.kt`, `PriceData.kt`
+- **Instructions:**
+  1. Ensure historical coordinate points (sparkline data) are retrieved from the CoinGecko API payload.
+  2. Create a custom Canvas-based `@Composable` function to draw a smooth bezier-curve sparkline graph.
+  3. Animate the line drawing when the dashboard loads or interval changes.
