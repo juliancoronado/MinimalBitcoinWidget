@@ -57,6 +57,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.fillMaxWidth
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -78,6 +83,9 @@ fun DeveloperOptionsScreen(
     var priceInput by remember(persistedPrice) { mutableStateOf(persistedPrice) }
     var percentChangeInput by remember(persistedPercentChange) { mutableStateOf(persistedPercentChange) }
     var currencyInput by remember(persistedCurrency) { mutableStateOf(persistedCurrency) }
+
+    val currencyCodes = stringArrayResource(R.array.currency_codes)
+    var isCurrencyMenuExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -206,17 +214,35 @@ fun DeveloperOptionsScreen(
                                             singleLine = true,
                                             modifier = Modifier.fillMaxWidth()
                                         )
-                                        OutlinedTextField(
-                                            value = currencyInput,
-                                            onValueChange = { currencyInput = it },
-                                            label = { Text(stringResource(R.string.debug_currency_label)) },
-                                            keyboardOptions = KeyboardOptions(
-                                                keyboardType = KeyboardType.Text,
-                                                imeAction = ImeAction.Done
-                                            ),
-                                            singleLine = true,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
+                                        ExposedDropdownMenuBox(
+                                            expanded = isCurrencyMenuExpanded,
+                                            onExpandedChange = { isCurrencyMenuExpanded = it }
+                                        ) {
+                                            OutlinedTextField(
+                                                value = currencyInput.uppercase(),
+                                                onValueChange = {},
+                                                readOnly = true,
+                                                label = { Text(stringResource(R.string.debug_currency_label)) },
+                                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCurrencyMenuExpanded) },
+                                                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                                                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth()
+                                            )
+                                            ExposedDropdownMenu(
+                                                expanded = isCurrencyMenuExpanded,
+                                                onDismissRequest = { isCurrencyMenuExpanded = false }
+                                            ) {
+                                                currencyCodes.forEach { currencyCode ->
+                                                    DropdownMenuItem(
+                                                        text = { Text(currencyCode.uppercase()) },
+                                                        onClick = {
+                                                            currencyInput = currencyCode.uppercase()
+                                                            isCurrencyMenuExpanded = false
+                                                        },
+                                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                                    )
+                                                }
+                                            }
+                                        }
                                         Spacer(Modifier.height(4.dp))
                                         Button(
                                             onClick = {
