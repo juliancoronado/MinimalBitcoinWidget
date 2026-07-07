@@ -7,7 +7,7 @@ This file provides context, architectural guidelines, and conventions for AI ass
 
 ## Tech Stack
 - **Language:** Kotlin (JVM 11 target)
-- **SDK Versions:** Min SDK 28, Target/Compile SDK 36
+- **SDK Versions:** Min SDK 28, Target/Compile SDK 37
 - **UI Framework:** Jetpack Compose (Material 3 / Expressive)
 - **Widgets:** Jetpack Glance for modern widgets, with support for legacy AppWidget.
 - **Background Work:** WorkManager (for periodic API polling)
