@@ -63,6 +63,26 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
 
     /** Load initial data from SharedPreferences. */
     private fun loadInitialData() {
+        val isHardCodedUiEnabled = prefs.getBoolean(Prefs.DEBUG_MOCK_UI_ENABLED, false)
+        if (isHardCodedUiEnabled) {
+            val mockPrice = prefs.getString(Prefs.DEBUG_MOCK_PRICE, AppConstants.DEBUG_MOCK_PRICE_DEFAULT)
+                ?.toDoubleOrNull() ?: AppConstants.DEBUG_MOCK_PRICE_DEFAULT.toDouble()
+            val mockPercent = prefs.getString(Prefs.DEBUG_MOCK_PERCENT_CHANGE, AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT)
+                ?.toDoubleOrNull() ?: AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT.toDouble()
+            val mockCurrency = prefs.getString(Prefs.DEBUG_MOCK_CURRENCY, AppConstants.DEBUG_MOCK_CURRENCY_DEFAULT)
+                ?: AppConstants.DEBUG_MOCK_CURRENCY_DEFAULT
+
+            _uiState.value = PriceUiState(
+                price = mockPrice,
+                percentageChange = mockPercent,
+                isLoading = false,
+                selectedCurrency = mockCurrency,
+                changeIntervalLabelResId = R.string.interval_24h,
+                lastUpdated = 0L
+            )
+            return
+        }
+
         val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null)
         val cachedCurrency =
             prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)!!
@@ -148,6 +168,17 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
 
     /** Fetch data from the Coingecko API. */
     fun fetchPrice(force: Boolean = false, fromInit: Boolean = false) {
+        val isHardCodedUiEnabled = prefs.getBoolean(Prefs.DEBUG_MOCK_UI_ENABLED, false)
+        if (isHardCodedUiEnabled) {
+            viewModelScope.launch {
+                _uiState.value = _uiState.value.copy(isLoading = true)
+                delay(750)
+                loadInitialData()
+                redrawWidgets()
+            }
+            return
+        }
+
         if (!fromInit && _uiState.value.isLoading) {
             Log.d(LOG_TAG, "Already loading, skipping this fetch")
             return
@@ -253,6 +284,39 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
          */
         fun refreshWidgetsFromCache(context: Context) {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val isHardCodedUiEnabled = prefs.getBoolean(Prefs.DEBUG_MOCK_UI_ENABLED, false)
+
+            if (isHardCodedUiEnabled) {
+                val mockPrice = prefs.getString(Prefs.DEBUG_MOCK_PRICE, AppConstants.DEBUG_MOCK_PRICE_DEFAULT)
+                    ?.toDoubleOrNull() ?: AppConstants.DEBUG_MOCK_PRICE_DEFAULT.toDouble()
+                val mockPercent = prefs.getString(Prefs.DEBUG_MOCK_PERCENT_CHANGE, AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT)
+                    ?.toDoubleOrNull() ?: AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT.toDouble()
+                val mockCurrency = prefs.getString(Prefs.DEBUG_MOCK_CURRENCY, AppConstants.DEBUG_MOCK_CURRENCY_DEFAULT)
+                    ?: AppConstants.DEBUG_MOCK_CURRENCY_DEFAULT
+
+                val glanceState = PriceWidgetState.Available(
+                    price = mockPrice,
+                    changePercentage = mockPercent,
+                    intervalLabelResId = R.string.interval_24h,
+                    currency = mockCurrency
+                )
+
+                // update glance widgets
+                CoroutineScope(Dispatchers.IO).launch {
+                    updateGlanceWidgets(context, glanceState)
+                }
+
+                // update legacy widgets
+                val hardCodedPriceData = PriceData(
+                    currentPrice = mockPrice,
+                    priceChangePercentage24h = mockPercent,
+                    priceChangePercentage7d = mockPercent,
+                    priceChangePercentage30d = mockPercent
+                )
+                updateLegacyWidgets(context, hardCodedPriceData, mockCurrency)
+                return
+            }
+
             val cachedDataJson = prefs.getString(Prefs.CACHED_PRICE_DATA, null) ?: return
             val gson = Gson()
 
@@ -305,7 +369,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
         /**
          * Updates all legacy widgets with the given price data.
          */
-        fun updateLegacyWidgets(context: Context, priceData: PriceData) {
+        fun updateLegacyWidgets(context: Context, priceData: PriceData, currencyOverride: String? = null) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val componentName = ComponentName(context, LEGACY_WIDGET_WRAPPER_CLASS)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
@@ -313,9 +377,8 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
             if (appWidgetIds.isEmpty()) return
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-            val currencyCode =
-                prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
-                    ?: AppConstants.CURRENCY_DEFAULT
+            val currencyCode = currencyOverride ?: (prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
+                    ?: AppConstants.CURRENCY_DEFAULT)
             val currencyInfo = getCurrencyInfo(currencyCode)
 
             val views = RemoteViews(context.packageName, R.layout.legacy_price_widget)

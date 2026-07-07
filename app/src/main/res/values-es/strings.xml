@@ -70,6 +70,14 @@
     <string name="clear">Borrar</string>
     <string name="error">Error</string>
 
-    <!-- Email / Contact -->
     <string name="mail_error">No se encontró ninguna aplicación de correo electrónico</string>
+
+    <!-- Mock UI Settings -->
+    <string name="debug_mock_ui_title">Simular Estado de UI</string>
+    <string name="debug_mock_ui_desc">Simular datos estáticos personalizados para pruebas</string>
+    <string name="debug_price_label">Precio simulado</string>
+    <string name="debug_change_label">Cambio porcentual simulado</string>
+    <string name="debug_currency_label">Moneda simulada</string>
+    <string name="debug_apply_btn">Aplicar cambios</string>
+    <string name="debug_mock_ui_applied">Estado de UI simulado aplicado</string>
 </resources>

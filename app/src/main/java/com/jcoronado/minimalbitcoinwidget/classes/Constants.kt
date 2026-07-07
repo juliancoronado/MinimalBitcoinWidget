@@ -24,6 +24,11 @@ object Prefs {
     /** Key for storing the app version code to detect updates. */
     const val LAST_VERSION_CODE = "last_version_code"
 
+    const val DEBUG_MOCK_UI_ENABLED = "debug_mock_ui_enabled"
+    const val DEBUG_MOCK_PRICE = "debug_mock_price"
+    const val DEBUG_MOCK_PERCENT_CHANGE = "debug_mock_percent_change"
+    const val DEBUG_MOCK_CURRENCY = "debug_mock_currency"
+
     /**
      * Checks if the app was updated and invalidates the cache if so.
      * Uses commit = true to ensure the reset is immediate and visible across components.
@@ -54,6 +59,10 @@ object AppConstants {
     /** Duration in milliseconds for which the cached price data is considered valid. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
     const val WIDGET_DEBUG_MODE = false
+
+    const val DEBUG_MOCK_PRICE_DEFAULT = "52849.10"
+    const val DEBUG_MOCK_PERCENT_CHANGE_DEFAULT = "2.03"
+    const val DEBUG_MOCK_CURRENCY_DEFAULT = "GBP"
 }
 
 /**

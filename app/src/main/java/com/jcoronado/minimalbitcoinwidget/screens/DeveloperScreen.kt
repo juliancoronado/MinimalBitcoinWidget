@@ -46,12 +46,39 @@ import com.jcoronado.minimalbitcoinwidget.AppDatabase
 import com.jcoronado.minimalbitcoinwidget.DebugLog
 import com.jcoronado.minimalbitcoinwidget.R
 import kotlinx.coroutines.launch
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Button
+import androidx.compose.material3.Switch
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.fillMaxWidth
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
+fun DeveloperOptionsScreen(
+    mockUiEnabled: Boolean,
+    onMockUiToggle: (Boolean) -> Unit,
+    persistedPrice: String,
+    persistedPercentChange: String,
+    persistedCurrency: String,
+    onApplyChanges: (price: String, percentChange: String, currency: String) -> Unit,
+    onNavigateToLogs: () -> Unit
+) {
     val view = LocalView.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val mockUiAppliedMessage = stringResource(R.string.debug_mock_ui_applied)
+
+    var priceInput by remember(persistedPrice) { mutableStateOf(persistedPrice) }
+    var percentChangeInput by remember(persistedPercentChange) { mutableStateOf(persistedPercentChange) }
+    var currencyInput by remember(persistedCurrency) { mutableStateOf(persistedCurrency) }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -85,7 +112,7 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 0, count = 2
+                            index = 0, count = if (mockUiEnabled) 3 else 2
                         ),
                         leadingContent = {
                             Icon(
@@ -112,25 +139,101 @@ fun DeveloperOptionsScreen(onNavigateToLogs: () -> Unit) {
                 item {
                     val colors =
                         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
-                    CompositionLocalProvider(LocalRippleConfiguration provides null) {
-                        SegmentedListItem(
-                            colors = colors,
-                            shapes = ListItemDefaults.segmentedShapes(
-                                index = 1, count = 2
-                            ),
-                            leadingContent = {
-                                Icon(
-                                    painterResource(R.drawable.rounded_bug_report_24), "TODO"
-                                )
-                            },
-                            content = {
-                                Text("TODO", fontWeight = FontWeight.Bold)
-                            },
-                            supportingContent = {
-                                Text("TODO")
-                            },
-                            onClick = {},
-                        )
+                    SegmentedListItem(
+                        colors = colors,
+                        shapes = ListItemDefaults.segmentedShapes(
+                            index = 1, count = if (mockUiEnabled) 3 else 2
+                        ),
+                        leadingContent = {
+                            Icon(
+                                painterResource(R.drawable.rounded_bug_report_24), "TODO"
+                            )
+                        },
+                        content = {
+                            Text(stringResource(R.string.debug_mock_ui_title), fontWeight = FontWeight.Bold)
+                        },
+                        supportingContent = {
+                            Text(stringResource(R.string.debug_mock_ui_desc))
+                        },
+                        trailingContent = {
+                            Switch(
+                                checked = mockUiEnabled, onCheckedChange = null
+                            )
+                        },
+                        onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            onMockUiToggle(!mockUiEnabled)
+                        },
+                    )
+                }
+                if (mockUiEnabled) {
+                    item {
+                        val colors =
+                            ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
+                        CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                            SegmentedListItem(
+                                colors = colors,
+                                shapes = ListItemDefaults.segmentedShapes(
+                                    index = 2, count = 3
+                                ),
+                                content = {},
+                                supportingContent = {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 8.dp),
+                                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        OutlinedTextField(
+                                            value = priceInput,
+                                            onValueChange = { priceInput = it },
+                                            label = { Text(stringResource(R.string.debug_price_label)) },
+                                            keyboardOptions = KeyboardOptions(
+                                                keyboardType = KeyboardType.Decimal,
+                                                imeAction = ImeAction.Next
+                                            ),
+                                            singleLine = true,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                        OutlinedTextField(
+                                            value = percentChangeInput,
+                                            onValueChange = { percentChangeInput = it },
+                                            label = { Text(stringResource(R.string.debug_change_label)) },
+                                            keyboardOptions = KeyboardOptions(
+                                                keyboardType = KeyboardType.Decimal,
+                                                imeAction = ImeAction.Next
+                                            ),
+                                            singleLine = true,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                        OutlinedTextField(
+                                            value = currencyInput,
+                                            onValueChange = { currencyInput = it },
+                                            label = { Text(stringResource(R.string.debug_currency_label)) },
+                                            keyboardOptions = KeyboardOptions(
+                                                keyboardType = KeyboardType.Text,
+                                                imeAction = ImeAction.Done
+                                            ),
+                                            singleLine = true,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                        Spacer(Modifier.height(4.dp))
+                                        Button(
+                                            onClick = {
+                                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                                                keyboardController?.hide()
+                                                onApplyChanges(priceInput, percentChangeInput, currencyInput)
+                                                Toast.makeText(context, mockUiAppliedMessage, Toast.LENGTH_SHORT).show()
+                                            },
+                                            modifier = Modifier.align(Alignment.End)
+                                        ) {
+                                            Text(stringResource(R.string.debug_apply_btn))
+                                        }
+                                    }
+                                },
+                                onClick = {},
+                            )
+                        }
                     }
                 }
             }

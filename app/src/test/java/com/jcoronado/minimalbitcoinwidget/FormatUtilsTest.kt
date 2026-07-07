@@ -27,4 +27,28 @@ class FormatUtilsTest {
         val result = FormatUtils.formatChange(0.0)
         assertEquals(" 0.00%", result)
     }
+
+    @Test
+    fun `formatPriceSeparated with mock default price and currency GBP`() {
+        // Ensure default mock price (52849.10) formats correctly with default currency (GBP)
+        val formatted = FormatUtils.formatPriceSeparated(52849.10, "GBP")
+        assertEquals("£", formatted.symbol)
+        // We replace any non-breaking space characters to avoid platform differences in test assertion
+        val cleanedPrice = formatted.price.replace("\u00A0", " ").replace(" ", "")
+        // Expect price digits without formatting space issues
+        assertEquals("52,849.10", cleanedPrice)
+    }
+
+    @Test
+    fun `formatPriceSeparated with fallback for invalid currency code`() {
+        // Ensure invalid currency code falls back to USD symbol
+        val formatted = FormatUtils.formatPriceSeparated(52849.10, "INVALID_CODE")
+        assertEquals("$", formatted.symbol)
+    }
+
+    @Test
+    fun `formatChange with mock default change percentage`() {
+        val result = FormatUtils.formatChange(2.03)
+        assertEquals("2.03%", result.trim())
+    }
 }

@@ -70,6 +70,14 @@
     <string name="clear">Temizle</string>
     <string name="error">Hata</string>
 
-    <!-- Email / Contact -->
     <string name="mail_error">E-posta uygulaması bulunamadı</string>
+
+    <!-- Mock UI Settings -->
+    <string name="debug_mock_ui_title">Arayüz Durumunu Simüle Et</string>
+    <string name="debug_mock_ui_desc">Test için statik özel verileri simüle edin</string>
+    <string name="debug_price_label">Simüle Edilen Fiyat</string>
+    <string name="debug_change_label">Simüle Edilen Yüzde Değişimi</string>
+    <string name="debug_currency_label">Simüle Edilen Para Birimi</string>
+    <string name="debug_apply_btn">Değişiklikleri Uygula</string>
+    <string name="debug_mock_ui_applied">Simüle edilen arayüz durumu uygulandı</string>
 </resources>

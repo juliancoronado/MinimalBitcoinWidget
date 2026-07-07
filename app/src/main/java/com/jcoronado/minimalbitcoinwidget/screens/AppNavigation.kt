@@ -203,7 +203,26 @@ fun AppNavigation() {
                             })
                     }
                     entry<Screen.DeveloperOptions> {
+                        val mockUiEnabled by settingsViewModel.debugMockUiEnabled.collectAsStateWithLifecycle()
+                        val mockPrice by settingsViewModel.debugMockPrice.collectAsStateWithLifecycle()
+                        val mockPercent by settingsViewModel.debugMockPercentChange.collectAsStateWithLifecycle()
+                        val mockCurrency by settingsViewModel.debugMockCurrency.collectAsStateWithLifecycle()
+
                         DeveloperOptionsScreen(
+                            mockUiEnabled = mockUiEnabled,
+                            onMockUiToggle = { enabled ->
+                                settingsViewModel.setDebugMockUiEnabled(enabled)
+                                priceViewModel.refreshFromCache()
+                            },
+                            persistedPrice = mockPrice,
+                            persistedPercentChange = mockPercent,
+                            persistedCurrency = mockCurrency,
+                            onApplyChanges = { price, percentChange, currency ->
+                                settingsViewModel.setDebugMockPrice(price)
+                                settingsViewModel.setDebugMockPercentChange(percentChange)
+                                settingsViewModel.setDebugMockCurrency(currency)
+                                priceViewModel.refreshFromCache()
+                            },
                             onNavigateToLogs = { backStack.add(Screen.WidgetLogs) }
                         )
                     }
