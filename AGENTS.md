@@ -50,6 +50,10 @@ Key directories and files:
 - Use `ViewModel` combined with Kotlin Coroutines for managing app state.
 - Keep the worker logic separate from the UI. Workers should fetch data, save it to persistent storage (Preferences/DB), and trigger a widget refresh.
 
+### 6. Debugging & Mock UI
+- **Mock UI State:** A Mock UI mode is available in the Developer Options screen. When enabled, it allows simulating static, user-defined custom data (Price, Change %, and Currency) for screenshots and testing.
+- **Interception Logic:** When active (`Prefs.DEBUG_MOCK_UI_ENABLED`), standard loading, live API fetches, widget redrawing, and background worker fetches (`PriceUpdateWorker`) are bypassed to persistently display the custom mock configurations without calling the CoinGecko API.
+
 ## General AI Instructions
 - When making changes to the UI, verify compatibility with Jetpack Compose Material 3.
 - When modifying data fetching logic, ensure background constraints (like network connectivity) and caching rules are preserved.
