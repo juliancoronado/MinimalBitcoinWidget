@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Date Format: YYYY-MM-DD
 
+## [Unreleased]
+
+### Added
+- Added configurable Mock UI State in Developer options to simulate static custom data (Price, Change %, and Currency) in the app and homescreen widgets for testing and screenshots.
+
 ## [3.1.1] - 2026-06-04
 ### Fixed
 - Fixed currency mismatch bug where the app dashboard fetched USD prices but formatted them with the user's local currency symbol (such as EUR) on launch/refresh.
