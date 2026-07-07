@@ -57,6 +57,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.fillMaxWidth
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -86,6 +87,10 @@ fun DeveloperOptionsScreen(
 
     val currencyCodes = stringArrayResource(R.array.currency_codes)
     var isCurrencyMenuExpanded by remember { mutableStateOf(false) }
+
+    BackHandler(enabled = isCurrencyMenuExpanded) {
+        isCurrencyMenuExpanded = false
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
