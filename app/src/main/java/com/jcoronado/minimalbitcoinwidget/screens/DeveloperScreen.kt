@@ -32,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -57,7 +58,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.fillMaxWidth
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
+import kotlin.coroutines.cancellation.CancellationException
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -87,9 +89,29 @@ fun DeveloperOptionsScreen(
 
     val currencyCodes = stringArrayResource(R.array.currency_codes)
     var isCurrencyMenuExpanded by remember { mutableStateOf(false) }
+    var isBackHandlerEnabled by remember { mutableStateOf(false) }
+    var isBackGestureInProgress by remember { mutableStateOf(false) }
 
-    BackHandler(enabled = isCurrencyMenuExpanded) {
+    LaunchedEffect(isCurrencyMenuExpanded) {
+        if (isCurrencyMenuExpanded) {
+            isBackHandlerEnabled = true
+        } else if (!isBackGestureInProgress) {
+            isBackHandlerEnabled = false
+        }
+    }
+
+    // TODO - fix this crash please
+    PredictiveBackHandler(enabled = isBackHandlerEnabled) { progressFlow ->
+        isBackGestureInProgress = true
         isCurrencyMenuExpanded = false
+        try {
+            progressFlow.collect { }
+        } catch (e: CancellationException) {
+            throw e
+        } finally {
+            isBackGestureInProgress = false
+            isBackHandlerEnabled = false
+        }
     }
 
     Scaffold(

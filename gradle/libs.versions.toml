@@ -20,6 +20,7 @@ material3Expressive = "1.5.0-alpha21" # alpha
 glance = "1.1.1"
 # navigation3
 nav3Core = "1.1.2"
+navigationEvent = "1.2.0-alpha01"
 # serialization
 kotlinxSerialization = "1.11.0"
 # workmanager
@@ -62,6 +63,8 @@ androidx-glance-preview = { group = "androidx.glance", name = "glance-preview", 
 # navigation3
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-navigationevent = { group = "androidx.navigationevent", name = "navigationevent", version.ref = "navigationEvent" }
+androidx-navigationevent-compose = { group = "androidx.navigationevent", name = "navigationevent-compose", version.ref = "navigationEvent" }
 # serialization
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 # workmanager

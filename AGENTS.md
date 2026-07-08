@@ -60,3 +60,4 @@ Key directories and files:
 - Prioritize Kotlin idioms, Coroutines, and Flow where appropriate.
 - When providing stringResource translations, ensure translations exist for all strings.xml files (currently 9 total).
 - When library / structure / tech stack changes are introduced, update AGENTS.md file as well (example: bumping minimum Android SDK)
+- **Dependency Overrides:** `androidx.navigationevent` and `androidx.navigationevent-compose` are force-resolved to version `1.2.0-alpha01` (or newer) to bypass the framework bug `IllegalStateException: This input is not added to any dispatcher` during predictive back gestures when popups/dropdowns are active. This override should remain until the fix is released in a stable channel version, at which point it should be reverted to the stable channel.

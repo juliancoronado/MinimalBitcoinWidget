@@ -101,6 +101,8 @@ dependencies {
     // navigation 3
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.navigation3.runtime)
+    implementation(libs.androidx.navigationevent)
+    implementation(libs.androidx.navigationevent.compose)
 
     // serialization
     implementation(libs.kotlinx.serialization.json)
