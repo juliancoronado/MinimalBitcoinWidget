@@ -51,7 +51,7 @@ class PriceViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         // First check if the app version updated to invalidate any outdated cache.
-        Prefs.checkAppUpdateAndInvalidateCache(prefs)
+        // Prefs.checkAppUpdateAndInvalidateCache(prefs)
         
         // Load settings and cached price synchronously to ensure the selected currency
         // is fully populated in _uiState before starting any network calls.

@@ -22,8 +22,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         
         // invalidate last fetch api timestamp if app was updated
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        Prefs.checkAppUpdateAndInvalidateCache(prefs)
+        // val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        // Prefs.checkAppUpdateAndInvalidateCache(prefs)
 
         setContent {
             val settingsViewModel : SettingsViewModel =  viewModel()

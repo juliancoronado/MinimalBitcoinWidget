@@ -29,6 +29,7 @@ object Prefs {
     const val DEBUG_MOCK_PERCENT_CHANGE = "debug_mock_percent_change"
     const val DEBUG_MOCK_CURRENCY = "debug_mock_currency"
 
+    /*
     /**
      * Checks if the app was updated and invalidates the cache if so.
      * Uses commit = true to ensure the reset is immediate and visible across components.
@@ -46,6 +47,7 @@ object Prefs {
             }
         }
     }
+    */
 }
 
 /**
