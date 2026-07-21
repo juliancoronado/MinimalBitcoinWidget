@@ -21,9 +21,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         
-        // invalidate last fetch api timestamp if app was updated
-        // val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        // Prefs.checkAppUpdateAndInvalidateCache(prefs)
+        // invalidate last fetch api timestamp if app was updated from old version
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        Prefs.checkAppUpdateAndInvalidateCache(prefs)
 
         setContent {
             val settingsViewModel : SettingsViewModel =  viewModel()

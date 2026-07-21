@@ -61,7 +61,7 @@ class PriceUpdateWorker(
             return@withContext Result.success()
         }
 
-        // Prefs.checkAppUpdateAndInvalidateCache(prefs)
+        Prefs.checkAppUpdateAndInvalidateCache(prefs)
         val lastApiCallTime = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
         val currentTime = System.currentTimeMillis()
         val cacheDuration = 15 * 60 * 1000L // 15 minutes
