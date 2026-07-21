@@ -17,7 +17,7 @@ android {
         applicationId = "com.jcoronado.minimalbitcoinwidget"
         minSdk = 28
         targetSdk = 37
-        versionCode = 15
+        versionCode = 16
         versionName = "3.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
