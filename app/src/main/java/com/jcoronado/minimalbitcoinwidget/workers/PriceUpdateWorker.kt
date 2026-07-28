@@ -21,6 +21,7 @@ import com.jcoronado.minimalbitcoinwidget.DebugLog
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
+import com.jcoronado.minimalbitcoinwidget.data.Resource
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
@@ -61,21 +62,23 @@ class PriceUpdateWorker(
         }
 
         val currencyCode = repository.getSelectedCurrency()
-        val result = repository.fetchPrice(currencyCode, force = true)
+        val resource = repository.fetchPrice(currencyCode, force = true)
 
-        result.fold(
-            onSuccess = {
+        when (resource) {
+            is Resource.Success -> {
                 PriceViewModel.refreshWidgetsFromCache(applicationContext)
                 dao.insert(DebugLog(message = "PriceWorker: Data Fetched"))
                 Result.success()
-            },
-            onFailure = { throwable ->
-                val exception = if (throwable is Exception) throwable else Exception(throwable)
-                dao.insert(DebugLog(message = "PriceWorker: Failed - ${exception.localizedMessage}"))
-                Log.e(LOG_TAG, "Worker fetch error", exception)
+            }
+            is Resource.Error -> {
+                val exception = resource.cause as? Exception ?: Exception(resource.message)
+                dao.insert(DebugLog(message = "PriceWorker: Failed - ${resource.message}"))
+                Log.e(LOG_TAG, "Worker fetch error: ${resource.message}", exception)
                 handleError(exception)
             }
-        )
+            // Included for Kotlin sealed class branch exhaustiveness. fetchPrice() runs to completion on Dispatchers.IO and only returns Success or Error.
+            is Resource.Loading -> Result.retry()
+        }
     }
 
     private suspend fun handleError(e: Exception): Result {

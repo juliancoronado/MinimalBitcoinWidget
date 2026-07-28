@@ -20,7 +20,7 @@ The project consists of a single `:app` module. The main source code is under `a
 
 Key directories and files:
 - **`MainActivity.kt`**: The main entry point for the companion Compose app.
-- **`data/`**: Data layer containing `PriceRepository.kt` for centralizing API requests (OkHttp/Gson), caching, and mock UI data logic.
+- **`data/`**: Data layer containing `PriceRepository.kt` for centralizing API requests (OkHttp/Gson), caching, and mock UI data logic, and `Resource.kt` for standardized API result state management (`Success`, `Error`, `Loading`).
 - **`screens/` & `ui/`**: Jetpack Compose UI screens, theming, and reusable components.
 - **`viewmodels/`**: ViewModels (e.g., `PriceViewModel`) that handle business logic, UI state, and bridge the data to the widgets.
 - **`widgets/`**: Contains widget implementations. Divided into Glance widgets (`PriceWidget`) and legacy implementations (`LegacyPriceWidget`).
@@ -50,6 +50,7 @@ Key directories and files:
 ### 5. State Management & Data Architecture
 - Use `ViewModel` combined with Kotlin Coroutines for managing app state.
 - All network operations, cache management, and data access MUST go through `PriceRepository`. ViewModels and Workers should not perform direct HTTP network calls or manual `SharedPreferences` cache serialization.
+- **API Results:** Use `Resource<T>` (`Resource.Success`, `Resource.Error`, `Resource.Loading`) for modeling API results across Repository, ViewModels, and Workers.
 - **ViewModel Constructor Overloads:** When creating or updating a ViewModel constructor with default parameter values (e.g. for default repository instances), annotate the constructor with `@JvmOverloads constructor(...)` so Android framework factories (`AndroidViewModelFactory`) can instantiate it via Java Reflection.
 - Keep the worker logic separate from the UI. Workers should request data updates via `PriceRepository` and trigger a widget refresh.
 

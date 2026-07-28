@@ -49,4 +49,15 @@ class PriceRepositoryTest {
         assertEquals(100000.0, priceData.currentPrice, 0.0)
         assertEquals(1.0, priceData.priceChangePercentage24h, 0.0)
     }
+
+    @Test
+    fun `resource states instantiate correctly`() {
+        val success: Resource<String> = Resource.Success("Data")
+        val error: Resource<String> = Resource.Error("Failed", cause = RuntimeException("Error"))
+        val loading: Resource<String> = Resource.Loading
+
+        assert(success is Resource.Success && success.data == "Data")
+        assert(error is Resource.Error && error.message == "Failed" && error.cause != null)
+        assert(loading is Resource.Loading)
+    }
 }

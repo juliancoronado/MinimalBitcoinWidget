@@ -37,14 +37,7 @@ This document serves as a structured technical specification for an AI agent to 
 
 ## Phase 2: Code Quality & Maintenance
 
-### Task 3: Standardized API Result Handling
-- **Goal:** Handle errors consistently across the app.
-- **Instructions:**
-  1. Create a `sealed class Resource<T>` with `Success`, `Error`, and `Loading` states.
-  2. Update the Repository to return `Flow<Resource<PriceData>>`.
-  3. Update `PriceUiState` and `PriceWidgetState` to map directly from these `Resource` states.
-
-### Task 4: Comprehensive Unit Testing
+### Task 3: Comprehensive Unit Testing
 - **Goal:** Ensure reliability and prevent regressions by implementing a suite of unit tests for data and business logic.
 - **Tools:** JUnit 4/5, MockK, and `kotlinx-coroutines-test`.
 - **Instructions:**
@@ -57,14 +50,14 @@ This document serves as a structured technical specification for an AI agent to 
 
 ## Phase 3: UI/UX Enhancements
 
-### Task 5: Widget Consolidation
+### Task 4: Widget Consolidation
 - **Goal:** Deprecate Legacy widget logic at a future date (2027).
 - **Instructions:**
   1. Evaluate if Glance covers all necessary features.
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
   3. Ensure `PriceUpdateWorker` only needs to trigger Glance updates.
 
-### Task 6: Canvas-Based Price Trend Sparkline
+### Task 5: Canvas-Based Price Trend Sparkline
 - **Goal:** Add visual historical charts to the dashboard.
 - **Target Files:** `MainScreen.kt`, `PriceViewModel.kt`, `PriceData.kt`
 - **Instructions:**

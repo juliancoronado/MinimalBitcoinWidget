@@ -134,17 +134,17 @@ class PriceRepository(private val context: Context) {
      * - If [force] is false and cache is fresh, returns cached price data without making a network call.
      * - Otherwise, executes an HTTP request to CoinGecko API and updates the local cache.
      */
-    suspend fun fetchPrice(currency: String, force: Boolean = false): Result<PriceData> = withContext(Dispatchers.IO) {
+    suspend fun fetchPrice(currency: String, force: Boolean = false): Resource<PriceData> = withContext(Dispatchers.IO) {
         checkAndInvalidateCache()
 
         if (isMockUiEnabled()) {
-            return@withContext Result.success(getMockPriceData())
+            return@withContext Resource.Success(getMockPriceData())
         }
 
         if (!force && isCacheFresh()) {
             val cachedData = getCachedPriceData()
             if (cachedData != null) {
-                return@withContext Result.success(cachedData)
+                return@withContext Resource.Success(cachedData)
             }
         }
 
@@ -159,22 +159,22 @@ class PriceRepository(private val context: Context) {
                 val dataList: List<PriceData> = gson.fromJson(body, type)
 
                 if (dataList.isEmpty()) {
-                    return@withContext Result.failure(Exception("Empty API response"))
+                    return@withContext Resource.Error("Empty API response")
                 }
 
                 val priceData = dataList[0]
                 savePriceDataToCache(priceData)
-                Result.success(priceData)
+                Resource.Success(priceData)
             } else {
                 Log.w(TAG, "Unsuccessful GET request: ${response.code}")
-                Result.failure(Exception("Server Error: ${response.code}"))
+                Resource.Error("Server Error: ${response.code}")
             }
         } catch (e: IOException) {
             Log.e(TAG, "Network call failed", e)
-            Result.failure(e)
+            Resource.Error(e.message ?: "Network call failed", cause = e)
         } catch (e: Exception) {
             Log.e(TAG, "API processing failed", e)
-            Result.failure(e)
+            Resource.Error(e.message ?: "API processing failed", cause = e)
         }
     }
 }

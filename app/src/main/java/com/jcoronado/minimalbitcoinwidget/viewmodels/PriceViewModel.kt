@@ -18,6 +18,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
+import com.jcoronado.minimalbitcoinwidget.data.Resource
 import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetReceiver
@@ -174,12 +175,13 @@ class PriceViewModel @JvmOverloads constructor(
             _uiState.value = _uiState.value.copy(isLoading = true)
 
             val currency = _uiState.value.selectedCurrency
-            val result = repository.fetchPrice(currency, force = force)
+            val resource = repository.fetchPrice(currency, force = force)
 
             delay(750)
 
-            result.fold(
-                onSuccess = { priceData ->
+            when (resource) {
+                is Resource.Success -> {
+                    val priceData = resource.data
                     val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
                     val percentage = priceData.getPercentageForInterval(selectedInterval)
                     val interval = TimeInterval.fromValue(selectedInterval)
@@ -194,15 +196,18 @@ class PriceViewModel @JvmOverloads constructor(
                         lastUpdated = lastUpdated
                     )
                     redrawWidgets()
-                },
-                onFailure = { throwable ->
-                    Log.e(LOG_TAG, "Network call failed: ${throwable.message}")
+                }
+                is Resource.Error -> {
+                    Log.e(LOG_TAG, "Network call failed: ${resource.message}")
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = throwable.message ?: "Error fetching price"
+                        errorMessage = resource.message
                     )
                 }
-            )
+                is Resource.Loading -> {
+                    _uiState.value = _uiState.value.copy(isLoading = true)
+                }
+            }
         }
     }
 
