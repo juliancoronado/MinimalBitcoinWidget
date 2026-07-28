@@ -7,7 +7,7 @@ This file provides context, architectural guidelines, and conventions for AI ass
 
 ## Tech Stack
 - **Language:** Kotlin (JVM 11 target)
-- **SDK Versions:** Min SDK 28, Target/Compile SDK 36
+- **SDK Versions:** Min SDK 28, Target/Compile SDK 37
 - **UI Framework:** Jetpack Compose (Material 3 / Expressive)
 - **Widgets:** Jetpack Glance for modern widgets, with support for legacy AppWidget.
 - **Background Work:** WorkManager (for periodic API polling)
@@ -50,9 +50,14 @@ Key directories and files:
 - Use `ViewModel` combined with Kotlin Coroutines for managing app state.
 - Keep the worker logic separate from the UI. Workers should fetch data, save it to persistent storage (Preferences/DB), and trigger a widget refresh.
 
+### 6. Debugging & Mock UI
+- **Mock UI State:** A Mock UI mode is available in the Developer Options screen. When enabled, it allows simulating static, user-defined custom data (Price, Change %, and Currency) for screenshots and testing.
+- **Interception Logic:** When active (`Prefs.DEBUG_MOCK_UI_ENABLED`), standard loading, live API fetches, widget redrawing, and background worker fetches (`PriceUpdateWorker`) are bypassed to persistently display the custom mock configurations without calling the CoinGecko API.
+
 ## General AI Instructions
 - When making changes to the UI, verify compatibility with Jetpack Compose Material 3.
 - When modifying data fetching logic, ensure background constraints (like network connectivity) and caching rules are preserved.
 - Prioritize Kotlin idioms, Coroutines, and Flow where appropriate.
 - When providing stringResource translations, ensure translations exist for all strings.xml files (currently 9 total).
 - When library / structure / tech stack changes are introduced, update AGENTS.md file as well (example: bumping minimum Android SDK)
+- **Dependency Overrides:** `androidx.navigationevent` and `androidx.navigationevent-compose` are force-resolved to version `1.2.0-alpha01` (or newer) to bypass the framework bug `IllegalStateException: This input is not added to any dispatcher` during predictive back gestures when popups/dropdowns are active. This override should remain until the fix is released in a stable channel version, at which point it should be reverted to the stable channel.

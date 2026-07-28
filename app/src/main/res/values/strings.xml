@@ -103,5 +103,13 @@
     <string name="mail_to" translatable="false">mailto:contact@jcoronado.dev</string>
     <string name="mail_subject" translatable="false">Minimal Bitcoin Widget App Support</string>
     <string name="mail_error" translatable="true">No email app found</string>
+    <!-- Mock UI Settings -->
+    <string name="debug_mock_ui_title">Mock UI State</string>
+    <string name="debug_mock_ui_desc">Simulate static custom data for testing</string>
+    <string name="debug_price_label">Mock Price</string>
+    <string name="debug_change_label">Mock Percent Change</string>
+    <string name="debug_currency_label">Mock Currency</string>
+    <string name="debug_apply_btn">Apply Changes</string>
+    <string name="debug_mock_ui_applied">Mock UI State applied</string>
 
 </resources>

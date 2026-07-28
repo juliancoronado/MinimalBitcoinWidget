@@ -1,27 +1,29 @@
-// release notes for the Google Play Store listing
+// Release notes for the Google Play Store listing
 // translations provided by Gemini AI
 
+// v3.2.0
+
 <en-US>
-Fixed a currency display bug on startup that caused incorrect Bitcoin prices to show under the wrong currency symbol.
+Added a new Mock UI mode in Developer options for testing and screenshots, along with minor bug fixes and performance improvements.
 </en-US>
 <es-ES>
-Se ha corregido un error de visualización de moneda al inicio que hacía que se mostraran precios de Bitcoin incorrectos bajo el símbolo de moneda equivocado.
+Se ha añadido un nuevo modo de IU de prueba en las Opciones de desarrollador para pruebas y capturas de pantalla, junto con pequeñas correcciones de errores y mejoras de rendimiento.
 </es-ES>
 <de-DE>
-Es wurde ein Fehler bei der Währungsanzeige beim Start behoben, durch den falsche Bitcoin-Preise unter dem falschen Währungssymbol angezeigt wurden.
+Ein neuer Mock-UI-Modus wurde in den Entwickleroptionen für Tests und Screenshots hinzugefügt, zusammen mit kleineren Fehlerbehebungen und Leistungsverbesserungen.
 </de-DE>
 <fr-FR>
-Correction d'un bug d'affichage de la devise au démarrage qui entraînait l'affichage de prix du Bitcoin incorrects sous le mauvais symbole de devise.
+Ajout d'un nouveau mode d'interface factice dans les Options pour les développeurs pour les tests et les captures d'écran, ainsi que de corrections de bugs mineurs et d'améliorations des performances.
 </fr-FR>
 <it-IT>
-Risolto un bug di visualizzazione della valuta all'avvio che causava la visualizzazione di prezzi di Bitcoin errati con il simbolo di valuta sbagliato.
+Aggiunta una nuova modalità di interfaccia simulata nelle Opzioni sviluppatore per test e screenshot, insieme a correzioni di bug minori e miglioramenti delle prestazioni.
 </it-IT>
 <pt-PT>
-Foi corrigido um erro de exibição de moeda no arranque que fazia com que preços de Bitcoin incorretos fossem mostrados sob o símbolo de moeda errado.
+Foi adicionado um novo modo de IU de teste nas Opções de programador para testes e capturas de ecrã, juntamente com pequenas correções de erros e melhorias de desempenho.
 </pt-PT>
 <pt-BR>
-Corrigido um erro de exibição de moeda na inicialização que fazia com que preços incorretos do Bitcoin fossem exibidos sob o símbolo de moeda errado.
+Adicionado um novo modo de interface simulada nas Opções do desenvolvedor para testes e capturas de tela, além de pequenas correções de erros e melhorias de desempenho.
 </pt-BR>
 <tr-TR>
-Başlangıçta yanlış para birimi simgesi altında yanlış Bitcoin fiyatlarının görünmesine neden olan bir para birimi görüntüleme hatası düzeltildi.
+Testler ve ekran görüntüleri için Geliştirici seçeneklerine yeni bir Mock Kullanıcı Arayüzü modu ile birlikte küçük hata düzeltmeleri ve performans iyileştirmeleri eklendi.
 </tr-TR>

@@ -289,12 +289,7 @@ fun setWidgetViews(
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
         
-        val percentage = when (selectedInterval) {
-            0 -> priceData.priceChangePercentage24h
-            1 -> priceData.priceChangePercentage7d
-            2 -> priceData.priceChangePercentage30d
-            else -> priceData.priceChangePercentage24h
-        }
+        val percentage = priceData.getPercentageForInterval(selectedInterval)
 
         val interval = TimeInterval.fromValue(selectedInterval)
 

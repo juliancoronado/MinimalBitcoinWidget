@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.workers.PriceUpdateWorker
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,16 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
     val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
     val developerModeEnabled: StateFlow<Boolean> = _developerModeEnabled.asStateFlow()
+
+    private val _debugMockUiEnabled = MutableStateFlow(getDebugMockUiEnabled())
+    private val _debugMockPrice = MutableStateFlow(getDebugMockPrice())
+    private val _debugMockPercentChange = MutableStateFlow(getDebugMockPercentChange())
+    private val _debugMockCurrency = MutableStateFlow(getDebugMockCurrency())
+
+    val debugMockUiEnabled: StateFlow<Boolean> = _debugMockUiEnabled.asStateFlow()
+    val debugMockPrice: StateFlow<String> = _debugMockPrice.asStateFlow()
+    val debugMockPercentChange: StateFlow<String> = _debugMockPercentChange.asStateFlow()
+    val debugMockCurrency: StateFlow<String> = _debugMockCurrency.asStateFlow()
 
     private fun getSavedTheme(): AppTheme {
         val themeName = prefs.getString(Prefs.SELECTED_THEME, AppTheme.SYSTEM.name)
@@ -77,5 +88,41 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun setDeveloperModeEnabled(enabled: Boolean) {
         _developerModeEnabled.value = enabled
         prefs.edit { putBoolean(Prefs.DEVELOPER_MODE_ENABLED, enabled) }
+    }
+
+    private fun getDebugMockUiEnabled(): Boolean {
+        return prefs.getBoolean(Prefs.DEBUG_MOCK_UI_ENABLED, false)
+    }
+
+    fun setDebugMockUiEnabled(enabled: Boolean) {
+        _debugMockUiEnabled.value = enabled
+        prefs.edit { putBoolean(Prefs.DEBUG_MOCK_UI_ENABLED, enabled) }
+    }
+
+    private fun getDebugMockPrice(): String {
+        return prefs.getString(Prefs.DEBUG_MOCK_PRICE, AppConstants.DEBUG_MOCK_PRICE_DEFAULT) ?: AppConstants.DEBUG_MOCK_PRICE_DEFAULT
+    }
+
+    fun setDebugMockPrice(price: String) {
+        _debugMockPrice.value = price
+        prefs.edit { putString(Prefs.DEBUG_MOCK_PRICE, price) }
+    }
+
+    private fun getDebugMockPercentChange(): String {
+        return prefs.getString(Prefs.DEBUG_MOCK_PERCENT_CHANGE, AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT) ?: AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT
+    }
+
+    fun setDebugMockPercentChange(percentChange: String) {
+        _debugMockPercentChange.value = percentChange
+        prefs.edit { putString(Prefs.DEBUG_MOCK_PERCENT_CHANGE, percentChange) }
+    }
+
+    private fun getDebugMockCurrency(): String {
+        return prefs.getString(Prefs.DEBUG_MOCK_CURRENCY, AppConstants.DEBUG_MOCK_CURRENCY_DEFAULT) ?: AppConstants.DEBUG_MOCK_CURRENCY_DEFAULT
+    }
+
+    fun setDebugMockCurrency(currency: String) {
+        _debugMockCurrency.value = currency
+        prefs.edit { putString(Prefs.DEBUG_MOCK_CURRENCY, currency) }
     }
 }

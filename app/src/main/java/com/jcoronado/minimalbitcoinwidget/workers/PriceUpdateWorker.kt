@@ -53,8 +53,15 @@ class PriceUpdateWorker(
         dao.insert(DebugLog(message = "PriceWorker: Fetching Data"))
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val isHardCodedUiEnabled = prefs.getBoolean(Prefs.DEBUG_MOCK_UI_ENABLED, false)
+        if (isHardCodedUiEnabled) {
+            dao.insert(DebugLog(message = "PriceWorker: Mock UI enabled, bypassing fetch"))
+            PriceViewModel.refreshWidgetsFromCache(context)
+            return@withContext Result.success()
+        }
+
         Prefs.checkAppUpdateAndInvalidateCache(prefs)
-        
         val lastApiCallTime = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
         val currentTime = System.currentTimeMillis()
         val cacheDuration = 15 * 60 * 1000L // 15 minutes

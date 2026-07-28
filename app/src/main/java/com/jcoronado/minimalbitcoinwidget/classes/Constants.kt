@@ -24,19 +24,35 @@ object Prefs {
     /** Key for storing the app version code to detect updates. */
     const val LAST_VERSION_CODE = "last_version_code"
 
+    const val DEBUG_MOCK_UI_ENABLED = "debug_mock_ui_enabled"
+    const val DEBUG_MOCK_PRICE = "debug_mock_price"
+    const val DEBUG_MOCK_PERCENT_CHANGE = "debug_mock_percent_change"
+    const val DEBUG_MOCK_CURRENCY = "debug_mock_currency"
+
     /**
-     * Checks if the app was updated and invalidates the cache if so.
-     * Uses commit = true to ensure the reset is immediate and visible across components.
+     * Checks if the app was updated from a pre-v3.0.0 release (versionCode < 12 or legacy prefs exist
+     * without a recorded version code) and invalidates the cache if so.
+     * For modern v3.x updates, it updates the saved version code without wiping the cache.
      */
     fun checkAppUpdateAndInvalidateCache(prefs: SharedPreferences) {
         val currentVersionCode = BuildConfig.VERSION_CODE
         val lastVersionCode = prefs.getInt(LAST_VERSION_CODE, 0)
 
-        if (currentVersionCode > lastVersionCode) {
-            Log.i("Prefs", "App updated ($lastVersionCode -> $currentVersionCode). Invalidating price cache.")
+        // Pre-v3.0.0 builds didn't store LAST_VERSION_CODE. If lastVersionCode is 0 but legacy
+        // preferences exist, or if lastVersionCode is 1..11, it's a legacy pre-v3.0.0 upgrade.
+        val isLegacyUpgrade = (lastVersionCode in 1..11) || 
+                (lastVersionCode == 0 && prefs.contains(LAST_API_CALL_TIMESTAMP))
+
+        if (isLegacyUpgrade) {
+            Log.i("Prefs", "Upgrading from pre-v3.0.0 ($lastVersionCode -> $currentVersionCode). Invalidating price cache.")
             prefs.edit(commit = true) {
                 putLong(LAST_API_CALL_TIMESTAMP, 0L)
                 remove(CACHED_PRICE_DATA)
+                putInt(LAST_VERSION_CODE, currentVersionCode)
+            }
+        } else if (currentVersionCode > lastVersionCode) {
+            // Keep tracked version code updated without wiping cache for modern v3.x updates
+            prefs.edit(commit = true) {
                 putInt(LAST_VERSION_CODE, currentVersionCode)
             }
         }
@@ -54,6 +70,10 @@ object AppConstants {
     /** Duration in milliseconds for which the cached price data is considered valid. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
     const val WIDGET_DEBUG_MODE = false
+
+    const val DEBUG_MOCK_PRICE_DEFAULT = "52849.10"
+    const val DEBUG_MOCK_PERCENT_CHANGE_DEFAULT = "2.03"
+    const val DEBUG_MOCK_CURRENCY_DEFAULT = "GBP"
 }
 
 /**

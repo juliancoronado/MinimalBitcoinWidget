@@ -70,6 +70,14 @@
     <string name="clear">Effacer</string>
     <string name="error">Erreur</string>
 
-    <!-- Email / Contact -->
     <string name="mail_error">Aucune application de messagerie trouvée</string>
+
+    <!-- Mock UI Settings -->
+    <string name="debug_mock_ui_title">Simuler l\'état de l\'interface</string>
+    <string name="debug_mock_ui_desc">Simuler des données statiques personnalisées pour les tests</string>
+    <string name="debug_price_label">Prix simulé</string>
+    <string name="debug_change_label">Variation en pourcentage simulée</string>
+    <string name="debug_currency_label">Devise simulée</string>
+    <string name="debug_apply_btn">Appliquer les modifications</string>
+    <string name="debug_mock_ui_applied">État de l\'interface simulé appliqué</string>
 </resources>

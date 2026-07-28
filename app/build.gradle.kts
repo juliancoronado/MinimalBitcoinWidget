@@ -17,8 +17,8 @@ android {
         applicationId = "com.jcoronado.minimalbitcoinwidget"
         minSdk = 28
         targetSdk = 37
-        versionCode = 14
-        versionName = "3.1.1"
+        versionCode = 16
+        versionName = "3.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -48,6 +48,10 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
+    }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
     }
 }
 
@@ -101,6 +105,8 @@ dependencies {
     // navigation 3
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.navigation3.runtime)
+    implementation(libs.androidx.navigationevent)
+    implementation(libs.androidx.navigationevent.compose)
 
     // serialization
     implementation(libs.kotlinx.serialization.json)
