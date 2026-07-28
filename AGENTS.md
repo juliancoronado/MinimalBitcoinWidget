@@ -13,17 +13,18 @@ This file provides context, architectural guidelines, and conventions for AI ass
 - **Background Work:** WorkManager (for periodic API polling)
 - **Networking:** OkHttp, Gson (Fetches data from CoinGecko API)
 - **Local Storage:** SharedPreferences (for user settings and caching), Room Database (primarily for debugging/logs)
-- **Architecture:** MVVM (Model-View-ViewModel)
+- **Architecture:** MVVM (Model-View-ViewModel) with Repository Pattern
 
 ## Project Structure
 The project consists of a single `:app` module. The main source code is under `app/src/main/java/com/jcoronado/minimalbitcoinwidget/`.
 
 Key directories and files:
 - **`MainActivity.kt`**: The main entry point for the companion Compose app.
+- **`data/`**: Data layer containing `PriceRepository.kt` for centralizing API requests (OkHttp/Gson), caching, and mock UI data logic.
 - **`screens/` & `ui/`**: Jetpack Compose UI screens, theming, and reusable components.
 - **`viewmodels/`**: ViewModels (e.g., `PriceViewModel`) that handle business logic, UI state, and bridge the data to the widgets.
 - **`widgets/`**: Contains widget implementations. Divided into Glance widgets (`PriceWidget`) and legacy implementations (`LegacyPriceWidget`).
-- **`workers/`**: Contains `PriceUpdateWorker.kt` which uses WorkManager to periodically fetch Bitcoin prices in the background.
+- **`workers/`**: Contains `PriceUpdateWorker.kt` which uses WorkManager to periodically fetch Bitcoin prices in the background via `PriceRepository`.
 - **`classes/`**: Data models, constants (`AppConstants`), preference keys (`Prefs`), and API configuration (`Api`).
 - **`AppDatabase.kt`**: Room database setup, mainly used for storing internal `DebugLog` entries.
 
@@ -46,9 +47,11 @@ Key directories and files:
 - **SharedPreferences:** Used for lightweight data, user preferences (e.g., selected currency, refresh interval), and caching the most recent JSON response.
 - **Room Database:** Currently used for internal debugging/logging (`DebugLog`). Avoid using it for heavy relational data unless the app's scope expands.
 
-### 5. State Management
+### 5. State Management & Data Architecture
 - Use `ViewModel` combined with Kotlin Coroutines for managing app state.
-- Keep the worker logic separate from the UI. Workers should fetch data, save it to persistent storage (Preferences/DB), and trigger a widget refresh.
+- All network operations, cache management, and data access MUST go through `PriceRepository`. ViewModels and Workers should not perform direct HTTP network calls or manual `SharedPreferences` cache serialization.
+- **ViewModel Constructor Overloads:** When creating or updating a ViewModel constructor with default parameter values (e.g. for default repository instances), annotate the constructor with `@JvmOverloads constructor(...)` so Android framework factories (`AndroidViewModelFactory`) can instantiate it via Java Reflection.
+- Keep the worker logic separate from the UI. Workers should request data updates via `PriceRepository` and trigger a widget refresh.
 
 ### 6. Debugging & Mock UI
 - **Mock UI State:** A Mock UI mode is available in the Developer Options screen. When enabled, it allows simulating static, user-defined custom data (Price, Change %, and Currency) for screenshots and testing.
