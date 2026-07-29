@@ -42,4 +42,31 @@ class PriceDataTest {
         val resultOver = priceData.getPercentageForInterval(3)
         assertEquals(1.5, resultOver, 0.0)
     }
+
+    @Test
+    fun `getSparklineForInterval returns expected sliced lists for 24h 7d and 30d`() {
+        val mockPrices = List(168) { i -> 50000.0 + i }
+        val sparklineData = priceData.copy(
+            sparklineIn7d = PriceData.SparklineData(prices = mockPrices)
+        )
+
+        // 24h (index 0) returns last 24 points
+        val sparkline24h = sparklineData.getSparklineForInterval(0)
+        assertEquals(24, sparkline24h.size)
+        assertEquals(mockPrices.last(), sparkline24h.last(), 0.0)
+
+        // 7d (index 1) returns full 168 points
+        val sparkline7d = sparklineData.getSparklineForInterval(1)
+        assertEquals(168, sparkline7d.size)
+
+        // 30d (index 2) returns empty list
+        val sparkline30d = sparklineData.getSparklineForInterval(2)
+        assertEquals(0, sparkline30d.size)
+    }
+
+    @Test
+    fun `getSparklineForInterval handles null sparkline gracefully`() {
+        val sparkline = priceData.getSparklineForInterval(0)
+        assertEquals(0, sparkline.size)
+    }
 }

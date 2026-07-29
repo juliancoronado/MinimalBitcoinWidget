@@ -57,24 +57,5 @@ This document serves as a structured technical specification for an AI agent to 
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
   3. Ensure `PriceUpdateWorker` only needs to trigger Glance updates.
 
-### Task 5: Canvas-Based Price Trend Sparkline [SHELVED FOR FUTURE RELEASE]
-- **Goal:** Add an interactive, high-density historical trendline chart to the dashboard main screen.
-- **Target Files:**
-  - Create: `app/src/main/java/com/jcoronado/minimalbitcoinwidget/ui/components/SparklineGraph.kt`
-  - Modify: `Constants.kt`, `PriceData.kt`, `PriceUiState.kt`, `PriceViewModel.kt`, `MainScreen.kt`, `PriceRepositoryTest.kt`
-- **Detailed Specifications & Technical Requirements:**
-  1. **CoinGecko API Parameter:** Append `&sparkline=true` to `Api.QUERY_PARAMS` in `Constants.kt` to retrieve historical price array (`sparkline_in_7d`).
-  2. **Data Deserialization (`PriceData.kt`)**:
-     - Add `@SerializedName("sparkline_in_7d") val sparklineIn7d: SparklineData? = null`.
-     - Data class: `data class SparklineData(@SerializedName("price") val prices: List<Double> = emptyList())`.
-  3. **Interval Slicing Logic (`PriceViewModel.kt`)**:
-     - **24H (`index 0`)**: Take the last 24 points (`rawSparkline.takeLast(24)`).
-     - **7D (`index 1`)**: Take full 168 points (`rawSparkline`).
-     - **30D (`index 2`)**: Return `emptyList()` to hide the sparkline (since CoinGecko markets endpoint provides 7-day sparkline arrays only).
-  4. **Canvas Component (`SparklineGraph.kt`)**:
-     - **Smooth Bezier Curve**: Use cubic Bezier interpolation (`Path.cubicTo` with control tension `/ 4f`).
-     - **Dynamic Smoothing Filter**: Apply Simple Moving Average (`smoothPrices`) dynamically scaled to ~10% of dataset size (`windowSize = (prices.size * 0.10).coerceIn(3, 7)`) to eliminate noise while preserving start-to-end trend accuracy.
-     - **Stroke Styling**: Thick line (`4.dp`), round stroke caps, dynamic color (`MaterialTheme.colorScheme.primary` for gain, `error` for loss).
-     - **Touch Drag Scrubbing**: Implement `detectDragGestures` and `detectTapGestures` with haptic feedback to allow users to drag along the curve, displaying exact historical price and local timestamp (`MMM d, hh:mm a`), vertical dashed guideline, and glowing point indicator.
-  5. **UI Placement (`MainScreen.kt`)**:
-     - Render as the middle segment (`index = 1, count = 3`) inside `PriceCard` between the main price tile (Segment 0) and the "Last Updated" tile (Segment 2).
+
+

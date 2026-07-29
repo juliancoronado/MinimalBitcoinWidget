@@ -80,4 +80,5 @@
     <string name="debug_currency_label">Moneda simulada</string>
     <string name="debug_apply_btn">Aplicar cambios</string>
     <string name="debug_mock_ui_applied">Estado de UI simulado aplicado</string>
+    <string name="chart_unavailable_30d">Gráfico no disponible para el intervalo de 30D</string>
 </resources>

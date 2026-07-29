@@ -71,7 +71,8 @@ class PriceViewModel @JvmOverloads constructor(
                 isLoading = false,
                 selectedCurrency = mockCurrency,
                 changeIntervalLabelResId = R.string.interval_24h,
-                lastUpdated = 0L
+                lastUpdated = 0L,
+                sparklinePrices = mockData.getSparklineForInterval(0)
             )
             return
         }
@@ -92,7 +93,8 @@ class PriceViewModel @JvmOverloads constructor(
                     percentageChange = percentage,
                     changeIntervalLabelResId = interval.labelResId,
                     selectedCurrency = cachedCurrency,
-                    lastUpdated = lastUpdated
+                    lastUpdated = lastUpdated,
+                    sparklinePrices = cachedData.getSparklineForInterval(selectedInterval)
                 )
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Failed to parse initial cache $e")
@@ -193,7 +195,8 @@ class PriceViewModel @JvmOverloads constructor(
                         changeIntervalLabelResId = interval.labelResId,
                         isLoading = false,
                         errorMessage = null,
-                        lastUpdated = lastUpdated
+                        lastUpdated = lastUpdated,
+                        sparklinePrices = priceData.getSparklineForInterval(selectedInterval)
                     )
                     redrawWidgets()
                 }

@@ -78,6 +78,7 @@
     <string name="debug_price_label">Simüle Edilen Fiyat</string>
     <string name="debug_change_label">Simüle Edilen Yüzde Değişimi</string>
     <string name="debug_currency_label">Simüle Edilen Para Birimi</string>
-    <string name="debug_apply_btn">Değişiklikleri Uygula</string>
-    <string name="debug_mock_ui_applied">Simüle edilen arayüz durumu uygulandı</string>
+    <string name="debug_apply_btn">Değişiklikleri uygula</string>
+    <string name="debug_mock_ui_applied">Sahte kullanıcı arayüzü durumu uygulandı</string>
+    <string name="chart_unavailable_30d">Grafik 30G aralığı için mevcut değil</string>
 </resources>

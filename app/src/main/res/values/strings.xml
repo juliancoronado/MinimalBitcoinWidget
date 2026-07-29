@@ -26,6 +26,7 @@
     <string name="interval_24h" translatable="false">24H</string>
     <string name="interval_7d" translatable="false">7D</string>
     <string name="interval_30d" translatable="false">30D</string>
+    <string name="chart_unavailable_30d">Chart unavailable for 30D interval</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Data</string>

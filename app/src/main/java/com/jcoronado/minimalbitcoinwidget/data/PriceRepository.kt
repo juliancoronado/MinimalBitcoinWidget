@@ -47,11 +47,22 @@ class PriceRepository(private val context: Context) {
         val mockPercent = prefs.getString(Prefs.DEBUG_MOCK_PERCENT_CHANGE, AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT)
             ?.toDoubleOrNull() ?: AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT.toDouble()
 
+        // Generate 168 synthetic hourly sparkline points trending from start price to current mock price
+        val startPrice = mockPrice / (1.0 + (mockPercent / 100.0))
+        val mockSparklinePrices = List(168) { i ->
+            val progress = i / 167.0
+            val baseLinear = startPrice + (mockPrice - startPrice) * progress
+            // Add subtle sine wave noise for visual curve variation
+            val wave = kotlin.math.sin(i * 0.15) * (mockPrice * 0.008)
+            baseLinear + wave
+        }
+
         return PriceData(
             currentPrice = mockPrice,
             priceChangePercentage24h = mockPercent,
             priceChangePercentage7d = mockPercent,
-            priceChangePercentage30d = mockPercent
+            priceChangePercentage30d = mockPercent,
+            sparklineIn7d = PriceData.SparklineData(prices = mockSparklinePrices)
         )
     }
 

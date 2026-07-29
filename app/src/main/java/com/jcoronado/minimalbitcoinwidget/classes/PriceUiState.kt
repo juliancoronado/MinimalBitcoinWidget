@@ -20,5 +20,6 @@ data class PriceUiState(
     val selectedCurrency : String = AppConstants.CURRENCY_DEFAULT,
     val lastUpdated: Long = 0L,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val sparklinePrices: List<Double> = emptyList()
 )

@@ -84,8 +84,8 @@ object Api {
     private const val COINGECKO_BASE_URL = "https://api.coingecko.com/api/v3/"
     /** Endpoint for fetching coin market price data. */
     private const val COINGECKO_ENDPOINT = "coins/markets"
-    /** Query parameters for the Bitcoin price request, including 24h change and precision. */
-    private const val QUERY_PARAMS = "?ids=bitcoin&precision=2&price_change_percentage=24h,7d,30d&vs_currency="
+    /** Query parameters for the Bitcoin price request, including 24h change, sparkline, and precision. */
+    private const val QUERY_PARAMS = "?ids=bitcoin&precision=2&price_change_percentage=24h,7d,30d&sparkline=true&vs_currency="
     /** Complete URL for fetching Bitcoin price data from CoinGecko. */
     const val COINGECKO_API_URL = COINGECKO_BASE_URL + COINGECKO_ENDPOINT + QUERY_PARAMS
 }

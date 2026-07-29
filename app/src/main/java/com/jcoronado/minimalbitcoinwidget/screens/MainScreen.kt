@@ -49,6 +49,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.ui.text.font.FontWeight
 import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.jcoronado.minimalbitcoinwidget.ui.components.SparklineGraph
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: () -> Unit) {
@@ -118,32 +125,45 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     val view = LocalView.current
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
-    val formattedTime = SimpleDateFormat(
+
+    var scrubbedPrice by remember { mutableStateOf<Double?>(null) }
+    var scrubbedTimestamp by remember { mutableStateOf<Long?>(null) }
+
+    val displayPrice = scrubbedPrice ?: uiState.price
+    val isScrubbing = scrubbedPrice != null
+
+    val defaultFormattedTime = SimpleDateFormat(
         "hh:mm:ss a", LocalLocale.current.platformLocale
     ).format(uiState.lastUpdated)
+
+    val scrubbedFormattedTime = scrubbedTimestamp?.let { ts ->
+        SimpleDateFormat("MMM d, h:mm a", LocalLocale.current.platformLocale).format(ts)
+    }
+
+    val displayTime = scrubbedFormattedTime ?: defaultFormattedTime
+
     SegmentedListItem(
-        onClick = {
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-            onRefresh()
-        }, colors = colors, shapes = ListItemDefaults.segmentedShapes(
+        onClick = {}, colors = colors, shapes = ListItemDefaults.segmentedShapes(
             index = 0, count = 2
         )
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp), contentAlignment = Alignment.Center
+                .height(260.dp)
+                .padding(vertical = 8.dp),
+            contentAlignment = Alignment.Center
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 val priceData =
-                    FormatUtils.formatPriceSeparated(uiState.price, uiState.selectedCurrency)
+                    FormatUtils.formatPriceSeparated(displayPrice, uiState.selectedCurrency)
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(all = 12.dp)
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.rounded_currency_bitcoin_24),
@@ -214,28 +234,57 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(all = 12.dp)
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                 ) {
-                    if (uiState.percentageChange > 0) Icon(
-                        painter = painterResource(id = R.drawable.rounded_trending_up_24),
-                        contentDescription = stringResource(R.string.trending_up_icon_description),
-                        tint = MaterialTheme.colorScheme.primary
-                    ) else if (uiState.percentageChange < 0) Icon(
-                        painter = painterResource(id = R.drawable.rounded_trending_down_24),
-                        contentDescription = stringResource(R.string.trending_down_icon_description),
-                        tint = MaterialTheme.colorScheme.error
-                    ) else Icon(
-                        painter = painterResource(id = R.drawable.rounded_trending_flat_24),
-                        contentDescription = stringResource(R.string.trending_flat_icon_description),
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                    Text(
-                        text = FormatUtils.formatChange(uiState.percentageChange),
-                        style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
-                        color = MaterialTheme.colorScheme.secondary,
-                        textAlign = TextAlign.Center
-                    )
+                    if (!isScrubbing) {
+                        if (uiState.percentageChange > 0) Icon(
+                            painter = painterResource(id = R.drawable.rounded_trending_up_24),
+                            contentDescription = stringResource(R.string.trending_up_icon_description),
+                            tint = MaterialTheme.colorScheme.primary
+                        ) else if (uiState.percentageChange < 0) Icon(
+                            painter = painterResource(id = R.drawable.rounded_trending_down_24),
+                            contentDescription = stringResource(R.string.trending_down_icon_description),
+                            tint = MaterialTheme.colorScheme.error
+                        ) else Icon(
+                            painter = painterResource(id = R.drawable.rounded_trending_flat_24),
+                            contentDescription = stringResource(R.string.trending_flat_icon_description),
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = FormatUtils.formatChange(uiState.percentageChange),
+                            style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
+                            color = MaterialTheme.colorScheme.secondary,
+                            textAlign = TextAlign.Center
+                        )
+                    } else {
+                        Text(
+                            text = scrubbedFormattedTime ?: "",
+                            style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
+                            color = MaterialTheme.colorScheme.primary,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
+
+                val is30dInterval = uiState.changeIntervalLabelResId == R.string.interval_30d
+                val isUnavailable = is30dInterval || uiState.sparklinePrices.isEmpty()
+
+                Spacer(modifier = Modifier.height(4.dp))
+                SparklineGraph(
+                    prices = uiState.sparklinePrices,
+                    isPositive = uiState.percentageChange >= 0,
+                    isUnavailable = isUnavailable,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(90.dp)
+                        .padding(horizontal = 16.dp),
+                    lastUpdatedTimestamp = uiState.lastUpdated,
+                    onScrub = { price, timestamp ->
+                        scrubbedPrice = price
+                        scrubbedTimestamp = timestamp
+                    }
+                )
             }
 
             // TODO - revisit this and see if we still want to keep this animation
@@ -263,14 +312,15 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
             }
         }
     }
-    CompositionLocalProvider(LocalRippleConfiguration provides null) {
-        SegmentedListItem(
-            onClick = {}, colors = colors, shapes = ListItemDefaults.segmentedShapes(
-                index = 1, count = 2
-            )
-        ) {
-            Text(stringResource(R.string.last_updated, formattedTime))
-        }
+    SegmentedListItem(
+        onClick = {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            onRefresh()
+        },
+        colors = colors,
+        shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2)
+    ) {
+        Text(stringResource(R.string.last_updated, defaultFormattedTime))
     }
 
 }
@@ -285,3 +335,4 @@ fun MainScreenPreview() {
             ), onRefresh = { }, onAddWidgetClick = { })
     }
 }
+
