@@ -92,16 +92,25 @@ fun SparklineGraph(
     val guidelineColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
     val indicatorOuterColor = normalLineColor.copy(alpha = 0.3f)
 
-    // Smooth raw prices using Simple Moving Average (SMA)
+    // Smooth raw prices using endpoint-preserving weighted Gaussian smoothing
     val smoothPrices = remember(effectivePrices, isUnavailable) {
-        if (isUnavailable || effectivePrices.size < 10) effectivePrices
+        if (isUnavailable || effectivePrices.size < 5) effectivePrices
         else {
-            val windowSize = (effectivePrices.size * 0.10).coerceIn(3.0, 7.0).toInt()
-            effectivePrices.indices.map { index ->
-                val start = (index - windowSize / 2).coerceAtLeast(0)
-                val end = (index + windowSize / 2).coerceAtMost(effectivePrices.lastIndex)
-                effectivePrices.subList(start, end + 1).average()
+            val n = effectivePrices.size
+            val smoothed = effectivePrices.toDoubleArray()
+            repeat(2) {
+                val temp = smoothed.clone()
+                for (i in 1 until n - 1) {
+                    val prev = temp[i - 1]
+                    val curr = temp[i]
+                    val next = temp[i + 1]
+                    smoothed[i] = 0.25 * prev + 0.50 * curr + 0.25 * next
+                }
+                // Strictly preserve exact start and end values
+                smoothed[0] = effectivePrices.first()
+                smoothed[n - 1] = effectivePrices.last()
             }
+            smoothed.toList()
         }
     }
 
@@ -199,16 +208,26 @@ fun SparklineGraph(
                 Offset(x, y)
             }
 
-            // Construct smooth Bezier Path
+            // Construct smooth Catmull-Rom Spline Path
             val path = Path().apply {
-                if (points.isNotEmpty()) {
+                if (points.size >= 2) {
                     moveTo(points[0].x, points[0].y)
-                    for (i in 0 until points.size - 1) {
-                        val p0 = points[i]
-                        val p1 = points[i + 1]
-                        val controlPoint1 = Offset(p0.x + (p1.x - p0.x) / 3f, p0.y)
-                        val controlPoint2 = Offset(p0.x + 2 * (p1.x - p0.x) / 3f, p1.y)
-                        cubicTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, p1.x, p1.y)
+                    val n = points.size
+                    val alpha = 0.20f // Smooth spline curvature multiplier
+
+                    for (i in 0 until n - 1) {
+                        val p0 = points[if (i == 0) 0 else i - 1]
+                        val p1 = points[i]
+                        val p2 = points[i + 1]
+                        val p3 = points[if (i + 2 >= n) n - 1 else i + 2]
+
+                        val cp1X = p1.x + (p2.x - p0.x) * alpha
+                        val cp1Y = p1.y + (p2.y - p0.y) * alpha
+
+                        val cp2X = p2.x - (p3.x - p1.x) * alpha
+                        val cp2Y = p2.y - (p3.y - p1.y) * alpha
+
+                        cubicTo(cp1X, cp1Y, cp2X, cp2Y, p2.x, p2.y)
                     }
                 }
             }
