@@ -9,10 +9,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -25,6 +29,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -68,16 +73,16 @@ fun SparklineGraph(
     // Use synthetic placeholder curve when graph data is unavailable
     val effectivePrices = remember(prices, isUnavailable) {
         if (isUnavailable || prices.size < 2) {
-            val totalPoints = 80
-            val startPrice = 35000.0
-            val endPrice = 65000.0
+            val totalPoints = 140
+            val startPrice = 22000.0
+            val endPrice = 78000.0
             List(totalPoints) { i ->
                 val progress = i / (totalPoints - 1.0)
                 val linearTrend = startPrice + (endPrice - startPrice) * progress
-                val macroWave = kotlin.math.sin(i * 0.26) * 12000.0
-                val microWave = kotlin.math.cos(i * 0.55) * 6000.0
-                val detailWave = kotlin.math.sin(i * 1.10) * 1800.0
-                linearTrend + macroWave + microWave + detailWave
+                // Sweeping sine waves with high peaks and deep valleys, with fewer overall cycles
+                val macroWave = kotlin.math.sin(progress * Math.PI * 6.0) * 38000.0
+                val midWave = kotlin.math.cos(progress * Math.PI * 11.0) * 10000.0
+                linearTrend + macroWave + midWave
             }
         } else prices
     }
@@ -88,8 +93,8 @@ fun SparklineGraph(
     val indicatorOuterColor = normalLineColor.copy(alpha = 0.3f)
 
     // Smooth raw prices using Simple Moving Average (SMA)
-    val smoothPrices = remember(effectivePrices) {
-        if (effectivePrices.size < 10) effectivePrices
+    val smoothPrices = remember(effectivePrices, isUnavailable) {
+        if (isUnavailable || effectivePrices.size < 10) effectivePrices
         else {
             val windowSize = (effectivePrices.size * 0.10).coerceIn(3.0, 7.0).toInt()
             effectivePrices.indices.map { index ->
@@ -98,6 +103,17 @@ fun SparklineGraph(
                 effectivePrices.subList(start, end + 1).average()
             }
         }
+    }
+
+    // Trendline entrance animation state (draws left-to-right on display / data updates)
+    val animationProgress = remember { Animatable(0f) }
+
+    LaunchedEffect(effectivePrices) {
+        animationProgress.snapTo(0f)
+        animationProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
+        )
     }
 
     var isScrubbing by remember { mutableStateOf(false) }
@@ -197,9 +213,22 @@ fun SparklineGraph(
                 }
             }
 
+            // Calculate animated path segment according to drawing progress
+            val currentProgress = animationProgress.value
+            val animatedPath = if (currentProgress < 1f) {
+                val pathMeasure = PathMeasure().apply { setPath(path, false) }
+                Path().apply {
+                    if (pathMeasure.length > 0f) {
+                        pathMeasure.getSegment(0f, pathMeasure.length * currentProgress, this, true)
+                    }
+                }
+            } else {
+                path
+            }
+
             // Draw sparkline stroke
             drawPath(
-                path = path,
+                path = animatedPath,
                 color = lineColor,
                 style = Stroke(
                     width = strokeWidthPx,
