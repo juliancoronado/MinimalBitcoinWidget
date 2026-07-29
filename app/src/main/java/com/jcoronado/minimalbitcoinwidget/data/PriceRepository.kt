@@ -47,14 +47,30 @@ class PriceRepository(private val context: Context) {
         val mockPercent = prefs.getString(Prefs.DEBUG_MOCK_PERCENT_CHANGE, AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT)
             ?.toDoubleOrNull() ?: AppConstants.DEBUG_MOCK_PERCENT_CHANGE_DEFAULT.toDouble()
 
-        // Generate 168 synthetic hourly sparkline points trending from start price to current mock price
+        // Generate 168 synthetic hourly sparkline points
+        // Ensure the 24h segment (last 24 points) starts exactly at startPrice and ends at mockPrice with vibrant sine wave ups & downs
         val startPrice = mockPrice / (1.0 + (mockPercent / 100.0))
+        val start7dPrice = mockPrice / (1.0 + (mockPercent * 1.8 / 100.0))
+        val amplitude24h = (mockPrice * 0.05).coerceAtLeast(kotlin.math.abs(mockPrice - startPrice) * 0.45)
+        val amplitude7d = (mockPrice * 0.07).coerceAtLeast(kotlin.math.abs(mockPrice - start7dPrice) * 0.45)
+
         val mockSparklinePrices = List(168) { i ->
-            val progress = i / 167.0
-            val baseLinear = startPrice + (mockPrice - startPrice) * progress
-            // Add subtle sine wave noise for visual curve variation
-            val wave = kotlin.math.sin(i * 0.15) * (mockPrice * 0.008)
-            baseLinear + wave
+            if (i >= 144) {
+                // 24h segment (last 24 points: index 144 to 167)
+                val p24 = (i - 144) / 23.0
+                val baseLinear = startPrice + (mockPrice - startPrice) * p24
+                val window = kotlin.math.sin(p24 * Math.PI)
+                val sineWave = kotlin.math.sin(p24 * Math.PI * 5.0) * amplitude24h * window
+                val secondaryHarmonic = kotlin.math.cos(p24 * Math.PI * 9.0) * (amplitude24h * 0.3) * window
+                baseLinear + sineWave + secondaryHarmonic
+            } else {
+                // Preceding 7d segment (index 0 to 143) leading smoothly to startPrice at index 144
+                val p7d = i / 144.0
+                val baseLinear = start7dPrice + (startPrice - start7dPrice) * p7d
+                val window = kotlin.math.sin(p7d * Math.PI).coerceAtLeast(0.2)
+                val sineWave = kotlin.math.sin(p7d * Math.PI * 12.0) * amplitude7d * window
+                baseLinear + sineWave
+            }
         }
 
         return PriceData(

@@ -73,16 +73,17 @@ fun SparklineGraph(
     // Use synthetic placeholder curve when graph data is unavailable
     val effectivePrices = remember(prices, isUnavailable) {
         if (isUnavailable || prices.size < 2) {
-            val totalPoints = 140
-            val startPrice = 22000.0
-            val endPrice = 78000.0
+            val totalPoints = 120
+            val startPrice = 35000.0
+            val endPrice = 65000.0
+            val amplitude = (endPrice * 0.05).coerceAtLeast(kotlin.math.abs(endPrice - startPrice) * 0.45)
             List(totalPoints) { i ->
                 val progress = i / (totalPoints - 1.0)
-                val linearTrend = startPrice + (endPrice - startPrice) * progress
-                // Sweeping sine waves with high peaks and deep valleys, with fewer overall cycles
-                val macroWave = kotlin.math.sin(progress * Math.PI * 6.0) * 38000.0
-                val midWave = kotlin.math.cos(progress * Math.PI * 11.0) * 10000.0
-                linearTrend + macroWave + midWave
+                val baseLinear = startPrice + (endPrice - startPrice) * progress
+                val window = kotlin.math.sin(progress * Math.PI)
+                val sineWave = kotlin.math.sin(progress * Math.PI * 5.0) * amplitude * window
+                val secondaryHarmonic = kotlin.math.cos(progress * Math.PI * 9.0) * (amplitude * 0.3) * window
+                baseLinear + sineWave + secondaryHarmonic
             }
         } else prices
     }
