@@ -38,21 +38,42 @@ data class PriceData(
     }
 
     /**
-     * Returns the sliced sparkline price list for the given time interval index.
+     * Returns the sliced and trend-normalized sparkline price list for the given time interval index.
      * Index mappings:
-     * - 0: 24h (last 24 points)
-     * - 1: 7d (all 168 points)
+     * - 0: 24h (last 25 points, covering 24 hourly intervals)
+     * - 1: 7d (all points)
      * - 2: 30d (empty list, as CoinGecko only provides 7d sparklines)
      */
     fun getSparklineForInterval(index: Int): List<Double> {
         val rawPrices = sparklineIn7d?.prices ?: return emptyList()
         if (rawPrices.isEmpty()) return emptyList()
 
-        return when (index) {
-            0 -> rawPrices.takeLast(24)
+        val slice = when (index) {
+            0 -> if (rawPrices.size >= 25) rawPrices.takeLast(25) else rawPrices
             1 -> rawPrices
-            2 -> emptyList()
-            else -> rawPrices.takeLast(24)
+            2 -> return emptyList()
+            else -> if (rawPrices.size >= 25) rawPrices.takeLast(25) else rawPrices
+        }
+
+        if (slice.size < 2) return slice
+
+        val percentageChange = getPercentageForInterval(index)
+        val denom = 1.0 + (percentageChange / 100.0)
+        if (denom <= 0.0) return slice
+
+        val targetStartPrice = currentPrice / denom
+        val targetEndPrice = currentPrice
+
+        val n = slice.size
+        val r0 = slice.first()
+        val rEnd = slice.last()
+
+        return List(n) { i ->
+            val t = i.toDouble() / (n - 1)
+            val rawBaseline = r0 + t * (rEnd - r0)
+            val targetBaseline = targetStartPrice + t * (targetEndPrice - targetStartPrice)
+            val fluctuation = slice[i] - rawBaseline
+            targetBaseline + fluctuation
         }
     }
 }

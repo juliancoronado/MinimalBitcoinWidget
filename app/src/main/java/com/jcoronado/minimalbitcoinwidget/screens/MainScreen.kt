@@ -135,7 +135,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
     ).format(uiState.lastUpdated)
 
     val scrubbedFormattedTime = scrubbedTimestamp?.let { ts ->
-        SimpleDateFormat("MMM d, h:mm a", LocalLocale.current.platformLocale).format(ts)
+        SimpleDateFormat("MMM d, hh:mm a", LocalLocale.current.platformLocale).format(ts)
     }
 
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
@@ -286,19 +286,6 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     )
                 }
 
-                // TODO - revisit this and see if we still want to keep this animation
-                AnimatedVisibility(
-                    visible = uiState.isLoading,
-                    enter = fadeIn(),
-                    exit = fadeOut(animationSpec = tween(durationMillis = 100)),
-                    modifier = Modifier.align(Alignment.BottomEnd)
-                ) {
-                    LoadingIndicator(
-                        modifier = Modifier.size(32.dp),
-                        polygons = LoadingIndicatorDefaults.IndeterminateIndicatorPolygons.shuffled()
-                    )
-                }
-
                 if (uiState.errorMessage != null) {
                     Text(
                         modifier = Modifier
@@ -318,11 +305,23 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
             onRefresh()
         },
         colors = colors,
-        shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2)
-    ) {
-        Text(stringResource(R.string.last_updated, defaultFormattedTime))
-    }
-
+        shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2),
+        content = {
+            Text(stringResource(R.string.last_updated, defaultFormattedTime))
+        },
+        trailingContent = {
+            AnimatedVisibility(
+                visible = uiState.isLoading,
+                enter = fadeIn(),
+                exit = fadeOut(animationSpec = tween(durationMillis = 100))
+            ) {
+                LoadingIndicator(
+                    modifier = Modifier.size(24.dp),
+                    polygons = LoadingIndicatorDefaults.IndeterminateIndicatorPolygons.shuffled()
+                )
+            }
+        }
+    )
 }
 
 @Preview(showSystemUi = true)
