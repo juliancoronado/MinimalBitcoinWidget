@@ -58,6 +58,7 @@ fun SparklineGraph(
     strokeWidth: Dp = 3.dp,
     lastUpdatedTimestamp: Long = System.currentTimeMillis(),
     isUnavailable: Boolean = false,
+    showOverlay: Boolean = isUnavailable,
     unavailableMessage: String = stringResource(R.string.chart_unavailable_30d),
     onScrub: (scrubbedPrice: Double?, scrubbedTimestamp: Long?) -> Unit = { _, _ -> }
 ) {
@@ -241,8 +242,8 @@ fun SparklineGraph(
             }
         }
 
-        // Display unavailable overlay pill when chart data is disabled/unavailable
-        if (isUnavailable) {
+        // Display unavailable overlay pill when requested (e.g. 30D interval)
+        if (showOverlay) {
             Surface(
                 shape = RoundedCornerShape(50),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
