@@ -24,6 +24,8 @@
     <string name="app_theme_dark">Dunkel</string>
     <string name="dynamic_colors">Dynamische Farben</string>
     <string name="dynamic_colors_subtitle">Farben vom Gerätedesign übernehmen</string>
+    <string name="show_price_graph">Preisdiagramm</string>
+    <string name="show_price_graph_subtitle">Preisdiagramm auf dem Dashboard anzeigen</string>
     <string name="version">Version</string>
     <string name="build_number">Build-Nummer</string>
     <string name="contact">Kontakt</string>

@@ -21,5 +21,6 @@ data class PriceUiState(
     val lastUpdated: Long = 0L,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val sparklinePrices: List<Double> = emptyList()
+    val sparklinePrices: List<Double> = emptyList(),
+    val showSparkline: Boolean = true
 )

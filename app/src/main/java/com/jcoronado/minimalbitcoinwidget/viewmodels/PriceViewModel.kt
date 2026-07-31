@@ -61,6 +61,8 @@ class PriceViewModel @JvmOverloads constructor(
 
     /** Load initial data from Repository/SharedPreferences. */
     private fun loadInitialData() {
+        val showSparkline = prefs.getBoolean(Prefs.SHOW_SPARKLINE, true)
+
         if (repository.isMockUiEnabled()) {
             val mockData = repository.getMockPriceData()
             val mockCurrency = repository.getMockCurrency()
@@ -72,7 +74,8 @@ class PriceViewModel @JvmOverloads constructor(
                 selectedCurrency = mockCurrency,
                 changeIntervalLabelResId = R.string.interval_24h,
                 lastUpdated = 0L,
-                sparklinePrices = mockData.getSparklineForInterval(0)
+                sparklinePrices = mockData.getSparklineForInterval(0),
+                showSparkline = showSparkline
             )
             return
         }
@@ -94,14 +97,15 @@ class PriceViewModel @JvmOverloads constructor(
                     changeIntervalLabelResId = interval.labelResId,
                     selectedCurrency = cachedCurrency,
                     lastUpdated = lastUpdated,
-                    sparklinePrices = cachedData.getSparklineForInterval(selectedInterval)
+                    sparklinePrices = cachedData.getSparklineForInterval(selectedInterval),
+                    showSparkline = showSparkline
                 )
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Failed to parse initial cache $e")
-                _uiState.value = _uiState.value.copy(selectedCurrency = cachedCurrency)
+                _uiState.value = _uiState.value.copy(selectedCurrency = cachedCurrency, showSparkline = showSparkline)
             }
         } else {
-            _uiState.value = _uiState.value.copy(selectedCurrency = cachedCurrency)
+            _uiState.value = _uiState.value.copy(selectedCurrency = cachedCurrency, showSparkline = showSparkline)
         }
     }
 

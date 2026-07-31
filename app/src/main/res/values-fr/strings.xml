@@ -24,6 +24,8 @@
     <string name="app_theme_dark">Sombre</string>
     <string name="dynamic_colors">Couleurs dynamiques</string>
     <string name="dynamic_colors_subtitle">Suivre les couleurs du thème de votre appareil</string>
+    <string name="show_price_graph">Graphique de prix</string>
+    <string name="show_price_graph_subtitle">Afficher le graphique de prix sur le tableau de bord</string>
     <string name="version">Version</string>
     <string name="build_number">Numéro de build</string>
     <string name="contact">Contact</string>

@@ -20,6 +20,7 @@ object Prefs {
     const val SELECTED_THEME = "selected_theme"
     const val REFRESH_INTERVAL = "refresh_interval"
     const val SELECTED_CHANGE_PERCENTAGE = "selected_change_percentage"
+    const val SHOW_SPARKLINE = "show_sparkline"
     const val DEVELOPER_MODE_ENABLED = "developer_mode_enabled"
     /** Key for storing the app version code to detect updates. */
     const val LAST_VERSION_CODE = "last_version_code"

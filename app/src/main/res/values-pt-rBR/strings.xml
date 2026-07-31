@@ -24,6 +24,8 @@
     <string name="app_theme_dark">Escuro</string>
     <string name="dynamic_colors">Cores dinâmicas</string>
     <string name="dynamic_colors_subtitle">Seguir cores do tema do dispositivo</string>
+    <string name="show_price_graph">Gráfico de preço</string>
+    <string name="show_price_graph_subtitle">Exibir gráfico de preço no painel</string>
     <string name="version">Versão</string>
     <string name="build_number">Número da versão</string>
     <string name="contact">Contato</string>

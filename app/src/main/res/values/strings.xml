@@ -49,6 +49,8 @@
     <string name="app_theme_dark">Dark</string>
     <string name="dynamic_colors">Dynamic Colors</string>
     <string name="dynamic_colors_subtitle">Follow colors from your device theme</string>
+    <string name="show_price_graph">Price Graph</string>
+    <string name="show_price_graph_subtitle">Display price graph on dashboard</string>
     <string name="version">Version</string>
     <string name="version_format" translatable="false">%1$s (%2$s)</string>
     <string name="build_number">Build Number</string>

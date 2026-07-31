@@ -138,6 +138,9 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
         SimpleDateFormat("MMM d, hh:mm a", LocalLocale.current.platformLocale).format(ts)
     }
 
+    val cardHeight = if (uiState.showSparkline) 260.dp else 200.dp
+    val rowVerticalPadding = if (uiState.showSparkline) 4.dp else 12.dp
+
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         SegmentedListItem(
             onClick = {}, colors = colors, shapes = ListItemDefaults.segmentedShapes(
@@ -147,8 +150,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(260.dp)
-                    .padding(vertical = 8.dp),
+                    .height(cardHeight),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
@@ -160,7 +162,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = rowVerticalPadding)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.rounded_currency_bitcoin_24),
@@ -231,7 +233,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = rowVerticalPadding)
                     ) {
                         if (!isScrubbing) {
                             if (uiState.percentageChange > 0) Icon(
@@ -264,26 +266,28 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                         }
                     }
 
-                    val is30dInterval = uiState.changeIntervalLabelResId == R.string.interval_30d
-                    val isChartUnavailable = is30dInterval || uiState.sparklinePrices.isEmpty()
-                    val showChartOverlay = is30dInterval
+                    if (uiState.showSparkline) {
+                        val is30dInterval = uiState.changeIntervalLabelResId == R.string.interval_30d
+                        val isChartUnavailable = is30dInterval || uiState.sparklinePrices.isEmpty()
+                        val showChartOverlay = is30dInterval
 
-                    Spacer(modifier = Modifier.height(16.dp))
-                    SparklineGraph(
-                        prices = uiState.sparklinePrices,
-                        isPositive = uiState.percentageChange >= 0,
-                        isUnavailable = isChartUnavailable,
-                        showOverlay = showChartOverlay,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(90.dp)
-                            .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 0.dp),
-                        lastUpdatedTimestamp = uiState.lastUpdated,
-                        onScrub = { price, timestamp ->
-                            scrubbedPrice = price
-                            scrubbedTimestamp = timestamp
-                        }
-                    )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        SparklineGraph(
+                            prices = uiState.sparklinePrices,
+                            isPositive = uiState.percentageChange >= 0,
+                            isUnavailable = isChartUnavailable,
+                            showOverlay = showChartOverlay,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(90.dp)
+                                .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 0.dp),
+                            lastUpdatedTimestamp = uiState.lastUpdated,
+                            onScrub = { price, timestamp ->
+                                scrubbedPrice = price
+                                scrubbedTimestamp = timestamp
+                            }
+                        )
+                    }
                 }
 
                 if (uiState.errorMessage != null) {

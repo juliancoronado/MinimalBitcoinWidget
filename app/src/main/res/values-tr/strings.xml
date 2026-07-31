@@ -24,6 +24,8 @@
     <string name="app_theme_dark">Koyu</string>
     <string name="dynamic_colors">Dinamik Renkler</string>
     <string name="dynamic_colors_subtitle">Cihaz temasındaki renkleri kullan</string>
+    <string name="show_price_graph">Fiyat Grafiği</string>
+    <string name="show_price_graph_subtitle">Gösterge tablosunda fiyat grafiğini göster</string>
     <string name="version">Sürüm</string>
     <string name="build_number">Yapı Numarası</string>
     <string name="contact">İletişim</string>
