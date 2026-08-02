@@ -65,19 +65,21 @@ class PriceDataTest {
     }
 
     @Test
-    fun `getSparklineForInterval with negative 24h change ensures end price is lower than start price`() {
+    fun `getSparklineForInterval with negative 24h change ensures end price is lower than start price and slope is weighted`() {
         // Raw prices increase from 60000 to 65000 (going UP)
         val rawPrices = List(168) { i -> 60000.0 + (i * 30.0) }
         val testData = PriceData(
             currentPrice = 63494.88,
-            priceChangePercentage24h = -0.30,
+            priceChangePercentage24h = -0.30, // -0.3% -> slopeWeight = 0.3 / 3.0 = 0.10
             priceChangePercentage7d = 1.0,
             priceChangePercentage30d = 5.0,
             sparklineIn7d = PriceData.SparklineData(prices = rawPrices)
         )
 
         val sparkline = testData.getSparklineForInterval(0)
-        val expectedStart = 63494.88 / (1.0 - 0.003)
+        val fullStartPrice = 63494.88 / (1.0 - 0.003)
+        val fullNetDelta = 63494.88 - fullStartPrice
+        val expectedStart = 63494.88 - (fullNetDelta * 0.10)
 
         assertEquals(25, sparkline.size)
         assertEquals(63494.88, sparkline.last(), 0.001)
@@ -91,7 +93,7 @@ class PriceDataTest {
         val rawPrices = List(168) { i -> 70000.0 - (i * 60.0) }
         val testData = PriceData(
             currentPrice = 65000.00,
-            priceChangePercentage24h = 5.00,
+            priceChangePercentage24h = 5.00, // 5.0% >= 3.0% refPct -> slopeWeight = 1.0
             priceChangePercentage7d = 2.0,
             priceChangePercentage30d = 10.0,
             sparklineIn7d = PriceData.SparklineData(prices = rawPrices)
@@ -104,6 +106,36 @@ class PriceDataTest {
         assertEquals(65000.00, sparkline.last(), 0.001)
         assertEquals(expectedStart, sparkline.first(), 0.001)
         org.junit.Assert.assertTrue("Right end of positive trendline must be higher than left end", sparkline.last() > sparkline.first())
+    }
+
+    @Test
+    fun `getSparklineForInterval with small percentage change dampens endpoint delta compared to large change`() {
+        val rawPrices = MutableList(25) { 1000.0 }
+        val smallChangeData = PriceData(
+            currentPrice = 1000.0,
+            priceChangePercentage24h = 0.3, // 0.3% -> slopeWeight = 0.1
+            priceChangePercentage7d = 0.0,
+            priceChangePercentage30d = 0.0,
+            sparklineIn7d = PriceData.SparklineData(prices = rawPrices)
+        )
+        val largeChangeData = PriceData(
+            currentPrice = 1000.0,
+            priceChangePercentage24h = 3.0, // 3.0% -> slopeWeight = 1.0
+            priceChangePercentage7d = 0.0,
+            priceChangePercentage30d = 0.0,
+            sparklineIn7d = PriceData.SparklineData(prices = rawPrices)
+        )
+
+        val smallSparkline = smallChangeData.getSparklineForInterval(0)
+        val largeSparkline = largeChangeData.getSparklineForInterval(0)
+
+        val smallDelta = smallSparkline.last() - smallSparkline.first()
+        val largeDelta = largeSparkline.last() - largeSparkline.first()
+
+        // 0.3% has 1/10th the percentage change AND 1/10th slopeWeight, making its endpoint delta ~100x smaller than 3%
+        assertEquals(0.2991, smallDelta, 0.01)
+        assertEquals(29.1262, largeDelta, 0.01)
+        org.junit.Assert.assertTrue("Small delta must be substantially smaller than large delta", smallDelta < (largeDelta / 50.0))
     }
 
     @Test

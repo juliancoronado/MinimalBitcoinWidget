@@ -204,7 +204,7 @@ fun SparklineGraph(
             // Convert prices to coordinates
             val points = smoothPrices.indices.map { i ->
                 val x = (i.toFloat() / (smoothPrices.size - 1)) * width
-                val yFraction = ((smoothPrices[i] - minPrice) / priceRange).toFloat()
+                val yFraction = if (maxPrice == minPrice) 0.5f else ((smoothPrices[i] - minPrice) / priceRange).toFloat()
                 val y = height - verticalPadding - (yFraction * usableHeight)
                 Offset(x, y)
             }
@@ -313,3 +313,4 @@ fun SparklineGraph(
         }
     }
 }
+
