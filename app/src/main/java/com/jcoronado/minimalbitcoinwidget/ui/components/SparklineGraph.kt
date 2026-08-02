@@ -61,6 +61,7 @@ fun SparklineGraph(
     isPositive: Boolean,
     modifier: Modifier = Modifier,
     strokeWidth: Dp = 3.dp,
+    minVisualRangePct: Double = 0.05,
     lastUpdatedTimestamp: Long = System.currentTimeMillis(),
     isUnavailable: Boolean = false,
     showOverlay: Boolean = isUnavailable,
@@ -195,16 +196,20 @@ fun SparklineGraph(
 
             val minPrice = smoothPrices.minOrNull() ?: 0.0
             val maxPrice = smoothPrices.maxOrNull() ?: 1.0
-            val priceRange = (maxPrice - minPrice).let { if (it == 0.0) 1.0 else it }
 
             // Vertical padding so stroke line caps don't clip canvas boundaries
             val verticalPadding = strokeWidthPx * 2f
             val usableHeight = (height - (verticalPadding * 2f)).coerceAtLeast(1f)
 
-            // Convert prices to coordinates
+            // Convert prices to coordinates using minimum percentage window scaling
             val points = smoothPrices.indices.map { i ->
                 val x = (i.toFloat() / (smoothPrices.size - 1)) * width
-                val yFraction = if (maxPrice == minPrice) 0.5f else ((smoothPrices[i] - minPrice) / priceRange).toFloat()
+                val yFraction = SparklineScaleCalculator.calculateYFraction(
+                    price = smoothPrices[i],
+                    minPrice = minPrice,
+                    maxPrice = maxPrice,
+                    minVisualRangePct = minVisualRangePct
+                )
                 val y = height - verticalPadding - (yFraction * usableHeight)
                 Offset(x, y)
             }
@@ -314,3 +319,37 @@ fun SparklineGraph(
     }
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * Calculates normalized Y height fractions (0.0 at bottom, 1.0 at top) for sparkline graph rendering.
+ *
+ * Enforces a minimum visual range percentage (`minVisualRangePct`) centered around the midpoint price
+ * so that small price movements (like -0.20%) render endpoints close together near vertical center.
+ */
+object SparklineScaleCalculator {
+    const val DEFAULT_MIN_VISUAL_RANGE_PCT = 0.05
+
+    fun calculateYFraction(
+        price: Double,
+        minPrice: Double,
+        maxPrice: Double,
+        minVisualRangePct: Double = DEFAULT_MIN_VISUAL_RANGE_PCT
+    ): Float {
+        val basePrice = if (minPrice > 0.0) minPrice else 1.0
+        val actualRange = maxPrice - minPrice
+        val minRange = basePrice * minVisualRangePct
+
+        val effectiveRange = if (actualRange > 0.0) {
+            maxOf(actualRange, minRange)
+        } else {
+            if (minRange > 0.0) minRange else 1.0
+        }
+
+        val midPrice = (minPrice + maxPrice) / 2.0
+        val effectiveMinPrice = midPrice - (effectiveRange / 2.0)
+        val fraction = (price - effectiveMinPrice) / effectiveRange
+        return fraction.toFloat().coerceIn(0f, 1f)
+    }
+}
+>>>>>>> cfe366c (Scale sparkline visual height continuously up to 5% net price change)
