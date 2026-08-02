@@ -319,8 +319,6 @@ fun SparklineGraph(
     }
 }
 
-<<<<<<< HEAD
-=======
 /**
  * Calculates normalized Y height fractions (0.0 at bottom, 1.0 at top) for sparkline graph rendering.
  *
@@ -352,4 +350,3 @@ object SparklineScaleCalculator {
         return fraction.toFloat().coerceIn(0f, 1f)
     }
 }
->>>>>>> cfe366c (Scale sparkline visual height continuously up to 5% net price change)
