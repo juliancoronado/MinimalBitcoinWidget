@@ -108,12 +108,24 @@ fun AnimatedPriceText(
                 AnimatedContent(
                     targetState = digit,
                     transitionSpec = {
-                        if (isIncrease) {
-                            // Price increase: enter from bottom (+height), exit to top (-height)
-                            slideInVertically { height -> height } togetherWith slideOutVertically { height -> -height }
+                        val targetVal = targetState.char.digitToIntOrNull() ?: 0
+                        val initialVal = initialState.char.digitToIntOrNull() ?: 0
+
+                        // Check if digit increased (including 9 -> 0 rollover when counting up)
+                        val digitIncreased = if (initialVal == 9 && targetVal == 0) {
+                            true
+                        } else if (initialVal == 0 && targetVal == 9) {
+                            false
                         } else {
-                            // Price decrease: enter from top (-height), exit to bottom (+height)
+                            targetVal > initialVal
+                        }
+
+                        if (digitIncreased) {
+                            // Digit increased (e.g. 5 -> 9): enters from top (-height), exits to bottom (+height)
                             slideInVertically { height -> -height } togetherWith slideOutVertically { height -> height }
+                        } else {
+                            // Digit decreased (e.g. 5 -> 0): enters from bottom (+height), exits to top (-height)
+                            slideInVertically { height -> height } togetherWith slideOutVertically { height -> -height }
                         }
                     },
                     label = "DigitAnimation"
