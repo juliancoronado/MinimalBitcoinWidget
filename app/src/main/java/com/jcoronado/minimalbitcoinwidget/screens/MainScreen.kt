@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
+import com.jcoronado.minimalbitcoinwidget.ui.components.AnimatedPriceText
 import com.jcoronado.minimalbitcoinwidget.ui.components.SparklineGraph
 import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansCodeFontFamily
@@ -212,17 +213,21 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                                 style = symbolStyle,
                                 modifier = Modifier.padding(end = 4.dp)
                             )
-                            Text(
-                                text = priceData.price,
+                            AnimatedPriceText(
+                                priceText = priceData.price,
+                                rawPrice = displayPrice,
                                 style = priceStyle,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = MaterialTheme.colorScheme.onBackground,
+                                animate = !isScrubbing
                             )
                         } else {
                             // SYMBOL RIGHT (e.g. 95.000 €)
-                            Text(
-                                text = priceData.price,
+                            AnimatedPriceText(
+                                priceText = priceData.price,
+                                rawPrice = displayPrice,
                                 style = priceStyle,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = MaterialTheme.colorScheme.onBackground,
+                                animate = !isScrubbing
                             )
                             Text(
                                 text = priceData.symbol,
