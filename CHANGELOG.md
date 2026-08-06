@@ -9,6 +9,19 @@ Date Format: YYYY-MM-DD
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+---
+
+## [3.3.0] - TBD
+
+### Added
+
+- Added interactive sparkline price trend chart with smooth curves, entrance animations, and a configurable setting toggle.
+- Added per-digit slide animation for price updates with directional up/down scrolling.
+
 ## [3.2.0] - 2026-07-21
 
 ### Added
