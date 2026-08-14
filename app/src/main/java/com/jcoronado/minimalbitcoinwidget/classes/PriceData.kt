@@ -61,16 +61,7 @@ data class PriceData(
         val denom = 1.0 + (percentageChange / 100.0)
         if (denom <= 0.0) return slice
 
-        val absPct = kotlin.math.abs(percentageChange)
-        val refPct = 3.0 // Reference percentage for full visual baseline slope
-        val slopeWeight = if (refPct > 0.0) (absPct / refPct).coerceAtMost(1.0) else 1.0
-
-        val fullStartPrice = currentPrice / denom
-        val fullEndPrice = currentPrice
-        val fullNetDelta = fullEndPrice - fullStartPrice
-        val weightedNetDelta = fullNetDelta * slopeWeight
-
-        val targetStartPrice = currentPrice - weightedNetDelta
+        val targetStartPrice = currentPrice / denom
         val targetEndPrice = currentPrice
 
         val n = slice.size

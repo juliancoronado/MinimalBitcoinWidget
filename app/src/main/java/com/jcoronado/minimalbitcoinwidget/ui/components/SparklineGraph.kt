@@ -61,7 +61,7 @@ fun SparklineGraph(
     isPositive: Boolean,
     modifier: Modifier = Modifier,
     strokeWidth: Dp = 3.dp,
-    minVisualRangePct: Double = 0.05,
+    verticalPaddingFraction: Double = SparklineScaleCalculator.DEFAULT_VERTICAL_PADDING_FRACTION,
     lastUpdatedTimestamp: Long = System.currentTimeMillis(),
     isUnavailable: Boolean = false,
     showOverlay: Boolean = isUnavailable,
@@ -201,14 +201,14 @@ fun SparklineGraph(
             val verticalPadding = strokeWidthPx * 2f
             val usableHeight = (height - (verticalPadding * 2f)).coerceAtLeast(1f)
 
-            // Convert prices to coordinates using minimum percentage window scaling
+            // Convert prices to coordinates using dynamic auto-scaling
             val points = smoothPrices.indices.map { i ->
                 val x = (i.toFloat() / (smoothPrices.size - 1)) * width
                 val yFraction = SparklineScaleCalculator.calculateYFraction(
                     price = smoothPrices[i],
                     minPrice = minPrice,
                     maxPrice = maxPrice,
-                    minVisualRangePct = minVisualRangePct
+                    verticalPaddingFraction = verticalPaddingFraction
                 )
                 val y = height - verticalPadding - (yFraction * usableHeight)
                 Offset(x, y)
@@ -322,31 +322,28 @@ fun SparklineGraph(
 /**
  * Calculates normalized Y height fractions (0.0 at bottom, 1.0 at top) for sparkline graph rendering.
  *
- * Enforces a minimum visual range percentage (`minVisualRangePct`) centered around the midpoint price
- * so that small price movements (like -0.20%) render endpoints close together near vertical center.
+ * Automatically scales the price data dynamically to the min and max prices of the current dataset,
+ * adding a balanced vertical padding fraction so peaks and valleys are expressive and do not clip.
  */
 object SparklineScaleCalculator {
-    const val DEFAULT_MIN_VISUAL_RANGE_PCT = 0.05
+    const val DEFAULT_VERTICAL_PADDING_FRACTION = 0.10
 
     fun calculateYFraction(
         price: Double,
         minPrice: Double,
         maxPrice: Double,
-        minVisualRangePct: Double = DEFAULT_MIN_VISUAL_RANGE_PCT
+        verticalPaddingFraction: Double = DEFAULT_VERTICAL_PADDING_FRACTION
     ): Float {
-        val basePrice = if (minPrice > 0.0) minPrice else 1.0
         val actualRange = maxPrice - minPrice
-        val minRange = basePrice * minVisualRangePct
-
-        val effectiveRange = if (actualRange > 0.0) {
-            maxOf(actualRange, minRange)
-        } else {
-            if (minRange > 0.0) minRange else 1.0
+        if (actualRange <= 0.0) {
+            return 0.5f
         }
 
-        val midPrice = (minPrice + maxPrice) / 2.0
-        val effectiveMinPrice = midPrice - (effectiveRange / 2.0)
-        val fraction = (price - effectiveMinPrice) / effectiveRange
+        val padding = actualRange * verticalPaddingFraction
+        val effectiveMin = minPrice - padding
+        val effectiveRange = actualRange + (padding * 2.0)
+
+        val fraction = (price - effectiveMin) / effectiveRange
         return fraction.toFloat().coerceIn(0f, 1f)
     }
 }
