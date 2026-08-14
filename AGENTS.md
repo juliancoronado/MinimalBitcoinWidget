@@ -58,6 +58,15 @@ Key directories and files:
 - **Mock UI State:** A Mock UI mode is available in the Developer Options screen. When enabled, it allows simulating static, user-defined custom data (Price, Change %, and Currency) for screenshots and testing.
 - **Interception Logic:** When active (`Prefs.DEBUG_MOCK_UI_ENABLED`), standard loading, live API fetches, widget redrawing, and background worker fetches (`PriceUpdateWorker`) are bypassed to persistently display the custom mock configurations without calling the CoinGecko API.
 
+### 7. Release Builds & Native Debug Symbols
+- **Native Debug Symbols:** When generating a signed release bundle (`.aab`) for Google Play Console submission, native debug symbols (from native dependencies such as `androidx.graphics.path`) should be packaged into a `.zip` archive.
+- **Source Directory:** The unstripped native library ABI folders (`arm64-v8a`, `armeabi-v7a`, `x86`, `x86_64`) are located at:
+  `app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib`
+- **Packaging Instructions:** Zip the ABI folders directly so the archive root contains the ABI directory hierarchy (`<abi>/<library>.so`), and output the zip to the base of the project folder:
+  ```bash
+  cd app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib && zip -r ../../../../../../../native-debug-symbols.zip arm64-v8a armeabi-v7a x86 x86_64
+  ```
+
 ## General AI Instructions
 - When making changes to the UI, verify compatibility with Jetpack Compose Material 3.
 - When modifying data fetching logic, ensure background constraints (like network connectivity) and caching rules are preserved.
