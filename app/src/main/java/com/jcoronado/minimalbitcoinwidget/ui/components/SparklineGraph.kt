@@ -1,7 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.ui.components
 
 import android.view.HapticFeedbackConstants
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -74,18 +72,7 @@ fun SparklineGraph(
     // Use synthetic placeholder curve when graph data is unavailable
     val effectivePrices = remember(prices, isUnavailable) {
         if (isUnavailable || prices.size < 2) {
-            val totalPoints = 120
-            val startPrice = 35000.0
-            val endPrice = 65000.0
-            val amplitude = (endPrice * 0.05).coerceAtLeast(kotlin.math.abs(endPrice - startPrice) * 0.45)
-            List(totalPoints) { i ->
-                val progress = i / (totalPoints - 1.0)
-                val baseLinear = startPrice + (endPrice - startPrice) * progress
-                val window = kotlin.math.sin(progress * Math.PI)
-                val sineWave = kotlin.math.sin(progress * Math.PI * 5.0) * amplitude * window
-                val secondaryHarmonic = kotlin.math.cos(progress * Math.PI * 9.0) * (amplitude * 0.3) * window
-                baseLinear + sineWave + secondaryHarmonic
-            }
+            PLACEHOLDER_SPARKLINE_PRICES
         } else prices
     }
 
@@ -116,7 +103,7 @@ fun SparklineGraph(
         }
     }
 
-    // Trendline entrance animation state (draws left-to-right on display / data updates)
+    // Trend line entrance animation state (draws left-to-right on display / data updates)
     val animationProgress = remember { Animatable(0f) }
 
     LaunchedEffect(effectivePrices) {
@@ -128,7 +115,6 @@ fun SparklineGraph(
     }
 
     var isScrubbing by remember { mutableStateOf(false) }
-    var scrubX by remember { mutableFloatStateOf(0f) }
     var selectedIndex by remember { mutableIntStateOf(-1) }
 
     val handleTouch: (Offset, Float) -> Unit = { offset, width ->
@@ -136,7 +122,6 @@ fun SparklineGraph(
             val clampedX = offset.x.coerceIn(0f, width)
             val fraction = clampedX / width
             val newIndex = (fraction * (effectivePrices.lastIndex)).roundToInt().coerceIn(0, effectivePrices.lastIndex)
-            scrubX = clampedX
 
             if (newIndex != selectedIndex) {
                 selectedIndex = newIndex
@@ -347,3 +332,15 @@ object SparklineScaleCalculator {
         return fraction.toFloat().coerceIn(0f, 1f)
     }
 }
+
+/**
+ * Synthetic default sparkline curve points used when live data is unavailable (e.g. 30D interval or initial load).
+ * Modeled after a smooth waveform with drastic amplitude swings: a lower starting baseline, tall primary crest, deep plunge trough, sharp secondary peak, and an elevated ending curve.
+ */
+val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = listOf(
+    15.0, 31.0, 36.0, 42.0, 65.0,
+    90.0, 100.0, 99.0, 88.0, 68.0,
+    38.0, 14.0, 3.0, 0.0, 8.0,
+    38.0, 72.0, 88.0, 75.0, 64.0,
+    58.0, 55.0, 58.0, 69.0, 92.0
+)

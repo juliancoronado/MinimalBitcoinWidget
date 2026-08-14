@@ -65,4 +65,13 @@ class SparklineGraphTest {
 
         assertEquals(0.5f, yFraction, 0.001f)
     }
+
+    @Test
+    fun `placeholder sparkline prices list is non empty and has distinct min max`() {
+        val prices = com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PRICES
+        assertTrue(prices.size >= 2)
+        val minPrice = prices.minOrNull() ?: 0.0
+        val maxPrice = prices.maxOrNull() ?: 0.0
+        assertTrue(maxPrice > minPrice)
+    }
 }
