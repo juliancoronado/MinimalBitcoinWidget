@@ -62,8 +62,9 @@ set-mbw-locale() {
 
 ## 2. Release: Package Native Debug Symbols
 
-When preparing a release bundle for Google Play Console submission:
+When preparing a release bundle for Google Play Console submission, package the unstripped native debug symbols into a `.zip` archive containing the current app version (`versionName`) and build number (`versionCode`) in the filename:
 
 ```bash
-cd app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib && zip -r ../../../../../../../native-debug-symbols.zip arm64-v8a armeabi-v7a x86 x86_64 && cd -
+# Example for v3.3.0 (build 19)
+cd app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib && zip -r ../../../../../../../native-debug-symbols-v3.3.0-19.zip arm64-v8a armeabi-v7a x86 x86_64 && cd -
 ```
