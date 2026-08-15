@@ -1,29 +1,29 @@
 // Release notes for the Google Play Store listing
 // translations provided by Gemini AI
 
-// v3.2.0
+// v3.3.0
 
 <en-US>
-Added a new Mock UI mode in Developer options for testing and screenshots, along with minor bug fixes and performance improvements.
+Visualize trends with the new interactive sparkline price chart, fluid price animations, and performance improvements.
 </en-US>
 <es-ES>
-Se ha añadido un nuevo modo de IU de prueba en las Opciones de desarrollador para pruebas y capturas de pantalla, junto con pequeñas correcciones de errores y mejoras de rendimiento.
+Visualiza tendencias con el nuevo gráfico interactivo de precios, animaciones fluidas y mejoras de rendimiento.
 </es-ES>
 <de-DE>
-Ein neuer Mock-UI-Modus wurde in den Entwickleroptionen für Tests und Screenshots hinzugefügt, zusammen mit kleineren Fehlerbehebungen und Leistungsverbesserungen.
+Visualisieren Sie Trends mit dem neuen interaktiven Preistrenddiagramm, flüssigen Preisanimationen und Leistungsverbesserungen.
 </de-DE>
 <fr-FR>
-Ajout d'un nouveau mode d'interface factice dans les Options pour les développeurs pour les tests et les captures d'écran, ainsi que de corrections de bugs mineurs et d'améliorations des performances.
+Visualisez les tendances grâce au nouveau graphique interactif des prix, aux animations fluides et aux améliorations des performances.
 </fr-FR>
 <it-IT>
-Aggiunta una nuova modalità di interfaccia simulata nelle Opzioni sviluppatore per test e screenshot, insieme a correzioni di bug minori e miglioramenti delle prestazioni.
+Visualizza le tendenze con il nuovo grafico interattivo dei prezzi, animazioni fluide e miglioramenti delle prestazioni.
 </it-IT>
 <pt-PT>
-Foi adicionado um novo modo de IU de teste nas Opções de programador para testes e capturas de ecrã, juntamente com pequenas correções de erros e melhorias de desempenho.
+Visualize tendências com o novo gráfico interativo de preços, animações fluidas e melhorias de desempenho.
 </pt-PT>
 <pt-BR>
-Adicionado um novo modo de interface simulada nas Opções do desenvolvedor para testes e capturas de tela, além de pequenas correções de erros e melhorias de desempenho.
+Visualize tendências com o novo gráfico interativo de preços, animações fluidas e melhorias de desempenho.
 </pt-BR>
 <tr-TR>
-Testler ve ekran görüntüleri için Geliştirici seçeneklerine yeni bir Mock Kullanıcı Arayüzü modu ile birlikte küçük hata düzeltmeleri ve performans iyileştirmeleri eklendi.
+Yeni etkileşimli fiyat grafiği, akıcı fiyat animasyonları ve performans iyileştirmeleriyle trendleri görselleştirin.
 </tr-TR>

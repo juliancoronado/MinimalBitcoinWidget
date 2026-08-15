@@ -15,7 +15,7 @@ Date Format: YYYY-MM-DD
 
 ---
 
-## [3.3.0] - TBD
+## [3.3.0] - 2026-08-14
 
 ### Added
 
