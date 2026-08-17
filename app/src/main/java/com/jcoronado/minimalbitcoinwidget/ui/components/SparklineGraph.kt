@@ -1,7 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget.ui.components
 
 import android.view.HapticFeedbackConstants
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,7 +59,7 @@ fun SparklineGraph(
     isPositive: Boolean,
     modifier: Modifier = Modifier,
     strokeWidth: Dp = 3.dp,
-    minVisualRangePct: Double = 0.05,
+    verticalPaddingFraction: Double = SparklineScaleCalculator.DEFAULT_VERTICAL_PADDING_FRACTION,
     lastUpdatedTimestamp: Long = System.currentTimeMillis(),
     isUnavailable: Boolean = false,
     showOverlay: Boolean = isUnavailable,
@@ -74,18 +72,7 @@ fun SparklineGraph(
     // Use synthetic placeholder curve when graph data is unavailable
     val effectivePrices = remember(prices, isUnavailable) {
         if (isUnavailable || prices.size < 2) {
-            val totalPoints = 120
-            val startPrice = 35000.0
-            val endPrice = 65000.0
-            val amplitude = (endPrice * 0.05).coerceAtLeast(kotlin.math.abs(endPrice - startPrice) * 0.45)
-            List(totalPoints) { i ->
-                val progress = i / (totalPoints - 1.0)
-                val baseLinear = startPrice + (endPrice - startPrice) * progress
-                val window = kotlin.math.sin(progress * Math.PI)
-                val sineWave = kotlin.math.sin(progress * Math.PI * 5.0) * amplitude * window
-                val secondaryHarmonic = kotlin.math.cos(progress * Math.PI * 9.0) * (amplitude * 0.3) * window
-                baseLinear + sineWave + secondaryHarmonic
-            }
+            PLACEHOLDER_SPARKLINE_PRICES
         } else prices
     }
 
@@ -116,7 +103,7 @@ fun SparklineGraph(
         }
     }
 
-    // Trendline entrance animation state (draws left-to-right on display / data updates)
+    // Trend line entrance animation state (draws left-to-right on display / data updates)
     val animationProgress = remember { Animatable(0f) }
 
     LaunchedEffect(effectivePrices) {
@@ -128,7 +115,6 @@ fun SparklineGraph(
     }
 
     var isScrubbing by remember { mutableStateOf(false) }
-    var scrubX by remember { mutableFloatStateOf(0f) }
     var selectedIndex by remember { mutableIntStateOf(-1) }
 
     val handleTouch: (Offset, Float) -> Unit = { offset, width ->
@@ -136,7 +122,6 @@ fun SparklineGraph(
             val clampedX = offset.x.coerceIn(0f, width)
             val fraction = clampedX / width
             val newIndex = (fraction * (effectivePrices.lastIndex)).roundToInt().coerceIn(0, effectivePrices.lastIndex)
-            scrubX = clampedX
 
             if (newIndex != selectedIndex) {
                 selectedIndex = newIndex
@@ -201,14 +186,14 @@ fun SparklineGraph(
             val verticalPadding = strokeWidthPx * 2f
             val usableHeight = (height - (verticalPadding * 2f)).coerceAtLeast(1f)
 
-            // Convert prices to coordinates using minimum percentage window scaling
+            // Convert prices to coordinates using dynamic auto-scaling
             val points = smoothPrices.indices.map { i ->
                 val x = (i.toFloat() / (smoothPrices.size - 1)) * width
                 val yFraction = SparklineScaleCalculator.calculateYFraction(
                     price = smoothPrices[i],
                     minPrice = minPrice,
                     maxPrice = maxPrice,
-                    minVisualRangePct = minVisualRangePct
+                    verticalPaddingFraction = verticalPaddingFraction
                 )
                 val y = height - verticalPadding - (yFraction * usableHeight)
                 Offset(x, y)
@@ -322,31 +307,40 @@ fun SparklineGraph(
 /**
  * Calculates normalized Y height fractions (0.0 at bottom, 1.0 at top) for sparkline graph rendering.
  *
- * Enforces a minimum visual range percentage (`minVisualRangePct`) centered around the midpoint price
- * so that small price movements (like -0.20%) render endpoints close together near vertical center.
+ * Automatically scales the price data dynamically to the min and max prices of the current dataset,
+ * adding a balanced vertical padding fraction so peaks and valleys are expressive and do not clip.
  */
 object SparklineScaleCalculator {
-    const val DEFAULT_MIN_VISUAL_RANGE_PCT = 0.05
+    const val DEFAULT_VERTICAL_PADDING_FRACTION = 0.10
 
     fun calculateYFraction(
         price: Double,
         minPrice: Double,
         maxPrice: Double,
-        minVisualRangePct: Double = DEFAULT_MIN_VISUAL_RANGE_PCT
+        verticalPaddingFraction: Double = DEFAULT_VERTICAL_PADDING_FRACTION
     ): Float {
-        val basePrice = if (minPrice > 0.0) minPrice else 1.0
         val actualRange = maxPrice - minPrice
-        val minRange = basePrice * minVisualRangePct
-
-        val effectiveRange = if (actualRange > 0.0) {
-            maxOf(actualRange, minRange)
-        } else {
-            if (minRange > 0.0) minRange else 1.0
+        if (actualRange <= 0.0) {
+            return 0.5f
         }
 
-        val midPrice = (minPrice + maxPrice) / 2.0
-        val effectiveMinPrice = midPrice - (effectiveRange / 2.0)
-        val fraction = (price - effectiveMinPrice) / effectiveRange
+        val padding = actualRange * verticalPaddingFraction
+        val effectiveMin = minPrice - padding
+        val effectiveRange = actualRange + (padding * 2.0)
+
+        val fraction = (price - effectiveMin) / effectiveRange
         return fraction.toFloat().coerceIn(0f, 1f)
     }
 }
+
+/**
+ * Synthetic default sparkline curve points used when live data is unavailable (e.g. 30D interval or initial load).
+ * Modeled after a smooth waveform with drastic amplitude swings: a lower starting baseline, tall primary crest, deep plunge trough, sharp secondary peak, and an elevated ending curve.
+ */
+val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = listOf(
+    15.0, 31.0, 36.0, 42.0, 65.0,
+    90.0, 100.0, 99.0, 88.0, 68.0,
+    38.0, 14.0, 3.0, 0.0, 8.0,
+    38.0, 72.0, 88.0, 75.0, 64.0,
+    58.0, 55.0, 58.0, 69.0, 92.0
+)

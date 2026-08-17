@@ -12,3 +12,4 @@ local.properties
 /app/release/
 notes.txt
 *upload-keystore.jks
+native-debug-symbols.zip
