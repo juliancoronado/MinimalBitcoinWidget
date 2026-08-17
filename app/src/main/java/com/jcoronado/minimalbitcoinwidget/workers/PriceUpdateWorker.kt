@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.util.Log
-import androidx.core.content.edit
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.preference.PreferenceManager
@@ -17,14 +16,12 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.jcoronado.minimalbitcoinwidget.AppDatabase
 import com.jcoronado.minimalbitcoinwidget.DebugLog
-import com.jcoronado.minimalbitcoinwidget.classes.Api
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
-import com.jcoronado.minimalbitcoinwidget.classes.PriceData
+import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
+import com.jcoronado.minimalbitcoinwidget.data.Resource
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
@@ -32,9 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 private const val LOG_TAG = "PriceUpdateWorker"
@@ -52,77 +46,38 @@ class PriceUpdateWorker(
 
         dao.insert(DebugLog(message = "PriceWorker: Fetching Data"))
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val repository = PriceRepository(applicationContext)
 
-        val isHardCodedUiEnabled = prefs.getBoolean(Prefs.DEBUG_MOCK_UI_ENABLED, false)
-        if (isHardCodedUiEnabled) {
+        if (repository.isMockUiEnabled()) {
             dao.insert(DebugLog(message = "PriceWorker: Mock UI enabled, bypassing fetch"))
-            PriceViewModel.refreshWidgetsFromCache(context)
+            PriceViewModel.refreshWidgetsFromCache(applicationContext)
             return@withContext Result.success()
         }
 
-        Prefs.checkAppUpdateAndInvalidateCache(prefs)
-        val lastApiCallTime = prefs.getLong(Prefs.LAST_API_CALL_TIMESTAMP, 0L)
-        val currentTime = System.currentTimeMillis()
-        val cacheDuration = 15 * 60 * 1000L // 15 minutes
-
-        if (currentTime - lastApiCallTime < cacheDuration) {
+        if (repository.isCacheFresh()) {
             dao.insert(DebugLog(message = "PriceWorker: Skipping Data Fetch (< 15 mins)"))
             Log.d(LOG_TAG, "Data is fresh, skipping fetch")
-            PriceViewModel.refreshWidgetsFromCache(context)
+            PriceViewModel.refreshWidgetsFromCache(applicationContext)
             return@withContext Result.success()
         }
 
-        val currencyCode = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
-            ?: AppConstants.CURRENCY_DEFAULT
+        val currencyCode = repository.getSelectedCurrency()
+        val resource = repository.fetchPrice(currencyCode, force = true)
 
-        val gson = Gson()
-        val client = OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
-            .build()
-        val url = Api.COINGECKO_API_URL + currencyCode
-        val request = Request.Builder().url(url).build()
-
-        try {
-            val response = client.newCall(request).execute()
-            if (response.isSuccessful) {
-                val body = response.body.string()
-
-                val type = object : TypeToken<List<PriceData>>() {}.type
-                val dataList: List<PriceData> = gson.fromJson(body, type)
-
-                if (dataList.isNotEmpty()) {
-                    val priceData = dataList[0]
-                    
-                    // update shared prefs cache for the MainActivity display
-                    prefs.edit {
-                        putLong(Prefs.LAST_API_CALL_TIMESTAMP, System.currentTimeMillis())
-                        putString(Prefs.CACHED_PRICE_DATA, gson.toJson(priceData))
-                    }
-
-                    // update widgets using the helper in PriceViewModel
-                    PriceViewModel.refreshWidgetsFromCache(context)
-
-                    dao.insert(DebugLog(message = "PriceWorker: Data Fetched"))
-
-                    Result.success()
-                } else {
-                    Result.retry()
-                }
-            } else if (response.code == 429) {
-                Result.retry()
-            } else {
-                throw Exception("Error: ${response.code}")
+        when (resource) {
+            is Resource.Success -> {
+                PriceViewModel.refreshWidgetsFromCache(applicationContext)
+                dao.insert(DebugLog(message = "PriceWorker: Data Fetched"))
+                Result.success()
             }
-        } catch (e: IOException) {
-            dao.insert(DebugLog(message = "PriceWorker: Failed (Network) - ${e.localizedMessage}"))
-            Log.e(LOG_TAG, "Network error", e)
-            return@withContext handleError(e)
-        } catch (e: Exception) {
-            dao.insert(DebugLog(message = "PriceWorker: Failed (Other) - ${e.localizedMessage}"))
-            Log.e(LOG_TAG, "Fatal error", e)
-            return@withContext handleError(e)
+            is Resource.Error -> {
+                val exception = resource.cause as? Exception ?: Exception(resource.message)
+                dao.insert(DebugLog(message = "PriceWorker: Failed - ${resource.message}"))
+                Log.e(LOG_TAG, "Worker fetch error: ${resource.message}", exception)
+                handleError(exception)
+            }
+            // Included for Kotlin sealed class branch exhaustiveness. fetchPrice() runs to completion on Dispatchers.IO and only returns Success or Error.
+            is Resource.Loading -> Result.retry()
         }
     }
 

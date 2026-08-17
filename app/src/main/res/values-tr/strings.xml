@@ -24,6 +24,8 @@
     <string name="app_theme_dark">Koyu</string>
     <string name="dynamic_colors">Dinamik Renkler</string>
     <string name="dynamic_colors_subtitle">Cihaz temasındaki renkleri kullan</string>
+    <string name="show_price_graph">Fiyat Grafiği</string>
+    <string name="show_price_graph_subtitle">Gösterge tablosunda fiyat grafiğini göster</string>
     <string name="version">Sürüm</string>
     <string name="build_number">Yapı Numarası</string>
     <string name="contact">İletişim</string>
@@ -78,6 +80,7 @@
     <string name="debug_price_label">Simüle Edilen Fiyat</string>
     <string name="debug_change_label">Simüle Edilen Yüzde Değişimi</string>
     <string name="debug_currency_label">Simüle Edilen Para Birimi</string>
-    <string name="debug_apply_btn">Değişiklikleri Uygula</string>
-    <string name="debug_mock_ui_applied">Simüle edilen arayüz durumu uygulandı</string>
+    <string name="debug_apply_btn">Değişiklikleri uygula</string>
+    <string name="debug_mock_ui_applied">Sahte kullanıcı arayüzü durumu uygulandı</string>
+    <string name="chart_unavailable_30d">Grafik 30G aralığı için mevcut değil</string>
 </resources>

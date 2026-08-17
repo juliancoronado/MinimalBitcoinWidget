@@ -20,6 +20,7 @@ object Prefs {
     const val SELECTED_THEME = "selected_theme"
     const val REFRESH_INTERVAL = "refresh_interval"
     const val SELECTED_CHANGE_PERCENTAGE = "selected_change_percentage"
+    const val SHOW_SPARKLINE = "show_sparkline"
     const val DEVELOPER_MODE_ENABLED = "developer_mode_enabled"
     /** Key for storing the app version code to detect updates. */
     const val LAST_VERSION_CODE = "last_version_code"
@@ -84,8 +85,8 @@ object Api {
     private const val COINGECKO_BASE_URL = "https://api.coingecko.com/api/v3/"
     /** Endpoint for fetching coin market price data. */
     private const val COINGECKO_ENDPOINT = "coins/markets"
-    /** Query parameters for the Bitcoin price request, including 24h change and precision. */
-    private const val QUERY_PARAMS = "?ids=bitcoin&precision=2&price_change_percentage=24h,7d,30d&vs_currency="
+    /** Query parameters for the Bitcoin price request, including 24h change, sparkline, and precision. */
+    private const val QUERY_PARAMS = "?ids=bitcoin&precision=2&price_change_percentage=24h,7d,30d&sparkline=true&vs_currency="
     /** Complete URL for fetching Bitcoin price data from CoinGecko. */
     const val COINGECKO_API_URL = COINGECKO_BASE_URL + COINGECKO_ENDPOINT + QUERY_PARAMS
 }

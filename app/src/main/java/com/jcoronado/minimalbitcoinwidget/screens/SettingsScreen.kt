@@ -78,6 +78,8 @@ fun SettingsScreen(
     onRefreshIntervalSelected: (Int) -> Unit = {},
     changePercentage: Int = 0,
     onChangePercentageSelected: (Int) -> Unit = {},
+    showSparkline: Boolean = true,
+    onShowSparklineSelected: (Boolean) -> Unit = {},
     developerModeEnabled: Boolean = false,
     onDebugModeToggle: (Boolean) -> Unit = {}
 ) {
@@ -335,7 +337,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 0, count = 2
+                            index = 0, count = 3
                         ),
                         leadingContent = {
                             Icon(
@@ -395,7 +397,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 1, count = 2
+                        index = 1, count = 3
                     ),
                     leadingContent = {
                         Icon(
@@ -426,6 +428,40 @@ fun SettingsScreen(
                     onClick = {
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         onDynamicColorsSelected(!dynamicColors)
+                    },
+                )
+                SegmentedListItem(
+                    colors = colors,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        index = 2, count = 3
+                    ),
+                    leadingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_show_chart_24),
+                            stringResource(R.string.chart_data_icon_description)
+                        )
+                    },
+                    content = {
+                        Text(
+                            stringResource(R.string.show_price_graph),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            stringResource(R.string.show_price_graph_subtitle),
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = showSparkline,
+                            onCheckedChange = null
+                        )
+                    },
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        onShowSparklineSelected(!showSparkline)
                     },
                 )
                 SectionHeader(stringResource(R.string.app_info_header))
@@ -513,11 +549,46 @@ fun SettingsScreen(
                         onClick = { },
                     )
                 }
+                SegmentedListItem(
+                    colors = colors,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        index = 3, count = if (developerModeEnabled) 7 else 6
+                    ),
+                    leadingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_mail_24),
+                            stringResource(R.string.contact_icon_description)
+                        )
+                    },
+                    content = {
+                        Text(stringResource(R.string.contact), fontWeight = FontWeight.SemiBold)
+                    },
+                    supportingContent = {
+                        Text(stringResource(R.string.developer))
+                    },
+                    trailingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_arrow_outward_24),
+                            stringResource(R.string.open_arrow_icon_description)
+                        )
+                    },
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "$mailTo?subject=${Uri.encode(subject)}".toUri()
+                        }
+                        try {
+                            context.startActivity(intent)
+                        } catch (_: Exception) {
+                            Toast.makeText(context, mailError, Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                )
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 3, count = if (developerModeEnabled) 7 else 6
+                            index = 4, count = if (developerModeEnabled) 7 else 6
                         ),
                         leadingContent = {
                             Icon(
@@ -545,7 +616,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 4, count = if (developerModeEnabled) 7 else 6
+                        index = 5, count = if (developerModeEnabled) 7 else 6
                     ),
                     leadingContent = {
                         Icon(
@@ -580,41 +651,6 @@ fun SettingsScreen(
                             } else if (tapCount > 10) {
                                 showToast(stepsMessage)
                             }
-                        }
-                    },
-                )
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 5, count = if (developerModeEnabled) 7 else 6
-                    ),
-                    leadingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_mail_24),
-                            stringResource(R.string.contact_icon_description)
-                        )
-                    },
-                    content = {
-                        Text(stringResource(R.string.contact), fontWeight = FontWeight.SemiBold)
-                    },
-                    supportingContent = {
-                        Text(stringResource(R.string.developer))
-                    },
-                    trailingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_arrow_outward_24),
-                            stringResource(R.string.open_arrow_icon_description)
-                        )
-                    },
-                    onClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = "$mailTo?subject=${Uri.encode(subject)}".toUri()
-                        }
-                        try {
-                            context.startActivity(intent)
-                        } catch (_: Exception) {
-                            Toast.makeText(context, mailError, Toast.LENGTH_SHORT).show()
                         }
                     },
                 )

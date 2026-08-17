@@ -22,12 +22,14 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
     private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
     private val _changePercentageInterval = MutableStateFlow(getSavedChangePercentageInterval())
+    private val _showSparkline = MutableStateFlow(getShowSparkline())
     private val _developerModeEnabled = MutableStateFlow(getDeveloperModeEnabled())
 
     val theme: StateFlow<AppTheme> = _theme.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
     val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
+    val showSparkline: StateFlow<Boolean> = _showSparkline.asStateFlow()
     val developerModeEnabled: StateFlow<Boolean> = _developerModeEnabled.asStateFlow()
 
     private val _debugMockUiEnabled = MutableStateFlow(getDebugMockUiEnabled())
@@ -79,6 +81,15 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         
         // update all widgets immediately using helper in PriceViewModel
         PriceViewModel.refreshWidgetsFromCache(getApplication())
+    }
+
+    private fun getShowSparkline(): Boolean {
+        return prefs.getBoolean(Prefs.SHOW_SPARKLINE, true)
+    }
+
+    fun setShowSparkline(enabled: Boolean) {
+        _showSparkline.value = enabled
+        prefs.edit { putBoolean(Prefs.SHOW_SPARKLINE, enabled) }
     }
 
     private fun getDeveloperModeEnabled(): Boolean {

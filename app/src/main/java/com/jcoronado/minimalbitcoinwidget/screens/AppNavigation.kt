@@ -172,6 +172,7 @@ fun AppNavigation() {
                         val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
                         val refreshInterval by settingsViewModel.refreshInterval.collectAsStateWithLifecycle()
                         val changePercentage by settingsViewModel.changePercentageInterval.collectAsStateWithLifecycle()
+                        val showSparkline by settingsViewModel.showSparkline.collectAsStateWithLifecycle()
 
                         SettingsScreen(
                             selectedCurrency = uiState.selectedCurrency,
@@ -195,6 +196,11 @@ fun AppNavigation() {
                             changePercentage = changePercentage,
                             onChangePercentageSelected = { newChangePercentage ->
                                 settingsViewModel.setChangePercentageInterval(newChangePercentage)
+                                priceViewModel.refreshFromCache()
+                            },
+                            showSparkline = showSparkline,
+                            onShowSparklineSelected = { enabled ->
+                                settingsViewModel.setShowSparkline(enabled)
                                 priceViewModel.refreshFromCache()
                             },
                             developerModeEnabled = developerModeEnabled,

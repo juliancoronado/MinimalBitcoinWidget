@@ -24,6 +24,8 @@
     <string name="app_theme_dark">Scuro</string>
     <string name="dynamic_colors">Colori dinamici</string>
     <string name="dynamic_colors_subtitle">Segui i colori del tema del tuo dispositivo</string>
+    <string name="show_price_graph">Grafico del prezzo</string>
+    <string name="show_price_graph_subtitle">Mostra grafico del prezzo sulla dashboard</string>
     <string name="version">Versione</string>
     <string name="build_number">Numero build</string>
     <string name="contact">Contatti</string>
@@ -80,4 +82,5 @@
     <string name="debug_currency_label">Valuta simulata</string>
     <string name="debug_apply_btn">Applica modifiche</string>
     <string name="debug_mock_ui_applied">Stato dell\'interfaccia simulato applicato</string>
+    <string name="chart_unavailable_30d">Grafico non disponibile per l\'intervallo 30D</string>
 </resources>
