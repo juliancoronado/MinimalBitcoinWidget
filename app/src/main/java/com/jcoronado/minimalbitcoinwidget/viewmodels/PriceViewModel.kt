@@ -135,7 +135,7 @@ class PriceViewModel @JvmOverloads constructor(
             )
 
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
-            val boldPrice = prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, true)
+            val boldPrice = prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, false)
 
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
@@ -243,7 +243,7 @@ class PriceViewModel @JvmOverloads constructor(
             val repository = PriceRepository(context)
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
-            val boldPrice = prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, true)
+            val boldPrice = prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, false)
 
             if (repository.isMockUiEnabled()) {
                 val mockData = repository.getMockPriceData()

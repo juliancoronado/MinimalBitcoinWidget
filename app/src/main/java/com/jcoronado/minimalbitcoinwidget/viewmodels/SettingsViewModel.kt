@@ -63,7 +63,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun getSavedWidgetPriceBold(): Boolean {
-        return prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, true)
+        return prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, false)
     }
 
     fun setWidgetFont(newFont: WidgetFont) {

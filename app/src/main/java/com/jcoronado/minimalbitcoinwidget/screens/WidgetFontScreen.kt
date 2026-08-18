@@ -62,7 +62,7 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.WidgetBitmapUtils
 @Composable
 fun WidgetFontScreen(
     currentFont: WidgetFont,
-    currentBold: Boolean = true,
+    currentBold: Boolean = false,
     price: Double,
     percentageChange: Double,
     currency: String,

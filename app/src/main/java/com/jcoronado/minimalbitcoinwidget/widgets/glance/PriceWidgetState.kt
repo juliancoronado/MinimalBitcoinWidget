@@ -14,7 +14,7 @@ sealed class PriceWidgetState {
         val intervalLabelResId: Int,
         val currency: String,
         val fontKey: String = "google_sans_rounded",
-        val boldPrice: Boolean = true
+        val boldPrice: Boolean = false
     ) : PriceWidgetState()
 
     @Serializable
@@ -22,6 +22,6 @@ sealed class PriceWidgetState {
         val message: String,
         val lastValidState: Available? = null,
         val fontKey: String = "google_sans_rounded",
-        val boldPrice: Boolean = true
+        val boldPrice: Boolean = false
     ) : PriceWidgetState()
 }

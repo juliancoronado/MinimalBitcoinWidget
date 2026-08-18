@@ -86,7 +86,7 @@ class PriceWidget : GlanceAppWidget() {
             is PriceWidgetState.Error -> state.boldPrice
             is PriceWidgetState.Loading -> {
                 val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-                prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, true)
+                prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, false)
             }
         }
         val widgetFont = WidgetFont.fromKey(fontKey)
