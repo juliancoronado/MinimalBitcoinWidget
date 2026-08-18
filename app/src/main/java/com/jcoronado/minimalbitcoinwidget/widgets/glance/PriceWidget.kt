@@ -36,6 +36,9 @@ import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
+import androidx.glance.text.FontWeight
+import androidx.glance.text.Text
+import androidx.glance.text.TextStyle
 import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
@@ -49,20 +52,27 @@ class PriceWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            val state = currentState<PriceWidgetState>()
-            WidgetContent(state)
+            GlanceTheme(
+                colors = if (Build.VERSION.SDK_INT >= 31) {
+                    GlanceTheme.colors
+                } else {
+                    GlanceColorScheme.colors
+                }
+            ) {
+                val state = currentState<PriceWidgetState>()
+                WidgetContent(state)
+            }
         }
     }
 
-    @SuppressLint( "DiscouragedApi")
+    @SuppressLint("DiscouragedApi")
     @Composable
     private fun WidgetContent(state: PriceWidgetState) {
-        val context = LocalContext.current
-        val openAppIntent = Intent(context, MainActivity::class.java).apply {
-            flags =
-                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        val openAppIntent = Intent(LocalContext.current, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
 
+        val context = LocalContext.current
         val fontKey = when (state) {
             is PriceWidgetState.Available -> state.fontKey
             is PriceWidgetState.Error -> state.fontKey
@@ -71,8 +81,6 @@ class PriceWidget : GlanceAppWidget() {
                 prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
             }
         }
-        val widgetFont = WidgetFont.fromKey(fontKey)
-        val typeface = WidgetBitmapUtils.getTypeface(context, widgetFont)
         val boldPrice = when (state) {
             is PriceWidgetState.Available -> state.boldPrice
             is PriceWidgetState.Error -> state.boldPrice
@@ -81,70 +89,55 @@ class PriceWidget : GlanceAppWidget() {
                 prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, true)
             }
         }
+        val widgetFont = WidgetFont.fromKey(fontKey)
+        val typeface = WidgetBitmapUtils.getTypeface(context, widgetFont, isBold = false)
         val priceTypeface = WidgetBitmapUtils.getTypeface(context, widgetFont, isBold = boldPrice)
 
-        GlanceTheme(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                GlanceTheme.colors
-            } else {
-                GlanceColorScheme.colors
-            }
-        ) {
-            var backgroundModifier = GlanceModifier.fillMaxSize()
-            
-            // Check if the device's launcher provides a system-wide widget corner radius (Android 12+)
-            val systemCornerRadiusDefined = context.resources
-                .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
+        var backgroundModifier = GlanceModifier.fillMaxSize()
+        val systemCornerRadiusDefined = LocalContext.current.resources
+            .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
 
-            backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
-                // On Android 12+ (API 31 and above):
-                // We use the system-provided corner radius to match other widgets on the homescreen.
-                // GlanceTheme.colors.widgetBackground automatically handles Material You dynamic colors.
-                backgroundModifier
-                    .background(GlanceTheme.colors.widgetBackground)
-                    .appWidgetBackground()
-                    .cornerRadius(android.R.dimen.system_app_widget_background_radius)
-            } else {
-                // On Android 11 and lower (API 30 and below):
-                // The .cornerRadius() modifier does not work. We must use an XML shape drawable.
-                // R.drawable.glance_widget_bg has a hardcoded 16dp radius and uses standard 
-                // light/dark mode colors defined in values/glance_colors.xml and values-night/glance_colors.xml.
-                backgroundModifier
-                    .background(ImageProvider(R.drawable.glance_widget_bg))
-                    .appWidgetBackground()
-            }
+        backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
+            backgroundModifier
+                .background(GlanceTheme.colors.widgetBackground)
+                .appWidgetBackground()
+                .cornerRadius(android.R.dimen.system_app_widget_background_radius)
+        } else {
+            backgroundModifier
+                .background(ImageProvider(R.drawable.glance_widget_bg))
+                .appWidgetBackground()
+        }
 
-            Box(modifier = backgroundModifier) {
-                Column(
-                    modifier = GlanceModifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp)
-                        .clickable(actionStartActivity(openAppIntent)),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    val isMonospaced = (widgetFont == WidgetFont.GOOGLE_SANS_CODE)
-                    when (state) {
-                        is PriceWidgetState.Available -> {
-                            AvailableUI(state, GlanceModifier.defaultWeight(), typeface, priceTypeface, isMonospaced)
+        Box(modifier = backgroundModifier) {
+            Column(
+                modifier = GlanceModifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp)
+                    .clickable(actionStartActivity(openAppIntent)),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                val isMonospaced = (widgetFont == WidgetFont.GOOGLE_SANS_CODE)
+                when (state) {
+                    is PriceWidgetState.Available -> {
+                        AvailableUI(state, GlanceModifier.defaultWeight(), typeface, priceTypeface, isMonospaced)
+                    }
+
+                    is PriceWidgetState.Error -> {
+                        if (state.lastValidState != null) {
+                            AvailableUI(
+                                state.lastValidState,
+                                GlanceModifier.defaultWeight(),
+                                typeface,
+                                priceTypeface,
+                                isMonospaced,
+                                error = true
+                            )
+                        } else {
+                            ErrorUI(state, typeface)
                         }
+                    }
 
-                        is PriceWidgetState.Error -> {
-                            if (state.lastValidState != null) {
-                                AvailableUI(
-                                    state.lastValidState,
-                                    GlanceModifier.defaultWeight(),
-                                    typeface,
-                                    priceTypeface,
-                                    isMonospaced,
-                                    error = true
-                                )
-                            } else {
-                                ErrorUI(state, typeface)
-                            }
-                        }
-
-                        is PriceWidgetState.Loading -> {
-                            CircularProgressIndicator()
-                        }
+                    is PriceWidgetState.Loading -> {
+                        CircularProgressIndicator()
                     }
                 }
             }
@@ -171,29 +164,49 @@ class PriceWidget : GlanceAppWidget() {
     private fun ErrorUI(state: PriceWidgetState.Error, typeface: Typeface?) {
         val context = LocalContext.current
         val errorLabel = "${context.getString(R.string.error)}:"
-        val labelBitmap = WidgetBitmapUtils.createTextBitmap(
-            context = context,
-            text = errorLabel,
-            fontSizeSp = 12f,
-            typeface = typeface
-        )
-        val messageBitmap = WidgetBitmapUtils.createTextBitmap(
-            context = context,
-            text = state.message,
-            fontSizeSp = 12f,
-            typeface = typeface
-        )
-        Image(
-            provider = ImageProvider(labelBitmap),
-            contentDescription = errorLabel,
-            colorFilter = ColorFilter.tint(GlanceTheme.colors.error)
-        )
-        Spacer(modifier = GlanceModifier.height(2.dp))
-        Image(
-            provider = ImageProvider(messageBitmap),
-            contentDescription = state.message,
-            colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
-        )
+        val message = state.message
+
+        if (typeface != null) {
+            val labelBitmap = WidgetBitmapUtils.createTextBitmap(
+                context = context,
+                text = errorLabel,
+                fontSizeSp = 12f,
+                typeface = typeface
+            )
+            val messageBitmap = WidgetBitmapUtils.createTextBitmap(
+                context = context,
+                text = message,
+                fontSizeSp = 12f,
+                typeface = typeface
+            )
+            Image(
+                provider = ImageProvider(labelBitmap),
+                contentDescription = errorLabel,
+                colorFilter = ColorFilter.tint(GlanceTheme.colors.error)
+            )
+            Spacer(modifier = GlanceModifier.height(2.dp))
+            Image(
+                provider = ImageProvider(messageBitmap),
+                contentDescription = message,
+                colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
+            )
+        } else {
+            Text(
+                text = errorLabel,
+                style = TextStyle(
+                    color = GlanceTheme.colors.error,
+                    fontSize = 12.sp
+                )
+            )
+            Spacer(modifier = GlanceModifier.height(2.dp))
+            Text(
+                text = message,
+                style = TextStyle(
+                    color = GlanceTheme.colors.onSurface,
+                    fontSize = 12.sp
+                )
+            )
+        }
     }
 
     @Composable
@@ -201,12 +214,7 @@ class PriceWidget : GlanceAppWidget() {
         val context = LocalContext.current
         val headerText = "/ ${currency.uppercase()} ・ ${context.getString(intervalLabel)}"
         val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize(isMonospaced)
-        val headerBitmap = WidgetBitmapUtils.createTextBitmap(
-            context = context,
-            text = headerText,
-            fontSizeSp = fontSize,
-            typeface = typeface
-        )
+
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -217,11 +225,27 @@ class PriceWidget : GlanceAppWidget() {
                 modifier = GlanceModifier.size(14.dp)
             )
             Spacer(modifier = GlanceModifier.width(2.dp))
-            Image(
-                provider = ImageProvider(headerBitmap),
-                contentDescription = headerText,
-                colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary)
-            )
+            if (typeface != null) {
+                val headerBitmap = WidgetBitmapUtils.createTextBitmap(
+                    context = context,
+                    text = headerText,
+                    fontSizeSp = fontSize,
+                    typeface = typeface
+                )
+                Image(
+                    provider = ImageProvider(headerBitmap),
+                    contentDescription = headerText,
+                    colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary)
+                )
+            } else {
+                Text(
+                    text = headerText,
+                    style = TextStyle(
+                        color = GlanceTheme.colors.secondary,
+                        fontSize = fontSize.sp
+                    )
+                )
+            }
         }
     }
 
@@ -230,52 +254,103 @@ class PriceWidget : GlanceAppWidget() {
         val context = LocalContext.current
         val priceData = FormatUtils.formatPriceSeparated(state.price, state.currency)
         val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(state.price, isMonospaced)
-
-        val symbolBitmap = WidgetBitmapUtils.createTextBitmap(
-            context = context,
-            text = priceData.symbol,
-            fontSizeSp = symbolFontSize,
-            typeface = typeface,
-            isBold = state.boldPrice
-        )
-
-        val priceBitmap = WidgetBitmapUtils.createTextBitmap(
-            context = context,
-            text = priceData.price,
-            fontSizeSp = priceFontSize,
-            typeface = typeface,
-            isBold = state.boldPrice
-        )
+        val fontWeight = if (state.boldPrice) FontWeight.Bold else FontWeight.Normal
 
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (priceData.symbolAtStart) {
-                // symbol on left
-                Image(
-                    provider = ImageProvider(symbolBitmap),
-                    contentDescription = priceData.symbol,
-                    colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
-                )
-                Spacer(modifier = GlanceModifier.width(2.dp))
-                Image(
-                    provider = ImageProvider(priceBitmap),
-                    contentDescription = priceData.price,
-                    colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
-                )
+                if (typeface != null) {
+                    val symbolBitmap = WidgetBitmapUtils.createTextBitmap(
+                        context = context,
+                        text = priceData.symbol,
+                        fontSizeSp = symbolFontSize,
+                        typeface = typeface,
+                        isBold = state.boldPrice
+                    )
+                    val priceBitmap = WidgetBitmapUtils.createTextBitmap(
+                        context = context,
+                        text = priceData.price,
+                        fontSizeSp = priceFontSize,
+                        typeface = typeface,
+                        isBold = state.boldPrice
+                    )
+                    Image(
+                        provider = ImageProvider(symbolBitmap),
+                        contentDescription = priceData.symbol,
+                        colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
+                    )
+                    Spacer(modifier = GlanceModifier.width(2.dp))
+                    Image(
+                        provider = ImageProvider(priceBitmap),
+                        contentDescription = priceData.price,
+                        colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
+                    )
+                } else {
+                    Text(
+                        text = priceData.symbol,
+                        style = TextStyle(
+                            color = GlanceTheme.colors.onSurface,
+                            fontSize = symbolFontSize.sp,
+                            fontWeight = fontWeight
+                        )
+                    )
+                    Spacer(modifier = GlanceModifier.width(2.dp))
+                    Text(
+                        text = priceData.price,
+                        style = TextStyle(
+                            color = GlanceTheme.colors.onSurface,
+                            fontSize = priceFontSize.sp,
+                            fontWeight = fontWeight
+                        )
+                    )
+                }
             } else {
-                // symbol on right (Euros in some regions)
-                Image(
-                    provider = ImageProvider(priceBitmap),
-                    contentDescription = priceData.price,
-                    colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
-                )
-                Spacer(modifier = GlanceModifier.width(2.dp))
-                Image(
-                    provider = ImageProvider(symbolBitmap),
-                    contentDescription = priceData.symbol,
-                    colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
-                )
+                if (typeface != null) {
+                    val priceBitmap = WidgetBitmapUtils.createTextBitmap(
+                        context = context,
+                        text = priceData.price,
+                        fontSizeSp = priceFontSize,
+                        typeface = typeface,
+                        isBold = state.boldPrice
+                    )
+                    val symbolBitmap = WidgetBitmapUtils.createTextBitmap(
+                        context = context,
+                        text = priceData.symbol,
+                        fontSizeSp = symbolFontSize,
+                        typeface = typeface,
+                        isBold = state.boldPrice
+                    )
+                    Image(
+                        provider = ImageProvider(priceBitmap),
+                        contentDescription = priceData.price,
+                        colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
+                    )
+                    Spacer(modifier = GlanceModifier.width(2.dp))
+                    Image(
+                        provider = ImageProvider(symbolBitmap),
+                        contentDescription = priceData.symbol,
+                        colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
+                    )
+                } else {
+                    Text(
+                        text = priceData.price,
+                        style = TextStyle(
+                            color = GlanceTheme.colors.onSurface,
+                            fontSize = priceFontSize.sp,
+                            fontWeight = fontWeight
+                        )
+                    )
+                    Spacer(modifier = GlanceModifier.width(2.dp))
+                    Text(
+                        text = priceData.symbol,
+                        style = TextStyle(
+                            color = GlanceTheme.colors.onSurface,
+                            fontSize = symbolFontSize.sp,
+                            fontWeight = fontWeight
+                        )
+                    )
+                }
             }
         }
     }
@@ -307,12 +382,6 @@ class PriceWidget : GlanceAppWidget() {
         val formatPattern = "%.2f%%"
         val changeText = String.format(formatPattern, changePercentage)
         val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize(isMonospaced)
-        val changeBitmap = WidgetBitmapUtils.createTextBitmap(
-            context = context,
-            text = changeText,
-            fontSizeSp = fontSize,
-            typeface = typeface
-        )
 
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -324,11 +393,27 @@ class PriceWidget : GlanceAppWidget() {
                 modifier = GlanceModifier.size(16.dp).padding(top = 2.dp)
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
-            Image(
-                provider = ImageProvider(changeBitmap),
-                contentDescription = changeText,
-                colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary)
-            )
+            if (typeface != null) {
+                val changeBitmap = WidgetBitmapUtils.createTextBitmap(
+                    context = context,
+                    text = changeText,
+                    fontSizeSp = fontSize,
+                    typeface = typeface
+                )
+                Image(
+                    provider = ImageProvider(changeBitmap),
+                    contentDescription = changeText,
+                    colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary)
+                )
+            } else {
+                Text(
+                    text = changeText,
+                    style = TextStyle(
+                        color = GlanceTheme.colors.secondary,
+                        fontSize = fontSize.sp
+                    )
+                )
+            }
             if (error) {
                 Spacer(modifier = GlanceModifier.width(4.dp))
                 Box(

@@ -13,14 +13,13 @@ import kotlin.math.ceil
 object WidgetBitmapUtils {
 
     fun getTypeface(context: Context, widgetFont: WidgetFont, isBold: Boolean = false): Typeface? {
-        val baseTypeface = if (widgetFont.fontResId != null) {
-            try {
-                ResourcesCompat.getFont(context, widgetFont.fontResId) ?: Typeface.DEFAULT
-            } catch (_: Exception) {
-                Typeface.DEFAULT
-            }
-        } else {
-            Typeface.DEFAULT
+        if (widgetFont.fontResId == null) {
+            return null
+        }
+        val baseTypeface = try {
+            ResourcesCompat.getFont(context, widgetFont.fontResId) ?: return null
+        } catch (_: Exception) {
+            return null
         }
 
         return if (isBold) {
