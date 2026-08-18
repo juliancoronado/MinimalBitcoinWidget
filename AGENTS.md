@@ -70,20 +70,9 @@ Key directories and files:
 - **Mock UI State:** A Mock UI mode is available in the Developer Options screen. When enabled, it allows simulating static, user-defined custom data (Price, Change %, and Currency) for screenshots and testing.
 - **Interception Logic:** When active (`Prefs.DEBUG_MOCK_UI_ENABLED`), standard loading, live API fetches, widget redrawing, and background worker fetches (`PriceUpdateWorker`) are bypassed to persistently display the custom mock configurations without calling the CoinGecko API.
 
-### 7. Release Builds & Native Debug Symbols
+### 8. Testing, Tooling and Running the App
 
-- **Native Debug Symbols:** When generating a signed release bundle (`.aab`) for Google Play Console submission, native debug symbols (from native dependencies such as `androidx.graphics.path`) should be packaged into a `.zip` archive named with the current app version and build number (e.g., `native-debug-symbols-v<versionName>-<versionCode>.zip`).
-- **Source Directory:** The unstripped native library ABI folders (`arm64-v8a`, `armeabi-v7a`, `x86`, `x86_64`) are located at:
-  `app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib`
-- **Packaging Instructions:** Zip the ABI folders directly so the archive root contains the ABI directory hierarchy (`<abi>/<library>.so`), and output the zip to the base of the project folder:
-  ```bash
-  # Example for v3.3.0 (build 19)
-  cd app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib && zip -r ../../../../../../../native-debug-symbols-v3.3.0-19.zip arm64-v8a armeabi-v7a x86 x86_64 && cd -
-  ```
-
-### 8. Testing & Tooling
-
-- For ADB locale switching scripts and build helper functions, see [COMMANDS.md](COMMANDS.md).
+- For ADB emulator commands, ADB locale switching scripts, build helper functions, see [COMMANDS.md](COMMANDS.md).
 
 ## General AI Instructions
 
