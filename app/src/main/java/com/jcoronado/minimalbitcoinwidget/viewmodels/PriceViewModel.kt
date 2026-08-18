@@ -17,6 +17,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.data.Resource
 import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
@@ -234,6 +235,9 @@ class PriceViewModel @JvmOverloads constructor(
          */
         fun refreshWidgetsFromCache(context: Context) {
             val repository = PriceRepository(context)
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+            val boldPrice = prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, true)
 
             if (repository.isMockUiEnabled()) {
                 val mockData = repository.getMockPriceData()
@@ -243,7 +247,9 @@ class PriceViewModel @JvmOverloads constructor(
                     price = mockData.currentPrice,
                     changePercentage = mockData.priceChangePercentage24h,
                     intervalLabelResId = R.string.interval_24h,
-                    currency = mockCurrency
+                    currency = mockCurrency,
+                    fontKey = fontKey,
+                    boldPrice = boldPrice
                 )
 
                 // update glance widgets
@@ -259,7 +265,6 @@ class PriceViewModel @JvmOverloads constructor(
             val priceData = repository.getCachedPriceData() ?: return
             val currencyCode = repository.getSelectedCurrency()
 
-            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
             val percentage = priceData.getPercentageForInterval(selectedInterval)
             val interval = TimeInterval.fromValue(selectedInterval)
@@ -268,7 +273,9 @@ class PriceViewModel @JvmOverloads constructor(
                 price = priceData.currentPrice,
                 changePercentage = percentage,
                 intervalLabelResId = interval.labelResId,
-                currency = currencyCode
+                currency = currencyCode,
+                fontKey = fontKey,
+                boldPrice = boldPrice
             )
 
             // update glance widgets

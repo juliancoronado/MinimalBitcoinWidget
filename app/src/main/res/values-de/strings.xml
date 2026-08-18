@@ -22,6 +22,16 @@
     <string name="app_theme_system">System</string>
     <string name="app_theme_light">Hell</string>
     <string name="app_theme_dark">Dunkel</string>
+    <string name="customize_widget">Widget anpassen</string>
+    <string name="widget_font">Widget-Schriftart</string>
+    <string name="widget_font_preview_header">Vorschau</string>
+    <string name="widget_font_options_header">Verfügbare Schriftarten</string>
+    <string name="text_options">Textoptionen</string>
+    <string name="bold_price_text">Fetter Preis</string>
+    <string name="bold_price_text_subtitle">Preis in fetter Schrift anzeigen</string>
+    <string name="bold_price_icon_description">Symbol für fetten Text</string>
+    <string name="widget_font_icon_description">Widget-Schriftartensymbol</string>
+    <string name="font_system_default">Systemstandard</string>
     <string name="dynamic_colors">Dynamische Farben</string>
     <string name="dynamic_colors_subtitle">Farben vom Gerätedesign übernehmen</string>
     <string name="show_price_graph">Preisdiagramm</string>

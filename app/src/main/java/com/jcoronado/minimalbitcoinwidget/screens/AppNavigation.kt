@@ -183,6 +183,7 @@ fun AppNavigation() {
                             },
                             currentTheme = currentTheme,
                             onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
+                            onNavigateToWidgetFont = { backStack.add(Screen.WidgetFont) },
                             dynamicColors = dynamicColors,
                             onDynamicColorsSelected = { newDynamicColors ->
                                 settingsViewModel.updateDynamicColorsFlag(
@@ -207,6 +208,25 @@ fun AppNavigation() {
                             onDebugModeToggle = { enabled ->
                                 settingsViewModel.setDeveloperModeEnabled(enabled)
                             })
+                    }
+                    entry<Screen.WidgetFont> {
+                        val currentWidgetFont by settingsViewModel.widgetFont.collectAsStateWithLifecycle()
+                        val currentBold by settingsViewModel.widgetPriceBold.collectAsStateWithLifecycle()
+                        WidgetFontScreen(
+                            currentFont = currentWidgetFont,
+                            currentBold = currentBold,
+                            price = uiState.price,
+                            percentageChange = uiState.percentageChange,
+                            currency = uiState.selectedCurrency,
+                            intervalLabelResId = uiState.changeIntervalLabelResId,
+                            onSave = { selectedFont, isBold ->
+                                settingsViewModel.saveWidgetCustomization(selectedFont, isBold)
+                                backStack.removeLastOrNull()
+                            },
+                            onCancel = {
+                                backStack.removeLastOrNull()
+                            }
+                        )
                     }
                     entry<Screen.DeveloperOptions> {
                         val mockUiEnabled by settingsViewModel.debugMockUiEnabled.collectAsStateWithLifecycle()
