@@ -17,6 +17,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.PriceData
 import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.data.Resource
 import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
@@ -129,8 +130,11 @@ class PriceViewModel @JvmOverloads constructor(
                 changeIntervalLabelResId = currentState.changeIntervalLabelResId,
                 percentageChange = if (currentState.percentageChange == 0.0) 2.03 else currentState.percentageChange,
                 price = if (currentState.price == 0.0) 52849.10 else currentState.price,
-                errorMessage = null
+                errorMessage = null,
+                selectedCurrency = currentState.selectedCurrency
             )
+
+            val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
 
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
@@ -140,7 +144,8 @@ class PriceViewModel @JvmOverloads constructor(
                         price = currentState.price,
                         changePercentage = currentState.percentageChange,
                         intervalLabelResId = currentState.changeIntervalLabelResId,
-                        currency = currentState.selectedCurrency
+                        currency = currentState.selectedCurrency,
+                        fontKey = fontKey
                     )
                 )
             } catch (e: Exception) {
@@ -234,6 +239,8 @@ class PriceViewModel @JvmOverloads constructor(
          */
         fun refreshWidgetsFromCache(context: Context) {
             val repository = PriceRepository(context)
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
 
             if (repository.isMockUiEnabled()) {
                 val mockData = repository.getMockPriceData()
@@ -243,7 +250,8 @@ class PriceViewModel @JvmOverloads constructor(
                     price = mockData.currentPrice,
                     changePercentage = mockData.priceChangePercentage24h,
                     intervalLabelResId = R.string.interval_24h,
-                    currency = mockCurrency
+                    currency = mockCurrency,
+                    fontKey = fontKey
                 )
 
                 // update glance widgets
@@ -259,7 +267,6 @@ class PriceViewModel @JvmOverloads constructor(
             val priceData = repository.getCachedPriceData() ?: return
             val currencyCode = repository.getSelectedCurrency()
 
-            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
             val percentage = priceData.getPercentageForInterval(selectedInterval)
             val interval = TimeInterval.fromValue(selectedInterval)
@@ -268,7 +275,8 @@ class PriceViewModel @JvmOverloads constructor(
                 price = priceData.currentPrice,
                 changePercentage = percentage,
                 intervalLabelResId = interval.labelResId,
-                currency = currencyCode
+                currency = currencyCode,
+                fontKey = fontKey
             )
 
             // update glance widgets

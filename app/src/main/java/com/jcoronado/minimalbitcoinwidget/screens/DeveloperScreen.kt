@@ -122,7 +122,7 @@ fun DeveloperOptionsScreen(
                     Text(
                         stringResource(R.string.developer_title),
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                     )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -317,7 +317,7 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                 Text(
                     stringResource(R.string.widget_logs),
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
                 )
             }, navigationIcon = {
                 IconButton(onClick = {

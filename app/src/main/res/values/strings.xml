@@ -47,6 +47,13 @@
     <string name="app_theme_system">System</string>
     <string name="app_theme_light">Light</string>
     <string name="app_theme_dark">Dark</string>
+    <string name="customize_widget">Customize Widget</string>
+    <string name="widget_font">Widget Font</string>
+    <string name="widget_font_preview_header">Preview</string>
+    <string name="widget_font_options_header">Available Fonts</string>
+    <string name="widget_font_icon_description">Widget font icon</string>
+    <string name="font_app_default">App Default</string>
+    <string name="font_system_default">System Default</string>
     <string name="dynamic_colors">Dynamic Colors</string>
     <string name="dynamic_colors_subtitle">Follow colors from your device theme</string>
     <string name="show_price_graph">Price Graph</string>

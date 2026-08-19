@@ -57,53 +57,6 @@ This document serves as a structured technical specification for an AI agent to 
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
   3. Ensure `PriceUpdateWorker` only needs to trigger Glance updates.
 
-### Task 5: Custom Widget Font Selection & Dynamic Typography
-- **Goal:** Allow users to choose their preferred typography for the Glance home screen widget (e.g. Google Sans Rounded, Manrope, Google Sans Code, System Default).
-- **Context & Constraints:**
-  - Android `RemoteViews` and Jetpack Glance cannot load custom `.ttf`/`.otf` font files across process boundaries via standard `Text(style = TextStyle(fontFamily = ...))` composables.
-  - Custom font rendering in widgets is achieved by drawing text onto a crisp `Bitmap` using Android `Canvas` + `Paint` (`ANTI_ALIAS_FLAG`), then displaying it via Glance `Image(ImageProvider(bitmap), colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface))` to ensure automatic Material You dynamic theming and dark mode compatibility.
-- **Target Files:**
-  - Font Assets: `app/src/main/res/font/google_sans_flex_rounded.ttf`, `app/src/main/res/font/manrope_bold.ttf`, `app/src/main/res/font/google_sans_code.ttf`
-  - Model & Constants: `classes/WidgetFont.kt`, `classes/Prefs.kt`
-  - Settings UI: `screens/SettingsScreen.kt`, `viewmodels/SettingsViewModel.kt`
-  - Widget UI: `widgets/glance/PriceWidget.kt`, `widgets/glance/PriceWidgetState.kt`
-  - Translations: All 9 `values*/strings.xml` files for font labels.
-- **Instructions:**
-  1. **Define `WidgetFont` Model:**
-     - Create an enum/class representing available font choices (`SYSTEM_DEFAULT`, `GOOGLE_SANS_ROUNDED`, `MANROPE`, `GOOGLE_SANS_CODE`) with `@StringRes` name and `@FontRes` font resource ID.
-  2. **Add Preference Storage:**
-     - Add `Prefs.SELECTED_WIDGET_FONT` (or DataStore equivalent) with `GOOGLE_SANS_ROUNDED` or `SYSTEM_DEFAULT` as default.
-  3. **Settings Screen Integration:**
-     - Add a settings row/dialog in `SettingsScreen.kt` with a live visual preview of `$62,884.21` rendered in each available font.
-     - On selection, update preference and trigger immediate widget refresh via `PriceViewModel.updateGlanceWidgets()`.
-  4. **Glance Widget Bitmap Renderer:**
-     - In `PriceWidget.kt` (or a dedicated `WidgetBitmapUtils.kt`), implement text bitmap creation:
-       ```kotlin
-       fun createTextBitmap(
-           context: Context,
-           text: String,
-           fontSizeSp: Float,
-           typeface: Typeface?
-       ): Bitmap {
-           val density = context.resources.displayMetrics.density
-           val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-               this.typeface = typeface
-               this.textSize = fontSizeSp * density
-               this.color = Color.WHITE
-           }
-           val width = ceil(paint.measureText(text)).toInt().coerceAtLeast(1)
-           val fontMetrics = paint.fontMetrics
-           val height = ceil(fontMetrics.descent - fontMetrics.ascent).toInt().coerceAtLeast(1)
-           val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-           val canvas = Canvas(bitmap)
-           canvas.drawText(text, 0f, -fontMetrics.ascent, paint)
-           return bitmap
-       }
-       ```
-     - Resolve the user's selected `Typeface` via `ResourcesCompat.getFont(context, fontResId)` (or `Typeface.DEFAULT`).
-     - Render the price and symbol strings into Bitmaps and display them using Glance's `Image(provider = ImageProvider(bitmap), colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface))`.
-  5. **Localization:**
-     - Provide translations across all 9 `strings.xml` files for the font picker title and font names.
 
 
 

@@ -6,7 +6,9 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
@@ -63,6 +65,7 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.metadata
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.jcoronado.minimalbitcoinwidget.R
@@ -183,6 +186,7 @@ fun AppNavigation() {
                             },
                             currentTheme = currentTheme,
                             onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
+                            onNavigateToWidgetFont = { backStack.add(Screen.WidgetFont) },
                             dynamicColors = dynamicColors,
                             onDynamicColorsSelected = { newDynamicColors ->
                                 settingsViewModel.updateDynamicColorsFlag(
@@ -207,6 +211,23 @@ fun AppNavigation() {
                             onDebugModeToggle = { enabled ->
                                 settingsViewModel.setDeveloperModeEnabled(enabled)
                             })
+                    }
+                    entry<Screen.WidgetFont> {
+                        val currentWidgetFont by settingsViewModel.widgetFont.collectAsStateWithLifecycle()
+                        WidgetFontScreen(
+                            currentFont = currentWidgetFont,
+                            price = uiState.price,
+                            percentageChange = uiState.percentageChange,
+                            currency = uiState.selectedCurrency,
+                            intervalLabelResId = uiState.changeIntervalLabelResId,
+                            onSave = { selectedFont ->
+                                settingsViewModel.setWidgetFont(selectedFont)
+                                backStack.removeLastOrNull()
+                            },
+                            onBack = {
+                                backStack.removeLastOrNull()
+                            }
+                        )
                     }
                     entry<Screen.DeveloperOptions> {
                         val mockUiEnabled by settingsViewModel.debugMockUiEnabled.collectAsStateWithLifecycle()

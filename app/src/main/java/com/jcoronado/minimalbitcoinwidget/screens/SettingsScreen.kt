@@ -56,12 +56,15 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.jcoronado.minimalbitcoinwidget.BuildConfig
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
 import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 
@@ -72,6 +75,7 @@ fun SettingsScreen(
     onCurrencySelected: (String) -> Unit = {},
     currentTheme: AppTheme,
     onThemeSelected: (AppTheme) -> Unit = {},
+    onNavigateToWidgetFont: () -> Unit = {},
     dynamicColors: Boolean,
     onDynamicColorsSelected: (Boolean) -> Unit = {},
     refreshInterval: Int = 1,
@@ -181,7 +185,7 @@ fun SettingsScreen(
                     Text(
                         stringResource(R.string.settings),
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                     )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -337,7 +341,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 0, count = 3
+                            index = 0, count = 4
                         ),
                         leadingContent = {
                             Icon(
@@ -366,7 +370,7 @@ fun SettingsScreen(
                                         label = systemThemeLabel,
                                         weight = if (currentTheme == AppTheme.SYSTEM) 1F else 0.9F,
                                         onCheckedChange = {
-                                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                             onThemeSelected(AppTheme.SYSTEM)
                                         },
                                     )
@@ -397,7 +401,35 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 1, count = 3
+                        index = 1, count = 4
+                    ),
+                    leadingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_widgets_24),
+                            stringResource(R.string.widget_font_icon_description)
+                        )
+                    },
+                    content = {
+                        Text(
+                            stringResource(R.string.customize_widget),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    },
+                    trailingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_chevron_forward_24),
+                            stringResource(R.string.open_arrow_icon_description)
+                        )
+                    },
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        onNavigateToWidgetFont()
+                    },
+                )
+                SegmentedListItem(
+                    colors = colors,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        index = 2, count = 4
                     ),
                     leadingContent = {
                         Icon(
@@ -433,7 +465,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 2, count = 3
+                        index = 3, count = 4
                     ),
                     leadingContent = {
                         Icon(
