@@ -26,11 +26,8 @@
     <string name="widget_font">Police du widget</string>
     <string name="widget_font_preview_header">Aperçu</string>
     <string name="widget_font_options_header">Polices disponibles</string>
-    <string name="text_options">Options de texte</string>
-    <string name="bold_price_text">Prix en gras</string>
-    <string name="bold_price_text_subtitle">Afficher le prix en gras</string>
-    <string name="bold_price_icon_description">Icône de texte en gras</string>
     <string name="widget_font_icon_description">Icône de police du widget</string>
+    <string name="font_app_default">Par défaut de l\'application</string>
     <string name="font_system_default">Système par défaut</string>
     <string name="dynamic_colors">Couleurs dynamiques</string>
     <string name="dynamic_colors_subtitle">Suivre les couleurs du thème de votre appareil</string>

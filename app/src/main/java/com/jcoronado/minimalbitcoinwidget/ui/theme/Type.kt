@@ -17,31 +17,46 @@ val googleSansCodeFontFamily = FontFamily(
 )
 
 @OptIn(ExperimentalTextApi::class)
-val googleSansFlexFontFamily = FontFamily(
+val googleSansRoundedFontFamily = FontFamily(
     fonts = listOf(
         Font(
-            resId = R.font.google_sans_flex,
+            resId = R.font.google_sans_flex_rounded,
             weight = FontWeight.Normal,
             variationSettings = FontVariation.Settings(
                 FontVariation.weight(400)
             )
         ),
         Font(
-            resId = R.font.google_sans_flex,
+            resId = R.font.google_sans_flex_rounded,
             weight = FontWeight.Medium,
             variationSettings = FontVariation.Settings(
                 FontVariation.weight(500)
             )
         ),
         Font(
-            resId = R.font.google_sans_flex,
+            resId = R.font.google_sans_flex_rounded,
             weight = FontWeight.SemiBold,
             variationSettings = FontVariation.Settings(
                 FontVariation.weight(600)
             )
         ),
+        Font(
+            resId = R.font.google_sans_flex_rounded,
+            weight = FontWeight.Bold,
+            variationSettings = FontVariation.Settings(
+                FontVariation.weight(700)
+            )
+        ),
+        Font(
+            resId = R.font.google_sans_flex_rounded,
+            weight = FontWeight.ExtraBold,
+            variationSettings = FontVariation.Settings(
+                FontVariation.weight(800)
+            )
+        )
     )
 )
+
 val appTypography = Typography(
-    fontFamily = googleSansFlexFontFamily
+    fontFamily = googleSansRoundedFontFamily
 )

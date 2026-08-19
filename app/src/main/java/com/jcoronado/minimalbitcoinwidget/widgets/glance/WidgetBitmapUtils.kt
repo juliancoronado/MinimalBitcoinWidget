@@ -12,7 +12,7 @@ import kotlin.math.ceil
 
 object WidgetBitmapUtils {
 
-    fun getTypeface(context: Context, widgetFont: WidgetFont, isBold: Boolean = false): Typeface? {
+    fun getTypeface(context: Context, widgetFont: WidgetFont): Typeface? {
         if (widgetFont.fontResId == null) {
             return null
         }
@@ -22,11 +22,7 @@ object WidgetBitmapUtils {
             return null
         }
 
-        return if (isBold) {
-            Typeface.create(baseTypeface, 700, false)
-        } else {
-            Typeface.create(baseTypeface, 400, false)
-        }
+        return Typeface.create(baseTypeface, 400, false)
     }
 
     /**
@@ -61,8 +57,7 @@ object WidgetBitmapUtils {
         context: Context,
         text: String,
         fontSizeSp: Float,
-        typeface: Typeface?,
-        isBold: Boolean = false
+        typeface: Typeface?
     ): Bitmap {
         val textSizePx = android.util.TypedValue.applyDimension(
             android.util.TypedValue.COMPLEX_UNIT_SP,
@@ -73,13 +68,6 @@ object WidgetBitmapUtils {
             this.typeface = typeface
             this.textSize = textSizePx
             this.color = Color.WHITE
-            if (isBold) {
-                if (typeface == null || typeface.weight < 600) {
-                    this.isFakeBoldText = true
-                }
-            } else {
-                this.isFakeBoldText = false
-            }
         }
 
         val width = ceil(paint.measureText(text)).toInt().coerceAtLeast(1)

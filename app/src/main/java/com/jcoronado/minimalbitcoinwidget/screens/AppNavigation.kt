@@ -6,7 +6,9 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
@@ -63,6 +65,7 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.metadata
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.jcoronado.minimalbitcoinwidget.R
@@ -211,19 +214,17 @@ fun AppNavigation() {
                     }
                     entry<Screen.WidgetFont> {
                         val currentWidgetFont by settingsViewModel.widgetFont.collectAsStateWithLifecycle()
-                        val currentBold by settingsViewModel.widgetPriceBold.collectAsStateWithLifecycle()
                         WidgetFontScreen(
                             currentFont = currentWidgetFont,
-                            currentBold = currentBold,
                             price = uiState.price,
                             percentageChange = uiState.percentageChange,
                             currency = uiState.selectedCurrency,
                             intervalLabelResId = uiState.changeIntervalLabelResId,
-                            onSave = { selectedFont, isBold ->
-                                settingsViewModel.saveWidgetCustomization(selectedFont, isBold)
+                            onSave = { selectedFont ->
+                                settingsViewModel.setWidgetFont(selectedFont)
                                 backStack.removeLastOrNull()
                             },
-                            onCancel = {
+                            onBack = {
                                 backStack.removeLastOrNull()
                             }
                         )

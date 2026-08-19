@@ -26,11 +26,8 @@
     <string name="widget_font">Fuente del widget</string>
     <string name="widget_font_preview_header">Vista previa</string>
     <string name="widget_font_options_header">Fuentes disponibles</string>
-    <string name="text_options">Opciones de texto</string>
-    <string name="bold_price_text">Precio en negrita</string>
-    <string name="bold_price_text_subtitle">Mostrar el precio en negrita</string>
-    <string name="bold_price_icon_description">Icono de texto en negrita</string>
     <string name="widget_font_icon_description">Icono de fuente del widget</string>
+    <string name="font_app_default">Predeterminado de la app</string>
     <string name="font_system_default">Predeterminado del sistema</string>
     <string name="dynamic_colors">Colores dinámicos</string>
     <string name="dynamic_colors_subtitle">Usar colores del tema del dispositivo</string>

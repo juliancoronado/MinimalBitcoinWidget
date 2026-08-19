@@ -81,17 +81,8 @@ class PriceWidget : GlanceAppWidget() {
                 prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
             }
         }
-        val boldPrice = when (state) {
-            is PriceWidgetState.Available -> state.boldPrice
-            is PriceWidgetState.Error -> state.boldPrice
-            is PriceWidgetState.Loading -> {
-                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-                prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, false)
-            }
-        }
         val widgetFont = WidgetFont.fromKey(fontKey)
-        val typeface = WidgetBitmapUtils.getTypeface(context, widgetFont, isBold = false)
-        val priceTypeface = WidgetBitmapUtils.getTypeface(context, widgetFont, isBold = boldPrice)
+        val typeface = WidgetBitmapUtils.getTypeface(context, widgetFont)
 
         var backgroundModifier = GlanceModifier.fillMaxSize()
         val systemCornerRadiusDefined = LocalContext.current.resources
@@ -115,10 +106,10 @@ class PriceWidget : GlanceAppWidget() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val isMonospaced = (widgetFont == WidgetFont.GOOGLE_SANS_CODE)
+                val isMonospaced = false
                 when (state) {
                     is PriceWidgetState.Available -> {
-                        AvailableUI(state, GlanceModifier.defaultWeight(), typeface, priceTypeface, isMonospaced)
+                        AvailableUI(state, GlanceModifier.defaultWeight(), typeface, isMonospaced)
                     }
 
                     is PriceWidgetState.Error -> {
@@ -127,7 +118,6 @@ class PriceWidget : GlanceAppWidget() {
                                 state.lastValidState,
                                 GlanceModifier.defaultWeight(),
                                 typeface,
-                                priceTypeface,
                                 isMonospaced,
                                 error = true
                             )
@@ -149,13 +139,12 @@ class PriceWidget : GlanceAppWidget() {
         state: PriceWidgetState.Available,
         modifier: GlanceModifier,
         typeface: Typeface?,
-        priceTypeface: Typeface?,
         isMonospaced: Boolean,
         error: Boolean = false
     ) {
         Header(state.currency, state.intervalLabelResId, typeface, isMonospaced)
         Spacer(modifier)
-        PriceValue(state, priceTypeface, isMonospaced)
+        PriceValue(state, typeface, isMonospaced)
         Spacer(modifier)
         PriceChange(state.changePercentage, error, typeface, isMonospaced)
     }
@@ -254,7 +243,6 @@ class PriceWidget : GlanceAppWidget() {
         val context = LocalContext.current
         val priceData = FormatUtils.formatPriceSeparated(state.price, state.currency)
         val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(state.price, isMonospaced)
-        val fontWeight = if (state.boldPrice) FontWeight.Bold else FontWeight.Normal
 
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -265,15 +253,13 @@ class PriceWidget : GlanceAppWidget() {
                         context = context,
                         text = priceData.symbol,
                         fontSizeSp = symbolFontSize,
-                        typeface = typeface,
-                        isBold = state.boldPrice
+                        typeface = typeface
                     )
                     val priceBitmap = WidgetBitmapUtils.createTextBitmap(
                         context = context,
                         text = priceData.price,
                         fontSizeSp = priceFontSize,
-                        typeface = typeface,
-                        isBold = state.boldPrice
+                        typeface = typeface
                     )
                     Image(
                         provider = ImageProvider(symbolBitmap),
@@ -291,8 +277,7 @@ class PriceWidget : GlanceAppWidget() {
                         text = priceData.symbol,
                         style = TextStyle(
                             color = GlanceTheme.colors.onSurface,
-                            fontSize = symbolFontSize.sp,
-                            fontWeight = fontWeight
+                            fontSize = symbolFontSize.sp
                         )
                     )
                     Spacer(modifier = GlanceModifier.width(2.dp))
@@ -300,8 +285,7 @@ class PriceWidget : GlanceAppWidget() {
                         text = priceData.price,
                         style = TextStyle(
                             color = GlanceTheme.colors.onSurface,
-                            fontSize = priceFontSize.sp,
-                            fontWeight = fontWeight
+                            fontSize = priceFontSize.sp
                         )
                     )
                 }
@@ -311,15 +295,13 @@ class PriceWidget : GlanceAppWidget() {
                         context = context,
                         text = priceData.price,
                         fontSizeSp = priceFontSize,
-                        typeface = typeface,
-                        isBold = state.boldPrice
+                        typeface = typeface
                     )
                     val symbolBitmap = WidgetBitmapUtils.createTextBitmap(
                         context = context,
                         text = priceData.symbol,
                         fontSizeSp = symbolFontSize,
-                        typeface = typeface,
-                        isBold = state.boldPrice
+                        typeface = typeface
                     )
                     Image(
                         provider = ImageProvider(priceBitmap),
@@ -337,8 +319,7 @@ class PriceWidget : GlanceAppWidget() {
                         text = priceData.price,
                         style = TextStyle(
                             color = GlanceTheme.colors.onSurface,
-                            fontSize = priceFontSize.sp,
-                            fontWeight = fontWeight
+                            fontSize = priceFontSize.sp
                         )
                     )
                     Spacer(modifier = GlanceModifier.width(2.dp))
@@ -346,8 +327,7 @@ class PriceWidget : GlanceAppWidget() {
                         text = priceData.symbol,
                         style = TextStyle(
                             color = GlanceTheme.colors.onSurface,
-                            fontSize = symbolFontSize.sp,
-                            fontWeight = fontWeight
+                            fontSize = symbolFontSize.sp
                         )
                     )
                 }

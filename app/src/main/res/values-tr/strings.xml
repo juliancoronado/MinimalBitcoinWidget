@@ -25,12 +25,9 @@
     <string name="customize_widget">Widget\'ı Özelleştir</string>
     <string name="widget_font">Widget Yazı Tipi</string>
     <string name="widget_font_preview_header">Önizleme</string>
-    <string name="widget_font_options_header">Mevcut Yazı Tipleri</string>
-    <string name="text_options">Metin Seçenekleri</string>
-    <string name="bold_price_text">Kalın Fiyat</string>
-    <string name="bold_price_text_subtitle">Fiyatı kalın metin olarak göster</string>
-    <string name="bold_price_icon_description">Kalın metin simgesi</string>
+    <string name="widget_font_options_header">Kullanılabilir Yazı Tipleri</string>
     <string name="widget_font_icon_description">Widget yazı tipi simgesi</string>
+    <string name="font_app_default">Uygulama Varsayılanı</string>
     <string name="font_system_default">Sistem Varsayılanı</string>
     <string name="dynamic_colors">Dinamik Renkler</string>
     <string name="dynamic_colors_subtitle">Cihaz temasındaki renkleri kullan</string>

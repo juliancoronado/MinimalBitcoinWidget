@@ -135,7 +135,6 @@ class PriceViewModel @JvmOverloads constructor(
             )
 
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
-            val boldPrice = prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, false)
 
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
@@ -146,8 +145,7 @@ class PriceViewModel @JvmOverloads constructor(
                         changePercentage = currentState.percentageChange,
                         intervalLabelResId = currentState.changeIntervalLabelResId,
                         currency = currentState.selectedCurrency,
-                        fontKey = fontKey,
-                        boldPrice = boldPrice
+                        fontKey = fontKey
                     )
                 )
             } catch (e: Exception) {
@@ -243,7 +241,6 @@ class PriceViewModel @JvmOverloads constructor(
             val repository = PriceRepository(context)
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
-            val boldPrice = prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, false)
 
             if (repository.isMockUiEnabled()) {
                 val mockData = repository.getMockPriceData()
@@ -254,8 +251,7 @@ class PriceViewModel @JvmOverloads constructor(
                     changePercentage = mockData.priceChangePercentage24h,
                     intervalLabelResId = R.string.interval_24h,
                     currency = mockCurrency,
-                    fontKey = fontKey,
-                    boldPrice = boldPrice
+                    fontKey = fontKey
                 )
 
                 // update glance widgets
@@ -280,8 +276,7 @@ class PriceViewModel @JvmOverloads constructor(
                 changePercentage = percentage,
                 intervalLabelResId = interval.labelResId,
                 currency = currencyCode,
-                fontKey = fontKey,
-                boldPrice = boldPrice
+                fontKey = fontKey
             )
 
             // update glance widgets

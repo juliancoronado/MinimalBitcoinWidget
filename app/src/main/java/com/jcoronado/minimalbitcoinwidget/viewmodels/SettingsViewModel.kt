@@ -21,7 +21,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
     private val _theme = MutableStateFlow(getSavedTheme())
     private val _widgetFont = MutableStateFlow(getSavedWidgetFont())
-    private val _widgetPriceBold = MutableStateFlow(getSavedWidgetPriceBold())
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
     private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
     private val _changePercentageInterval = MutableStateFlow(getSavedChangePercentageInterval())
@@ -30,7 +29,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     val theme: StateFlow<AppTheme> = _theme.asStateFlow()
     val widgetFont: StateFlow<WidgetFont> = _widgetFont.asStateFlow()
-    val widgetPriceBold: StateFlow<Boolean> = _widgetPriceBold.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
     val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
@@ -62,29 +60,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         return WidgetFont.fromKey(fontKey)
     }
 
-    private fun getSavedWidgetPriceBold(): Boolean {
-        return prefs.getBoolean(Prefs.WIDGET_PRICE_BOLD, false)
-    }
-
     fun setWidgetFont(newFont: WidgetFont) {
         _widgetFont.value = newFont
         prefs.edit(commit = true) { putString(Prefs.SELECTED_WIDGET_FONT, newFont.key) }
-        PriceViewModel.refreshWidgetsFromCache(getApplication())
-    }
-
-    fun setWidgetPriceBold(isBold: Boolean) {
-        _widgetPriceBold.value = isBold
-        prefs.edit(commit = true) { putBoolean(Prefs.WIDGET_PRICE_BOLD, isBold) }
-        PriceViewModel.refreshWidgetsFromCache(getApplication())
-    }
-
-    fun saveWidgetCustomization(newFont: WidgetFont, isBold: Boolean) {
-        _widgetFont.value = newFont
-        _widgetPriceBold.value = isBold
-        prefs.edit(commit = true) {
-            putString(Prefs.SELECTED_WIDGET_FONT, newFont.key)
-            putBoolean(Prefs.WIDGET_PRICE_BOLD, isBold)
-        }
         PriceViewModel.refreshWidgetsFromCache(getApplication())
     }
 

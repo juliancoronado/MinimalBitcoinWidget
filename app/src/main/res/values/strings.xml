@@ -51,13 +51,8 @@
     <string name="widget_font">Widget Font</string>
     <string name="widget_font_preview_header">Preview</string>
     <string name="widget_font_options_header">Available Fonts</string>
-    <string name="text_options">Text Options</string>
-    <string name="bold_price_text">Bold Price</string>
-    <string name="bold_price_text_subtitle">Display the price in bold</string>
-    <string name="bold_price_icon_description">Bold text icon</string>
     <string name="widget_font_icon_description">Widget font icon</string>
-    <string name="font_google_sans_rounded" translatable="false">Google Sans Rounded</string>
-    <string name="font_google_sans_code" translatable="false">Google Sans Code</string>
+    <string name="font_app_default">App Default</string>
     <string name="font_system_default">System Default</string>
     <string name="dynamic_colors">Dynamic Colors</string>
     <string name="dynamic_colors_subtitle">Follow colors from your device theme</string>

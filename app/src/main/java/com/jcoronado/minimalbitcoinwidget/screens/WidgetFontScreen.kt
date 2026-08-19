@@ -11,14 +11,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -32,13 +31,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedListItem
-import androidx.compose.material3.Switch
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -62,21 +60,19 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.WidgetBitmapUtils
 @Composable
 fun WidgetFontScreen(
     currentFont: WidgetFont,
-    currentBold: Boolean = false,
     price: Double,
     percentageChange: Double,
     currency: String,
     @StringRes intervalLabelResId: Int,
-    onSave: (WidgetFont, Boolean) -> Unit,
-    onCancel: () -> Unit
+    onSave: (WidgetFont) -> Unit,
+    onBack: () -> Unit
 ) {
     val view = LocalView.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     var selectedFont by remember(currentFont) { mutableStateOf(currentFont) }
-    var isBoldPrice by remember(currentBold) { mutableStateOf(currentBold) }
 
     BackHandler {
-        onCancel()
+        onBack()
     }
 
     Scaffold(
@@ -85,13 +81,13 @@ fun WidgetFontScreen(
                 title = {
                     Text(
                         stringResource(R.string.customize_widget),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.SemiBold
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = {
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        onCancel()
+                        onBack()
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.rounded_arrow_back_24),
@@ -104,6 +100,32 @@ fun WidgetFontScreen(
                 ),
                 scrollBehavior = scrollBehavior
             )
+        },
+        bottomBar = {
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .navigationBarsPadding()
+                ) {
+                    Button(
+                        onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            onSave(selectedFont)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = stringResource(R.string.save),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -125,7 +147,6 @@ fun WidgetFontScreen(
                 // Live Widget Preview
                 GlanceWidgetPreviewCard(
                     selectedFont = selectedFont,
-                    isBoldPrice = isBoldPrice,
                     price = if (price > 0.0) price else 62884.21,
                     percentageChange = if (price > 0.0) percentageChange else 2.03,
                     currency = if (currency.isNotBlank()) currency else "USD",
@@ -133,7 +154,6 @@ fun WidgetFontScreen(
                 )
             }
 
-            val colors = ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
             val fontEntries = WidgetFont.entries
 
             Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
@@ -141,112 +161,31 @@ fun WidgetFontScreen(
                     title = stringResource(R.string.widget_font)
                 )
 
-                fontEntries.forEachIndexed { index, font ->
-                    val isSelected = (font == selectedFont)
-                    SegmentedListItem(
-                        colors = colors,
-                        shapes = ListItemDefaults.segmentedShapes(
-                            index = index,
-                            count = fontEntries.size
-                        ),
-                        leadingContent = {
-                            RadioButton(
-                                selected = isSelected,
-                                onClick = null
-                            )
-                        },
-                        content = {
+                SingleChoiceSegmentedButtonRow(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    fontEntries.forEachIndexed { index, font ->
+                        val isSelected = (font == selectedFont)
+                        SegmentedButton(
+                            selected = isSelected,
+                            onClick = {
+                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                                selectedFont = font
+                            },
+                            shape = SegmentedButtonDefaults.itemShape(
+                                index = index,
+                                count = fontEntries.size
+                            ),
+                            icon = {
+                                SegmentedButtonDefaults.Icon(active = isSelected)
+                            }
+                        ) {
                             Text(
                                 text = stringResource(font.labelResId),
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                             )
-                        },
-                        supportingContent = {
-                            Text(
-                                text = "$62,884.21",
-                                fontFamily = font.getFontFamily(),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(top = 2.dp)
-                            )
-                        },
-                        onClick = {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            selectedFont = font
                         }
-                    )
-                }
-            }
-
-            // Text Options Section
-            Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
-                SectionHeader(
-                    title = stringResource(R.string.text_options)
-                )
-
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 0,
-                        count = 1
-                    ),
-                    leadingContent = {
-                        Icon(
-                            painter = painterResource(R.drawable.rounded_format_bold_24),
-                            contentDescription = stringResource(R.string.bold_price_icon_description)
-                        )
-                    },
-                    content = {
-                        Text(
-                            text = stringResource(R.string.bold_price_text),
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    },
-                    supportingContent = {
-                        Text(
-                            text = stringResource(R.string.bold_price_text_subtitle),
-                            modifier = Modifier.padding(top = 2.dp)
-                        )
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = isBoldPrice,
-                            onCheckedChange = null
-                        )
-                    },
-                    onClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        isBoldPrice = !isBoldPrice
                     }
-                )
-            }
-
-            // Action Buttons
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .padding(bottom = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding() + 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                OutlinedButton(
-                    onClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        onCancel()
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
-
-                Button(
-                    onClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        onSave(selectedFont, isBoldPrice)
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(stringResource(R.string.save))
                 }
             }
         }
@@ -257,14 +196,12 @@ fun WidgetFontScreen(
 @Composable
 private fun GlanceWidgetPreviewCard(
     selectedFont: WidgetFont,
-    isBoldPrice: Boolean,
     price: Double,
     percentageChange: Double,
     currency: String,
     @StringRes intervalLabelResId: Int
 ) {
     val fontFamily = selectedFont.getFontFamily()
-    val priceFontWeight = if (isBoldPrice) FontWeight.Bold else FontWeight.Normal
     val priceData = FormatUtils.formatPriceSeparated(price, currency)
 
     val (trendIcon, trendColor) = if (percentageChange > 0) {
@@ -299,10 +236,8 @@ private fun GlanceWidgetPreviewCard(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Header Row
-                val isMonospaced = (selectedFont == WidgetFont.GOOGLE_SANS_CODE)
-                val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(price, isMonospaced)
-                val secondaryFontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize(isMonospaced)
+                val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(price, false)
+                val secondaryFontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize(false)
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -330,7 +265,6 @@ private fun GlanceWidgetPreviewCard(
                         Text(
                             text = priceData.symbol,
                             fontSize = symbolFontSize.sp,
-                            fontWeight = priceFontWeight,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = fontFamily
                         )
@@ -338,7 +272,6 @@ private fun GlanceWidgetPreviewCard(
                         Text(
                             text = priceData.price,
                             fontSize = priceFontSize.sp,
-                            fontWeight = priceFontWeight,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = fontFamily
                         )
@@ -346,7 +279,6 @@ private fun GlanceWidgetPreviewCard(
                         Text(
                             text = priceData.price,
                             fontSize = priceFontSize.sp,
-                            fontWeight = priceFontWeight,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = fontFamily
                         )
@@ -354,7 +286,6 @@ private fun GlanceWidgetPreviewCard(
                         Text(
                             text = priceData.symbol,
                             fontSize = symbolFontSize.sp,
-                            fontWeight = priceFontWeight,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = fontFamily
                         )

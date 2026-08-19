@@ -26,11 +26,8 @@
     <string name="widget_font">Carattere del widget</string>
     <string name="widget_font_preview_header">Anteprima</string>
     <string name="widget_font_options_header">Caratteri disponibili</string>
-    <string name="text_options">Opzioni testo</string>
-    <string name="bold_price_text">Prezzo in grassetto</string>
-    <string name="bold_price_text_subtitle">Mostra il prezzo in grassetto</string>
-    <string name="bold_price_icon_description">Icona testo in grassetto</string>
-    <string name="widget_font_icon_description">Icona del carattere del widget</string>
+    <string name="widget_font_icon_description">Icona carattere widget</string>
+    <string name="font_app_default">Predefinito dell\'app</string>
     <string name="font_system_default">Predefinito di sistema</string>
     <string name="dynamic_colors">Colori dinamici</string>
     <string name="dynamic_colors_subtitle">Segui i colori del tema del tuo dispositivo</string>
