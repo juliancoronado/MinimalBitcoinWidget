@@ -49,7 +49,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
@@ -202,6 +204,7 @@ private fun GlanceWidgetPreviewCard(
     @StringRes intervalLabelResId: Int
 ) {
     val fontFamily = selectedFont.getFontFamily()
+    val letterSpacing = if (selectedFont.letterSpacingEm > 0f) selectedFont.letterSpacingEm.em else TextUnit.Unspecified
     val priceData = FormatUtils.formatPriceSeparated(price, currency)
 
     val (trendIcon, trendColor) = if (percentageChange > 0) {
@@ -252,6 +255,7 @@ private fun GlanceWidgetPreviewCard(
                     Text(
                         text = "/ ${currency.uppercase()} ・ ${stringResource(intervalLabelResId)}",
                         fontSize = secondaryFontSize.sp,
+                        letterSpacing = letterSpacing,
                         color = MaterialTheme.colorScheme.secondary,
                         fontFamily = fontFamily
                     )
@@ -265,6 +269,7 @@ private fun GlanceWidgetPreviewCard(
                         Text(
                             text = priceData.symbol,
                             fontSize = symbolFontSize.sp,
+                            letterSpacing = letterSpacing,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = fontFamily
                         )
@@ -272,6 +277,7 @@ private fun GlanceWidgetPreviewCard(
                         Text(
                             text = priceData.price,
                             fontSize = priceFontSize.sp,
+                            letterSpacing = letterSpacing,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = fontFamily
                         )
@@ -279,6 +285,7 @@ private fun GlanceWidgetPreviewCard(
                         Text(
                             text = priceData.price,
                             fontSize = priceFontSize.sp,
+                            letterSpacing = letterSpacing,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = fontFamily
                         )
@@ -286,6 +293,7 @@ private fun GlanceWidgetPreviewCard(
                         Text(
                             text = priceData.symbol,
                             fontSize = symbolFontSize.sp,
+                            letterSpacing = letterSpacing,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = fontFamily
                         )
@@ -306,6 +314,7 @@ private fun GlanceWidgetPreviewCard(
                     Text(
                         text = String.format("%.2f%%", percentageChange),
                         fontSize = secondaryFontSize.sp,
+                        letterSpacing = letterSpacing,
                         color = MaterialTheme.colorScheme.secondary,
                         fontFamily = fontFamily
                     )

@@ -9,17 +9,20 @@ import com.jcoronado.minimalbitcoinwidget.ui.theme.googleSansRoundedFontFamily
 enum class WidgetFont(
     val key: String,
     @StringRes val labelResId: Int,
-    @FontRes val fontResId: Int?
+    @FontRes val fontResId: Int?,
+    val letterSpacingEm: Float = 0f
 ) {
     APP_DEFAULT(
         key = "app_default",
         labelResId = R.string.font_app_default,
-        fontResId = R.font.google_sans_flex_rounded
+        fontResId = R.font.google_sans_flex_rounded,
+        letterSpacingEm = 0.03f
     ),
     SYSTEM_DEFAULT(
         key = "system_default",
         labelResId = R.string.font_system_default,
-        fontResId = null
+        fontResId = null,
+        letterSpacingEm = 0f
     );
 
     fun getFontFamily(): FontFamily {

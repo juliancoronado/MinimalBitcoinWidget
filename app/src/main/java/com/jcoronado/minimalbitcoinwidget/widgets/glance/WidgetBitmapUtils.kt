@@ -12,6 +12,8 @@ import kotlin.math.ceil
 
 object WidgetBitmapUtils {
 
+    const val WIDGET_LETTER_SPACING_EM = 0.03f
+
     fun getTypeface(context: Context, widgetFont: WidgetFont): Typeface? {
         if (widgetFont.fontResId == null) {
             return null
@@ -57,7 +59,8 @@ object WidgetBitmapUtils {
         context: Context,
         text: String,
         fontSizeSp: Float,
-        typeface: Typeface?
+        typeface: Typeface?,
+        letterSpacingEm: Float = WIDGET_LETTER_SPACING_EM
     ): Bitmap {
         val textSizePx = android.util.TypedValue.applyDimension(
             android.util.TypedValue.COMPLEX_UNIT_SP,
@@ -68,6 +71,9 @@ object WidgetBitmapUtils {
             this.typeface = typeface
             this.textSize = textSizePx
             this.color = Color.WHITE
+            if (letterSpacingEm > 0f) {
+                this.letterSpacing = letterSpacingEm
+            }
         }
 
         val width = ceil(paint.measureText(text)).toInt().coerceAtLeast(1)
