@@ -1,29 +1,29 @@
 // Release notes for the Google Play Store listing
 // translations provided by Gemini AI
 
-// v3.3.0
+// v3.3.1
 
 <en-US>
-Visualize trends with the new interactive sparkline price chart, fluid price animations, and performance improvements.
+Visualize trends with the new interactive sparkline price chart, fluid price animations, and performance improvements. Version 3.3.1 includes a UI fix for currency sparkline rendering.
 </en-US>
 <es-ES>
-Visualiza tendencias con el nuevo gráfico interactivo de precios, animaciones fluidas y mejoras de rendimiento.
+Visualiza tendencias con el nuevo gráfico interactivo de precios, animaciones fluidas y mejoras de rendimiento. La versión 3.3.1 incluye una corrección de interfaz para el gráfico de líneas según la divisa.
 </es-ES>
 <de-DE>
-Visualisieren Sie Trends mit dem neuen interaktiven Preistrenddiagramm, flüssigen Preisanimationen und Leistungsverbesserungen.
+Visualisieren Sie Trends mit dem neuen interaktiven Preistrenddiagramm, flüssigen Preisanimationen und Leistungsverbesserungen. Version 3.3.1 enthält eine UI-Korrektur für die Sparkline-Darstellung bei verschiedenen Währungen.
 </de-DE>
 <fr-FR>
-Visualisez les tendances grâce au nouveau graphique interactif des prix, aux animations fluides et aux améliorations des performances.
+Visualisez les tendances grâce au nouveau graphique interactif des prix, aux animations fluides et aux améliorations des performances. La version 3.3.1 inclut un correctif d'interface utilisateur pour le rendu du graphique selon les devises.
 </fr-FR>
 <it-IT>
-Visualizza le tendenze con il nuovo grafico interattivo dei prezzi, animazioni fluide e miglioramenti delle prestazioni.
+Visualizza le tendenze con il nuovo grafico interattivo dei prezzi, animazioni fluide e miglioramenti delle prestazioni. La versione 3.3.1 include una correzione dell'interfaccia per il rendering del grafico a linee per le diverse valute.
 </it-IT>
 <pt-PT>
-Visualize tendências com o novo gráfico interativo de preços, animações fluidas e melhorias de desempenho.
+Visualize tendências com o novo gráfico interativo de preços, animações fluidas e melhorias de desempenho. A versão 3.3.1 inclui uma correção na interface para a renderização do gráfico de linhas entre moedas.
 </pt-PT>
 <pt-BR>
-Visualize tendências com o novo gráfico interativo de preços, animações fluidas e melhorias de desempenho.
+Visualize tendências com o novo gráfico interativo de preços, animaciones fluidas e melhorias de desempenho. A versão 3.3.1 inclui uma correção na interface para a renderização do gráfico de linhas entre moedas.
 </pt-BR>
 <tr-TR>
-Yeni etkileşimli fiyat grafiği, akıcı fiyat animasyonları ve performans iyileştirmeleriyle trendleri görselleştirin.
+Yeni etkileşimli fiyat grafiği, akıcı fiyat animasyonları ve performans iyileştirmeleriyle trendleri görselleştirin. 3.3.1 sürümü, para birimlerine göre mini grafik oluşturma için bir arayüz düzeltmesi içerir.
 </tr-TR>
