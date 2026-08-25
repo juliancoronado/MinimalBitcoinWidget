@@ -158,6 +158,50 @@ class PriceDataTest {
     }
 
     @Test
+    fun `getSparklineForInterval with non-USD high denomination currency preserves relative peak amplitude`() {
+        // Raw USD prices: baseline around 60000 with a 10% peak in the middle (66000)
+        val rawPrices = MutableList(25) { 60000.0 }
+        rawPrices[12] = 66000.0 // +10% peak
+
+        // Target currency is JPY with current price of 12,000,000 and 0% 24h net change
+        val testDataJpy = PriceData(
+            currentPrice = 12000000.0,
+            priceChangePercentage24h = 0.0,
+            priceChangePercentage7d = 0.0,
+            priceChangePercentage30d = 0.0,
+            sparklineIn7d = PriceData.SparklineData(prices = rawPrices)
+        )
+
+        val sparklineJpy = testDataJpy.getSparklineForInterval(0)
+        assertEquals(25, sparklineJpy.size)
+        assertEquals(12000000.0, sparklineJpy.first(), 0.001)
+        assertEquals(12000000.0, sparklineJpy.last(), 0.001)
+        // Peak should be scaled proportionally by +10% to 13,200,000 JPY
+        assertEquals(13200000.0, sparklineJpy[12], 0.001)
+        org.junit.Assert.assertTrue(
+            "JPY peak should be ~10% above baseline, not flattened",
+            sparklineJpy[12] > 13000000.0
+        )
+    }
+
+    @Test
+    fun `getSparklineForInterval with non-positive raw baseline falls back to target baseline`() {
+        val rawPrices = MutableList(25) { 0.0 }
+        val testData = PriceData(
+            currentPrice = 60000.0,
+            priceChangePercentage24h = 0.0,
+            priceChangePercentage7d = 0.0,
+            priceChangePercentage30d = 0.0,
+            sparklineIn7d = PriceData.SparklineData(prices = rawPrices)
+        )
+
+        val sparkline = testData.getSparklineForInterval(0)
+        assertEquals(25, sparkline.size)
+        assertEquals(60000.0, sparkline.first(), 0.001)
+        assertEquals(60000.0, sparkline.last(), 0.001)
+    }
+
+    @Test
     fun `getSparklineForInterval handles null sparkline gracefully`() {
         val sparkline = priceData.getSparklineForInterval(0)
         assertEquals(0, sparkline.size)
