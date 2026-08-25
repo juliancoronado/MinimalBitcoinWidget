@@ -8,6 +8,8 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import androidx.core.content.res.ResourcesCompat
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
+import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
+import com.jcoronado.minimalbitcoinwidget.utils.FormattedPrice
 import kotlin.math.ceil
 
 object WidgetBitmapUtils {
@@ -29,30 +31,40 @@ object WidgetBitmapUtils {
 
     /**
      * Calculates the optimal font size (in SP) for the price and currency symbol
-     * based on price magnitude and whether the font is monospaced (e.g. Google Sans Code).
+     * based on the total visual character length of the rendered price and symbol.
      */
-    fun getWidgetPriceFontSize(price: Double, isMonospaced: Boolean): Pair<Float, Float> {
-        val (priceSp, symbolSp) = if (isMonospaced) {
-            when {
-                price >= 1_000_000 -> Pair(16f, 13f)
-                price >= 100_000 -> Pair(18f, 14f)
-                else -> Pair(20f, 15f)
-            }
-        } else {
-            when {
-                price >= 1_000_000 -> Pair(19f, 15f)
-                price >= 100_000 -> Pair(21f, 15f)
-                else -> Pair(24f, 16f)
-            }
+    fun getWidgetPriceFontSize(formattedPrice: FormattedPrice): Pair<Float, Float> {
+        return getWidgetPriceFontSize(formattedPrice.price, formattedPrice.symbol)
+    }
+
+    /**
+     * Calculates the optimal font size (in SP) for the price and currency symbol
+     * based on the total character length of the price text and symbol.
+     */
+    fun getWidgetPriceFontSize(priceText: String, symbolText: String): Pair<Float, Float> {
+        val totalLength = priceText.length + symbolText.length
+        val (priceSp, symbolSp) = when {
+            totalLength <= 11 -> Pair(24f, 16f)
+            totalLength <= 13 -> Pair(21f, 15f)
+            totalLength <= 15 -> Pair(18f, 14f)
+            else -> Pair(15f, 12f)
         }
         return Pair(priceSp, symbolSp)
     }
 
     /**
+     * Overload calculating optimal font size (in SP) given a raw price and currency code.
+     */
+    fun getWidgetPriceFontSize(price: Double, currencyCode: String = "USD"): Pair<Float, Float> {
+        val formatted = FormatUtils.formatPriceSeparated(price, currencyCode)
+        return getWidgetPriceFontSize(formatted)
+    }
+
+    /**
      * Returns the optimal secondary font size (in SP) for headers and percentage changes.
      */
-    fun getWidgetSecondaryFontSize(isMonospaced: Boolean): Float {
-        return if (isMonospaced) 11f else 12f
+    fun getWidgetSecondaryFontSize(): Float {
+        return 12f
     }
 
     fun createTextBitmap(

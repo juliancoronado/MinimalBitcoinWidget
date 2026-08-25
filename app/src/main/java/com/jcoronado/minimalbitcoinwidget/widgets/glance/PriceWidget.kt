@@ -106,10 +106,9 @@ class PriceWidget : GlanceAppWidget() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val isMonospaced = false
                 when (state) {
                     is PriceWidgetState.Available -> {
-                        AvailableUI(state, GlanceModifier.defaultWeight(), typeface, isMonospaced)
+                        AvailableUI(state, GlanceModifier.defaultWeight(), typeface)
                     }
 
                     is PriceWidgetState.Error -> {
@@ -118,7 +117,6 @@ class PriceWidget : GlanceAppWidget() {
                                 state.lastValidState,
                                 GlanceModifier.defaultWeight(),
                                 typeface,
-                                isMonospaced,
                                 error = true
                             )
                         } else {
@@ -139,14 +137,13 @@ class PriceWidget : GlanceAppWidget() {
         state: PriceWidgetState.Available,
         modifier: GlanceModifier,
         typeface: Typeface?,
-        isMonospaced: Boolean,
         error: Boolean = false
     ) {
-        Header(state.currency, state.intervalLabelResId, typeface, isMonospaced)
+        Header(state.currency, state.intervalLabelResId, typeface)
         Spacer(modifier)
-        PriceValue(state, typeface, isMonospaced)
+        PriceValue(state, typeface)
         Spacer(modifier)
-        PriceChange(state.changePercentage, error, typeface, isMonospaced)
+        PriceChange(state.changePercentage, error, typeface)
     }
 
     @Composable
@@ -199,10 +196,10 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun Header(currency: String, intervalLabel: Int, typeface: Typeface?, isMonospaced: Boolean = false) {
+    private fun Header(currency: String, intervalLabel: Int, typeface: Typeface?) {
         val context = LocalContext.current
         val headerText = "/ ${currency.uppercase()} ・ ${context.getString(intervalLabel)}"
-        val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize(isMonospaced)
+        val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
 
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -239,10 +236,10 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun PriceValue(state: PriceWidgetState.Available, typeface: Typeface?, isMonospaced: Boolean = false) {
+    private fun PriceValue(state: PriceWidgetState.Available, typeface: Typeface?) {
         val context = LocalContext.current
         val priceData = FormatUtils.formatPriceSeparated(state.price, state.currency)
-        val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(state.price, isMonospaced)
+        val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(priceData)
 
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -337,7 +334,7 @@ class PriceWidget : GlanceAppWidget() {
 
     @SuppressLint("DefaultLocale")
     @Composable
-    private fun PriceChange(changePercentage: Double, error: Boolean, typeface: Typeface?, isMonospaced: Boolean = false) {
+    private fun PriceChange(changePercentage: Double, error: Boolean, typeface: Typeface?) {
         val context = LocalContext.current
         val (iconRes, color, iconDesc) = if (changePercentage > 0) {
             Triple(
@@ -361,7 +358,7 @@ class PriceWidget : GlanceAppWidget() {
 
         val formatPattern = "%.2f%%"
         val changeText = String.format(formatPattern, changePercentage)
-        val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize(isMonospaced)
+        val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
 
         Row(
             verticalAlignment = Alignment.CenterVertically

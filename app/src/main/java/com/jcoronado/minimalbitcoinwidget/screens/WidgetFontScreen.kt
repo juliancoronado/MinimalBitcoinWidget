@@ -239,8 +239,8 @@ private fun GlanceWidgetPreviewCard(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(price, false)
-                val secondaryFontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize(false)
+                val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(priceData)
+                val secondaryFontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
