@@ -15,6 +15,12 @@ Date Format: YYYY-MM-DD
 
 ---
 
+## [3.3.1] - 2026-08-25
+
+### Fixed
+
+- Fixed sparkline price trend chart flattening on non-USD currencies (such as JPY, MXN, and BRL) by using proportional relative currency scaling.
+
 ## [3.3.0] - 2026-08-17
 
 ### Added

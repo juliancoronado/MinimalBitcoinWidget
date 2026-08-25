@@ -72,8 +72,12 @@ data class PriceData(
             val t = i.toDouble() / (n - 1)
             val rawBaseline = r0 + t * (rEnd - r0)
             val targetBaseline = targetStartPrice + t * (targetEndPrice - targetStartPrice)
-            val fluctuation = slice[i] - rawBaseline
-            targetBaseline + fluctuation
+            if (rawBaseline <= 0.0) {
+                targetBaseline
+            } else {
+                val ratio = slice[i] / rawBaseline
+                targetBaseline * ratio
+            }
         }
     }
 }
