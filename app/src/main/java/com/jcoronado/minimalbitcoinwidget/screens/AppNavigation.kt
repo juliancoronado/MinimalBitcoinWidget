@@ -36,6 +36,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.ToggleButtonDefaults
+import androidx.compose.material3.ToggleButtonShapes
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
@@ -312,7 +313,7 @@ fun AppNavigation() {
                                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                         checkedContainerColor = MaterialTheme.colorScheme.primary,
                                         checkedContentColor = MaterialTheme.colorScheme.onPrimary
-                                    ), shapes = ToggleButtonDefaults.shapes(
+                                    ), shapes = ToggleButtonShapes(
                                         CircleShape, CircleShape, CircleShape
                                     ), modifier = Modifier.height(56.dp)
                                 ) {

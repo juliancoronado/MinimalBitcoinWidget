@@ -15,7 +15,7 @@ gson = "2.14.0"
 androidxComposeBom = "2026.08.00"
 activityCompose = "1.13.0"
 lifecycleViewmodelCompose = "2.11.0"
-material3Expressive = "1.5.0-alpha24" # alpha
+material3Expressive = "1.5.0-alpha26" # alpha
 # glance
 glance = "1.1.1"
 # navigation3
