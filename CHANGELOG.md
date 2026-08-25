@@ -9,9 +9,12 @@ Date Format: YYYY-MM-DD
 
 ## [Unreleased]
 
-### Changed
+### Added
 
-- Improved digit and character spacing on the Glance homescreen widget when using App Default (Google Sans Flex Rounded) font for better legibility.
+- Added new Google Sans Flex Rounded variable font to the app and Glance homescreen widget with a dedicated "Customize Widget" settings screen.
+- Added widget font customization options (App Default vs. System Default).
+
+### Changed
 
 ---
 
