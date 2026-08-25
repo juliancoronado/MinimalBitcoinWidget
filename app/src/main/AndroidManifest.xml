@@ -41,7 +41,9 @@
                 android:resource="@xml/price_widget_info" />
         </receiver>
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
             android:exported="true">
 

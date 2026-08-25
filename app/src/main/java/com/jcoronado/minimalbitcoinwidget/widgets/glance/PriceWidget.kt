@@ -68,10 +68,6 @@ class PriceWidget : GlanceAppWidget() {
     @SuppressLint("DiscouragedApi")
     @Composable
     private fun WidgetContent(state: PriceWidgetState) {
-        val openAppIntent = Intent(LocalContext.current, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        }
-
         val context = LocalContext.current
         val fontKey = when (state) {
             is PriceWidgetState.Available -> state.fontKey
@@ -102,7 +98,7 @@ class PriceWidget : GlanceAppWidget() {
         Box(modifier = backgroundModifier) {
             Column(
                 modifier = GlanceModifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp)
-                    .clickable(actionStartActivity(openAppIntent)),
+                    .clickable(actionStartActivity(Intent(context, MainActivity::class.java))),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
