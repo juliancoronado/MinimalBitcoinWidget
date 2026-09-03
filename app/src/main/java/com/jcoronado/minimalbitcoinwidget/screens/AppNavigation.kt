@@ -215,7 +215,7 @@ fun AppNavigation() {
                     }
                     entry<Screen.WidgetFont> {
                         val currentWidgetFont by settingsViewModel.widgetFont.collectAsStateWithLifecycle()
-                        WidgetFontScreen(
+                        CustomizeWidgetScreen(
                             currentFont = currentWidgetFont,
                             price = uiState.price,
                             percentageChange = uiState.percentageChange,

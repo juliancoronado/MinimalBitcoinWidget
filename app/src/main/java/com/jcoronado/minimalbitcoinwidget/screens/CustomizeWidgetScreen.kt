@@ -1,29 +1,25 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
 import android.annotation.SuppressLint
+import android.view.ContextThemeWrapper
 import android.view.HapticFeedbackConstants
+import android.widget.FrameLayout
+import android.widget.RemoteViews
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -41,26 +37,29 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.glance.appwidget.compose
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
-import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
-import com.jcoronado.minimalbitcoinwidget.widgets.glance.WidgetBitmapUtils
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun WidgetFontScreen(
+fun CustomizeWidgetScreen(
     currentFont: WidgetFont,
     price: Double,
     percentageChange: Double,
@@ -203,16 +202,27 @@ private fun GlanceWidgetPreviewCard(
     currency: String,
     @StringRes intervalLabelResId: Int
 ) {
-    val fontFamily = selectedFont.getFontFamily()
-    val letterSpacing = if (selectedFont.letterSpacingEm > 0f) selectedFont.letterSpacingEm.em else TextUnit.Unspecified
-    val priceData = FormatUtils.formatPriceSeparated(price, currency)
+    val context = LocalContext.current
+    val widgetState = remember(selectedFont, price, percentageChange, currency, intervalLabelResId) {
+        PriceWidgetState.Available(
+            price = price,
+            changePercentage = percentageChange,
+            intervalLabelResId = intervalLabelResId,
+            currency = currency,
+            fontKey = selectedFont.key
+        )
+    }
 
-    val (trendIcon, trendColor) = if (percentageChange > 0) {
-        Pair(R.drawable.rounded_trending_up_24, MaterialTheme.colorScheme.primary)
-    } else if (percentageChange < 0) {
-        Pair(R.drawable.rounded_trending_down_24, MaterialTheme.colorScheme.error)
-    } else {
-        Pair(R.drawable.rounded_trending_flat_24, MaterialTheme.colorScheme.secondary)
+    val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState) {
+        value = try {
+            PriceWidget().compose(
+                context = context,
+                size = DpSize(208.dp, 108.dp),
+                state = widgetState
+            )
+        } catch (e: Exception) {
+            null
+        }
     }
 
     Box(
@@ -221,105 +231,45 @@ private fun GlanceWidgetPreviewCard(
             .padding(vertical = 4.dp),
         contentAlignment = Alignment.Center
     ) {
-        Card(
-            modifier = Modifier
-                .width(208.dp)
-                .height(108.dp),
-            shape = RoundedCornerShape(28.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
-            ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-        ) {
-            Column(
+        if (remoteViews != null) {
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 14.dp, vertical = 10.dp),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .width(208.dp)
+                    .height(108.dp)
             ) {
-                val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(priceData)
-                val secondaryFontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.rounded_currency_bitcoin_24),
-                        contentDescription = stringResource(R.string.bitcoin_icon_description),
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.size(14.dp)
-                    )
-                    Spacer(modifier = Modifier.width(3.dp))
-                    Text(
-                        text = "/ ${currency.uppercase()} ・ ${stringResource(intervalLabelResId)}",
-                        fontSize = secondaryFontSize.sp,
-                        letterSpacing = letterSpacing,
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontFamily = fontFamily
-                    )
-                }
-
-                // Price Row
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (priceData.symbolAtStart) {
-                        Text(
-                            text = priceData.symbol,
-                            fontSize = symbolFontSize.sp,
-                            letterSpacing = letterSpacing,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontFamily = fontFamily
-                        )
-                        Spacer(modifier = Modifier.width(2.dp))
-                        Text(
-                            text = priceData.price,
-                            fontSize = priceFontSize.sp,
-                            letterSpacing = letterSpacing,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontFamily = fontFamily
-                        )
-                    } else {
-                        Text(
-                            text = priceData.price,
-                            fontSize = priceFontSize.sp,
-                            letterSpacing = letterSpacing,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontFamily = fontFamily
-                        )
-                        Spacer(modifier = Modifier.width(2.dp))
-                        Text(
-                            text = priceData.symbol,
-                            fontSize = symbolFontSize.sp,
-                            letterSpacing = letterSpacing,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontFamily = fontFamily
-                        )
+                AndroidView(
+                    modifier = Modifier.fillMaxSize(),
+                    factory = { ctx ->
+                        val themedContext = android.view.ContextThemeWrapper(ctx, android.R.style.Theme_DeviceDefault)
+                        val frameLayout = FrameLayout(themedContext)
+                        val inflated = remoteViews?.apply(themedContext, frameLayout)
+                        if (inflated != null) {
+                            frameLayout.addView(inflated)
+                        }
+                        frameLayout
+                    },
+                    update = { frameLayout ->
+                        frameLayout.removeAllViews()
+                        val themedContext = android.view.ContextThemeWrapper(frameLayout.context, android.R.style.Theme_DeviceDefault)
+                        val inflated = remoteViews?.apply(themedContext, frameLayout)
+                        if (inflated != null) {
+                            frameLayout.addView(inflated)
+                        }
                     }
-                }
-
-                // Percentage Change Row
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(trendIcon),
-                        contentDescription = null,
-                        tint = trendColor,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = String.format("%.2f%%", percentageChange),
-                        fontSize = secondaryFontSize.sp,
-                        letterSpacing = letterSpacing,
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontFamily = fontFamily
-                    )
-                }
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) {}
+                )
             }
+        } else {
+            // Fallback while loading
+            Box(
+                modifier = Modifier
+                    .width(208.dp)
+                    .height(108.dp)
+            )
         }
     }
 }
