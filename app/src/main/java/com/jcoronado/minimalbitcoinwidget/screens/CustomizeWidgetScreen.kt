@@ -1,12 +1,14 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.HapticFeedbackConstants
 import android.widget.FrameLayout
 import android.widget.RemoteViews
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +18,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -26,15 +30,20 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LoadingIndicatorDefaults
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -42,8 +51,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -145,14 +156,34 @@ fun CustomizeWidgetScreen(
                     top = true
                 )
 
-                // Live Widget Preview
-                GlanceWidgetPreviewCard(
-                    selectedFont = selectedFont,
-                    price = if (price > 0.0) price else 62884.21,
-                    percentageChange = if (price > 0.0) percentageChange else 2.03,
-                    currency = if (currency.isNotBlank()) currency else "USD",
-                    intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_24h
-                )
+                // Live Widget Preview Stage
+                CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                    SegmentedListItem(
+                        onClick = {},
+                        colors = ListItemDefaults.segmentedColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                        ),
+                        shapes = ListItemDefaults.segmentedShapes(
+                            index = 0,
+                            count = 1
+                        )
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            GlanceWidgetPreviewCard(
+                                selectedFont = selectedFont,
+                                price = if (price > 0.0) price else 62884.21,
+                                percentageChange = if (price > 0.0) percentageChange else 2.03,
+                                currency = if (currency.isNotBlank()) currency else "USD",
+                                intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_24h
+                            )
+                        }
+                    }
+                }
             }
 
             val fontEntries = WidgetFont.entries
@@ -193,6 +224,10 @@ fun CustomizeWidgetScreen(
     }
 }
 
+private val PREVIEW_WIDTH = 208.dp
+private val PREVIEW_HEIGHT = 108.dp
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DefaultLocale")
 @Composable
 private fun GlanceWidgetPreviewCard(
@@ -203,6 +238,23 @@ private fun GlanceWidgetPreviewCard(
     @StringRes intervalLabelResId: Int
 ) {
     val context = LocalContext.current
+    val density = LocalDensity.current
+
+    val widgetCornerRadius = remember(context, density) {
+        val systemRadiusId = context.resources.getIdentifier(
+            "system_app_widget_background_radius", "dimen", "android"
+        )
+        if (Build.VERSION.SDK_INT >= 31 && systemRadiusId != 0) {
+            val px = context.resources.getDimension(systemRadiusId)
+            with(density) { px.toDp() }
+        } else {
+            16.dp
+        }
+    }
+    val widgetShape = remember(widgetCornerRadius) {
+        RoundedCornerShape(widgetCornerRadius)
+    }
+
     val widgetState = remember(selectedFont, price, percentageChange, currency, intervalLabelResId) {
         PriceWidgetState.Available(
             price = price,
@@ -217,7 +269,7 @@ private fun GlanceWidgetPreviewCard(
         value = try {
             PriceWidget().compose(
                 context = context,
-                size = DpSize(208.dp, 108.dp),
+                size = DpSize(PREVIEW_WIDTH, PREVIEW_HEIGHT),
                 state = widgetState
             )
         } catch (e: Exception) {
@@ -226,23 +278,23 @@ private fun GlanceWidgetPreviewCard(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (remoteViews != null) {
+        val currentViews = remoteViews
+        if (currentViews != null) {
             Box(
                 modifier = Modifier
-                    .width(208.dp)
-                    .height(108.dp)
+                    .width(PREVIEW_WIDTH)
+                    .height(PREVIEW_HEIGHT)
             ) {
                 AndroidView(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(widgetShape),
                     factory = { ctx ->
-                        val themedContext = android.view.ContextThemeWrapper(ctx, android.R.style.Theme_DeviceDefault)
+                        val themedContext = ContextThemeWrapper(ctx, android.R.style.Theme_DeviceDefault)
                         val frameLayout = FrameLayout(themedContext)
-                        val inflated = remoteViews?.apply(themedContext, frameLayout)
+                        val inflated = currentViews.apply(themedContext, frameLayout)
                         if (inflated != null) {
                             frameLayout.addView(inflated)
                         }
@@ -250,8 +302,8 @@ private fun GlanceWidgetPreviewCard(
                     },
                     update = { frameLayout ->
                         frameLayout.removeAllViews()
-                        val themedContext = android.view.ContextThemeWrapper(frameLayout.context, android.R.style.Theme_DeviceDefault)
-                        val inflated = remoteViews?.apply(themedContext, frameLayout)
+                        val themedContext = ContextThemeWrapper(frameLayout.context, android.R.style.Theme_DeviceDefault)
+                        val inflated = currentViews.apply(themedContext, frameLayout)
                         if (inflated != null) {
                             frameLayout.addView(inflated)
                         }
@@ -260,16 +312,26 @@ private fun GlanceWidgetPreviewCard(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+                            shape = widgetShape
+                        )
                         .pointerInput(Unit) {}
                 )
             }
         } else {
-            // Fallback while loading
             Box(
                 modifier = Modifier
-                    .width(208.dp)
-                    .height(108.dp)
-            )
+                    .width(PREVIEW_WIDTH)
+                    .height(PREVIEW_HEIGHT),
+                contentAlignment = Alignment.Center
+            ) {
+                LoadingIndicator(
+                    modifier = Modifier.size(32.dp),
+                    polygons = LoadingIndicatorDefaults.IndeterminateIndicatorPolygons
+                )
+            }
         }
     }
 }
