@@ -1,6 +1,7 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.HapticFeedbackConstants
@@ -52,6 +53,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -239,6 +241,17 @@ private fun GlanceWidgetPreviewCard(
 ) {
     val context = LocalContext.current
     val density = LocalDensity.current
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+
+    val themedContext = remember(context, isDark) {
+        val uiModeNight = if (isDark) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
+        val config = Configuration(context.resources.configuration).apply {
+            uiMode = (uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or uiModeNight
+        }
+        val configContext = context.createConfigurationContext(config)
+        val themeResId = if (isDark) android.R.style.Theme_DeviceDefault else android.R.style.Theme_DeviceDefault_Light
+        ContextThemeWrapper(configContext, themeResId)
+    }
 
     val widgetCornerRadius = remember(context, density) {
         val systemRadiusId = context.resources.getIdentifier(
@@ -265,10 +278,10 @@ private fun GlanceWidgetPreviewCard(
         )
     }
 
-    val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState) {
+    val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState, themedContext) {
         value = try {
             PriceWidget().compose(
-                context = context,
+                context = themedContext,
                 size = DpSize(PREVIEW_WIDTH, PREVIEW_HEIGHT),
                 state = widgetState
             )
@@ -291,8 +304,7 @@ private fun GlanceWidgetPreviewCard(
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(widgetShape),
-                    factory = { ctx ->
-                        val themedContext = ContextThemeWrapper(ctx, android.R.style.Theme_DeviceDefault)
+                    factory = { _ ->
                         val frameLayout = FrameLayout(themedContext)
                         val inflated = currentViews.apply(themedContext, frameLayout)
                         if (inflated != null) {
@@ -302,7 +314,6 @@ private fun GlanceWidgetPreviewCard(
                     },
                     update = { frameLayout ->
                         frameLayout.removeAllViews()
-                        val themedContext = ContextThemeWrapper(frameLayout.context, android.R.style.Theme_DeviceDefault)
                         val inflated = currentViews.apply(themedContext, frameLayout)
                         if (inflated != null) {
                             frameLayout.addView(inflated)
