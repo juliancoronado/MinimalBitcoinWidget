@@ -1,29 +1,29 @@
 // Release notes for the Google Play Store listing
 // translations provided by Gemini AI
 
-// v3.3.1
+// v3.4.0
 
 <en-US>
-Visualize trends with the new interactive sparkline price chart, fluid price animations, and performance improvements. Version 3.3.1 includes a UI fix for currency sparkline rendering.
+Enjoy a fresh look with the new Google Sans Rounded font! In the new "Customize Widget" screen, you can easily customize your homescreen widget or switch back to your system font. We've also made backend improvements to fix errors and improve stability.
 </en-US>
 <es-ES>
-Visualiza tendencias con el nuevo gráfico interactivo de precios, animaciones fluidas y mejoras de rendimiento. La versión 3.3.1 incluye una corrección de interfaz para el gráfico de líneas según la divisa.
+¡Disfruta de un diseño renovado con la nueva fuente Google Sans Rounded! En la nueva pantalla «Personalizar widget», puedes personalizar fácilmente el widget de tu pantalla de inicio o volver a la fuente del sistema. También hemos realizado mejoras en el backend para corregir errores y mejorar la estabilidad.
 </es-ES>
 <de-DE>
-Visualisieren Sie Trends mit dem neuen interaktiven Preistrenddiagramm, flüssigen Preisanimationen und Leistungsverbesserungen. Version 3.3.1 enthält eine UI-Korrektur für die Sparkline-Darstellung bei verschiedenen Währungen.
+Genießen Sie einen frischen Look mit der neuen Schriftart Google Sans Rounded! Im neuen Bildschirm „Widget anpassen“ können Sie Ihr Startbildschirm-Widget ganz einfach anpassen oder zur Standardschriftart des Systems zurückkehren. Außerdem haben wir Backend-Verbesserungen vorgenommen, um Fehler zu beheben und die Stabilität zu verbessern.
 </de-DE>
 <fr-FR>
-Visualisez les tendances grâce au nouveau graphique interactif des prix, aux animations fluides et aux améliorations des performances. La version 3.3.1 inclut un correctif d'interface utilisateur pour le rendu du graphique selon les devises.
+Profitez d'un nouveau look avec la police Google Sans Rounded ! Dans le nouvel écran « Personnaliser le widget », personnalisez facilement le widget de votre écran d'accueil ou revenez à la police du système. Nous avons également apporté des améliorations au backend pour corriger des erreurs et améliorer la stabilité.
 </fr-FR>
 <it-IT>
-Visualizza le tendenze con il nuovo grafico interattivo dei prezzi, animazioni fluide e miglioramenti delle prestazioni. La versione 3.3.1 include una correzione dell'interfaccia per il rendering del grafico a linee per le diverse valute.
+Goditi un nuovo look con il nuovo carattere Google Sans Rounded! Nella nuova schermata "Personalizza widget", puoi personalizzare facilmente il widget della schermata iniziale o tornare al carattere di sistema. Abbiamo anche apportato miglioramenti al backend per correggere errori e migliorare la stabilità.
 </it-IT>
 <pt-PT>
-Visualize tendências com o novo gráfico interativo de preços, animações fluidas e melhorias de desempenho. A versão 3.3.1 inclui uma correção na interface para a renderização do gráfico de linhas entre moedas.
+Desfruta de um visual renovado com o novo tipo de letra Google Sans Rounded! No novo ecrã «Personalizar widget», podes personalizar facilmente o widget do ecrã principal ou voltar ao tipo de letra do sistema. Também fizemos melhorias no backend para corrigir erros e melhorar a estabilidade.
 </pt-PT>
 <pt-BR>
-Visualize tendências com o novo gráfico interativo de preços, animaciones fluidas e melhorias de desempenho. A versão 3.3.1 inclui uma correção na interface para a renderização do gráfico de linhas entre moedas.
+Aproveite um visual renovado com a nova fonte Google Sans Rounded! Na nova tela "Personalizar widget", você pode personalizar facilmente o widget da tela inicial ou voltar para a fonte do sistema. Também fizemos melhorias no backend para corrigir erros e aumentar a estabilidade.
 </pt-BR>
 <tr-TR>
-Yeni etkileşimli fiyat grafiği, akıcı fiyat animasyonları ve performans iyileştirmeleriyle trendleri görselleştirin. 3.3.1 sürümü, para birimlerine göre mini grafik oluşturma için bir arayüz düzeltmesi içerir.
+Yeni Google Sans Rounded yazı tipiyle yepyeni bir görünümün keyfini çıkarın! Yeni "Widget'ı Özelleştir" ekranında ana ekran widget'ınızı kolayca özelleştirebilir veya sistem yazı tipine geri dönebilirsiniz. Ayrıca hataları düzeltmek ve kararlılığı artırmak için arka uç iyileştirmeleri yaptık.
 </tr-TR>
