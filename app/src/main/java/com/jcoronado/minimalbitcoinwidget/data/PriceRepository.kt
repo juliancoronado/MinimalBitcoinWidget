@@ -175,7 +175,7 @@ class PriceRepository(private val context: Context) {
             }
         }
 
-        val url = Api.COINGECKO_API_URL + currency
+        val url = Api.BITCOIN_PRICE_API_URL + currency
         val request = Request.Builder().url(url).build()
 
         try {

@@ -158,8 +158,8 @@ fun fetchFromNetwork(
 ) {
     Log.d(TAG, "Fetching from network.")
     val currency = prefs.getString(Prefs.SELECTED_CURRENCY, AppConstants.CURRENCY_DEFAULT)
-    // current CoinGecko url to send GET request
-    val url = Api.COINGECKO_API_URL + currency
+    // current API url to send GET request
+    val url = Api.BITCOIN_PRICE_API_URL + currency
     val currencyInfo = getCurrencyInfo(currency)
 
     // OkHttp
