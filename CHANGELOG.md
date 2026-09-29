@@ -11,10 +11,20 @@ Date Format: YYYY-MM-DD
 
 ### Added
 
+### Changed
+
+---
+
+## [3.4.0] - 2026-09-29
+
+### Added
+
 - Added new Google Sans Flex Rounded variable font to the app and Glance homescreen widget with a dedicated "Customize Widget" settings screen.
 - Added widget font customization options (App Default vs. System Default).
 
 ### Changed
+
+- Migrated price fetching to a fast, CDN-cached backend proxy to improve widget refresh speed and reliability worldwide.
 
 ---
 
