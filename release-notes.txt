@@ -4,26 +4,38 @@
 // v3.4.0
 
 <en-US>
-Enjoy a fresh look with the new Google Sans Rounded font! In the new "Customize Widget" screen, you can easily customize your homescreen widget or switch back to your system font. We've also made backend improvements to fix errors and improve stability.
+• Fixes & Reliability: Upgraded backend infrastructure to resolve price update errors and improve widget stability.
+• New Customization: Enjoy a fresh look with a new font! Choose between the new style or your system default in the new "Customize Widget" screen.
 </en-US>
 <es-ES>
-¡Disfruta de un diseño renovado con la nueva fuente Google Sans Rounded! En la nueva pantalla «Personalizar widget», puedes personalizar fácilmente el widget de tu pantalla de inicio o volver a la fuente del sistema. También hemos realizado mejoras en el backend para corregir errores y mejorar la estabilidad.
+• Correcciones y fiabilidad: Se ha actualizado la infraestructura del backend para resolver los errores de actualización de precios y mejorar la estabilidad del widget.
+• Nueva personalización: ¡Disfruta de un diseño renovado con una nueva fuente! Elige entre el nuevo estilo o la fuente predeterminada del sistema en la nueva pantalla «Personalizar widget».
 </es-ES>
+<es-419>
+• Correcciones y confiabilidad: Se ha actualizado la infraestructura del backend para resolver los errores de actualización de precios y mejorar la estabilidad del widget.
+• Nueva personalización: ¡Disfruta de un diseño renovado con una nueva fuente! Elige entre el nuevo estilo o la fuente predeterminada del sistema en la nueva pantalla "Personalizar widget".
+</es-419>
 <de-DE>
-Genießen Sie einen frischen Look mit der neuen Schriftart Google Sans Rounded! Im neuen Bildschirm „Widget anpassen“ können Sie Ihr Startbildschirm-Widget ganz einfach anpassen oder zur Standardschriftart des Systems zurückkehren. Außerdem haben wir Backend-Verbesserungen vorgenommen, um Fehler zu beheben und die Stabilität zu verbessern.
+• Fehlerbehebungen & Zuverlässigkeit: Die Backend-Infrastruktur wurde aktualisiert, um Fehler bei der Preisaktualisierung zu beheben und die Widget-Stabilität zu verbessern.
+• Neue Anpassung: Genießen Sie einen frischen Look mit einer neuen Schriftart! Wählen Sie im neuen Bildschirm „Widget anpassen“ zwischen dem neuen Stil und der Standardschriftart Ihres Systems.
 </de-DE>
 <fr-FR>
-Profitez d'un nouveau look avec la police Google Sans Rounded ! Dans le nouvel écran « Personnaliser le widget », personnalisez facilement le widget de votre écran d'accueil ou revenez à la police du système. Nous avons également apporté des améliorations au backend pour corriger des erreurs et améliorer la stabilité.
+• Corrections et fiabilité : Mise à niveau de l'infrastructure backend pour résoudre les erreurs d'actualisation des prix et améliorer la stabilité du widget.
+• Nouvelle personnalisation : Profitez d'un nouveau look avec une nouvelle police ! Choisissez entre le nouveau style ou la police par défaut du système dans le nouvel écran « Personnaliser le widget ».
 </fr-FR>
 <it-IT>
-Goditi un nuovo look con il nuovo carattere Google Sans Rounded! Nella nuova schermata "Personalizza widget", puoi personalizzare facilmente il widget della schermata iniziale o tornare al carattere di sistema. Abbiamo anche apportato miglioramenti al backend per correggere errori e migliorare la stabilità.
+• Correzioni e affidabilità: Abbiamo aggiornato l'infrastruttura backend per risolvere gli errori di aggiornamento del prezzo e migliorare la stabilità del widget.
+• Nuova personalizzazione: Goditi un nuovo look con un nuovo carattere! Scegli tra il nuovo stile o il carattere predefinito di sistema nella nuova schermata "Personalizza widget".
 </it-IT>
 <pt-PT>
-Desfruta de um visual renovado com o novo tipo de letra Google Sans Rounded! No novo ecrã «Personalizar widget», podes personalizar facilmente o widget do ecrã principal ou voltar ao tipo de letra do sistema. Também fizemos melhorias no backend para corrigir erros e melhorar a estabilidade.
+• Correções e fiabilidade: Atualizámos a infraestrutura de backend para resolver erros na atualização do preço e melhorar a estabilidade do widget.
+• Nova personalização: Desfruta de um visual renovado com um novo tipo de letra! Escolhe entre o novo estilo ou a predefinição do sistema no novo ecrã «Personalizar widget».
 </pt-PT>
 <pt-BR>
-Aproveite um visual renovado com a nova fonte Google Sans Rounded! Na nova tela "Personalizar widget", você pode personalizar facilmente o widget da tela inicial ou voltar para a fonte do sistema. Também fizemos melhorias no backend para corrigir erros e aumentar a estabilidade.
+• Correções e confiabilidade: Atualizamos a infraestrutura do backend para resolver erros na atualização do preço e melhorar a estabilidade do widget.
+• Nova personalização: Aproveite um visual renovado com uma nova fonte! Escolha entre o novo estilo ou a fonte padrão do sistema na nova tela "Personalizar widget".
 </pt-BR>
 <tr-TR>
-Yeni Google Sans Rounded yazı tipiyle yepyeni bir görünümün keyfini çıkarın! Yeni "Widget'ı Özelleştir" ekranında ana ekran widget'ınızı kolayca özelleştirebilir veya sistem yazı tipine geri dönebilirsiniz. Ayrıca hataları düzeltmek ve kararlılığı artırmak için arka uç iyileştirmeleri yaptık.
+• Düzeltmeler ve Kararlılık: Fiyat güncelleme hatalarını çözmek ve widget kararlılığını artırmak için arka uç altyapısı yükseltildi.
+• Yeni Özelleştirme: Yeni bir yazı tipiyle yepyeni bir görünümün keyfini çıkarın! Yeni "Widget'ı Özelleştir" ekranında yeni stil ile sisteminizin varsayılan yazı tipi arasında seçim yapın.
 </tr-TR>
