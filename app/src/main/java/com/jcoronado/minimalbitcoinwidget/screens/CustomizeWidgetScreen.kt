@@ -95,7 +95,8 @@ fun CustomizeWidgetScreen(
                 title = {
                     Text(
                         stringResource(R.string.customize_widget),
-                        fontWeight = FontWeight.SemiBold
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Medium
                     )
                 },
                 navigationIcon = {
@@ -135,7 +136,7 @@ fun CustomizeWidgetScreen(
                     ) {
                         Text(
                             text = stringResource(R.string.save),
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
@@ -216,7 +217,7 @@ fun CustomizeWidgetScreen(
                         ) {
                             Text(
                                 text = stringResource(font.labelResId),
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                                fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal
                             )
                         }
                     }

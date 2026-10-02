@@ -65,7 +65,7 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: (
                     Text(
                         stringResource(R.string.app_name),
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                     )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -108,7 +108,7 @@ fun AddWidgetShortcut(onClick: () -> Unit) {
         content = {
             Text(
                 text = stringResource(R.string.add_widget_shortcut_title),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Medium
             )
         },
         supportingContent = {
