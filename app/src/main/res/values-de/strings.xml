@@ -22,6 +22,13 @@
     <string name="app_theme_system">System</string>
     <string name="app_theme_light">Hell</string>
     <string name="app_theme_dark">Dunkel</string>
+    <string name="customize_widget">Widget anpassen</string>
+    <string name="widget_font">Widget-Schriftart</string>
+    <string name="widget_font_preview_header">Vorschau</string>
+    <string name="widget_font_options_header">Verfügbare Schriftarten</string>
+    <string name="widget_font_icon_description">Widget-Schriftartensymbol</string>
+    <string name="font_app_default">App-Standard</string>
+    <string name="font_system_default">Systemstandard</string>
     <string name="dynamic_colors">Dynamische Farben</string>
     <string name="dynamic_colors_subtitle">Farben vom Gerätedesign übernehmen</string>
     <string name="show_price_graph">Preisdiagramm</string>

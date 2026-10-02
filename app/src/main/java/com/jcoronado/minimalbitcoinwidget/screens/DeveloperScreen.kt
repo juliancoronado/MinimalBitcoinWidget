@@ -60,6 +60,7 @@ import android.widget.Toast
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.activity.compose.PredictiveBackHandler
 import kotlin.coroutines.cancellation.CancellationException
+import androidx.compose.material3.ExposedDropdownMenu
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -100,7 +101,6 @@ fun DeveloperOptionsScreen(
         }
     }
 
-    // TODO - fix this crash please
     PredictiveBackHandler(enabled = isBackHandlerEnabled) { progressFlow ->
         isBackGestureInProgress = true
         isCurrencyMenuExpanded = false
@@ -122,7 +122,7 @@ fun DeveloperOptionsScreen(
                     Text(
                         stringResource(R.string.developer_title),
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                     )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -317,7 +317,7 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                 Text(
                     stringResource(R.string.widget_logs),
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
                 )
             }, navigationIcon = {
                 IconButton(onClick = {

@@ -38,9 +38,15 @@ object PriceWidgetStateDefinition : GlanceStateDefinition<PriceWidgetState> {
     object PriceWidgetStateSerializer : Serializer<PriceWidgetState> {
         override val defaultValue: PriceWidgetState = PriceWidgetState.Loading
 
+        private val json = Json {
+            ignoreUnknownKeys = true
+            encodeDefaults = true
+            isLenient = true
+        }
+
         override suspend fun readFrom(input: InputStream): PriceWidgetState {
             return try {
-                Json.decodeFromString(
+                json.decodeFromString(
                     PriceWidgetState.serializer(),
                     input.readBytes().decodeToString()
                 )
@@ -52,7 +58,7 @@ object PriceWidgetStateDefinition : GlanceStateDefinition<PriceWidgetState> {
         override suspend fun writeTo(t: PriceWidgetState, output: OutputStream) {
             output.use {
                 it.write(
-                    Json.encodeToString(PriceWidgetState.serializer(), t).toByteArray()
+                    json.encodeToString(PriceWidgetState.serializer(), t).toByteArray()
                 )
             }
         }

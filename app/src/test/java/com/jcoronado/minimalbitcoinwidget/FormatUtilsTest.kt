@@ -51,4 +51,26 @@ class FormatUtilsTest {
         val result = FormatUtils.formatChange(2.03)
         assertEquals("2.03%", result.trim())
     }
+
+    @Test
+    fun `formatPriceSeparated with JPY formats with zero decimal places`() {
+        val formatted = FormatUtils.formatPriceSeparated(14500000.0, "JPY")
+        assertEquals("¥", formatted.symbol)
+        val cleanedPrice = formatted.price.replace("\u00A0", " ").replace(" ", "")
+        assertEquals("14,500,000", cleanedPrice)
+    }
+
+    @Test
+    fun `formatPriceSeparated with BRL formats with R$ symbol`() {
+        val formatted = FormatUtils.formatPriceSeparated(540000.0, "BRL")
+        assertEquals("R$", formatted.symbol)
+    }
+
+    @Test
+    fun `formatPriceSeparated with zero price`() {
+        val formatted = FormatUtils.formatPriceSeparated(0.0, "USD")
+        assertEquals("$", formatted.symbol)
+        val cleanedPrice = formatted.price.replace("\u00A0", " ").replace(" ", "")
+        assertEquals("0.00", cleanedPrice)
+    }
 }

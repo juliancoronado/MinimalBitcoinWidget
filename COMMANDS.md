@@ -50,17 +50,66 @@ set-mbw-locale() {
 ```
 
 ### Usage Examples:
-* `set-mbw-locale mx` &rarr; Spanish (Mexico) &ndash; `$ 95,000.00`
-* `set-mbw-locale es` &rarr; Spanish (Spain) &ndash; `95.000,00 €` / `95.000,00 US$`
-* `set-mbw-locale de` &rarr; German &ndash; `95.000,00 €`
-* `set-mbw-locale fr` &rarr; French &ndash; `95 000,00 €`
-* `set-mbw-locale br` &rarr; Portuguese (Brazil) &ndash; `R$ 550.000,00`
-* `set-mbw-locale tr` &rarr; Turkish &ndash; `%2,03`
-* `set-mbw-locale reset` &rarr; Reset back to device system default
+
+- `set-mbw-locale mx` &rarr; Spanish (Mexico) &ndash; `$ 95,000.00`
+- `set-mbw-locale es` &rarr; Spanish (Spain) &ndash; `95.000,00 €` / `95.000,00 US$`
+- `set-mbw-locale de` &rarr; German &ndash; `95.000,00 €`
+- `set-mbw-locale fr` &rarr; French &ndash; `95 000,00 €`
+- `set-mbw-locale br` &rarr; Portuguese (Brazil) &ndash; `R$ 550.000,00`
+- `set-mbw-locale tr` &rarr; Turkish &ndash; `%2,03`
+- `set-mbw-locale reset` &rarr; Reset back to device system default
 
 ---
 
-## 2. Release: Package Native Debug Symbols
+## 2. Android CLI Tool & Skill Usage (`android-cli`)
+
+For emulator management, app execution, layout inspection, and documentation searches, use the official `android` CLI tool (configured via the `android-cli` skill at `~/.gemini/config/plugins/android-cli-plugin/skills/SKILL.md`).
+
+### A. Emulator Management
+
+Instead of raw `adb` / `qemu` background processes or aliases, prefer the `android emulator` commands:
+
+```bash
+# List all available Android Virtual Devices (AVDs)
+android emulator list
+
+# Start a specific emulator (automatically waits until device is fully booted and ready)
+android emulator start "EMULATOR NAME"
+
+# Stop a running emulator
+android emulator stop "EMULATOR NAME"
+```
+
+### B. Building, Deploying & Running the App
+
+```bash
+# Build the debug APK and deploy/launch via android CLI
+./gradlew assembleDebug && android run --apks=app/build/outputs/apk/debug/app-debug.apk --activity=com.jcoronado.minimalbitcoinwidget.MainActivity
+```
+
+### C. UI Layout Inspection & Screenshots
+
+```bash
+# Capture a screenshot from the running device
+android screen capture screenshot.png
+
+# Dump the current UI layout tree (fast JSON inspection for UI hierarchy debugging)
+android layout --pretty
+```
+
+### D. Official Documentation Search
+
+```bash
+# Search authoritative Android developer documentation
+android docs search "Glance AppWidget"
+
+# Fetch article content by Knowledge Base URL
+android docs fetch "kb://..."
+```
+
+---
+
+## 3. Release: Package Native Debug Symbols
 
 When preparing a release bundle for Google Play Console submission, package the unstripped native debug symbols into a `.zip` archive containing the current app version (`versionName`) and build number (`versionCode`) in the filename:
 

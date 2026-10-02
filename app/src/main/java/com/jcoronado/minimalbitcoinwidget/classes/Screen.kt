@@ -17,6 +17,9 @@ sealed class Screen : NavKey {
 
     @Serializable
     object WidgetLogs : Screen()
+
+    @Serializable
+    object WidgetFont : Screen()
 }
 
 data class NavItem(

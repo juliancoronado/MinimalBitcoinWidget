@@ -22,6 +22,13 @@
     <string name="app_theme_system">Système</string>
     <string name="app_theme_light">Clair</string>
     <string name="app_theme_dark">Sombre</string>
+    <string name="customize_widget">Personnaliser le widget</string>
+    <string name="widget_font">Police du widget</string>
+    <string name="widget_font_preview_header">Aperçu</string>
+    <string name="widget_font_options_header">Polices disponibles</string>
+    <string name="widget_font_icon_description">Icône de police du widget</string>
+    <string name="font_app_default">Par défaut de l\'application</string>
+    <string name="font_system_default">Système par défaut</string>
     <string name="dynamic_colors">Couleurs dynamiques</string>
     <string name="dynamic_colors_subtitle">Suivre les couleurs du thème de votre appareil</string>
     <string name="show_price_graph">Graphique de prix</string>

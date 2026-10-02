@@ -36,8 +36,13 @@ object FormatUtils {
             formatter.decimalFormatSymbols = symbols
 
             // fix spacing (standard Currency format often adds non-breaking spaces)
-            formatter.minimumFractionDigits = 2
-            formatter.maximumFractionDigits = 2
+            val fractionDigits = if (currency.defaultFractionDigits >= 0) {
+                currency.defaultFractionDigits
+            } else {
+                2
+            }
+            formatter.minimumFractionDigits = fractionDigits
+            formatter.maximumFractionDigits = fractionDigits
         }
 
         val fullFormattedString = formatter.format(price)

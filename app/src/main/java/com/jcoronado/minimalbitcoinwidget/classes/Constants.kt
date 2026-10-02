@@ -21,6 +21,7 @@ object Prefs {
     const val REFRESH_INTERVAL = "refresh_interval"
     const val SELECTED_CHANGE_PERCENTAGE = "selected_change_percentage"
     const val SHOW_SPARKLINE = "show_sparkline"
+    const val SELECTED_WIDGET_FONT = "selected_widget_font"
     const val DEVELOPER_MODE_ENABLED = "developer_mode_enabled"
     /** Key for storing the app version code to detect updates. */
     const val LAST_VERSION_CODE = "last_version_code"
@@ -81,12 +82,9 @@ object AppConstants {
  * Contains API related constants and URL construction.
  */
 object Api {
-    /** Base URL for the CoinGecko API. */
-    private const val COINGECKO_BASE_URL = "https://api.coingecko.com/api/v3/"
-    /** Endpoint for fetching coin market price data. */
-    private const val COINGECKO_ENDPOINT = "coins/markets"
-    /** Query parameters for the Bitcoin price request, including 24h change, sparkline, and precision. */
-    private const val QUERY_PARAMS = "?ids=bitcoin&precision=2&price_change_percentage=24h,7d,30d&sparkline=true&vs_currency="
-    /** Complete URL for fetching Bitcoin price data from CoinGecko. */
-    const val COINGECKO_API_URL = COINGECKO_BASE_URL + COINGECKO_ENDPOINT + QUERY_PARAMS
+    /** Complete URL for fetching Bitcoin price data from the API proxy. */
+    const val BITCOIN_PRICE_API_URL = "https://mbw-price-api.web.app/api/bitcoinPrice?vs_currency="
+
+    @Deprecated("Renamed to BITCOIN_PRICE_API_URL", ReplaceWith("BITCOIN_PRICE_API_URL"))
+    const val COINGECKO_API_URL = BITCOIN_PRICE_API_URL
 }
