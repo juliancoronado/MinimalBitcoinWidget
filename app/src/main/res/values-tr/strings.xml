@@ -23,7 +23,7 @@
     <string name="app_theme_light">Açık</string>
     <string name="app_theme_dark">Koyu</string>
     <string name="customize_widget">Widget\'ı Özelleştir</string>
-    <string name="widget_font">Widget Yazı Tipi</string>
+    <string name="widget_font">Yazı Tipi</string>
     <string name="widget_font_preview_header">Önizleme</string>
     <string name="widget_font_options_header">Kullanılabilir Yazı Tipleri</string>
     <string name="widget_font_icon_description">Widget yazı tipi simgesi</string>

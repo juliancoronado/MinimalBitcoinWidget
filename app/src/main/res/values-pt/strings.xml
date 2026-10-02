@@ -23,7 +23,7 @@
     <string name="app_theme_light">Claro</string>
     <string name="app_theme_dark">Escuro</string>
     <string name="customize_widget">Personalizar widget</string>
-    <string name="widget_font">Fonte do widget</string>
+    <string name="widget_font">Fonte</string>
     <string name="widget_font_preview_header">Pré-visualização</string>
     <string name="widget_font_options_header">Tipos de letra disponíveis</string>
     <string name="widget_font_icon_description">Ícone de tipo de letra do widget</string>

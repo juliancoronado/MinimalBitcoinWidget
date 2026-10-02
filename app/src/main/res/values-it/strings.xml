@@ -23,7 +23,7 @@
     <string name="app_theme_light">Chiaro</string>
     <string name="app_theme_dark">Scuro</string>
     <string name="customize_widget">Personalizza widget</string>
-    <string name="widget_font">Carattere del widget</string>
+    <string name="widget_font">Carattere</string>
     <string name="widget_font_preview_header">Anteprima</string>
     <string name="widget_font_options_header">Caratteri disponibili</string>
     <string name="widget_font_icon_description">Icona carattere widget</string>
