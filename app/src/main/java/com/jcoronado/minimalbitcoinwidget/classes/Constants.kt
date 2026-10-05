@@ -71,11 +71,9 @@ object AppConstants {
     private const val CACHE_DURATION_MINUTES = 30L
     /** Duration in milliseconds for which the cached price data is considered valid. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
-    const val WIDGET_DEBUG_MODE = false
-
     const val DEBUG_MOCK_PRICE_DEFAULT = "52849.10"
     const val DEBUG_MOCK_PERCENT_CHANGE_DEFAULT = "2.03"
-    const val DEBUG_MOCK_CURRENCY_DEFAULT = "GBP"
+    const val DEBUG_MOCK_CURRENCY_DEFAULT = "EUR"
 }
 
 /**
