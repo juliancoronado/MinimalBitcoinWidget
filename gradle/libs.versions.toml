@@ -1,7 +1,7 @@
 [versions]
-agp = "9.2.1"
-kotlin = "2.4.10"
-coreKtx = "1.19.0"
+agp = "9.4.1"
+kotlin = "2.4.20"
+coreKtx = "1.19.1"
 appcompat = "1.8.0"
 material = "1.14.0"
 constraintlayout = "2.2.2"
@@ -12,21 +12,21 @@ espressoCore = "3.7.0"
 okhttp = "5.5.0"
 gson = "2.14.0"
 # compose
-androidxComposeBom = "2026.08.00"
+androidxComposeBom = "2026.09.00"
 activityCompose = "1.13.0"
 lifecycleViewmodelCompose = "2.11.0"
-material3Expressive = "1.5.0-alpha26" # alpha
+material3Expressive = "1.5.0-alpha29" # alpha
 # glance
-glance = "1.1.1"
+glance = "1.2.0"
 # navigation3
-nav3Core = "1.1.6"
-navigationEvent = "1.2.0-alpha04"
+nav3Core = "1.2.0"
+navigationEvent = "1.2.0-rc01"
 # serialization
 kotlinxSerialization = "1.11.0"
 # workmanager
-workRuntimeKtx = "2.11.2"
+workRuntimeKtx = "2.12.0"
 # room / db
-room = "2.8.4"
+room = "2.8.5"
 ksp = "2.3.6"
 
 [libraries]
