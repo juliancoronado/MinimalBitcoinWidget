@@ -13,6 +13,9 @@ Date Format: YYYY-MM-DD
 
 ### Changed
 
+- Reduced font weight on bolded text for better readability
+- Small wording changes on the Customize Widget screen
+
 ---
 
 ## [3.4.0] - 2026-09-29
