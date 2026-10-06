@@ -7,7 +7,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
 import com.jcoronado.minimalbitcoinwidget.workers.PriceUpdateWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +23,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
     private val _theme = MutableStateFlow(getSavedTheme())
     private val _widgetFont = MutableStateFlow(getSavedWidgetFont())
+    private val _widgetPriceSize = MutableStateFlow(getSavedWidgetPriceSize())
+    private val _widgetAmoledBlack = MutableStateFlow(getSavedWidgetAmoledBlack())
+    private val _widgetBackgroundOpacity = MutableStateFlow(getSavedWidgetBackgroundOpacity())
+    private val _widgetShowHeader = MutableStateFlow(getSavedWidgetShowHeader())
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
     private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
     private val _changePercentageInterval = MutableStateFlow(getSavedChangePercentageInterval())
@@ -29,6 +35,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     val theme: StateFlow<AppTheme> = _theme.asStateFlow()
     val widgetFont: StateFlow<WidgetFont> = _widgetFont.asStateFlow()
+    val widgetPriceSize: StateFlow<WidgetPriceSize> = _widgetPriceSize.asStateFlow()
+    val widgetAmoledBlack: StateFlow<Boolean> = _widgetAmoledBlack.asStateFlow()
+    val widgetBackgroundOpacity: StateFlow<WidgetBackgroundOpacity> = _widgetBackgroundOpacity.asStateFlow()
+    val widgetShowHeader: StateFlow<Boolean> = _widgetShowHeader.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
     val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
@@ -60,9 +70,50 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         return WidgetFont.fromKey(fontKey)
     }
 
+    private fun getSavedWidgetPriceSize(): WidgetPriceSize {
+        val key = prefs.getString(Prefs.WIDGET_PRICE_SIZE, WidgetPriceSize.DEFAULT.key)
+        return WidgetPriceSize.fromKey(key)
+    }
+
+    private fun getSavedWidgetAmoledBlack(): Boolean {
+        return prefs.getBoolean(Prefs.WIDGET_AMOLED_BLACK, false)
+    }
+
+    private fun getSavedWidgetBackgroundOpacity(): WidgetBackgroundOpacity {
+        val key = prefs.getString(Prefs.WIDGET_BACKGROUND_OPACITY, WidgetBackgroundOpacity.SOLID.key)
+        return WidgetBackgroundOpacity.fromKey(key)
+    }
+
+    private fun getSavedWidgetShowHeader(): Boolean {
+        return prefs.getBoolean(Prefs.WIDGET_SHOW_HEADER, true)
+    }
+
     fun setWidgetFont(newFont: WidgetFont) {
         _widgetFont.value = newFont
         prefs.edit(commit = true) { putString(Prefs.SELECTED_WIDGET_FONT, newFont.key) }
+        PriceViewModel.refreshWidgetsFromCache(getApplication())
+    }
+
+    fun saveWidgetCustomization(
+        newFont: WidgetFont,
+        newPriceSize: WidgetPriceSize,
+        newAmoledBlack: Boolean,
+        newOpacity: WidgetBackgroundOpacity,
+        newShowHeader: Boolean
+    ) {
+        _widgetFont.value = newFont
+        _widgetPriceSize.value = newPriceSize
+        _widgetAmoledBlack.value = newAmoledBlack
+        _widgetBackgroundOpacity.value = newOpacity
+        _widgetShowHeader.value = newShowHeader
+
+        prefs.edit(commit = true) {
+            putString(Prefs.SELECTED_WIDGET_FONT, newFont.key)
+            putString(Prefs.WIDGET_PRICE_SIZE, newPriceSize.key)
+            putBoolean(Prefs.WIDGET_AMOLED_BLACK, newAmoledBlack)
+            putString(Prefs.WIDGET_BACKGROUND_OPACITY, newOpacity.key)
+            putBoolean(Prefs.WIDGET_SHOW_HEADER, newShowHeader)
+        }
         PriceViewModel.refreshWidgetsFromCache(getApplication())
     }
 

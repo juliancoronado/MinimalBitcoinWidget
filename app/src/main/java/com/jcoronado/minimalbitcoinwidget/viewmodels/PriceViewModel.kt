@@ -135,6 +135,10 @@ class PriceViewModel @JvmOverloads constructor(
             )
 
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+            val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
+            val amoledBlack = prefs.getBoolean(Prefs.WIDGET_AMOLED_BLACK, false)
+            val opacityKey = prefs.getString(Prefs.WIDGET_BACKGROUND_OPACITY, "solid") ?: "solid"
+            val showHeader = prefs.getBoolean(Prefs.WIDGET_SHOW_HEADER, true)
 
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
@@ -145,7 +149,11 @@ class PriceViewModel @JvmOverloads constructor(
                         changePercentage = currentState.percentageChange,
                         intervalLabelResId = currentState.changeIntervalLabelResId,
                         currency = currentState.selectedCurrency,
-                        fontKey = fontKey
+                        fontKey = fontKey,
+                        priceSizeKey = priceSizeKey,
+                        amoledBlack = amoledBlack,
+                        backgroundOpacityKey = opacityKey,
+                        showHeader = showHeader
                     )
                 )
             } catch (e: Exception) {
@@ -241,6 +249,10 @@ class PriceViewModel @JvmOverloads constructor(
             val repository = PriceRepository(context)
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+            val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
+            val amoledBlack = prefs.getBoolean(Prefs.WIDGET_AMOLED_BLACK, false)
+            val opacityKey = prefs.getString(Prefs.WIDGET_BACKGROUND_OPACITY, "solid") ?: "solid"
+            val showHeader = prefs.getBoolean(Prefs.WIDGET_SHOW_HEADER, true)
 
             if (repository.isMockUiEnabled()) {
                 val mockData = repository.getMockPriceData()
@@ -251,7 +263,11 @@ class PriceViewModel @JvmOverloads constructor(
                     changePercentage = mockData.priceChangePercentage24h,
                     intervalLabelResId = R.string.interval_24h,
                     currency = mockCurrency,
-                    fontKey = fontKey
+                    fontKey = fontKey,
+                    priceSizeKey = priceSizeKey,
+                    amoledBlack = amoledBlack,
+                    backgroundOpacityKey = opacityKey,
+                    showHeader = showHeader
                 )
 
                 // update glance widgets
@@ -276,7 +292,11 @@ class PriceViewModel @JvmOverloads constructor(
                 changePercentage = percentage,
                 intervalLabelResId = interval.labelResId,
                 currency = currencyCode,
-                fontKey = fontKey
+                fontKey = fontKey,
+                priceSizeKey = priceSizeKey,
+                amoledBlack = amoledBlack,
+                backgroundOpacityKey = opacityKey,
+                showHeader = showHeader
             )
 
             // update glance widgets

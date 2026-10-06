@@ -212,14 +212,29 @@ fun AppNavigation() {
                     }
                     entry<Screen.WidgetFont> {
                         val currentWidgetFont by settingsViewModel.widgetFont.collectAsStateWithLifecycle()
+                        val currentPriceSize by settingsViewModel.widgetPriceSize.collectAsStateWithLifecycle()
+                        val currentAmoledBlack by settingsViewModel.widgetAmoledBlack.collectAsStateWithLifecycle()
+                        val currentOpacity by settingsViewModel.widgetBackgroundOpacity.collectAsStateWithLifecycle()
+                        val currentShowHeader by settingsViewModel.widgetShowHeader.collectAsStateWithLifecycle()
+
                         CustomizeWidgetScreen(
                             currentFont = currentWidgetFont,
+                            currentPriceSize = currentPriceSize,
+                            currentAmoledBlack = currentAmoledBlack,
+                            currentOpacity = currentOpacity,
+                            currentShowHeader = currentShowHeader,
                             price = uiState.price,
                             percentageChange = uiState.percentageChange,
                             currency = uiState.selectedCurrency,
                             intervalLabelResId = uiState.changeIntervalLabelResId,
-                            onSave = { selectedFont ->
-                                settingsViewModel.setWidgetFont(selectedFont)
+                            onSave = { selectedFont, selectedPriceSize, selectedAmoledBlack, selectedOpacity, selectedShowHeader ->
+                                settingsViewModel.saveWidgetCustomization(
+                                    selectedFont,
+                                    selectedPriceSize,
+                                    selectedAmoledBlack,
+                                    selectedOpacity,
+                                    selectedShowHeader
+                                )
                                 backStack.removeLastOrNull()
                             },
                             onBack = {

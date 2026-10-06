@@ -13,13 +13,21 @@ sealed class PriceWidgetState {
         val changePercentage: Double,
         val intervalLabelResId: Int,
         val currency: String,
-        val fontKey: String = "app_default"
+        val fontKey: String = "app_default",
+        val priceSizeKey: String = "default",
+        val amoledBlack: Boolean = false,
+        val backgroundOpacityKey: String = "solid",
+        val showHeader: Boolean = true
     ) : PriceWidgetState()
 
     @Serializable
     data class Error(
         val message: String,
         val lastValidState: Available? = null,
-        val fontKey: String = "app_default"
+        val fontKey: String = "app_default",
+        val priceSizeKey: String = "default",
+        val amoledBlack: Boolean = false,
+        val backgroundOpacityKey: String = "solid",
+        val showHeader: Boolean = true
     ) : PriceWidgetState()
 }

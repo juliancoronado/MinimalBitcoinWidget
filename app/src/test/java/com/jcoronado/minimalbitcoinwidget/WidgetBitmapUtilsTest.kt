@@ -116,4 +116,34 @@ class WidgetBitmapUtilsTest {
         assertEquals(24f, priceSp, 0.0f)
         assertEquals(16f, symbolSp, 0.0f)
     }
+
+    @Test
+    fun `getWidgetPriceFontSize with scaleFactor correctly scales output`() {
+        // Base is 24sp / 16sp for 7 chars
+        val (smallPriceSp, smallSymbolSp) = WidgetBitmapUtils.getWidgetPriceFontSize("500.00", "$", 0.85f)
+        assertEquals(24f * 0.85f, smallPriceSp, 0.001f)
+        assertEquals(16f * 0.85f, smallSymbolSp, 0.001f)
+
+        val (largePriceSp, largeSymbolSp) = WidgetBitmapUtils.getWidgetPriceFontSize("500.00", "$", 1.15f)
+        assertEquals(24f * 1.15f, largePriceSp, 0.001f)
+        assertEquals(16f * 1.15f, largeSymbolSp, 0.001f)
+    }
+
+    @Test
+    fun `WidgetPriceSize fromKey returns expected values and fallback`() {
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.SMALL, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey("small"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.DEFAULT, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey("default"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.LARGE, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey("large"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.DEFAULT, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey("unknown"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.DEFAULT, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey(null))
+    }
+
+    @Test
+    fun `WidgetBackgroundOpacity fromKey returns expected values and fallback`() {
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.SOLID, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey("solid"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.SEMI_TRANSPARENT, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey("semi_transparent"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.TRANSPARENT, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey("transparent"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.SOLID, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey("unknown"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.SOLID, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey(null))
+    }
 }

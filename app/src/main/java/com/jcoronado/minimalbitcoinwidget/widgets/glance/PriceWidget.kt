@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.graphics.Typeface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.ColorFilter
@@ -15,6 +16,8 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.Visibility
+import androidx.glance.visibility
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
@@ -23,6 +26,7 @@ import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.color.ColorProvider
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
@@ -43,7 +47,9 @@ import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 
 class PriceWidget : GlanceAppWidget() {
@@ -80,19 +86,60 @@ class PriceWidget : GlanceAppWidget() {
         val widgetFont = WidgetFont.fromKey(fontKey)
         val typeface = WidgetBitmapUtils.getTypeface(context, widgetFont)
 
+        val amoledBlack = when (state) {
+            is PriceWidgetState.Available -> state.amoledBlack
+            is PriceWidgetState.Error -> state.amoledBlack
+            is PriceWidgetState.Loading -> {
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+                prefs.getBoolean(Prefs.WIDGET_AMOLED_BLACK, false)
+            }
+        }
+        val backgroundOpacityKey = when (state) {
+            is PriceWidgetState.Available -> state.backgroundOpacityKey
+            is PriceWidgetState.Error -> state.backgroundOpacityKey
+            is PriceWidgetState.Loading -> {
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+                prefs.getString(Prefs.WIDGET_BACKGROUND_OPACITY, WidgetBackgroundOpacity.SOLID.key) ?: WidgetBackgroundOpacity.SOLID.key
+            }
+        }
+        val backgroundOpacity = WidgetBackgroundOpacity.fromKey(backgroundOpacityKey)
+
         var backgroundModifier = GlanceModifier.fillMaxSize()
         val systemCornerRadiusDefined = LocalContext.current.resources
             .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
 
+        when (backgroundOpacity) {
+            WidgetBackgroundOpacity.TRANSPARENT -> {
+                backgroundModifier = backgroundModifier.background(Color.Transparent)
+            }
+            WidgetBackgroundOpacity.SEMI_TRANSPARENT -> {
+                val semiBg = if (amoledBlack) {
+                    ColorProvider(day = Color(0x80FFFFFF), night = Color(0x80000000))
+                } else {
+                    ColorProvider(day = Color(0x80FFFFFF), night = Color(0x801D2024))
+                }
+                backgroundModifier = backgroundModifier.background(semiBg)
+            }
+            WidgetBackgroundOpacity.SOLID -> {
+                if (amoledBlack) {
+                    val solidAmoledBg = ColorProvider(day = Color(0xFFF8F9FF), night = Color(0xFF000000))
+                    backgroundModifier = backgroundModifier.background(solidAmoledBg)
+                } else {
+                    if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
+                        backgroundModifier = backgroundModifier.background(GlanceTheme.colors.widgetBackground)
+                    } else {
+                        backgroundModifier = backgroundModifier.background(ImageProvider(R.drawable.glance_widget_bg))
+                    }
+                }
+            }
+        }
+
         backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
             backgroundModifier
-                .background(GlanceTheme.colors.widgetBackground)
                 .appWidgetBackground()
                 .cornerRadius(android.R.dimen.system_app_widget_background_radius)
         } else {
-            backgroundModifier
-                .background(ImageProvider(R.drawable.glance_widget_bg))
-                .appWidgetBackground()
+            backgroundModifier.appWidgetBackground()
         }
 
         Box(modifier = backgroundModifier) {
@@ -135,7 +182,7 @@ class PriceWidget : GlanceAppWidget() {
         typeface: Typeface?,
         error: Boolean = false
     ) {
-        Header(state.currency, state.intervalLabelResId, typeface)
+        Header(state.currency, state.intervalLabelResId, typeface, state.showHeader)
         Spacer(modifier)
         PriceValue(state, typeface)
         Spacer(modifier)
@@ -192,17 +239,23 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun Header(currency: String, intervalLabel: Int, typeface: Typeface?) {
+    private fun Header(
+        currency: String,
+        intervalLabel: Int,
+        typeface: Typeface?,
+        visible: Boolean = true
+    ) {
         val context = LocalContext.current
         val headerText = "/ ${currency.uppercase()} ・ ${context.getString(intervalLabel)}"
         val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
 
         Row(
+            modifier = GlanceModifier.visibility(if (visible) Visibility.Visible else Visibility.Invisible),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 provider = ImageProvider(R.drawable.rounded_currency_bitcoin_24),
-                contentDescription = context.getString(R.string.bitcoin_icon_description),
+                contentDescription = if (visible) context.getString(R.string.bitcoin_icon_description) else null,
                 colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary),
                 modifier = GlanceModifier.size(14.dp)
             )
@@ -216,7 +269,7 @@ class PriceWidget : GlanceAppWidget() {
                 )
                 Image(
                     provider = ImageProvider(headerBitmap),
-                    contentDescription = headerText,
+                    contentDescription = if (visible) headerText else null,
                     colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary)
                 )
             } else {
@@ -235,7 +288,8 @@ class PriceWidget : GlanceAppWidget() {
     private fun PriceValue(state: PriceWidgetState.Available, typeface: Typeface?) {
         val context = LocalContext.current
         val priceData = FormatUtils.formatPriceSeparated(state.price, state.currency)
-        val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(priceData)
+        val priceSize = WidgetPriceSize.fromKey(state.priceSizeKey)
+        val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(priceData, priceSize.scaleFactor)
 
         Row(
             verticalAlignment = Alignment.CenterVertically
