@@ -15,8 +15,8 @@ sealed class PriceWidgetState {
         val currency: String,
         val fontKey: String = "app_default",
         val priceSizeKey: String = "default",
-        val amoledBlack: Boolean = false,
-        val backgroundOpacityKey: String = "solid",
+        val colorStyleKey: String = "dynamic",
+        val themeKey: String = "system",
         val showHeader: Boolean = true
     ) : PriceWidgetState()
 
@@ -26,8 +26,8 @@ sealed class PriceWidgetState {
         val lastValidState: Available? = null,
         val fontKey: String = "app_default",
         val priceSizeKey: String = "default",
-        val amoledBlack: Boolean = false,
-        val backgroundOpacityKey: String = "solid",
+        val colorStyleKey: String = "dynamic",
+        val themeKey: String = "system",
         val showHeader: Boolean = true
     ) : PriceWidgetState()
 }

@@ -136,8 +136,8 @@ class PriceViewModel @JvmOverloads constructor(
 
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
             val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
-            val amoledBlack = prefs.getBoolean(Prefs.WIDGET_AMOLED_BLACK, false)
-            val opacityKey = prefs.getString(Prefs.WIDGET_BACKGROUND_OPACITY, "solid") ?: "solid"
+            val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
+            val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
             val showHeader = prefs.getBoolean(Prefs.WIDGET_SHOW_HEADER, true)
 
             try {
@@ -151,8 +151,8 @@ class PriceViewModel @JvmOverloads constructor(
                         currency = currentState.selectedCurrency,
                         fontKey = fontKey,
                         priceSizeKey = priceSizeKey,
-                        amoledBlack = amoledBlack,
-                        backgroundOpacityKey = opacityKey,
+                        colorStyleKey = colorStyleKey,
+                        themeKey = themeKey,
                         showHeader = showHeader
                     )
                 )
@@ -250,8 +250,8 @@ class PriceViewModel @JvmOverloads constructor(
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
             val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
-            val amoledBlack = prefs.getBoolean(Prefs.WIDGET_AMOLED_BLACK, false)
-            val opacityKey = prefs.getString(Prefs.WIDGET_BACKGROUND_OPACITY, "solid") ?: "solid"
+            val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
+            val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
             val showHeader = prefs.getBoolean(Prefs.WIDGET_SHOW_HEADER, true)
 
             if (repository.isMockUiEnabled()) {
@@ -265,8 +265,8 @@ class PriceViewModel @JvmOverloads constructor(
                     currency = mockCurrency,
                     fontKey = fontKey,
                     priceSizeKey = priceSizeKey,
-                    amoledBlack = amoledBlack,
-                    backgroundOpacityKey = opacityKey,
+                    colorStyleKey = colorStyleKey,
+                    themeKey = themeKey,
                     showHeader = showHeader
                 )
 
@@ -294,8 +294,8 @@ class PriceViewModel @JvmOverloads constructor(
                 currency = currencyCode,
                 fontKey = fontKey,
                 priceSizeKey = priceSizeKey,
-                amoledBlack = amoledBlack,
-                backgroundOpacityKey = opacityKey,
+                colorStyleKey = colorStyleKey,
+                themeKey = themeKey,
                 showHeader = showHeader
             )
 

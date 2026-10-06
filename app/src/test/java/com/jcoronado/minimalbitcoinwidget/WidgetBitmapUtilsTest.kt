@@ -139,11 +139,19 @@ class WidgetBitmapUtilsTest {
     }
 
     @Test
-    fun `WidgetBackgroundOpacity fromKey returns expected values and fallback`() {
-        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.SOLID, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey("solid"))
-        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.SEMI_TRANSPARENT, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey("semi_transparent"))
-        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.TRANSPARENT, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey("transparent"))
-        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.SOLID, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey("unknown"))
-        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.SOLID, com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity.fromKey(null))
+    fun `WidgetColorStyle fromKey returns expected values and fallback`() {
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.DYNAMIC, com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.fromKey("dynamic"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.SOLID, com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.fromKey("solid"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.DYNAMIC, com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.fromKey("unknown"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.DYNAMIC, com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.fromKey(null))
+    }
+
+    @Test
+    fun `WidgetTheme fromKey returns expected values and fallback`() {
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.SYSTEM, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey("system"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.LIGHT, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey("light"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.DARK, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey("dark"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.SYSTEM, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey("unknown"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.SYSTEM, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey(null))
     }
 }

@@ -66,9 +66,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.glance.appwidget.compose
 import com.jcoronado.minimalbitcoinwidget.R
-import com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 
@@ -77,22 +78,22 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 fun CustomizeWidgetScreen(
     currentFont: WidgetFont,
     currentPriceSize: WidgetPriceSize = WidgetPriceSize.DEFAULT,
-    currentAmoledBlack: Boolean = false,
-    currentOpacity: WidgetBackgroundOpacity = WidgetBackgroundOpacity.SOLID,
+    currentColorStyle: WidgetColorStyle = WidgetColorStyle.DYNAMIC,
+    currentTheme: WidgetTheme = WidgetTheme.SYSTEM,
     currentShowHeader: Boolean = true,
     price: Double,
     percentageChange: Double,
     currency: String,
     @StringRes intervalLabelResId: Int,
-    onSave: (WidgetFont, WidgetPriceSize, Boolean, WidgetBackgroundOpacity, Boolean) -> Unit,
+    onSave: (WidgetFont, WidgetPriceSize, WidgetColorStyle, WidgetTheme, Boolean) -> Unit,
     onBack: () -> Unit
 ) {
     val view = LocalView.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var selectedFont by remember(currentFont) { mutableStateOf(currentFont) }
     var selectedPriceSize by remember(currentPriceSize) { mutableStateOf(currentPriceSize) }
-    var selectedAmoledBlack by remember(currentAmoledBlack) { mutableStateOf(currentAmoledBlack) }
-    var selectedOpacity by remember(currentOpacity) { mutableStateOf(currentOpacity) }
+    var selectedColorStyle by remember(currentColorStyle) { mutableStateOf(currentColorStyle) }
+    var selectedTheme by remember(currentTheme) { mutableStateOf(currentTheme) }
     var selectedShowHeader by remember(currentShowHeader) { mutableStateOf(currentShowHeader) }
 
     BackHandler {
@@ -167,8 +168,8 @@ fun CustomizeWidgetScreen(
                             GlanceWidgetPreviewCard(
                                 selectedFont = selectedFont,
                                 selectedPriceSize = selectedPriceSize,
-                                selectedAmoledBlack = selectedAmoledBlack,
-                                selectedOpacity = selectedOpacity,
+                                selectedColorStyle = selectedColorStyle,
+                                selectedTheme = selectedTheme,
                                 selectedShowHeader = selectedShowHeader,
                                 price = if (price > 0.0) price else 62884.21,
                                 percentageChange = if (price > 0.0) percentageChange else 2.03,
@@ -263,28 +264,28 @@ fun CustomizeWidgetScreen(
                     }
                 }
 
-                val opacityEntries = WidgetBackgroundOpacity.entries
+                val colorStyleEntries = WidgetColorStyle.entries
 
                 Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
                     SectionHeader(
-                        title = stringResource(R.string.widget_background)
+                        title = stringResource(R.string.widget_colors)
                     )
 
-                    opacityEntries.forEachIndexed { index, opacity ->
-                        val isSelected = (opacity == selectedOpacity)
+                    colorStyleEntries.forEachIndexed { index, style ->
+                        val isSelected = (style == selectedColorStyle)
                         SegmentedListItem(
                             onClick = {
                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                                selectedOpacity = opacity
+                                selectedColorStyle = style
                             },
                             colors = colors,
                             shapes = ListItemDefaults.segmentedShapes(
                                 index = index,
-                                count = opacityEntries.size
+                                count = colorStyleEntries.size
                             ),
                             content = {
                                 Text(
-                                    text = stringResource(opacity.labelResId),
+                                    text = stringResource(style.labelResId),
                                     fontWeight = FontWeight.Medium
                                 )
                             },
@@ -296,39 +297,37 @@ fun CustomizeWidgetScreen(
                             }
                         )
                     }
+                }
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                val themeEntries = WidgetTheme.entries
 
-                    CompositionLocalProvider(LocalRippleConfiguration provides null) {
+                Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+                    SectionHeader(
+                        title = stringResource(R.string.widget_theme)
+                    )
+
+                    themeEntries.forEachIndexed { index, theme ->
+                        val isSelected = (theme == selectedTheme)
                         SegmentedListItem(
                             onClick = {
                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                                selectedAmoledBlack = !selectedAmoledBlack
+                                selectedTheme = theme
                             },
                             colors = colors,
                             shapes = ListItemDefaults.segmentedShapes(
-                                index = 0,
-                                count = 1
+                                index = index,
+                                count = themeEntries.size
                             ),
                             content = {
                                 Text(
-                                    text = stringResource(R.string.widget_amoled_black_title),
+                                    text = stringResource(theme.labelResId),
                                     fontWeight = FontWeight.Medium
                                 )
                             },
-                            supportingContent = {
-                                Text(
-                                    text = stringResource(R.string.widget_amoled_black_subtitle),
-                                    modifier = Modifier.padding(top = 2.dp)
-                                )
-                            },
                             trailingContent = {
-                                Switch(
-                                    checked = selectedAmoledBlack,
-                                    onCheckedChange = {
-                                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                                        selectedAmoledBlack = it
-                                    }
+                                RadioButton(
+                                    selected = isSelected,
+                                    onClick = null
                                 )
                             }
                         )
@@ -382,8 +381,8 @@ fun CustomizeWidgetScreen(
                         onSave(
                             selectedFont,
                             selectedPriceSize,
-                            selectedAmoledBlack,
-                            selectedOpacity,
+                            selectedColorStyle,
+                            selectedTheme,
                             selectedShowHeader
                         )
                     },
@@ -412,8 +411,8 @@ private val PREVIEW_HEIGHT = 108.dp
 private fun GlanceWidgetPreviewCard(
     selectedFont: WidgetFont,
     selectedPriceSize: WidgetPriceSize,
-    selectedAmoledBlack: Boolean,
-    selectedOpacity: WidgetBackgroundOpacity,
+    selectedColorStyle: WidgetColorStyle,
+    selectedTheme: WidgetTheme,
     selectedShowHeader: Boolean,
     price: Double,
     percentageChange: Double,
@@ -423,15 +422,21 @@ private fun GlanceWidgetPreviewCard(
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
-    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val isAppDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
 
-    val themedContext = remember(context, configuration, isDark) {
-        val uiModeNight = if (isDark) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
+    val isPreviewDark = when (selectedTheme) {
+        WidgetTheme.LIGHT -> false
+        WidgetTheme.DARK -> true
+        WidgetTheme.SYSTEM -> isAppDark
+    }
+
+    val themedContext = remember(context, configuration, isPreviewDark) {
+        val uiModeNight = if (isPreviewDark) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
         val config = Configuration(configuration).apply {
             uiMode = (uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or uiModeNight
         }
         val configContext = context.createConfigurationContext(config)
-        val themeResId = if (isDark) android.R.style.Theme_DeviceDefault else android.R.style.Theme_DeviceDefault_Light
+        val themeResId = if (isPreviewDark) android.R.style.Theme_DeviceDefault else android.R.style.Theme_DeviceDefault_Light
         ContextThemeWrapper(configContext, themeResId)
     }
 
@@ -453,8 +458,8 @@ private fun GlanceWidgetPreviewCard(
     val widgetState = remember(
         selectedFont,
         selectedPriceSize,
-        selectedAmoledBlack,
-        selectedOpacity,
+        selectedColorStyle,
+        selectedTheme,
         selectedShowHeader,
         price,
         percentageChange,
@@ -468,8 +473,8 @@ private fun GlanceWidgetPreviewCard(
             currency = currency,
             fontKey = selectedFont.key,
             priceSizeKey = selectedPriceSize.key,
-            amoledBlack = selectedAmoledBlack,
-            backgroundOpacityKey = selectedOpacity.key,
+            colorStyleKey = selectedColorStyle.key,
+            themeKey = selectedTheme.key,
             showHeader = selectedShowHeader
         )
     }

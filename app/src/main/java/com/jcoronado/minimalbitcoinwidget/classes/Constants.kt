@@ -23,8 +23,8 @@ object Prefs {
     const val SHOW_SPARKLINE = "show_sparkline"
     const val SELECTED_WIDGET_FONT = "selected_widget_font"
     const val WIDGET_PRICE_SIZE = "widget_price_size"
-    const val WIDGET_AMOLED_BLACK = "widget_amoled_black"
-    const val WIDGET_BACKGROUND_OPACITY = "widget_background_opacity"
+    const val WIDGET_COLOR_STYLE = "widget_color_style"
+    const val WIDGET_THEME = "widget_theme"
     const val WIDGET_SHOW_HEADER = "widget_show_header"
     const val DEVELOPER_MODE_ENABLED = "developer_mode_enabled"
     /** Key for storing the app version code to detect updates. */

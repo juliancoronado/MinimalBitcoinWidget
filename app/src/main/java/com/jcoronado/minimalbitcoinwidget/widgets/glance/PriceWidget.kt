@@ -42,14 +42,21 @@ import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.glance.text.TextStyle
 import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
-import com.jcoronado.minimalbitcoinwidget.classes.WidgetBackgroundOpacity
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
+import com.jcoronado.minimalbitcoinwidget.ui.theme.darkScheme
+import com.jcoronado.minimalbitcoinwidget.ui.theme.lightScheme
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 
 class PriceWidget : GlanceAppWidget() {
@@ -58,15 +65,57 @@ class PriceWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            GlanceTheme(
-                colors = if (Build.VERSION.SDK_INT >= 31) {
-                    GlanceTheme.colors
-                } else {
-                    GlanceColorScheme.colors
+            val state = currentState<PriceWidgetState>()
+            WidgetContent(state)
+        }
+    }
+
+    @Composable
+    private fun getGlanceColorProviders(
+        context: Context,
+        colorStyle: WidgetColorStyle,
+        widgetTheme: WidgetTheme
+    ): androidx.glance.color.ColorProviders {
+        return when (colorStyle) {
+            WidgetColorStyle.SOLID -> {
+                val solidLight = lightColorScheme(
+                    surface = Color.White,
+                    onSurface = Color.Black,
+                    surfaceContainer = Color.White,
+                    secondary = Color(0xFF44474E),
+                    primary = Color(0xFF00875A),
+                    error = Color(0xFFDE350B)
+                )
+                val solidDark = darkColorScheme(
+                    surface = Color.Black,
+                    onSurface = Color.White,
+                    surfaceContainer = Color.Black,
+                    secondary = Color(0xFFC4C6D0),
+                    primary = Color(0xFF36B37E),
+                    error = Color(0xFFFF5630)
+                )
+                when (widgetTheme) {
+                    WidgetTheme.LIGHT -> androidx.glance.material3.ColorProviders(light = solidLight, dark = solidLight)
+                    WidgetTheme.DARK -> androidx.glance.material3.ColorProviders(light = solidDark, dark = solidDark)
+                    WidgetTheme.SYSTEM -> androidx.glance.material3.ColorProviders(light = solidLight, dark = solidDark)
                 }
-            ) {
-                val state = currentState<PriceWidgetState>()
-                WidgetContent(state)
+            }
+            WidgetColorStyle.DYNAMIC -> {
+                if (Build.VERSION.SDK_INT >= 31) {
+                    val dynLight = dynamicLightColorScheme(context)
+                    val dynDark = dynamicDarkColorScheme(context)
+                    when (widgetTheme) {
+                        WidgetTheme.LIGHT -> androidx.glance.material3.ColorProviders(light = dynLight, dark = dynLight)
+                        WidgetTheme.DARK -> androidx.glance.material3.ColorProviders(light = dynDark, dark = dynDark)
+                        WidgetTheme.SYSTEM -> GlanceTheme.colors
+                    }
+                } else {
+                    when (widgetTheme) {
+                        WidgetTheme.LIGHT -> androidx.glance.material3.ColorProviders(light = lightScheme, dark = lightScheme)
+                        WidgetTheme.DARK -> androidx.glance.material3.ColorProviders(light = darkScheme, dark = darkScheme)
+                        WidgetTheme.SYSTEM -> GlanceColorScheme.colors
+                    }
+                }
             }
         }
     }
@@ -86,89 +135,109 @@ class PriceWidget : GlanceAppWidget() {
         val widgetFont = WidgetFont.fromKey(fontKey)
         val typeface = WidgetBitmapUtils.getTypeface(context, widgetFont)
 
-        val amoledBlack = when (state) {
-            is PriceWidgetState.Available -> state.amoledBlack
-            is PriceWidgetState.Error -> state.amoledBlack
+        val colorStyleKey = when (state) {
+            is PriceWidgetState.Available -> state.colorStyleKey
+            is PriceWidgetState.Error -> state.colorStyleKey
             is PriceWidgetState.Loading -> {
                 val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-                prefs.getBoolean(Prefs.WIDGET_AMOLED_BLACK, false)
+                prefs.getString(Prefs.WIDGET_COLOR_STYLE, WidgetColorStyle.DYNAMIC.key) ?: WidgetColorStyle.DYNAMIC.key
             }
         }
-        val backgroundOpacityKey = when (state) {
-            is PriceWidgetState.Available -> state.backgroundOpacityKey
-            is PriceWidgetState.Error -> state.backgroundOpacityKey
+        val themeKey = when (state) {
+            is PriceWidgetState.Available -> state.themeKey
+            is PriceWidgetState.Error -> state.themeKey
             is PriceWidgetState.Loading -> {
                 val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-                prefs.getString(Prefs.WIDGET_BACKGROUND_OPACITY, WidgetBackgroundOpacity.SOLID.key) ?: WidgetBackgroundOpacity.SOLID.key
+                prefs.getString(Prefs.WIDGET_THEME, WidgetTheme.SYSTEM.key) ?: WidgetTheme.SYSTEM.key
             }
         }
-        val backgroundOpacity = WidgetBackgroundOpacity.fromKey(backgroundOpacityKey)
+        val colorStyle = WidgetColorStyle.fromKey(colorStyleKey)
+        val widgetTheme = WidgetTheme.fromKey(themeKey)
 
-        var backgroundModifier = GlanceModifier.fillMaxSize()
-        val systemCornerRadiusDefined = LocalContext.current.resources
-            .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
+        val colorProviders = getGlanceColorProviders(context, colorStyle, widgetTheme)
 
-        when (backgroundOpacity) {
-            WidgetBackgroundOpacity.TRANSPARENT -> {
-                backgroundModifier = backgroundModifier.background(Color.Transparent)
-            }
-            WidgetBackgroundOpacity.SEMI_TRANSPARENT -> {
-                val semiBg = if (amoledBlack) {
-                    ColorProvider(day = Color(0x80FFFFFF), night = Color(0x80000000))
-                } else {
-                    ColorProvider(day = Color(0x80FFFFFF), night = Color(0x801D2024))
+        GlanceTheme(colors = colorProviders) {
+            val systemCornerRadiusDefined = LocalContext.current.resources
+                .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
+
+            var backgroundModifier = GlanceModifier.fillMaxSize()
+
+            when (colorStyle) {
+                WidgetColorStyle.SOLID -> {
+                    val solidBg = when (widgetTheme) {
+                        WidgetTheme.LIGHT -> ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))
+                        WidgetTheme.DARK -> ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000))
+                        WidgetTheme.SYSTEM -> ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF000000))
+                    }
+                    backgroundModifier = backgroundModifier.background(solidBg)
                 }
-                backgroundModifier = backgroundModifier.background(semiBg)
-            }
-            WidgetBackgroundOpacity.SOLID -> {
-                if (amoledBlack) {
-                    val solidAmoledBg = ColorProvider(day = Color(0xFFF8F9FF), night = Color(0xFF000000))
-                    backgroundModifier = backgroundModifier.background(solidAmoledBg)
-                } else {
+                WidgetColorStyle.DYNAMIC -> {
                     if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
-                        backgroundModifier = backgroundModifier.background(GlanceTheme.colors.widgetBackground)
+                        when (widgetTheme) {
+                            WidgetTheme.LIGHT -> {
+                                val lightBg = dynamicLightColorScheme(context).surfaceContainer
+                                backgroundModifier = backgroundModifier.background(ColorProvider(day = lightBg, night = lightBg))
+                            }
+                            WidgetTheme.DARK -> {
+                                val darkBg = dynamicDarkColorScheme(context).surfaceContainer
+                                backgroundModifier = backgroundModifier.background(ColorProvider(day = darkBg, night = darkBg))
+                            }
+                            WidgetTheme.SYSTEM -> {
+                                backgroundModifier = backgroundModifier.background(GlanceTheme.colors.widgetBackground)
+                            }
+                        }
                     } else {
-                        backgroundModifier = backgroundModifier.background(ImageProvider(R.drawable.glance_widget_bg))
-                    }
-                }
-            }
-        }
-
-        backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
-            backgroundModifier
-                .appWidgetBackground()
-                .cornerRadius(android.R.dimen.system_app_widget_background_radius)
-        } else {
-            backgroundModifier.appWidgetBackground()
-        }
-
-        Box(modifier = backgroundModifier) {
-            Column(
-                modifier = GlanceModifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp)
-                    .clickable(actionStartActivity(Intent(context, MainActivity::class.java))),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                when (state) {
-                    is PriceWidgetState.Available -> {
-                        AvailableUI(state, GlanceModifier.defaultWeight(), typeface)
-                    }
-
-                    is PriceWidgetState.Error -> {
-                        if (state.lastValidState != null) {
-                            AvailableUI(
-                                state.lastValidState,
-                                GlanceModifier.defaultWeight(),
-                                typeface,
-                                error = true
-                            )
-                        } else {
-                            ErrorUI(state, typeface)
+                        when (widgetTheme) {
+                            WidgetTheme.LIGHT -> {
+                                backgroundModifier = backgroundModifier.background(ColorProvider(day = Color(0xFFF8F9FF), night = Color(0xFFF8F9FF)))
+                            }
+                            WidgetTheme.DARK -> {
+                                backgroundModifier = backgroundModifier.background(ColorProvider(day = Color(0xFF1D2024), night = Color(0xFF1D2024)))
+                            }
+                            WidgetTheme.SYSTEM -> {
+                                backgroundModifier = backgroundModifier.background(ImageProvider(R.drawable.glance_widget_bg))
+                            }
                         }
                     }
+                }
+            }
 
-                    is PriceWidgetState.Loading -> {
-                        CircularProgressIndicator()
+            backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
+                backgroundModifier
+                    .appWidgetBackground()
+                    .cornerRadius(android.R.dimen.system_app_widget_background_radius)
+            } else {
+                backgroundModifier.appWidgetBackground()
+            }
+
+            Box(modifier = backgroundModifier) {
+                Column(
+                    modifier = GlanceModifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp)
+                        .clickable(actionStartActivity(Intent(context, MainActivity::class.java))),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    when (state) {
+                        is PriceWidgetState.Available -> {
+                            AvailableUI(state, GlanceModifier.defaultWeight(), typeface)
+                        }
+
+                        is PriceWidgetState.Error -> {
+                            if (state.lastValidState != null) {
+                                AvailableUI(
+                                    state.lastValidState,
+                                    GlanceModifier.defaultWeight(),
+                                    typeface,
+                                    error = true
+                                )
+                            } else {
+                                ErrorUI(state, typeface)
+                            }
+                        }
+
+                        is PriceWidgetState.Loading -> {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             }

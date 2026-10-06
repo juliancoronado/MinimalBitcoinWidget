@@ -213,26 +213,26 @@ fun AppNavigation() {
                     entry<Screen.WidgetFont> {
                         val currentWidgetFont by settingsViewModel.widgetFont.collectAsStateWithLifecycle()
                         val currentPriceSize by settingsViewModel.widgetPriceSize.collectAsStateWithLifecycle()
-                        val currentAmoledBlack by settingsViewModel.widgetAmoledBlack.collectAsStateWithLifecycle()
-                        val currentOpacity by settingsViewModel.widgetBackgroundOpacity.collectAsStateWithLifecycle()
+                        val currentColorStyle by settingsViewModel.widgetColorStyle.collectAsStateWithLifecycle()
+                        val currentTheme by settingsViewModel.widgetTheme.collectAsStateWithLifecycle()
                         val currentShowHeader by settingsViewModel.widgetShowHeader.collectAsStateWithLifecycle()
 
                         CustomizeWidgetScreen(
                             currentFont = currentWidgetFont,
                             currentPriceSize = currentPriceSize,
-                            currentAmoledBlack = currentAmoledBlack,
-                            currentOpacity = currentOpacity,
+                            currentColorStyle = currentColorStyle,
+                            currentTheme = currentTheme,
                             currentShowHeader = currentShowHeader,
                             price = uiState.price,
                             percentageChange = uiState.percentageChange,
                             currency = uiState.selectedCurrency,
                             intervalLabelResId = uiState.changeIntervalLabelResId,
-                            onSave = { selectedFont, selectedPriceSize, selectedAmoledBlack, selectedOpacity, selectedShowHeader ->
+                            onSave = { selectedFont, selectedPriceSize, selectedColorStyle, selectedTheme, selectedShowHeader ->
                                 settingsViewModel.saveWidgetCustomization(
                                     selectedFont,
                                     selectedPriceSize,
-                                    selectedAmoledBlack,
-                                    selectedOpacity,
+                                    selectedColorStyle,
+                                    selectedTheme,
                                     selectedShowHeader
                                 )
                                 backStack.removeLastOrNull()
