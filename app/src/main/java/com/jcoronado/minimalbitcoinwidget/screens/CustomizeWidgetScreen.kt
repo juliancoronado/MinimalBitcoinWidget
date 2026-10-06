@@ -39,7 +39,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -55,6 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -191,6 +191,9 @@ fun CustomizeWidgetScreen(
             ) {
                 val fontEntries = WidgetFont.entries
 
+                val colors =
+                    ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
+
                 Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
                     SectionHeader(
                         title = stringResource(R.string.widget_font),
@@ -204,9 +207,7 @@ fun CustomizeWidgetScreen(
                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                 selectedFont = font
                             },
-                            colors = ListItemDefaults.segmentedColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                            ),
+                            colors = colors,
                             shapes = ListItemDefaults.segmentedShapes(
                                 index = index,
                                 count = fontEntries.size
@@ -241,9 +242,7 @@ fun CustomizeWidgetScreen(
                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                 selectedPriceSize = size
                             },
-                            colors = ListItemDefaults.segmentedColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                            ),
+                            colors = colors,
                             shapes = ListItemDefaults.segmentedShapes(
                                 index = index,
                                 count = priceSizeEntries.size
@@ -278,9 +277,7 @@ fun CustomizeWidgetScreen(
                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                 selectedOpacity = opacity
                             },
-                            colors = ListItemDefaults.segmentedColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                            ),
+                            colors = colors,
                             shapes = ListItemDefaults.segmentedShapes(
                                 index = index,
                                 count = opacityEntries.size
@@ -308,9 +305,7 @@ fun CustomizeWidgetScreen(
                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                 selectedAmoledBlack = !selectedAmoledBlack
                             },
-                            colors = ListItemDefaults.segmentedColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                            ),
+                            colors = colors,
                             shapes = ListItemDefaults.segmentedShapes(
                                 index = 0,
                                 count = 1
@@ -351,9 +346,7 @@ fun CustomizeWidgetScreen(
                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                 selectedShowHeader = !selectedShowHeader
                             },
-                            colors = ListItemDefaults.segmentedColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                            ),
+                            colors = colors,
                             shapes = ListItemDefaults.segmentedShapes(
                                 index = 0,
                                 count = 1
@@ -403,9 +396,8 @@ fun CustomizeWidgetScreen(
                         fontWeight = FontWeight.Medium
                     )
                 }
-
                 Spacer(modifier = Modifier.navigationBarsPadding())
-                Spacer(modifier = Modifier.height(16.dp))
+                // Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
@@ -415,7 +407,7 @@ private val PREVIEW_WIDTH = 208.dp
 private val PREVIEW_HEIGHT = 108.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@SuppressLint("DefaultLocale")
+@SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
 @Composable
 private fun GlanceWidgetPreviewCard(
     selectedFont: WidgetFont,
@@ -429,12 +421,13 @@ private fun GlanceWidgetPreviewCard(
     @StringRes intervalLabelResId: Int
 ) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
     val density = LocalDensity.current
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
 
-    val themedContext = remember(context, isDark) {
+    val themedContext = remember(context, configuration, isDark) {
         val uiModeNight = if (isDark) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
-        val config = Configuration(context.resources.configuration).apply {
+        val config = Configuration(configuration).apply {
             uiMode = (uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or uiModeNight
         }
         val configContext = context.createConfigurationContext(config)
