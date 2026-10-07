@@ -107,7 +107,7 @@ class PriceWidget : GlanceAppWidget() {
                     when (widgetTheme) {
                         WidgetTheme.LIGHT -> androidx.glance.material3.ColorProviders(light = dynLight, dark = dynLight)
                         WidgetTheme.DARK -> androidx.glance.material3.ColorProviders(light = dynDark, dark = dynDark)
-                        WidgetTheme.SYSTEM -> GlanceTheme.colors
+                        WidgetTheme.SYSTEM -> androidx.glance.material3.ColorProviders(light = dynLight, dark = dynDark)
                     }
                 } else {
                     when (widgetTheme) {
@@ -173,19 +173,7 @@ class PriceWidget : GlanceAppWidget() {
                 }
                 WidgetColorStyle.DYNAMIC -> {
                     if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
-                        when (widgetTheme) {
-                            WidgetTheme.LIGHT -> {
-                                val lightBg = dynamicLightColorScheme(context).surfaceContainer
-                                backgroundModifier = backgroundModifier.background(ColorProvider(day = lightBg, night = lightBg))
-                            }
-                            WidgetTheme.DARK -> {
-                                val darkBg = dynamicDarkColorScheme(context).surfaceContainer
-                                backgroundModifier = backgroundModifier.background(ColorProvider(day = darkBg, night = darkBg))
-                            }
-                            WidgetTheme.SYSTEM -> {
-                                backgroundModifier = backgroundModifier.background(GlanceTheme.colors.widgetBackground)
-                            }
-                        }
+                        backgroundModifier = backgroundModifier.background(GlanceTheme.colors.widgetBackground)
                     } else {
                         when (widgetTheme) {
                             WidgetTheme.LIGHT -> {

@@ -61,3 +61,18 @@ This document serves as a structured technical specification for an AI agent to 
   1. Evaluate if Glance covers all necessary features.
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
   3. Ensure `PriceUpdateWorker` only needs to trigger Glance updates.
+
+### Task 5: Centralize and Extract Widget Color Palettes
+
+- **Goal:** Extract inline widget color scheme definitions (such as `solidLight` and `solidDark`) out of `PriceWidget.kt` and centralize them as reusable constants in `GlanceColorScheme.kt` or `Theme.kt`.
+- **Current State:**
+  - `PriceWidget.kt` instantiates custom `lightColorScheme(...)` and `darkColorScheme(...)` objects inline on every composition cycle when `WidgetColorStyle.SOLID` is selected.
+  - While dedicated schemes are necessary for "Solid" (to preserve pure `#FFFFFF` / pure OLED `#000000` surfaces and maintain financial green `#00875A` / `#36B37E` for `primary` price trend indicators instead of the app's brand blue), allocating them inline fragments theme declarations and creates redundant allocations.
+- **Target Files:**
+  - `com.jcoronado.minimalbitcoinwidget.widgets.glance.GlanceColorScheme.kt` or `com.jcoronado.minimalbitcoinwidget.ui.theme.Theme.kt`
+  - `com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget.kt`
+- **Instructions:**
+  1. Define `solidLightScheme` and `solidDarkScheme` as pre-allocated top-level `val` constants in `GlanceColorScheme.kt` (or `Theme.kt`).
+  2. Define `solidColorProviders = ColorProviders(light = solidLightScheme, dark = solidDarkScheme)`.
+  3. Update `PriceWidget.kt` to reference these pre-allocated scheme constants rather than constructing them inline on each compose cycle.
+
