@@ -122,7 +122,7 @@ fun DeveloperOptionsScreen(
                     Text(
                         stringResource(R.string.developer_title),
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                     )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -155,7 +155,7 @@ fun DeveloperOptionsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.widget_logs), fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.widget_logs), fontWeight = FontWeight.Medium)
                         },
                         supportingContent = {
                             Text(stringResource(R.string.widget_logs_description))
@@ -185,7 +185,7 @@ fun DeveloperOptionsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.debug_mock_ui_title), fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.debug_mock_ui_title), fontWeight = FontWeight.Medium)
                         },
                         supportingContent = {
                             Text(stringResource(R.string.debug_mock_ui_desc))
@@ -317,7 +317,7 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                 Text(
                     stringResource(R.string.widget_logs),
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                 )
             }, navigationIcon = {
                 IconButton(onClick = {

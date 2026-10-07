@@ -15,6 +15,13 @@ Date Format: YYYY-MM-DD
 
 ---
 
+## [3.4.1] - 2026-10-05
+
+### Changed
+
+- Reduced font weight on bolded text for better readability
+- Small wording change on the Customize Widget screen
+
 ## [3.4.0] - 2026-09-29
 
 ### Added
@@ -25,8 +32,6 @@ Date Format: YYYY-MM-DD
 ### Changed
 
 - Migrated price fetching to a fast, CDN-cached backend proxy to improve widget refresh speed and reliability worldwide.
-
----
 
 ## [3.3.1] - 2026-08-25
 

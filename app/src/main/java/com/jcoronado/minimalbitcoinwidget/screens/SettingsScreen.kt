@@ -185,7 +185,7 @@ fun SettingsScreen(
                     Text(
                         stringResource(R.string.settings),
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                     )
                 }, colors = TopAppBarDefaults.topAppBarColors().copy(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -221,7 +221,7 @@ fun SettingsScreen(
                     content = {
                         Text(
                             stringResource(R.string.update_currency),
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Medium
                         )
                     },
                     supportingContent = {
@@ -255,7 +255,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.change_percentage),
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.Medium
                             )
                         },
                         supportingContent = {
@@ -303,7 +303,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.widget_refresh_interval),
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.Medium
                             )
                         },
                         supportingContent = {
@@ -351,7 +351,7 @@ fun SettingsScreen(
                         },
                         content = {
                             Text(
-                                stringResource(R.string.app_theme), fontWeight = FontWeight.SemiBold
+                                stringResource(R.string.app_theme), fontWeight = FontWeight.Medium
                             )
                         },
                         supportingContent = {
@@ -412,7 +412,7 @@ fun SettingsScreen(
                     content = {
                         Text(
                             stringResource(R.string.customize_widget),
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Medium
                         )
                     },
                     trailingContent = {
@@ -441,7 +441,7 @@ fun SettingsScreen(
                     content = {
                         Text(
                             stringResource(R.string.dynamic_colors),
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Medium
                         )
                     },
                     supportingContent = {
@@ -476,7 +476,7 @@ fun SettingsScreen(
                     content = {
                         Text(
                             stringResource(R.string.show_price_graph),
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Medium
                         )
                     },
                     supportingContent = {
@@ -509,7 +509,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.data_source), fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.data_source), fontWeight = FontWeight.Medium)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.data_source_subtitle))
@@ -539,7 +539,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.source_code), fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.source_code), fontWeight = FontWeight.Medium)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.view_on_github))
@@ -573,7 +573,7 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.license), fontWeight = FontWeight.SemiBold)
+                            Text(stringResource(R.string.license), fontWeight = FontWeight.Medium)
                         },
                         supportingContent = {
                             Text(stringResource(R.string.license_subtitle))
@@ -593,7 +593,7 @@ fun SettingsScreen(
                         )
                     },
                     content = {
-                        Text(stringResource(R.string.contact), fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.contact), fontWeight = FontWeight.Medium)
                     },
                     supportingContent = {
                         Text(stringResource(R.string.developer))
@@ -629,7 +629,7 @@ fun SettingsScreen(
                             )
                         },
                         content = {
-                            Text(stringResource(R.string.version), fontWeight = FontWeight.SemiBold)
+                            Text(stringResource(R.string.version), fontWeight = FontWeight.Medium)
                         },
                         supportingContent = {
                             Text(
@@ -658,7 +658,7 @@ fun SettingsScreen(
                     },
                     content = {
                         Text(
-                            stringResource(R.string.build_number), fontWeight = FontWeight.SemiBold
+                            stringResource(R.string.build_number), fontWeight = FontWeight.Medium
                         )
                     },
                     supportingContent = {
@@ -701,7 +701,7 @@ fun SettingsScreen(
                         content = {
                             Text(
                                 stringResource(R.string.developer_mode),
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.Medium
                             )
                         },
                         supportingContent = {

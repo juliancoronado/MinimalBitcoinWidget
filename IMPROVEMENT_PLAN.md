@@ -5,6 +5,7 @@ This document serves as a structured technical specification for an AI agent to 
 ---
 
 ## Project Context for AI
+
 - **App Type:** Bitcoin Price Tracking Widget & App.
 - **Tech Stack:** Kotlin, Jetpack Compose, Glance (Widgets), WorkManager, OkHttp/Gson, Navigation 3.
 - **Data Flow:** Price data is fetched from CoinGecko API via `PriceRepository`, cached as a JSON string in `SharedPreferences`, and displayed in a Compose UI and Home Screen Widgets (Glance + Legacy).
@@ -14,6 +15,7 @@ This document serves as a structured technical specification for an AI agent to 
 ## Phase 1: Structural & Architectural Modernization
 
 ### Task 1: Migrate to Jetpack DataStore
+
 - **Goal:** Replace `SharedPreferences` with a modern, reactive storage solution.
 - **Current State:** Settings and JSON cache are stored in `com.jcoronado.minimalbitcoinwidget.classes.Prefs`.
 - **Target Files:**
@@ -25,6 +27,7 @@ This document serves as a structured technical specification for an AI agent to 
   3. Replace all calls to `PreferenceManager.getDefaultSharedPreferences`.
 
 ### Task 2: Dependency Injection with Hilt
+
 - **Goal:** Remove manual dependency management and `AndroidViewModel` boilerplate.
 - **Target Files:** `build.gradle.kts`, `MainActivity.kt`, `PriceViewModel.kt`, `SettingsViewModel.kt`, `PriceUpdateWorker.kt`.
 - **Instructions:**
@@ -38,6 +41,7 @@ This document serves as a structured technical specification for an AI agent to 
 ## Phase 2: Code Quality & Maintenance
 
 ### Task 3: Comprehensive Unit Testing
+
 - **Goal:** Ensure reliability and prevent regressions by implementing a suite of unit tests for data and business logic.
 - **Tools:** JUnit 4/5, MockK, and `kotlinx-coroutines-test`.
 - **Instructions:**
@@ -51,12 +55,9 @@ This document serves as a structured technical specification for an AI agent to 
 ## Phase 3: UI/UX Enhancements
 
 ### Task 4: Widget Consolidation
+
 - **Goal:** Deprecate Legacy widget logic at a future date (2027).
 - **Instructions:**
   1. Evaluate if Glance covers all necessary features.
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
   3. Ensure `PriceUpdateWorker` only needs to trigger Glance updates.
-
-
-
-

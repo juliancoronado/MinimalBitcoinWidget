@@ -6,18 +6,23 @@ A minimal, open-source Bitcoin price widget for your Android home screen. Track 
 
 <a href='https://play.google.com/store/apps/details?id=com.jcoronado.minimalbitcoinwidget&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="250"/></a>
 
-*Google Play and the Google Play logo are trademarks of Google LLC.*
+_Google Play and the Google Play logo are trademarks of Google LLC._
 
 ## Features
 
-- **Real-time Price Tracking**: Stay updated with the latest Bitcoin price data provided by the CoinGecko API.
-- **Multiple Currencies**: Support for a wide range of currencies including USD, GBP, JPY, EUR, CAD, MXN, AUD, and BRL.
+- **Real-time Price Tracking**: High-speed, CDN-cached Bitcoin price updates powered by CoinGecko.
+- **Interactive Sparkline Chart**: Clean trend visualization on the dashboard with smooth curves, dynamic scaling, and toggleable display.
+- **Widget Customization**: Dedicated customization screen to personalize widget typography (Google Sans Flex Rounded vs. System Default) and a live in-app widget preview matching your theme.
+- **Homescreen Widgets**: Modern widgets built with Jetpack Compose Glance, plus a legacy widget option for broader device compatibility.
+- **Quick Widget Pinning**: In-app shortcut to pin the widget directly to your home screen with a single tap.
+- **Animated Price Updates**: Engaging per-digit slide animations indicating directional price movements.
+- **Multiple Currencies**: Track prices in USD, GBP, JPY, EUR, CAD, MXN, AUD, and BRL with locale-aware currency symbol formatting.
 - **Customizable Timeframes**: Choose to display price change percentages for 24 hours, 7 days, or 30 days.
-- **Homescreen Widgets**: Beautiful, modern widgets built with Jetpack Compose Glance, plus a legacy widget option for broader compatibility.
-- **Configurable Refresh Rates**: Tailor the background update frequency to your needs with 1, 4, or 8-hour refresh intervals.
-- **Material Design 3**: A clean and modern user interface using the latest Material 3 Expressive components.
-- **Dynamic Theming**: Support for Material You dynamic colors on Android 12+ and seamless Light/Dark/System theme switching.
-- **Privacy-Focused**: Open-source, no ads, no tracking.
+- **Configurable Refresh Rates**: Tailor background update frequency with 1, 4, or 8-hour refresh intervals.
+- **Material Design 3 Expressive**: Clean and modern UI using the latest Material 3 Expressive components and Material You dynamic theming (Android 12+).
+- **Multi-Language Localization**: Full translation support across 9 languages (English, Spanish, German, French, Italian, Portuguese, Turkish, and more).
+- **Developer Tools**: Integrated developer options with a Mock UI simulator to preview custom prices, currencies, and widget layouts without hitting network limits.
+- **Privacy-Focused**: 100% open-source, no ads, no trackers, and no unnecessary permissions.
 
 ## Screenshots
 
@@ -44,8 +49,8 @@ To build and run the project locally, you can clone the repository and open it i
 - [Glance](https://developer.android.com/jetpack/compose/glance): Build app widgets with a Jetpack Compose-style API.
 - [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager): For reliable, periodic background price updates.
 - [Navigation 3](https://developer.android.com/jetpack/compose/navigation): Modern, type-safe navigation for Compose.
-- [Room](https://developer.android.com/training/data-storage/room): For local database persistence and caching.
-- [OkHttp](https://square.github.io/okhttp/): For making efficient HTTP requests to the CoinGecko API.
+- [Room](https://developer.android.com/training/data-storage/room): For local database persistence and logging.
+- [OkHttp](https://square.github.io/okhttp/): For efficient HTTP requests to the CDN-cached backend proxy.
 - [Gson](https://github.com/google/gson): For robust JSON serialization and parsing.
 
 ## Contributing
@@ -66,7 +71,7 @@ Distributed under the GNU General Public License v3.0. See the `LICENSE` file fo
 
 ## Acknowledgments
 
-- Price data provided by the [CoinGecko API](https://www.coingecko.com/api).
+- Bitcoin price data powered by the [CoinGecko API](https://www.coingecko.com/api).
 
 ## Contact & Support
 

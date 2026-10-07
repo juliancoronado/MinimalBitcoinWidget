@@ -1,41 +1,32 @@
 // Release notes for the Google Play Store listing
 // translations provided by Gemini AI
 
-// v3.4.0
+// v3.4.1
 
 <en-US>
-• Fixes & Reliability: Upgraded backend infrastructure to resolve price update errors and improve widget stability.
-• New Customization: Enjoy a fresh look with a new font! Choose between the new style or your system default in the new "Customize Widget" screen.
+Small UI and readability improvements.
 </en-US>
 <es-ES>
-• Correcciones y fiabilidad: Se ha actualizado la infraestructura del backend para resolver los errores de actualización de precios y mejorar la estabilidad del widget.
-• Nueva personalización: ¡Disfruta de un diseño renovado con una nueva fuente! Elige entre el nuevo estilo o la fuente predeterminada del sistema en la nueva pantalla «Personalizar widget».
+Pequeñas mejoras de interfaz y legibilidad.
 </es-ES>
 <es-419>
-• Correcciones y confiabilidad: Se ha actualizado la infraestructura del backend para resolver los errores de actualización de precios y mejorar la estabilidad del widget.
-• Nueva personalización: ¡Disfruta de un diseño renovado con una nueva fuente! Elige entre el nuevo estilo o la fuente predeterminada del sistema en la nueva pantalla "Personalizar widget".
+Pequeñas mejoras de interfaz y legibilidad.
 </es-419>
 <de-DE>
-• Fehlerbehebungen & Zuverlässigkeit: Die Backend-Infrastruktur wurde aktualisiert, um Fehler bei der Preisaktualisierung zu beheben und die Widget-Stabilität zu verbessern.
-• Neue Anpassung: Genießen Sie einen frischen Look mit einer neuen Schriftart! Wählen Sie im neuen Bildschirm „Widget anpassen“ zwischen dem neuen Stil und der Standardschriftart Ihres Systems.
+Kleine Verbesserungen an der Benutzeroberfläche und Lesbarkeit.
 </de-DE>
 <fr-FR>
-• Corrections et fiabilité : Mise à niveau de l'infrastructure backend pour résoudre les erreurs d'actualisation des prix et améliorer la stabilité du widget.
-• Nouvelle personnalisation : Profitez d'un nouveau look avec une nouvelle police ! Choisissez entre le nouveau style ou la police par défaut du système dans le nouvel écran « Personnaliser le widget ».
+Petites améliorations de l'interface et de la lisibilité.
 </fr-FR>
 <it-IT>
-• Correzioni e affidabilità: Abbiamo aggiornato l'infrastruttura backend per risolvere gli errori di aggiornamento del prezzo e migliorare la stabilità del widget.
-• Nuova personalizzazione: Goditi un nuovo look con un nuovo carattere! Scegli tra il nuovo stile o il carattere predefinito di sistema nella nuova schermata "Personalizza widget".
+Piccoli miglioramenti all'interfaccia e alla leggibilità.
 </it-IT>
 <pt-PT>
-• Correções e fiabilidade: Atualizámos a infraestrutura de backend para resolver erros na atualização do preço e melhorar a estabilidade do widget.
-• Nova personalização: Desfruta de um visual renovado com um novo tipo de letra! Escolhe entre o novo estilo ou a predefinição do sistema no novo ecrã «Personalizar widget».
+Pequenas melhorias na interface e na legibilidade.
 </pt-PT>
 <pt-BR>
-• Correções e confiabilidade: Atualizamos a infraestrutura do backend para resolver erros na atualização do preço e melhorar a estabilidade do widget.
-• Nova personalização: Aproveite um visual renovado com uma nova fonte! Escolha entre o novo estilo ou a fonte padrão do sistema na nova tela "Personalizar widget".
+Pequenas melhorias na interface e na legibilidade.
 </pt-BR>
 <tr-TR>
-• Düzeltmeler ve Kararlılık: Fiyat güncelleme hatalarını çözmek ve widget kararlılığını artırmak için arka uç altyapısı yükseltildi.
-• Yeni Özelleştirme: Yeni bir yazı tipiyle yepyeni bir görünümün keyfini çıkarın! Yeni "Widget'ı Özelleştir" ekranında yeni stil ile sisteminizin varsayılan yazı tipi arasında seçim yapın.
+Küçük kullanıcı arayüzü ve okunabilirlik iyileştirmeleri.
 </tr-TR>
