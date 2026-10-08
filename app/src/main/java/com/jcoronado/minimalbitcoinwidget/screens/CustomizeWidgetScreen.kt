@@ -209,6 +209,7 @@ fun CustomizeWidgetScreen(
                                 index = index,
                                 count = fontEntries.size
                             ),
+                            verticalAlignment = Alignment.CenterVertically,
                             content = {
                                 Text(
                                     text = stringResource(font.labelResId),
@@ -244,6 +245,7 @@ fun CustomizeWidgetScreen(
                                 index = index,
                                 count = priceSizeEntries.size
                             ),
+                            verticalAlignment = Alignment.CenterVertically,
                             content = {
                                 Text(
                                     text = stringResource(size.labelResId),
@@ -279,6 +281,7 @@ fun CustomizeWidgetScreen(
                                 index = index,
                                 count = colorStyleEntries.size
                             ),
+                            verticalAlignment = Alignment.CenterVertically,
                             content = {
                                 Text(
                                     text = stringResource(style.labelResId),
@@ -314,6 +317,7 @@ fun CustomizeWidgetScreen(
                                 index = index,
                                 count = themeEntries.size
                             ),
+                            verticalAlignment = Alignment.CenterVertically,
                             content = {
                                 Text(
                                     text = stringResource(theme.labelResId),

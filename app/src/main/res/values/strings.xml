@@ -52,6 +52,7 @@
     <string name="widget_font_preview_header">Preview</string>
     <string name="widget_font_options_header">Available Fonts</string>
     <string name="widget_font_icon_description">Widget font icon</string>
+    <string name="customize_widget_icon_description">Customize widget icon</string>
     <string name="font_app_default">App Default</string>
     <string name="font_system_default">System Default</string>
     <string name="widget_price_size">Price Size</string>
@@ -92,7 +93,9 @@
     <!-- Shortcuts -->
     <string name="shortcuts_header">Shortcuts</string>
     <string name="add_widget_shortcut_title">Add to Home Screen</string>
-    <string name="add_widget_shortcut_description">Tap here to add a widget to your home screen</string>
+    <string name="add_widget_shortcut_description">Place widget on home screen</string>
+    <string name="rate_app_shortcut_title">Rate on Google Play</string>
+    <string name="rate_app_shortcut_description">Support the app by leaving a review</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Currency icon</string>
@@ -104,6 +107,9 @@
     <string name="build_icon_description">Build icon</string>
     <string name="contact_icon_description">Contact icon</string>
     <string name="open_arrow_icon_description">Open arrow icon</string>
+    <string name="add_icon_description">Add icon</string>
+    <string name="widgets_icon_description">Widgets icon</string>
+    <string name="star_icon_description">Star icon</string>
     <string name="chart_data_icon_description">Chart data icon</string>
     <string name="developer_mode_icon_description">Developer Mode icon</string>
     <string name="bitcoin_icon_description">Bitcoin icon</string>

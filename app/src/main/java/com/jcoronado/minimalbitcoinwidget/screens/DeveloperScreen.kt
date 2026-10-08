@@ -149,6 +149,7 @@ fun DeveloperOptionsScreen(
                         shapes = ListItemDefaults.segmentedShapes(
                             index = 0, count = if (mockUiEnabled) 3 else 2
                         ),
+                        verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_notes_24), "TODO"
@@ -179,6 +180,7 @@ fun DeveloperOptionsScreen(
                         shapes = ListItemDefaults.segmentedShapes(
                             index = 1, count = if (mockUiEnabled) 3 else 2
                         ),
+                        verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_bug_report_24), "TODO"

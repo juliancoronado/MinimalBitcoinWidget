@@ -27,6 +27,7 @@
     <string name="widget_font_preview_header">Vorschau</string>
     <string name="widget_font_options_header">Verfügbare Schriftarten</string>
     <string name="widget_font_icon_description">Widget-Schriftartensymbol</string>
+    <string name="customize_widget_icon_description">Widget anpassen-Symbol</string>
     <string name="font_app_default">App-Standard</string>
     <string name="font_system_default">Systemstandard</string>
     <string name="widget_price_size">Preisgröße</string>
@@ -62,7 +63,9 @@
     <!-- Shortcuts -->
     <string name="shortcuts_header">Kurzbefehle</string>
     <string name="add_widget_shortcut_title">Zum Startbildschirm hinzufügen</string>
-    <string name="add_widget_shortcut_description">Tippen Sie hier, um ein Widget zu Ihrem Startbildschirm hinzuzufügen</string>
+    <string name="add_widget_shortcut_description">Widget zum Startbildschirm hinzufügen</string>
+    <string name="rate_app_shortcut_title">Im Google Play Store bewerten</string>
+    <string name="rate_app_shortcut_description">Unterstützen Sie die App mit einer Bewertung</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Währungssymbol</string>
@@ -74,6 +77,9 @@
     <string name="build_icon_description">Build-Symbol</string>
     <string name="contact_icon_description">Kontakt-Symbol</string>
     <string name="open_arrow_icon_description">Symbol für Pfeil zum Öffnen</string>
+    <string name="add_icon_description">Hinzufügen-Symbol</string>
+    <string name="widgets_icon_description">Widget-Symbol</string>
+    <string name="star_icon_description">Stern-Symbol</string>
     <string name="chart_data_icon_description">Diagrammdaten-Symbol</string>
     <string name="developer_mode_icon_description">Symbol für Entwicklermodus</string>
     <string name="bitcoin_icon_description">Bitcoin-Symbol</string>

@@ -212,6 +212,7 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 0, count = 3
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_price_change_24),
@@ -403,10 +404,11 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 1, count = 4
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
-                            painterResource(R.drawable.rounded_widgets_24),
-                            stringResource(R.string.widget_font_icon_description)
+                            painterResource(R.drawable.rounded_tune_24),
+                            stringResource(R.string.customize_widget_icon_description)
                         )
                     },
                     content = {
@@ -431,6 +433,7 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 2, count = 4
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_palette_24),
@@ -467,6 +470,7 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 3, count = 4
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_show_chart_24),
@@ -502,6 +506,7 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 0, count = if (developerModeEnabled) 7 else 6
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_chart_data_24),
@@ -532,6 +537,7 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 1, count = if (developerModeEnabled) 7 else 6
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_folder_code_24),
@@ -566,6 +572,7 @@ fun SettingsScreen(
                         shapes = ListItemDefaults.segmentedShapes(
                             index = 2, count = if (developerModeEnabled) 7 else 6
                         ),
+                        verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_license_24),
@@ -586,6 +593,7 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 3, count = if (developerModeEnabled) 7 else 6
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_mail_24),
@@ -622,6 +630,7 @@ fun SettingsScreen(
                         shapes = ListItemDefaults.segmentedShapes(
                             index = 4, count = if (developerModeEnabled) 7 else 6
                         ),
+                        verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_info_24),
@@ -650,6 +659,7 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 5, count = if (developerModeEnabled) 7 else 6
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_build_24),
@@ -692,6 +702,7 @@ fun SettingsScreen(
                         shapes = ListItemDefaults.segmentedShapes(
                             index = 6, count = 7
                         ),
+                        verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_code_24),

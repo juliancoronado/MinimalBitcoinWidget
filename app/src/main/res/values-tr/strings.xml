@@ -27,6 +27,7 @@
     <string name="widget_font_preview_header">Önizleme</string>
     <string name="widget_font_options_header">Kullanılabilir Yazı Tipleri</string>
     <string name="widget_font_icon_description">Widget yazı tipi simgesi</string>
+    <string name="customize_widget_icon_description">Widget özelleştirme simgesi</string>
     <string name="font_app_default">Uygulama Varsayılanı</string>
     <string name="font_system_default">Sistem Varsayılanı</string>
     <string name="widget_price_size">Fiyat Boyutu</string>
@@ -62,7 +63,9 @@
     <!-- Shortcuts -->
     <string name="shortcuts_header">Kısayollar</string>
     <string name="add_widget_shortcut_title">Ana Ekrana Ekle</string>
-    <string name="add_widget_shortcut_description">Ana ekranınıza bir widget eklemek için buraya dokunun</string>
+    <string name="add_widget_shortcut_description">Ana ekrana bir widget ekleyin</string>
+    <string name="rate_app_shortcut_title">Google Play\'de Puanlayın</string>
+    <string name="rate_app_shortcut_description">Bir değerlendirme bırakarak uygulamayı destekleyin</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Para birimi simgesi</string>
@@ -74,6 +77,9 @@
     <string name="build_icon_description">Yapı simgesi</string>
     <string name="contact_icon_description">İletişim simgesi</string>
     <string name="open_arrow_icon_description">Açılış oku simgesi</string>
+    <string name="add_icon_description">Ekle simgesi</string>
+    <string name="widgets_icon_description">Widget simgesi</string>
+    <string name="star_icon_description">Yıldız simgesi</string>
     <string name="chart_data_icon_description">Grafik verileri simgesi</string>
     <string name="developer_mode_icon_description">Geliştirici modu simgesi</string>
     <string name="bitcoin_icon_description">Bitcoin simgesi</string>

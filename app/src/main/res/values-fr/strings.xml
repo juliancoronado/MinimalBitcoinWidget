@@ -27,6 +27,7 @@
     <string name="widget_font_preview_header">Aperçu</string>
     <string name="widget_font_options_header">Polices disponibles</string>
     <string name="widget_font_icon_description">Icône de police du widget</string>
+    <string name="customize_widget_icon_description">Icône de personnalisation du widget</string>
     <string name="font_app_default">Par défaut de l\'application</string>
     <string name="font_system_default">Système par défaut</string>
     <string name="widget_price_size">Taille du prix</string>
@@ -62,7 +63,9 @@
     <!-- Shortcuts -->
     <string name="shortcuts_header">Raccourcis</string>
     <string name="add_widget_shortcut_title">Ajouter à l\'écran d\'accueil</string>
-    <string name="add_widget_shortcut_description">Appuyez ici pour ajouter un widget à votre écran d\'accueil</string>
+    <string name="add_widget_shortcut_description">Ajouter un widget à l\'écran d\'accueil</string>
+    <string name="rate_app_shortcut_title">Noter sur Google Play</string>
+    <string name="rate_app_shortcut_description">Soutenez l\'application en laissant un avis</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Icône de devise</string>
@@ -74,6 +77,9 @@
     <string name="build_icon_description">Icône de build</string>
     <string name="contact_icon_description">Icône de contact</string>
     <string name="open_arrow_icon_description">Icône de flèche d\'ouverture</string>
+    <string name="add_icon_description">Icône d\'ajout</string>
+    <string name="widgets_icon_description">Icône de widgets</string>
+    <string name="star_icon_description">Icône d\'étoile</string>
     <string name="chart_data_icon_description">Icône des données du graphique</string>
     <string name="developer_mode_icon_description">Icône du mode développeur</string>
     <string name="bitcoin_icon_description">Icône Bitcoin</string>
