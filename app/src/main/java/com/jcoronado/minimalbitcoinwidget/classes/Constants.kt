@@ -77,6 +77,8 @@ object AppConstants {
     const val DEBUG_MOCK_PRICE_DEFAULT = "52849.10"
     const val DEBUG_MOCK_PERCENT_CHANGE_DEFAULT = "2.03"
     const val DEBUG_MOCK_CURRENCY_DEFAULT = "EUR"
+    /** Default change percentage interval index (1 for 7D). */
+    const val CHANGE_PERCENTAGE_DEFAULT = 1
 }
 
 /**

@@ -35,12 +35,12 @@ class PriceDataTest {
     }
 
     @Test
-    fun `getPercentageForInterval with invalid index returns 24h change default`() {
+    fun `getPercentageForInterval with invalid index returns 7d change default`() {
         val resultUnder = priceData.getPercentageForInterval(-1)
-        assertEquals(1.5, resultUnder, 0.0)
+        assertEquals(-5.2, resultUnder, 0.0)
 
         val resultOver = priceData.getPercentageForInterval(3)
-        assertEquals(1.5, resultOver, 0.0)
+        assertEquals(-5.2, resultOver, 0.0)
     }
 
     @Test
@@ -62,6 +62,19 @@ class PriceDataTest {
         // 30d (index 2) returns empty list
         val sparkline30d = sparklineData.getSparklineForInterval(2)
         assertEquals(0, sparkline30d.size)
+
+        // invalid index returns full 168 points (7d default)
+        val sparklineInvalid = sparklineData.getSparklineForInterval(-1)
+        assertEquals(168, sparklineInvalid.size)
+    }
+
+    @Test
+    fun `TimeInterval fromValue returns matching interval and defaults to DAYS_7`() {
+        assertEquals(com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.HOURS_24, com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.fromValue(0))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.DAYS_7, com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.fromValue(1))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.DAYS_30, com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.fromValue(2))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.DAYS_7, com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.fromValue(-1))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.DAYS_7, com.jcoronado.minimalbitcoinwidget.utils.TimeInterval.fromValue(99))
     }
 
     @Test

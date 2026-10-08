@@ -33,7 +33,7 @@ data class PriceData(
             0 -> priceChangePercentage24h
             1 -> priceChangePercentage7d
             2 -> priceChangePercentage30d
-            else -> priceChangePercentage24h
+            else -> priceChangePercentage7d
         }
     }
 
@@ -52,7 +52,7 @@ data class PriceData(
             0 -> if (rawPrices.size >= 25) rawPrices.takeLast(25) else rawPrices
             1 -> rawPrices
             2 -> return emptyList()
-            else -> if (rawPrices.size >= 25) rawPrices.takeLast(25) else rawPrices
+            else -> rawPrices
         }
 
         if (slice.size < 2) return slice

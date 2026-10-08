@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.jcoronado.minimalbitcoinwidget.BuildConfig
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
 import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
@@ -80,7 +81,7 @@ fun SettingsScreen(
     onDynamicColorsSelected: (Boolean) -> Unit = {},
     refreshInterval: Int = 1,
     onRefreshIntervalSelected: (Int) -> Unit = {},
-    changePercentage: Int = 0,
+    changePercentage: Int = AppConstants.CHANGE_PERCENTAGE_DEFAULT,
     onChangePercentageSelected: (Int) -> Unit = {},
     showSparkline: Boolean = true,
     onShowSparklineSelected: (Boolean) -> Unit = {},

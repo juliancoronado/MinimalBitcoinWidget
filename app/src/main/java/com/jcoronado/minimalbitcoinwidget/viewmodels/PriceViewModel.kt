@@ -67,15 +67,17 @@ class PriceViewModel @JvmOverloads constructor(
         if (repository.isMockUiEnabled()) {
             val mockData = repository.getMockPriceData()
             val mockCurrency = repository.getMockCurrency()
+            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+            val interval = TimeInterval.fromValue(selectedInterval)
 
             _uiState.value = PriceUiState(
                 price = mockData.currentPrice,
-                percentageChange = mockData.priceChangePercentage24h,
+                percentageChange = mockData.getPercentageForInterval(selectedInterval),
                 isLoading = false,
                 selectedCurrency = mockCurrency,
-                changeIntervalLabelResId = R.string.interval_24h,
+                changeIntervalLabelResId = interval.labelResId,
                 lastUpdated = 0L,
-                sparklinePrices = mockData.getSparklineForInterval(0),
+                sparklinePrices = mockData.getSparklineForInterval(selectedInterval),
                 showSparkline = showSparkline
             )
             return
@@ -86,7 +88,7 @@ class PriceViewModel @JvmOverloads constructor(
         if (cachedData != null) {
             try {
                 val lastUpdated = repository.getLastApiCallTimestamp()
-                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
                 val percentage = cachedData.getPercentageForInterval(selectedInterval)
 
                 val interval = TimeInterval.fromValue(selectedInterval)
@@ -199,7 +201,7 @@ class PriceViewModel @JvmOverloads constructor(
             when (resource) {
                 is Resource.Success -> {
                     val priceData = resource.data
-                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
                     val percentage = priceData.getPercentageForInterval(selectedInterval)
                     val interval = TimeInterval.fromValue(selectedInterval)
                     val lastUpdated = repository.getLastApiCallTimestamp()
@@ -254,11 +256,13 @@ class PriceViewModel @JvmOverloads constructor(
             if (repository.isMockUiEnabled()) {
                 val mockData = repository.getMockPriceData()
                 val mockCurrency = repository.getMockCurrency()
+                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+                val interval = TimeInterval.fromValue(selectedInterval)
 
                 val glanceState = PriceWidgetState.Available(
                     price = mockData.currentPrice,
-                    changePercentage = mockData.priceChangePercentage24h,
-                    intervalLabelResId = R.string.interval_24h,
+                    changePercentage = mockData.getPercentageForInterval(selectedInterval),
+                    intervalLabelResId = interval.labelResId,
                     currency = mockCurrency,
                     fontKey = fontKey,
                     priceSizeKey = priceSizeKey,
@@ -279,7 +283,7 @@ class PriceViewModel @JvmOverloads constructor(
             val priceData = repository.getCachedPriceData() ?: return
             val currencyCode = repository.getSelectedCurrency()
 
-            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
             val percentage = priceData.getPercentageForInterval(selectedInterval)
             val interval = TimeInterval.fromValue(selectedInterval)
 

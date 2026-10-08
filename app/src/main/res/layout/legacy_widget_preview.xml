@@ -88,7 +88,7 @@
             android:layout_marginStart="4dp"
             android:fontFamily="@font/manrope_regular"
             android:gravity="center_vertical"
-            android:text="@string/interval_24h"
+            android:text="@string/interval_7d"
             android:textColor="?attr/appWidgetTextColor"
             android:textSize="12sp" />
 

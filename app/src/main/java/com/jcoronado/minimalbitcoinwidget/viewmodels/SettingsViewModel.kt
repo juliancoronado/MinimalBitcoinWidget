@@ -130,7 +130,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun getSavedChangePercentageInterval(): Int {
-        return prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+        return prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
     }
 
     fun setChangePercentageInterval(index: Int) {

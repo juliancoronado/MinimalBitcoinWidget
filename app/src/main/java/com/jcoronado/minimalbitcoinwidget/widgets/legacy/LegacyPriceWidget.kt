@@ -287,7 +287,7 @@ fun setWidgetViews(
         )
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+        val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
         
         val percentage = priceData.getPercentageForInterval(selectedInterval)
 

@@ -170,7 +170,7 @@ fun CustomizeWidgetScreen(
                                 price = if (price > 0.0) price else 62884.21,
                                 percentageChange = if (price > 0.0) percentageChange else 2.03,
                                 currency = if (currency.isNotBlank()) currency else "USD",
-                                intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_24h
+                                intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_7d
                             )
                         }
                     }
