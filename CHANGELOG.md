@@ -11,7 +11,13 @@ Date Format: YYYY-MM-DD
 
 ### Added
 
+- Added widget customization options: Price Size (Small, Default, Large), Colors (Dynamic, Solid), and Theme (System, Light, Dark).
+- Added toggle option to show or hide the widget header (Bitcoin icon, currency code, and interval label).
+
 ### Changed
+
+- Harmonized dynamic widget theme colors across Light, Dark, and System modes.
+- Centralized Glance widget color palettes and background providers into `GlanceColorScheme`, eliminating inline allocations on widget composition passes.
 
 ---
 

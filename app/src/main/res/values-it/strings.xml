@@ -37,7 +37,7 @@
     <string name="widget_colors_dynamic">Dinamico</string>
     <string name="widget_colors_solid">Tinta unita</string>
     <string name="widget_theme">Tema</string>
-    <string name="widget_theme_system">Sistema</string>
+    <string name="widget_theme_system">Predefinito di sistema</string>
     <string name="widget_theme_light">Chiaro</string>
     <string name="widget_theme_dark">Scuro</string>
     <string name="widget_display_options">Opzioni di visualizzazione</string>

@@ -37,7 +37,7 @@
     <string name="widget_colors_dynamic">Dinamik</string>
     <string name="widget_colors_solid">Düz</string>
     <string name="widget_theme">Tema</string>
-    <string name="widget_theme_system">Sistem</string>
+    <string name="widget_theme_system">Sistem varsayılanı</string>
     <string name="widget_theme_light">Açık</string>
     <string name="widget_theme_dark">Koyu</string>
     <string name="widget_display_options">Görüntü Seçenekleri</string>

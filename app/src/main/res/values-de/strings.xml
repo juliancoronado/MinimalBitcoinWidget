@@ -37,7 +37,7 @@
     <string name="widget_colors_dynamic">Dynamisch</string>
     <string name="widget_colors_solid">Einfarbig</string>
     <string name="widget_theme">Design</string>
-    <string name="widget_theme_system">System</string>
+    <string name="widget_theme_system">Systemstandard</string>
     <string name="widget_theme_light">Hell</string>
     <string name="widget_theme_dark">Dunkel</string>
     <string name="widget_display_options">Anzeigeoptionen</string>

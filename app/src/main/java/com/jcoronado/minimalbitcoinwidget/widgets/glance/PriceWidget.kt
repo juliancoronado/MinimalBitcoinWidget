@@ -42,10 +42,6 @@ import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.glance.text.TextStyle
 import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.MainActivity
@@ -55,8 +51,6 @@ import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
-import com.jcoronado.minimalbitcoinwidget.ui.theme.darkScheme
-import com.jcoronado.minimalbitcoinwidget.ui.theme.lightScheme
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 
 class PriceWidget : GlanceAppWidget() {
@@ -70,55 +64,6 @@ class PriceWidget : GlanceAppWidget() {
         }
     }
 
-    @Composable
-    private fun getGlanceColorProviders(
-        context: Context,
-        colorStyle: WidgetColorStyle,
-        widgetTheme: WidgetTheme
-    ): androidx.glance.color.ColorProviders {
-        return when (colorStyle) {
-            WidgetColorStyle.SOLID -> {
-                val solidLight = lightColorScheme(
-                    surface = Color.White,
-                    onSurface = Color.Black,
-                    surfaceContainer = Color.White,
-                    secondary = Color(0xFF44474E),
-                    primary = Color(0xFF00875A),
-                    error = Color(0xFFDE350B)
-                )
-                val solidDark = darkColorScheme(
-                    surface = Color.Black,
-                    onSurface = Color.White,
-                    surfaceContainer = Color.Black,
-                    secondary = Color(0xFFC4C6D0),
-                    primary = Color(0xFF36B37E),
-                    error = Color(0xFFFF5630)
-                )
-                when (widgetTheme) {
-                    WidgetTheme.LIGHT -> androidx.glance.material3.ColorProviders(light = solidLight, dark = solidLight)
-                    WidgetTheme.DARK -> androidx.glance.material3.ColorProviders(light = solidDark, dark = solidDark)
-                    WidgetTheme.SYSTEM -> androidx.glance.material3.ColorProviders(light = solidLight, dark = solidDark)
-                }
-            }
-            WidgetColorStyle.DYNAMIC -> {
-                if (Build.VERSION.SDK_INT >= 31) {
-                    val dynLight = dynamicLightColorScheme(context)
-                    val dynDark = dynamicDarkColorScheme(context)
-                    when (widgetTheme) {
-                        WidgetTheme.LIGHT -> androidx.glance.material3.ColorProviders(light = dynLight, dark = dynLight)
-                        WidgetTheme.DARK -> androidx.glance.material3.ColorProviders(light = dynDark, dark = dynDark)
-                        WidgetTheme.SYSTEM -> androidx.glance.material3.ColorProviders(light = dynLight, dark = dynDark)
-                    }
-                } else {
-                    when (widgetTheme) {
-                        WidgetTheme.LIGHT -> androidx.glance.material3.ColorProviders(light = lightScheme, dark = lightScheme)
-                        WidgetTheme.DARK -> androidx.glance.material3.ColorProviders(light = darkScheme, dark = darkScheme)
-                        WidgetTheme.SYSTEM -> GlanceColorScheme.colors
-                    }
-                }
-            }
-        }
-    }
 
     @SuppressLint("DiscouragedApi")
     @Composable
@@ -154,41 +99,19 @@ class PriceWidget : GlanceAppWidget() {
         val colorStyle = WidgetColorStyle.fromKey(colorStyleKey)
         val widgetTheme = WidgetTheme.fromKey(themeKey)
 
-        val colorProviders = getGlanceColorProviders(context, colorStyle, widgetTheme)
+        val colorProviders = GlanceColorScheme.colorsFor(context, colorStyle, widgetTheme)
 
         GlanceTheme(colors = colorProviders) {
             val systemCornerRadiusDefined = LocalContext.current.resources
                 .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
 
             var backgroundModifier = GlanceModifier.fillMaxSize()
-
-            when (colorStyle) {
-                WidgetColorStyle.SOLID -> {
-                    val solidBg = when (widgetTheme) {
-                        WidgetTheme.LIGHT -> ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))
-                        WidgetTheme.DARK -> ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000))
-                        WidgetTheme.SYSTEM -> ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF000000))
-                    }
-                    backgroundModifier = backgroundModifier.background(solidBg)
-                }
-                WidgetColorStyle.DYNAMIC -> {
-                    if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
-                        backgroundModifier = backgroundModifier.background(GlanceTheme.colors.widgetBackground)
-                    } else {
-                        when (widgetTheme) {
-                            WidgetTheme.LIGHT -> {
-                                backgroundModifier = backgroundModifier.background(ColorProvider(day = Color(0xFFF8F9FF), night = Color(0xFFF8F9FF)))
-                            }
-                            WidgetTheme.DARK -> {
-                                backgroundModifier = backgroundModifier.background(ColorProvider(day = Color(0xFF1D2024), night = Color(0xFF1D2024)))
-                            }
-                            WidgetTheme.SYSTEM -> {
-                                backgroundModifier = backgroundModifier.background(ImageProvider(R.drawable.glance_widget_bg))
-                            }
-                        }
-                    }
-                }
-            }
+            backgroundModifier = GlanceColorScheme.applyBackground(
+                modifier = backgroundModifier,
+                colorStyle = colorStyle,
+                widgetTheme = widgetTheme,
+                systemCornerRadiusDefined = systemCornerRadiusDefined
+            )
 
             backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
                 backgroundModifier

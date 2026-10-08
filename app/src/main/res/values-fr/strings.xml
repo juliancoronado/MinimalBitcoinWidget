@@ -37,7 +37,7 @@
     <string name="widget_colors_dynamic">Dynamique</string>
     <string name="widget_colors_solid">Uni</string>
     <string name="widget_theme">Thème</string>
-    <string name="widget_theme_system">Système</string>
+    <string name="widget_theme_system">Système par défaut</string>
     <string name="widget_theme_light">Clair</string>
     <string name="widget_theme_dark">Sombre</string>
     <string name="widget_display_options">Options d\'affichage</string>
