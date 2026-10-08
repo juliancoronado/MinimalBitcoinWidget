@@ -40,9 +40,6 @@
     <string name="widget_theme_system">Padrão do sistema</string>
     <string name="widget_theme_light">Claro</string>
     <string name="widget_theme_dark">Escuro</string>
-    <string name="widget_display_options">Opções de exibição</string>
-    <string name="widget_show_header_title">Mostrar cabeçalho</string>
-    <string name="widget_show_header_subtitle">Exibe o ícone do Bitcoin, código da moeda e intervalo</string>
     <string name="dynamic_colors">Cores dinâmicas</string>
     <string name="dynamic_colors_subtitle">Seguir cores do tema do dispositivo</string>
     <string name="show_price_graph">Gráfico de preço</string>

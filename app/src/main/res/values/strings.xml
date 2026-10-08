@@ -65,9 +65,6 @@
     <string name="widget_theme_system">System default</string>
     <string name="widget_theme_light">Light</string>
     <string name="widget_theme_dark">Dark</string>
-    <string name="widget_display_options">Display Options</string>
-    <string name="widget_show_header_title">Show Header</string>
-    <string name="widget_show_header_subtitle">Displays the Bitcoin icon, currency code, and time interval</string>
     <string name="dynamic_colors">Dynamic Colors</string>
     <string name="dynamic_colors_subtitle">Follow colors from your device theme</string>
     <string name="show_price_graph">Price Graph</string>

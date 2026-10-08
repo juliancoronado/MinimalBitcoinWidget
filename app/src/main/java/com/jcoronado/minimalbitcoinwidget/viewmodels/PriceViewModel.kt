@@ -138,7 +138,6 @@ class PriceViewModel @JvmOverloads constructor(
             val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
             val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
             val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
-            val showHeader = prefs.getBoolean(Prefs.WIDGET_SHOW_HEADER, true)
 
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
@@ -152,8 +151,7 @@ class PriceViewModel @JvmOverloads constructor(
                         fontKey = fontKey,
                         priceSizeKey = priceSizeKey,
                         colorStyleKey = colorStyleKey,
-                        themeKey = themeKey,
-                        showHeader = showHeader
+                        themeKey = themeKey
                     )
                 )
             } catch (e: Exception) {
@@ -252,7 +250,6 @@ class PriceViewModel @JvmOverloads constructor(
             val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
             val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
             val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
-            val showHeader = prefs.getBoolean(Prefs.WIDGET_SHOW_HEADER, true)
 
             if (repository.isMockUiEnabled()) {
                 val mockData = repository.getMockPriceData()
@@ -266,8 +263,7 @@ class PriceViewModel @JvmOverloads constructor(
                     fontKey = fontKey,
                     priceSizeKey = priceSizeKey,
                     colorStyleKey = colorStyleKey,
-                    themeKey = themeKey,
-                    showHeader = showHeader
+                    themeKey = themeKey
                 )
 
                 // update glance widgets
@@ -295,8 +291,7 @@ class PriceViewModel @JvmOverloads constructor(
                 fontKey = fontKey,
                 priceSizeKey = priceSizeKey,
                 colorStyleKey = colorStyleKey,
-                themeKey = themeKey,
-                showHeader = showHeader
+                themeKey = themeKey
             )
 
             // update glance widgets

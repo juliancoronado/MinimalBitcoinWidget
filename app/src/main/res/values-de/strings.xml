@@ -40,9 +40,6 @@
     <string name="widget_theme_system">Systemstandard</string>
     <string name="widget_theme_light">Hell</string>
     <string name="widget_theme_dark">Dunkel</string>
-    <string name="widget_display_options">Anzeigeoptionen</string>
-    <string name="widget_show_header_title">Kopfzeile anzeigen</string>
-    <string name="widget_show_header_subtitle">Zeigt Bitcoin-Symbol, Währungscode und Zeitintervall an</string>
     <string name="dynamic_colors">Dynamische Farben</string>
     <string name="dynamic_colors_subtitle">Farben vom Gerätedesign übernehmen</string>
     <string name="show_price_graph">Preisdiagramm</string>

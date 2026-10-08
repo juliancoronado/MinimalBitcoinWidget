@@ -16,8 +16,6 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
-import androidx.glance.Visibility
-import androidx.glance.visibility
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
@@ -162,7 +160,7 @@ class PriceWidget : GlanceAppWidget() {
         typeface: Typeface?,
         error: Boolean = false
     ) {
-        Header(state.currency, state.intervalLabelResId, typeface, state.showHeader)
+        Header(state.currency, state.intervalLabelResId, typeface)
         Spacer(modifier)
         PriceValue(state, typeface)
         Spacer(modifier)
@@ -222,20 +220,18 @@ class PriceWidget : GlanceAppWidget() {
     private fun Header(
         currency: String,
         intervalLabel: Int,
-        typeface: Typeface?,
-        visible: Boolean = true
+        typeface: Typeface?
     ) {
         val context = LocalContext.current
         val headerText = "/ ${currency.uppercase()} ・ ${context.getString(intervalLabel)}"
         val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
 
         Row(
-            modifier = GlanceModifier.visibility(if (visible) Visibility.Visible else Visibility.Invisible),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 provider = ImageProvider(R.drawable.rounded_currency_bitcoin_24),
-                contentDescription = if (visible) context.getString(R.string.bitcoin_icon_description) else null,
+                contentDescription = context.getString(R.string.bitcoin_icon_description),
                 colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary),
                 modifier = GlanceModifier.size(14.dp)
             )
@@ -249,7 +245,7 @@ class PriceWidget : GlanceAppWidget() {
                 )
                 Image(
                     provider = ImageProvider(headerBitmap),
-                    contentDescription = if (visible) headerText else null,
+                    contentDescription = headerText,
                     colorFilter = ColorFilter.tint(GlanceTheme.colors.secondary)
                 )
             } else {

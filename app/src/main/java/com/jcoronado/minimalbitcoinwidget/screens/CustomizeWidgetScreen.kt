@@ -39,7 +39,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -80,12 +79,11 @@ fun CustomizeWidgetScreen(
     currentPriceSize: WidgetPriceSize = WidgetPriceSize.DEFAULT,
     currentColorStyle: WidgetColorStyle = WidgetColorStyle.DYNAMIC,
     currentTheme: WidgetTheme = WidgetTheme.SYSTEM,
-    currentShowHeader: Boolean = true,
     price: Double,
     percentageChange: Double,
     currency: String,
     @StringRes intervalLabelResId: Int,
-    onSave: (WidgetFont, WidgetPriceSize, WidgetColorStyle, WidgetTheme, Boolean) -> Unit,
+    onSave: (WidgetFont, WidgetPriceSize, WidgetColorStyle, WidgetTheme) -> Unit,
     onBack: () -> Unit
 ) {
     val view = LocalView.current
@@ -94,7 +92,6 @@ fun CustomizeWidgetScreen(
     var selectedPriceSize by remember(currentPriceSize) { mutableStateOf(currentPriceSize) }
     var selectedColorStyle by remember(currentColorStyle) { mutableStateOf(currentColorStyle) }
     var selectedTheme by remember(currentTheme) { mutableStateOf(currentTheme) }
-    var selectedShowHeader by remember(currentShowHeader) { mutableStateOf(currentShowHeader) }
 
     BackHandler {
         onBack()
@@ -170,7 +167,6 @@ fun CustomizeWidgetScreen(
                                 selectedPriceSize = selectedPriceSize,
                                 selectedColorStyle = selectedColorStyle,
                                 selectedTheme = selectedTheme,
-                                selectedShowHeader = selectedShowHeader,
                                 price = if (price > 0.0) price else 62884.21,
                                 percentageChange = if (price > 0.0) percentageChange else 2.03,
                                 currency = if (currency.isNotBlank()) currency else "USD",
@@ -334,47 +330,6 @@ fun CustomizeWidgetScreen(
                     }
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
-                    SectionHeader(
-                        title = stringResource(R.string.widget_display_options)
-                    )
-
-                    CompositionLocalProvider(LocalRippleConfiguration provides null) {
-                        SegmentedListItem(
-                            onClick = {
-                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                                selectedShowHeader = !selectedShowHeader
-                            },
-                            colors = colors,
-                            shapes = ListItemDefaults.segmentedShapes(
-                                index = 0,
-                                count = 1
-                            ),
-                            content = {
-                                Text(
-                                    text = stringResource(R.string.widget_show_header_title),
-                                    fontWeight = FontWeight.Medium
-                                )
-                            },
-                            supportingContent = {
-                                Text(
-                                    text = stringResource(R.string.widget_show_header_subtitle),
-                                    modifier = Modifier.padding(top = 2.dp)
-                                )
-                            },
-                            trailingContent = {
-                                Switch(
-                                    checked = selectedShowHeader,
-                                    onCheckedChange = {
-                                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                                        selectedShowHeader = it
-                                    }
-                                )
-                            }
-                        )
-                    }
-                }
-
                 Button(
                     onClick = {
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
@@ -382,8 +337,7 @@ fun CustomizeWidgetScreen(
                             selectedFont,
                             selectedPriceSize,
                             selectedColorStyle,
-                            selectedTheme,
-                            selectedShowHeader
+                            selectedTheme
                         )
                     },
                     modifier = Modifier
@@ -413,7 +367,6 @@ private fun GlanceWidgetPreviewCard(
     selectedPriceSize: WidgetPriceSize,
     selectedColorStyle: WidgetColorStyle,
     selectedTheme: WidgetTheme,
-    selectedShowHeader: Boolean,
     price: Double,
     percentageChange: Double,
     currency: String,
@@ -460,7 +413,6 @@ private fun GlanceWidgetPreviewCard(
         selectedPriceSize,
         selectedColorStyle,
         selectedTheme,
-        selectedShowHeader,
         price,
         percentageChange,
         currency,
@@ -474,8 +426,7 @@ private fun GlanceWidgetPreviewCard(
             fontKey = selectedFont.key,
             priceSizeKey = selectedPriceSize.key,
             colorStyleKey = selectedColorStyle.key,
-            themeKey = selectedTheme.key,
-            showHeader = selectedShowHeader
+            themeKey = selectedTheme.key
         )
     }
 

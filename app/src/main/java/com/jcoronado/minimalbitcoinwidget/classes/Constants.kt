@@ -25,7 +25,6 @@ object Prefs {
     const val WIDGET_PRICE_SIZE = "widget_price_size"
     const val WIDGET_COLOR_STYLE = "widget_color_style"
     const val WIDGET_THEME = "widget_theme"
-    const val WIDGET_SHOW_HEADER = "widget_show_header"
     const val DEVELOPER_MODE_ENABLED = "developer_mode_enabled"
     /** Key for storing the app version code to detect updates. */
     const val LAST_VERSION_CODE = "last_version_code"

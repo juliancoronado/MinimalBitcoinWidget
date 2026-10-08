@@ -27,7 +27,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _widgetPriceSize = MutableStateFlow(getSavedWidgetPriceSize())
     private val _widgetColorStyle = MutableStateFlow(getSavedWidgetColorStyle())
     private val _widgetTheme = MutableStateFlow(getSavedWidgetTheme())
-    private val _widgetShowHeader = MutableStateFlow(getSavedWidgetShowHeader())
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
     private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
     private val _changePercentageInterval = MutableStateFlow(getSavedChangePercentageInterval())
@@ -39,7 +38,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val widgetPriceSize: StateFlow<WidgetPriceSize> = _widgetPriceSize.asStateFlow()
     val widgetColorStyle: StateFlow<WidgetColorStyle> = _widgetColorStyle.asStateFlow()
     val widgetTheme: StateFlow<WidgetTheme> = _widgetTheme.asStateFlow()
-    val widgetShowHeader: StateFlow<Boolean> = _widgetShowHeader.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
     val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
@@ -86,10 +84,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         return WidgetTheme.fromKey(key)
     }
 
-    private fun getSavedWidgetShowHeader(): Boolean {
-        return prefs.getBoolean(Prefs.WIDGET_SHOW_HEADER, true)
-    }
-
     fun setWidgetFont(newFont: WidgetFont) {
         _widgetFont.value = newFont
         prefs.edit(commit = true) { putString(Prefs.SELECTED_WIDGET_FONT, newFont.key) }
@@ -100,21 +94,18 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         newFont: WidgetFont,
         newPriceSize: WidgetPriceSize,
         newColorStyle: WidgetColorStyle,
-        newTheme: WidgetTheme,
-        newShowHeader: Boolean
+        newTheme: WidgetTheme
     ) {
         _widgetFont.value = newFont
         _widgetPriceSize.value = newPriceSize
         _widgetColorStyle.value = newColorStyle
         _widgetTheme.value = newTheme
-        _widgetShowHeader.value = newShowHeader
 
         prefs.edit(commit = true) {
             putString(Prefs.SELECTED_WIDGET_FONT, newFont.key)
             putString(Prefs.WIDGET_PRICE_SIZE, newPriceSize.key)
             putString(Prefs.WIDGET_COLOR_STYLE, newColorStyle.key)
             putString(Prefs.WIDGET_THEME, newTheme.key)
-            putBoolean(Prefs.WIDGET_SHOW_HEADER, newShowHeader)
         }
         PriceViewModel.refreshWidgetsFromCache(getApplication())
     }

@@ -215,25 +215,22 @@ fun AppNavigation() {
                         val currentPriceSize by settingsViewModel.widgetPriceSize.collectAsStateWithLifecycle()
                         val currentColorStyle by settingsViewModel.widgetColorStyle.collectAsStateWithLifecycle()
                         val currentTheme by settingsViewModel.widgetTheme.collectAsStateWithLifecycle()
-                        val currentShowHeader by settingsViewModel.widgetShowHeader.collectAsStateWithLifecycle()
 
                         CustomizeWidgetScreen(
                             currentFont = currentWidgetFont,
                             currentPriceSize = currentPriceSize,
                             currentColorStyle = currentColorStyle,
                             currentTheme = currentTheme,
-                            currentShowHeader = currentShowHeader,
                             price = uiState.price,
                             percentageChange = uiState.percentageChange,
                             currency = uiState.selectedCurrency,
                             intervalLabelResId = uiState.changeIntervalLabelResId,
-                            onSave = { selectedFont, selectedPriceSize, selectedColorStyle, selectedTheme, selectedShowHeader ->
+                            onSave = { selectedFont, selectedPriceSize, selectedColorStyle, selectedTheme ->
                                 settingsViewModel.saveWidgetCustomization(
                                     selectedFont,
                                     selectedPriceSize,
                                     selectedColorStyle,
-                                    selectedTheme,
-                                    selectedShowHeader
+                                    selectedTheme
                                 )
                                 backStack.removeLastOrNull()
                             },
