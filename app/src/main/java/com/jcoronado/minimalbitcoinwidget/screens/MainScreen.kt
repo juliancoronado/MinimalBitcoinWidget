@@ -60,8 +60,8 @@ import java.text.SimpleDateFormat
 fun MainScreen(
     uiState: PriceUiState,
     onRefresh: () -> Unit,
+    onCustomizeWidgetClick: () -> Unit,
     onAddWidgetClick: () -> Unit,
-    onRateAppClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -87,17 +87,54 @@ fun MainScreen(
             verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
         ) {
             PriceCard(uiState, onRefresh = onRefresh)
-            // TODO - shortcuts section - put this into a separate component later
+            // TODO - widget section - put this into a separate component later
             Text(
-                text = stringResource(R.string.shortcuts_header),
+                text = stringResource(R.string.widget_header),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
+            CustomizeWidgetShortcut(onClick = onCustomizeWidgetClick)
             AddWidgetShortcut(onClick = onAddWidgetClick)
-            RateAppShortcut(onClick = onRateAppClick)
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun CustomizeWidgetShortcut(onClick: () -> Unit) {
+    val view = LocalView.current
+    SegmentedListItem(
+        shapes = ListItemDefaults.segmentedShapes(index = 0, count = 2),
+        verticalAlignment = Alignment.CenterVertically,
+        onClick = {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            onClick()
+        },
+        leadingContent = {
+            Icon(
+                painterResource(R.drawable.rounded_tune_24),
+                stringResource(R.string.customize_widget_icon_description)
+            )
+        },
+        content = {
+            Text(
+                text = stringResource(R.string.customize_shortcut_title),
+                fontWeight = FontWeight.Medium
+            )
+        },
+        supportingContent = {
+            Text(
+                text = stringResource(R.string.customize_widget_shortcut_description),
+            )
+        },
+        trailingContent = {
+            Icon(
+                painterResource(R.drawable.rounded_chevron_forward_24),
+                stringResource(R.string.open_arrow_icon_description)
+            )
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -105,7 +142,7 @@ fun MainScreen(
 fun AddWidgetShortcut(onClick: () -> Unit) {
     val view = LocalView.current
     SegmentedListItem(
-        shapes = ListItemDefaults.segmentedShapes(index = 0, count = 2),
+        shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2),
         verticalAlignment = Alignment.CenterVertically,
         onClick = {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
@@ -132,43 +169,6 @@ fun AddWidgetShortcut(onClick: () -> Unit) {
             Icon(
                 painterResource(R.drawable.rounded_add_24),
                 stringResource(R.string.add_icon_description)
-            )
-        }
-    )
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-fun RateAppShortcut(onClick: () -> Unit) {
-    val view = LocalView.current
-    SegmentedListItem(
-        shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2),
-        verticalAlignment = Alignment.CenterVertically,
-        onClick = {
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-            onClick()
-        },
-        leadingContent = {
-            Icon(
-                painterResource(R.drawable.rounded_star_24),
-                stringResource(R.string.star_icon_description)
-            )
-        },
-        content = {
-            Text(
-                text = stringResource(R.string.rate_app_shortcut_title),
-                fontWeight = FontWeight.Medium
-            )
-        },
-        supportingContent = {
-            Text(
-                text = stringResource(R.string.rate_app_shortcut_description),
-            )
-        },
-        trailingContent = {
-            Icon(
-                painterResource(R.drawable.rounded_arrow_outward_24),
-                stringResource(R.string.open_arrow_icon_description)
             )
         }
     )
@@ -399,8 +399,8 @@ fun MainScreenPreview() {
                 price = 52849.10, percentageChange = 2.03, isLoading = false
             ),
             onRefresh = { },
-            onAddWidgetClick = { },
-            onRateAppClick = { }
+            onCustomizeWidgetClick = { },
+            onAddWidgetClick = { }
         )
     }
 }

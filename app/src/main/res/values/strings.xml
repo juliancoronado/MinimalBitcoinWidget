@@ -55,7 +55,7 @@
     <string name="customize_widget_icon_description">Customize widget icon</string>
     <string name="font_app_default">App Default</string>
     <string name="font_system_default">System Default</string>
-    <string name="widget_price_size">Price Size</string>
+    <string name="widget_price_size">Price</string>
     <string name="widget_size_small">Small</string>
     <string name="widget_size_default">Default</string>
     <string name="widget_size_large">Large</string>
@@ -91,7 +91,9 @@
     <string name="widget_logs_description" translatable="false">View logs for the widget update worker</string>
 
     <!-- Shortcuts -->
-    <string name="shortcuts_header">Shortcuts</string>
+    <string name="widget_header">Widget</string>
+    <string name="customize_shortcut_title">Customize</string>
+    <string name="customize_widget_shortcut_description">Font, color, size and theme</string>
     <string name="add_widget_shortcut_title">Add to Home Screen</string>
     <string name="add_widget_shortcut_description">Place widget on home screen</string>
     <string name="rate_app_shortcut_title">Rate on Google Play</string>

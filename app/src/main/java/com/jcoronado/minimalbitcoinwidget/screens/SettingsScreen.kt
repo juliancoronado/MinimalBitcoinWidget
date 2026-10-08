@@ -75,7 +75,7 @@ fun SettingsScreen(
     onCurrencySelected: (String) -> Unit = {},
     currentTheme: AppTheme,
     onThemeSelected: (AppTheme) -> Unit = {},
-    onNavigateToWidgetFont: () -> Unit = {},
+    onRateAppClick: () -> Unit = {},
     dynamicColors: Boolean,
     onDynamicColorsSelected: (Boolean) -> Unit = {},
     refreshInterval: Int = 1,
@@ -342,7 +342,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 0, count = 4
+                            index = 0, count = 3
                         ),
                         leadingContent = {
                             Icon(
@@ -402,36 +402,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 1, count = 4
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    leadingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_tune_24),
-                            stringResource(R.string.customize_widget_icon_description)
-                        )
-                    },
-                    content = {
-                        Text(
-                            stringResource(R.string.customize_widget),
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                    trailingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_chevron_forward_24),
-                            stringResource(R.string.open_arrow_icon_description)
-                        )
-                    },
-                    onClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        onNavigateToWidgetFont()
-                    },
-                )
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 2, count = 4
+                        index = 1, count = 3
                     ),
                     verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
@@ -468,7 +439,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 3, count = 4
+                        index = 2, count = 3
                     ),
                     verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
@@ -504,7 +475,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 0, count = if (developerModeEnabled) 7 else 6
+                        index = 0, count = if (developerModeEnabled) 8 else 7
                     ),
                     verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
@@ -535,7 +506,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 1, count = if (developerModeEnabled) 7 else 6
+                        index = 1, count = if (developerModeEnabled) 8 else 7
                     ),
                     verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
@@ -570,7 +541,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 2, count = if (developerModeEnabled) 7 else 6
+                            index = 2, count = if (developerModeEnabled) 8 else 7
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
@@ -591,7 +562,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 3, count = if (developerModeEnabled) 7 else 6
+                        index = 3, count = if (developerModeEnabled) 8 else 7
                     ),
                     verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
@@ -624,11 +595,43 @@ fun SettingsScreen(
                         }
                     },
                 )
+                SegmentedListItem(
+                    colors = colors,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        index = 4, count = if (developerModeEnabled) 8 else 7
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    leadingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_star_24),
+                            stringResource(R.string.star_icon_description)
+                        )
+                    },
+                    content = {
+                        Text(
+                            stringResource(R.string.rate_app_shortcut_title),
+                            fontWeight = FontWeight.Medium
+                        )
+                    },
+                    supportingContent = {
+                        Text(stringResource(R.string.rate_app_shortcut_description))
+                    },
+                    trailingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_arrow_outward_24),
+                            stringResource(R.string.open_arrow_icon_description)
+                        )
+                    },
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        onRateAppClick()
+                    },
+                )
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 4, count = if (developerModeEnabled) 7 else 6
+                            index = 5, count = if (developerModeEnabled) 8 else 7
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
@@ -657,7 +660,7 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 5, count = if (developerModeEnabled) 7 else 6
+                        index = 6, count = if (developerModeEnabled) 8 else 7
                     ),
                     verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
@@ -700,7 +703,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 6, count = 7
+                            index = 7, count = 8
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {

@@ -30,7 +30,7 @@
     <string name="customize_widget_icon_description">Widget anpassen-Symbol</string>
     <string name="font_app_default">App-Standard</string>
     <string name="font_system_default">Systemstandard</string>
-    <string name="widget_price_size">Preisgröße</string>
+    <string name="widget_price_size">Preis</string>
     <string name="widget_size_small">Klein</string>
     <string name="widget_size_default">Standard</string>
     <string name="widget_size_large">Groß</string>
@@ -61,7 +61,9 @@
     <string name="developer_taps">Sie sind jetzt noch %1$d Tipps davon entfernt, ein Entwickler zu sein</string>
 
     <!-- Shortcuts -->
-    <string name="shortcuts_header">Kurzbefehle</string>
+    <string name="widget_header">Widget</string>
+    <string name="customize_shortcut_title">Anpassen</string>
+    <string name="customize_widget_shortcut_description">Schriftart, Farbe, Größe und Design</string>
     <string name="add_widget_shortcut_title">Zum Startbildschirm hinzufügen</string>
     <string name="add_widget_shortcut_description">Widget zum Startbildschirm hinzufügen</string>
     <string name="rate_app_shortcut_title">Im Google Play Store bewerten</string>

@@ -30,7 +30,7 @@
     <string name="customize_widget_icon_description">Icône de personnalisation du widget</string>
     <string name="font_app_default">Par défaut de l\'application</string>
     <string name="font_system_default">Système par défaut</string>
-    <string name="widget_price_size">Taille du prix</string>
+    <string name="widget_price_size">Prix</string>
     <string name="widget_size_small">Petit</string>
     <string name="widget_size_default">Par défaut</string>
     <string name="widget_size_large">Grand</string>
@@ -61,7 +61,9 @@
     <string name="developer_taps">Vous êtes maintenant à %1$d pressions d\'être un développeur</string>
 
     <!-- Shortcuts -->
-    <string name="shortcuts_header">Raccourcis</string>
+    <string name="widget_header">Widget</string>
+    <string name="customize_shortcut_title">Personnaliser</string>
+    <string name="customize_widget_shortcut_description">Police, couleur, taille et thème</string>
     <string name="add_widget_shortcut_title">Ajouter à l\'écran d\'accueil</string>
     <string name="add_widget_shortcut_description">Ajouter un widget à l\'écran d\'accueil</string>
     <string name="rate_app_shortcut_title">Noter sur Google Play</string>

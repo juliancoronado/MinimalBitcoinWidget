@@ -167,15 +167,15 @@ fun AppNavigation() {
                 },
                 entryProvider = entryProvider {
                     entry<Screen.Dashboard> {
-                        val context = LocalContext.current
                         MainScreen(
                             uiState = uiState,
                             onRefresh = { priceViewModel.fetchPrice() },
-                            onAddWidgetClick = { priceViewModel.requestPinWidget() },
-                            onRateAppClick = { openPlayStore(context) }
+                            onCustomizeWidgetClick = { backStack.add(Screen.WidgetFont) },
+                            onAddWidgetClick = { priceViewModel.requestPinWidget() }
                         )
                     }
                     entry<Screen.Settings> {
+                        val context = LocalContext.current
                         val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
                         val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
                         val refreshInterval by settingsViewModel.refreshInterval.collectAsStateWithLifecycle()
@@ -191,7 +191,7 @@ fun AppNavigation() {
                             },
                             currentTheme = currentTheme,
                             onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
-                            onNavigateToWidgetFont = { backStack.add(Screen.WidgetFont) },
+                            onRateAppClick = { openPlayStore(context) },
                             dynamicColors = dynamicColors,
                             onDynamicColorsSelected = { newDynamicColors ->
                                 settingsViewModel.updateDynamicColorsFlag(

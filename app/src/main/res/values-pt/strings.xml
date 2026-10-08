@@ -30,7 +30,7 @@
     <string name="customize_widget_icon_description">Ícone de personalizar widget</string>
     <string name="font_app_default">Padrão da aplicação</string>
     <string name="font_system_default">Padrão do sistema</string>
-    <string name="widget_price_size">Tamanho do preço</string>
+    <string name="widget_price_size">Preço</string>
     <string name="widget_size_small">Pequeno</string>
     <string name="widget_size_default">Padrão</string>
     <string name="widget_size_large">Grande</string>
@@ -61,7 +61,9 @@
     <string name="developer_taps">Está agora a %1$d toques de ser um programador</string>
 
     <!-- Shortcuts -->
-    <string name="shortcuts_header">Atalhos</string>
+    <string name="widget_header">Widget</string>
+    <string name="customize_shortcut_title">Personalizar</string>
+    <string name="customize_widget_shortcut_description">Fonte, cor, tamanho e tema</string>
     <string name="add_widget_shortcut_title">Adicionar ao ecrã principal</string>
     <string name="add_widget_shortcut_description">Adicionar widget ao ecrã principal</string>
     <string name="rate_app_shortcut_title">Avaliar no Google Play</string>
