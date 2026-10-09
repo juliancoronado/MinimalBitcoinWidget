@@ -62,3 +62,17 @@ This document serves as a structured technical specification for an AI agent to 
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
   3. Ensure `PriceUpdateWorker` only needs to trigger Glance updates.
 
+### Task 5: Immediate Widget Synchronization on App Updates (`MY_PACKAGE_REPLACED`)
+
+- **Goal:** Immediately refresh all homescreen widgets (Glance and Legacy) whenever an app update is installed, preventing stale cached resource IDs or icon misalignment in the system Launcher.
+- **Context:** The Android Launcher caches `RemoteViews` layouts using compiled integer resource IDs (`R.drawable.*`). When an app update introduces, removes, or renames drawables, `aapt2` re-indexes resource IDs alphabetically. Without an explicit update broadcast, the Launcher continues rendering cached layouts using old IDs against the new APK's resource table, causing mismatched icons until a widget refresh occurs.
+- **Target Files:**
+  - Modify: `app/src/main/AndroidManifest.xml`
+  - Create: `com.jcoronado.minimalbitcoinwidget.receivers.AppUpdateReceiver.kt` (or extend `PriceWidgetReceiver`)
+- **Instructions:**
+  1. Register a broadcast receiver in `AndroidManifest.xml` listening for `android.intent.action.MY_PACKAGE_REPLACED`.
+  2. In `onReceive`, call `Prefs.checkAppUpdateAndInvalidateCache(prefs)` to sync version tracking.
+  3. Immediately invoke `PriceViewModel.refreshWidgetsFromCache(context)` to redraw both Glance and Legacy widgets with fresh resource IDs.
+  4. Ensure `PriceUpdateWorker.enqueue(context)` is re-verified so background polling schedules persist seamlessly after updates.
+
+

@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -50,6 +52,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -60,6 +68,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.jcoronado.minimalbitcoinwidget.BuildConfig
@@ -106,12 +115,20 @@ fun SettingsScreen(
     val mailError = stringResource(R.string.mail_error)
 
     if (showCurrencyDialog.value) {
+        val currencyListScrollState = rememberScrollState()
+        val dialogContainerColor = AlertDialogDefaults.containerColor
+        val outlineVariantColor = MaterialTheme.colorScheme.outlineVariant
+        val thumbColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+        val trackColor = outlineVariantColor.copy(alpha = 0.25f)
+
         BasicAlertDialog(
             modifier = Modifier.heightIn(min = 200.dp, max = 400.dp),
             onDismissRequest = { showCurrencyDialog.value = false }) {
             Surface(
-                shape = MaterialTheme.shapes.large,
-                tonalElevation = AlertDialogDefaults.TonalElevation,
+                shape = AlertDialogDefaults.shape,
+                color = dialogContainerColor,
+                tonalElevation = 0.dp,
+                border = BorderStroke(1.dp, outlineVariantColor.copy(alpha = 0.5f)),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth()
@@ -119,14 +136,18 @@ fun SettingsScreen(
                     Text(
                         stringResource(R.string.update_currency),
                         style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.padding(all = 16.dp)
+                        modifier = Modifier.padding(start = 24.dp, top = 20.dp, end = 24.dp, bottom = 8.dp)
                     )
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 0.dp))
                     Column(
                         Modifier
                             .fillMaxWidth()
                             .weight(weight = 1.0F)
-                            .verticalScroll(rememberScrollState())
+                            .drawVerticalScrollbar(
+                                scrollState = currencyListScrollState,
+                                color = thumbColor,
+                                trackColor = trackColor
+                            )
+                            .verticalScroll(currencyListScrollState)
                     ) {
                         currencyCodes.forEachIndexed { index, currency ->
                             Row(
@@ -155,10 +176,9 @@ fun SettingsScreen(
                             }
                         }
                     }
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 0.dp))
                     Row(
                         modifier = Modifier
-                            .padding(all = 16.dp)
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
@@ -765,6 +785,48 @@ fun SettingsPreview() {
             currentTheme = AppTheme.LIGHT,
             dynamicColors = true,
             refreshInterval = 1
+        )
+    }
+}
+
+private fun Modifier.drawVerticalScrollbar(
+    scrollState: ScrollState,
+    color: Color,
+    trackColor: Color,
+    width: Dp = 4.dp,
+    paddingEnd: Dp = 6.dp,
+    paddingVertical: Dp = 4.dp,
+    minThumbHeight: Dp = 32.dp
+): Modifier = this.drawWithContent {
+    drawContent()
+    if (scrollState.maxValue > 0) {
+        val padVertPx = paddingVertical.toPx()
+        val trackHeight = (size.height - padVertPx * 2).coerceAtLeast(0f)
+        val viewportHeight = size.height
+        val totalHeight = viewportHeight + scrollState.maxValue
+        val thumbHeight = ((viewportHeight / totalHeight) * trackHeight)
+            .coerceIn(minThumbHeight.toPx(), trackHeight)
+        val scrollProgress = scrollState.value.toFloat() / scrollState.maxValue
+        val thumbOffsetY = padVertPx + scrollProgress * (trackHeight - thumbHeight)
+
+        val thumbWidthPx = width.toPx()
+        val paddingEndPx = paddingEnd.toPx()
+        val left = size.width - thumbWidthPx - paddingEndPx
+
+        // Track
+        drawRoundRect(
+            color = trackColor,
+            topLeft = Offset(left, padVertPx),
+            size = Size(thumbWidthPx, trackHeight),
+            cornerRadius = CornerRadius(thumbWidthPx / 2f, thumbWidthPx / 2f)
+        )
+
+        // Thumb
+        drawRoundRect(
+            color = color,
+            topLeft = Offset(left, thumbOffsetY),
+            size = Size(thumbWidthPx, thumbHeight),
+            cornerRadius = CornerRadius(thumbWidthPx / 2f, thumbWidthPx / 2f)
         )
     }
 }
