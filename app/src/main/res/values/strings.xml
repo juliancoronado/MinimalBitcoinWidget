@@ -87,8 +87,12 @@
     <string name="license_subtitle" translatable="false">GNU General Public License v3.0</string>
 
     <!-- Developer Options Screen - don't translate these for now -->
-    <string name="widget_logs" translatable="false">Widget Logs</string>
-    <string name="widget_logs_description" translatable="false">View logs for the widget update worker</string>
+    <string name="widget_logs" translatable="false">Logs</string>
+    <string name="widget_logs_description" translatable="false">View app and widget activity logs</string>
+    <string name="logs_filter_all" translatable="false">All</string>
+    <string name="logs_filter_widget" translatable="false">Widget</string>
+    <string name="logs_filter_app" translatable="false">App</string>
+    <string name="logs_empty" translatable="false">No logs stored.</string>
 
     <!-- Shortcuts -->
     <string name="widget_header">Widget</string>

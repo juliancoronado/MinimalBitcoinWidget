@@ -21,6 +21,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.data.Resource
+import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetReceiver
@@ -36,12 +37,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+import com.jcoronado.minimalbitcoinwidget.AppDatabase
+import com.jcoronado.minimalbitcoinwidget.DebugDao
+import com.jcoronado.minimalbitcoinwidget.DebugLog
+
 private const val LOG_TAG = "PriceViewModel"
 
 class PriceViewModel @JvmOverloads constructor(
     application: Application,
-    private val repository: PriceRepository = PriceRepository(application)
+    private val repository: PriceRepository = PriceRepository(application),
+    private val debugDao: DebugDao = AppDatabase.getInstance(application).debugDao()
 ) : AndroidViewModel(application) {
+
+    private fun logApp(message: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            debugDao.insert(DebugLog(message = message, type = DebugLog.TYPE_APP))
+        }
+    }
 
     private val _uiState = MutableStateFlow(PriceUiState(isLoading = true))
 
@@ -171,6 +183,7 @@ class PriceViewModel @JvmOverloads constructor(
         if (_uiState.value.selectedCurrency == newCurrency) return
 
         Log.i(LOG_TAG, "Updating currency to: $newCurrency")
+        logApp("App: Currency changed to $newCurrency")
 
         _uiState.value = _uiState.value.copy(selectedCurrency = newCurrency)
         repository.updateSelectedCurrency(newCurrency)
@@ -178,8 +191,15 @@ class PriceViewModel @JvmOverloads constructor(
     }
 
     /** Fetch data via Repository. */
-    fun fetchPrice(force: Boolean = false, fromInit: Boolean = false) {
+    fun fetchPrice(force: Boolean = false, fromInit: Boolean = false, isManual: Boolean = false) {
+        if (isManual) {
+            logApp("App: Manual refresh requested")
+        } else if (fromInit) {
+            logApp("App: Initial fetch requested")
+        }
+
         if (repository.isMockUiEnabled()) {
+            logApp("App: Mock UI enabled, bypassing fetch")
             viewModelScope.launch {
                 _uiState.value = _uiState.value.copy(isLoading = true)
                 delay(750)
@@ -197,6 +217,7 @@ class PriceViewModel @JvmOverloads constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = _uiState.value.copy(isLoading = true)
 
+            val isCacheHit = !force && repository.isCacheFresh() && repository.getCachedPriceData() != null
             val currency = _uiState.value.selectedCurrency
             val resource = repository.fetchPrice(currency, force = force)
 
@@ -205,6 +226,12 @@ class PriceViewModel @JvmOverloads constructor(
             when (resource) {
                 is Resource.Success -> {
                     val priceData = resource.data
+                    val formattedPrice = FormatUtils.formatPrice(priceData.currentPrice, currency)
+                    if (isCacheHit) {
+                        logApp("App: Loaded from cache ($formattedPrice)")
+                    } else {
+                        logApp("App: Data fetched ($formattedPrice)")
+                    }
                     val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
                     val percentage = priceData.getPercentageForInterval(selectedInterval)
                     val interval = TimeInterval.fromValue(selectedInterval)
@@ -222,6 +249,7 @@ class PriceViewModel @JvmOverloads constructor(
                     redrawWidgets()
                 }
                 is Resource.Error -> {
+                    logApp("App: Failed - ${resource.message}")
                     Log.e(LOG_TAG, "Network call failed: ${resource.message}")
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,

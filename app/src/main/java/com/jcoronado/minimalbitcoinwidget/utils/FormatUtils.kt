@@ -60,6 +60,18 @@ object FormatUtils {
         )
     }
 
+    /**
+     * Formats price with native currency symbol and proper locale placement.
+     */
+    fun formatPrice(price: Double, currencyCode: String): String {
+        val formatted = formatPriceSeparated(price, currencyCode)
+        return if (formatted.symbolAtStart) {
+            "${formatted.symbol}${formatted.price}"
+        } else {
+            "${formatted.price} ${formatted.symbol}"
+        }
+    }
+
     private fun getNativeSymbol(currency: Currency): String {
         val textSymbol = currency.getSymbol(Locale.getDefault()) // default fallback
 

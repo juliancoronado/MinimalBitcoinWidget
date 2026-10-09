@@ -67,10 +67,9 @@ class FormatUtilsTest {
     }
 
     @Test
-    fun `formatPriceSeparated with zero price`() {
-        val formatted = FormatUtils.formatPriceSeparated(0.0, "USD")
-        assertEquals("$", formatted.symbol)
-        val cleanedPrice = formatted.price.replace("\u00A0", " ").replace(" ", "")
-        assertEquals("0.00", cleanedPrice)
+    fun `formatPrice returns combined formatted string with symbol`() {
+        val formatted = FormatUtils.formatPrice(52849.10, "USD")
+        val cleaned = formatted.replace("\u00A0", " ").replace(" ", "")
+        assertEquals("$52,849.10", cleaned)
     }
 }

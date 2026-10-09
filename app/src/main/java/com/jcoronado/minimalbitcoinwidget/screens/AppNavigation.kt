@@ -169,7 +169,7 @@ fun AppNavigation() {
                     entry<Screen.Dashboard> {
                         MainScreen(
                             uiState = uiState,
-                            onRefresh = { priceViewModel.fetchPrice() },
+                            onRefresh = { priceViewModel.fetchPrice(isManual = true) },
                             onCustomizeWidgetClick = { backStack.add(Screen.WidgetFont) },
                             onAddWidgetClick = { priceViewModel.requestPinWidget() }
                         )

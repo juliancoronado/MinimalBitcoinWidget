@@ -4,18 +4,23 @@ import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
@@ -23,6 +28,7 @@ import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -297,9 +303,17 @@ fun DeveloperOptionsScreen(
 }
 
 // TODO - move to a separate file
+enum class LogFilter { ALL, WIDGET, APP }
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun WidgetLogsScreen(onBack: () -> Unit) {
+    LogsScreen(onBack = onBack)
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun LogsScreen(onBack: () -> Unit) {
     val view = LocalView.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -310,40 +324,49 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
 
     // observe the logs
     val logs by db.debugDao().getAllLogs().collectAsState(initial = emptyList())
+    var selectedFilter by remember { mutableStateOf(LogFilter.ALL) }
+
+    val filteredLogs = remember(logs, selectedFilter) {
+        when (selectedFilter) {
+            LogFilter.ALL -> logs
+            LogFilter.WIDGET -> logs.filter { it.type == DebugLog.TYPE_WIDGET }
+            LogFilter.APP -> logs.filter { it.type == DebugLog.TYPE_APP }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                Text(
-                    stringResource(R.string.widget_logs),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Medium,
-                )
-            }, navigationIcon = {
-                IconButton(onClick = {
-                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                    onBack()
-                }) {
-                    Icon(
-                        painter = painterResource(R.drawable.rounded_arrow_back_24),
-                        contentDescription = stringResource(R.string.back_icon_description)
+                    Text(
+                        stringResource(R.string.widget_logs),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Medium,
                     )
-                }
-            }, colors = TopAppBarDefaults.topAppBarColors().copy(
-                containerColor = MaterialTheme.colorScheme.surfaceContainer
-            ), actions = {
-                TextButton(
-                    onClick = {
+                }, navigationIcon = {
+                    IconButton(onClick = {
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        scope.launch { db.debugDao().clearAll() }
-                    },
-                    enabled = logs.isNotEmpty()
-                ) {
-                    Text(stringResource(R.string.clear))
-                }
-            }, scrollBehavior = scrollBehavior
+                        onBack()
+                    }) {
+                        Icon(
+                            painter = painterResource(R.drawable.rounded_arrow_back_24),
+                            contentDescription = stringResource(R.string.back_icon_description)
+                        )
+                    }
+                }, colors = TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ), actions = {
+                    TextButton(
+                        onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            scope.launch { db.debugDao().clearAll() }
+                        },
+                        enabled = logs.isNotEmpty()
+                    ) {
+                        Text(stringResource(R.string.clear))
+                    }
+                }, scrollBehavior = scrollBehavior
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -355,19 +378,79 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                 .padding(horizontal = 12.dp)
                 .fillMaxSize()
         ) {
-            if (logs.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FilterChip(
+                    selected = selectedFilter == LogFilter.ALL,
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        selectedFilter = LogFilter.ALL
+                    },
+                    label = { Text(stringResource(R.string.logs_filter_all)) },
+                    leadingIcon = if (selectedFilter == LogFilter.ALL) {
+                        {
+                            Icon(
+                                painter = painterResource(R.drawable.rounded_check_24),
+                                contentDescription = null,
+                                modifier = Modifier.size(FilterChipDefaults.IconSize)
+                            )
+                        }
+                    } else null
+                )
+                FilterChip(
+                    selected = selectedFilter == LogFilter.WIDGET,
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        selectedFilter = LogFilter.WIDGET
+                    },
+                    label = { Text(stringResource(R.string.logs_filter_widget)) },
+                    leadingIcon = if (selectedFilter == LogFilter.WIDGET) {
+                        {
+                            Icon(
+                                painter = painterResource(R.drawable.rounded_check_24),
+                                contentDescription = null,
+                                modifier = Modifier.size(FilterChipDefaults.IconSize)
+                            )
+                        }
+                    } else null
+                )
+                FilterChip(
+                    selected = selectedFilter == LogFilter.APP,
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        selectedFilter = LogFilter.APP
+                    },
+                    label = { Text(stringResource(R.string.logs_filter_app)) },
+                    leadingIcon = if (selectedFilter == LogFilter.APP) {
+                        {
+                            Icon(
+                                painter = painterResource(R.drawable.rounded_check_24),
+                                contentDescription = null,
+                                modifier = Modifier.size(FilterChipDefaults.IconSize)
+                            )
+                        }
+                    } else null
+                )
+            }
+
+            if (filteredLogs.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No logs stored.")
+                    Text(stringResource(R.string.logs_empty))
                 }
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
                 ) {
-                    itemsIndexed(logs) { index, log ->
-                        if (index != logs.size - 1) {
-                            LogItem(index, log, logs.size)
+                    val showBadge = selectedFilter == LogFilter.ALL
+                    itemsIndexed(filteredLogs) { index, log ->
+                        if (index != filteredLogs.size - 1) {
+                            LogItem(index, log, filteredLogs.size, showCategoryBadge = showBadge)
                         } else {
-                            LogItem(index, log, logs.size)
+                            LogItem(index, log, filteredLogs.size, showCategoryBadge = showBadge)
                             Spacer(
                                 Modifier.height(
                                     WindowInsets.systemBars.asPaddingValues()
@@ -375,7 +458,6 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
                                 )
                             )
                         }
-
                     }
                 }
             }
@@ -385,7 +467,12 @@ fun WidgetLogsScreen(onBack: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun LogItem(index: Int, log: DebugLog, length: Int) {
+fun LogItem(
+    index: Int,
+    log: DebugLog,
+    length: Int,
+    showCategoryBadge: Boolean = true
+) {
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
@@ -395,9 +482,44 @@ fun LogItem(index: Int, log: DebugLog, length: Int) {
                 index = index, count = length
             ),
             content = {
-                Text(
-                    text = log.timestamp, fontSize = 12.sp
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        text = log.timestamp,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    if (showCategoryBadge) {
+                        Text(
+                            text = "・",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        val isApp = log.type == DebugLog.TYPE_APP
+                        Surface(
+                            shape = RoundedCornerShape(4.dp),
+                            color = if (isApp) {
+                                MaterialTheme.colorScheme.primaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.secondaryContainer
+                            }
+                        ) {
+                            Text(
+                                text = if (isApp) stringResource(R.string.logs_filter_app) else stringResource(R.string.logs_filter_widget),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = if (isApp) {
+                                    MaterialTheme.colorScheme.onPrimaryContainer
+                                } else {
+                                    MaterialTheme.colorScheme.onSecondaryContainer
+                                },
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
             },
             supportingContent = {
                 Text(

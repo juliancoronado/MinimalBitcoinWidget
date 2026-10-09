@@ -22,6 +22,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.data.Resource
+import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
@@ -67,7 +68,8 @@ class PriceUpdateWorker(
         when (resource) {
             is Resource.Success -> {
                 PriceViewModel.refreshWidgetsFromCache(applicationContext)
-                dao.insert(DebugLog(message = "PriceWorker: Data Fetched"))
+                val priceString = FormatUtils.formatPrice(resource.data.currentPrice, currencyCode)
+                dao.insert(DebugLog(message = "PriceWorker: Data Fetched ($priceString)"))
                 Result.success()
             }
             is Resource.Error -> {
