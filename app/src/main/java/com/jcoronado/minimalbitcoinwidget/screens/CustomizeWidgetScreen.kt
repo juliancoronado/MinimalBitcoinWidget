@@ -10,6 +10,7 @@ import android.widget.RemoteViews
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -52,7 +54,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -404,12 +405,12 @@ private fun GlanceWidgetPreviewCard(
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
-    val isAppDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val isSystemDark = isSystemInDarkTheme()
 
     val isPreviewDark = when (selectedTheme) {
         WidgetTheme.LIGHT -> false
         WidgetTheme.DARK -> true
-        WidgetTheme.SYSTEM -> isAppDark
+        WidgetTheme.SYSTEM -> isSystemDark
     }
 
     val themedContext = remember(context, configuration, isPreviewDark) {
@@ -481,26 +482,28 @@ private fun GlanceWidgetPreviewCard(
                     .width(PREVIEW_WIDTH)
                     .height(PREVIEW_HEIGHT)
             ) {
-                AndroidView(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(widgetShape),
-                    factory = { _ ->
-                        val frameLayout = FrameLayout(themedContext)
-                        val inflated = currentViews.apply(themedContext, frameLayout)
-                        if (inflated != null) {
-                            frameLayout.addView(inflated)
+                key(isPreviewDark) {
+                    AndroidView(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(widgetShape),
+                        factory = { _ ->
+                            val frameLayout = FrameLayout(themedContext)
+                            val inflated = currentViews.apply(themedContext, frameLayout)
+                            if (inflated != null) {
+                                frameLayout.addView(inflated)
+                            }
+                            frameLayout
+                        },
+                        update = { frameLayout ->
+                            frameLayout.removeAllViews()
+                            val inflated = currentViews.apply(themedContext, frameLayout)
+                            if (inflated != null) {
+                                frameLayout.addView(inflated)
+                            }
                         }
-                        frameLayout
-                    },
-                    update = { frameLayout ->
-                        frameLayout.removeAllViews()
-                        val inflated = currentViews.apply(themedContext, frameLayout)
-                        if (inflated != null) {
-                            frameLayout.addView(inflated)
-                        }
-                    }
-                )
+                    )
+                }
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
