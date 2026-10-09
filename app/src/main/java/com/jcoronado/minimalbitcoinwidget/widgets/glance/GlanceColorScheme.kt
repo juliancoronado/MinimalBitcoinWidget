@@ -60,6 +60,7 @@ object GlanceColorScheme {
     /**
      * Resolves the appropriate [ColorProviders] based on [WidgetColorStyle] and [WidgetTheme].
      */
+    @Composable
     fun colorsFor(context: Context, colorStyle: WidgetColorStyle, widgetTheme: WidgetTheme): GlanceColorProviders {
         return when (colorStyle) {
             WidgetColorStyle.SOLID -> when (widgetTheme) {
@@ -74,7 +75,7 @@ object GlanceColorScheme {
                     when (widgetTheme) {
                         WidgetTheme.LIGHT -> ColorProviders(light = dynLight, dark = dynLight)
                         WidgetTheme.DARK -> ColorProviders(light = dynDark, dark = dynDark)
-                        WidgetTheme.SYSTEM -> ColorProviders(light = dynLight, dark = dynDark)
+                        WidgetTheme.SYSTEM -> GlanceTheme.colors
                     }
                 } else {
                     when (widgetTheme) {
