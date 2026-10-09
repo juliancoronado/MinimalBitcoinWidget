@@ -97,6 +97,7 @@
     <string name="cancel">Annuler</string>
     <string name="clear">Effacer</string>
     <string name="error">Erreur</string>
+    <string name="reset_to_default">Rétablir les valeurs par défaut</string>
 
     <string name="mail_error">Aucune application de messagerie trouvée</string>
 

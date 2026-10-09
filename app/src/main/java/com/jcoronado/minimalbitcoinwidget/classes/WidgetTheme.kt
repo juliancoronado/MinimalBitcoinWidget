@@ -12,8 +12,10 @@ enum class WidgetTheme(
     DARK("dark", R.string.widget_theme_dark);
 
     companion object {
+        val DEFAULT = SYSTEM
+
         fun fromKey(key: String?): WidgetTheme {
-            return entries.firstOrNull { it.key.equals(key, ignoreCase = true) } ?: SYSTEM
+            return entries.firstOrNull { it.key.equals(key, ignoreCase = true) } ?: DEFAULT
         }
     }
 }

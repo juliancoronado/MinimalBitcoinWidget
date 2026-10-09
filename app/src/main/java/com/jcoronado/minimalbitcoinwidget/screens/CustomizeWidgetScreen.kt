@@ -26,6 +26,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -97,6 +98,11 @@ fun CustomizeWidgetScreen(
         onBack()
     }
 
+    val isDefault = selectedFont == WidgetFont.DEFAULT &&
+        selectedPriceSize == WidgetPriceSize.DEFAULT &&
+        selectedColorStyle == WidgetColorStyle.DEFAULT &&
+        selectedTheme == WidgetTheme.DEFAULT
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -115,6 +121,23 @@ fun CustomizeWidgetScreen(
                         Icon(
                             painter = painterResource(R.drawable.rounded_arrow_back_24),
                             contentDescription = stringResource(R.string.back_icon_description)
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            selectedFont = WidgetFont.DEFAULT
+                            selectedPriceSize = WidgetPriceSize.DEFAULT
+                            selectedColorStyle = WidgetColorStyle.DEFAULT
+                            selectedTheme = WidgetTheme.DEFAULT
+                        },
+                        enabled = !isDefault
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.rounded_restart_alt_24),
+                            contentDescription = stringResource(R.string.reset_to_default)
                         )
                     }
                 },
@@ -344,13 +367,15 @@ fun CustomizeWidgetScreen(
                             selectedTheme
                         )
                     },
+                    shapes = ButtonDefaults.shapesFor(ButtonDefaults.MediumContainerHeight),
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(top = 8.dp)
+                        .fillMaxWidth()
+                        .height(ButtonDefaults.MediumContainerHeight)
                 ) {
                     Text(
                         text = stringResource(R.string.save),
-                        fontWeight = FontWeight.Medium
+                        style = ButtonDefaults.textStyleFor(ButtonDefaults.MediumContainerHeight)
                     )
                 }
                 Spacer(modifier = Modifier.navigationBarsPadding())

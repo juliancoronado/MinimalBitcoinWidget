@@ -127,6 +127,7 @@
     <string name="cancel">Cancel</string>
     <string name="clear">Clear</string>
     <string name="error">Error</string>
+    <string name="reset_to_default">Reset to default</string>
 
     <!-- Email / Contact -->
     <string name="mail_to" translatable="false">mailto:contact@jcoronado.dev</string>

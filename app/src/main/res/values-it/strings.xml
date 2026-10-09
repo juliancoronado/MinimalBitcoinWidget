@@ -97,6 +97,7 @@
     <string name="cancel">Annulla</string>
     <string name="clear">Cancella</string>
     <string name="error">Errore</string>
+    <string name="reset_to_default">Ripristina impostazioni predefinite</string>
 
     <string name="mail_error">Nessuna app di posta trovata</string>
 

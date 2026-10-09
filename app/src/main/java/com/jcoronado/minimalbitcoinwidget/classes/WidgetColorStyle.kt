@@ -11,8 +11,10 @@ enum class WidgetColorStyle(
     SOLID("solid", R.string.widget_colors_solid);
 
     companion object {
+        val DEFAULT = DYNAMIC
+
         fun fromKey(key: String?): WidgetColorStyle {
-            return entries.firstOrNull { it.key.equals(key, ignoreCase = true) } ?: DYNAMIC
+            return entries.firstOrNull { it.key.equals(key, ignoreCase = true) } ?: DEFAULT
         }
     }
 }
