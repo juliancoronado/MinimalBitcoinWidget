@@ -4,6 +4,7 @@ import android.app.Application
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -56,6 +57,9 @@ class PriceViewModel @JvmOverloads constructor(
         // is fully populated in _uiState before starting any network calls.
         loadInitialData()
         
+        // Publish or refresh Glance widget preview for the system widget picker on Android 15+
+        updateWidgetPreview(application)
+
         // Trigger a fresh price fetch using the newly loaded currency preference.
         fetchPrice(fromInit = true)
     }
@@ -274,13 +278,17 @@ class PriceViewModel @JvmOverloads constructor(
                 CoroutineScope(Dispatchers.IO).launch {
                     updateGlanceWidgets(context, glanceState)
                 }
+                updateWidgetPreview(context)
 
                 // update legacy widgets
                 updateLegacyWidgets(context, mockData, mockCurrency)
                 return
             }
 
-            val priceData = repository.getCachedPriceData() ?: return
+            val priceData = repository.getCachedPriceData() ?: run {
+                updateWidgetPreview(context)
+                return
+            }
             val currencyCode = repository.getSelectedCurrency()
 
             val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
@@ -302,9 +310,32 @@ class PriceViewModel @JvmOverloads constructor(
             CoroutineScope(Dispatchers.IO).launch {
                 updateGlanceWidgets(context, glanceState)
             }
+            updateWidgetPreview(context)
 
             // update legacy widgets
             updateLegacyWidgets(context, priceData)
+        }
+
+        /**
+         * Generates and publishes the Glance widget preview for the system widget picker
+         * on Android 15+ (API 35+).
+         */
+        fun updateWidgetPreview(context: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val manager = GlanceAppWidgetManager(context)
+                        val result = manager.setWidgetPreviews(PriceWidgetReceiver::class)
+                        if (result == GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_RATE_LIMITED) {
+                            Log.d(LOG_TAG, "setWidgetPreviews was rate-limited by the system")
+                        } else {
+                            Log.d(LOG_TAG, "setWidgetPreviews updated successfully")
+                        }
+                    } catch (e: Exception) {
+                        Log.w(LOG_TAG, "Failed to update widget preview: $e")
+                    }
+                }
+            }
         }
 
         /**

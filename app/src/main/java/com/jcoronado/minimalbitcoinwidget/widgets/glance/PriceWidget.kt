@@ -44,12 +44,15 @@ import androidx.glance.text.TextStyle
 import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
+import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
+import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 
 class PriceWidget : GlanceAppWidget() {
 
@@ -59,6 +62,64 @@ class PriceWidget : GlanceAppWidget() {
         provideContent {
             val state = currentState<PriceWidgetState>()
             WidgetContent(state)
+        }
+    }
+
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        val repository = PriceRepository(context)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+        val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
+        val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
+        val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
+        val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+        val interval = TimeInterval.fromValue(selectedInterval)
+
+        val previewState: PriceWidgetState.Available = when {
+            repository.isMockUiEnabled() -> {
+                val mockData = repository.getMockPriceData()
+                PriceWidgetState.Available(
+                    price = mockData.currentPrice,
+                    changePercentage = mockData.getPercentageForInterval(selectedInterval),
+                    intervalLabelResId = interval.labelResId,
+                    currency = repository.getMockCurrency(),
+                    fontKey = fontKey,
+                    priceSizeKey = priceSizeKey,
+                    colorStyleKey = colorStyleKey,
+                    themeKey = themeKey
+                )
+            }
+            else -> {
+                val cachedData = repository.getCachedPriceData()
+                if (cachedData != null) {
+                    PriceWidgetState.Available(
+                        price = cachedData.currentPrice,
+                        changePercentage = cachedData.getPercentageForInterval(selectedInterval),
+                        intervalLabelResId = interval.labelResId,
+                        currency = repository.getSelectedCurrency(),
+                        fontKey = fontKey,
+                        priceSizeKey = priceSizeKey,
+                        colorStyleKey = colorStyleKey,
+                        themeKey = themeKey
+                    )
+                } else {
+                    PriceWidgetState.Available(
+                        price = 52849.10,
+                        changePercentage = 2.45,
+                        intervalLabelResId = interval.labelResId,
+                        currency = repository.getSelectedCurrency(),
+                        fontKey = fontKey,
+                        priceSizeKey = priceSizeKey,
+                        colorStyleKey = colorStyleKey,
+                        themeKey = themeKey
+                    )
+                }
+            }
+        }
+
+        provideContent {
+            WidgetContent(previewState)
         }
     }
 
