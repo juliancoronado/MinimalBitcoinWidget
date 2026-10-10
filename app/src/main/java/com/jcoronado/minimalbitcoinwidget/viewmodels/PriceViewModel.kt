@@ -183,7 +183,7 @@ class PriceViewModel @JvmOverloads constructor(
         if (_uiState.value.selectedCurrency == newCurrency) return
 
         Log.i(LOG_TAG, "Updating currency to: $newCurrency")
-        logApp("App: Currency changed to $newCurrency")
+        logApp("Currency changed to $newCurrency")
 
         _uiState.value = _uiState.value.copy(selectedCurrency = newCurrency)
         repository.updateSelectedCurrency(newCurrency)
@@ -193,13 +193,13 @@ class PriceViewModel @JvmOverloads constructor(
     /** Fetch data via Repository. */
     fun fetchPrice(force: Boolean = false, fromInit: Boolean = false, isManual: Boolean = false) {
         if (isManual) {
-            logApp("App: Manual refresh requested")
+            logApp("Manual refresh requested")
         } else if (fromInit) {
-            logApp("App: Initial fetch requested")
+            logApp("Initial fetch requested")
         }
 
         if (repository.isMockUiEnabled()) {
-            logApp("App: Mock UI enabled, bypassing fetch")
+            logApp("Mock UI enabled, bypassing fetch")
             viewModelScope.launch {
                 _uiState.value = _uiState.value.copy(isLoading = true)
                 delay(750)
@@ -228,9 +228,9 @@ class PriceViewModel @JvmOverloads constructor(
                     val priceData = resource.data
                     val formattedPrice = FormatUtils.formatPrice(priceData.currentPrice, currency)
                     if (isCacheHit) {
-                        logApp("App: Loaded from cache ($formattedPrice)")
+                        logApp("Loaded from cache ($formattedPrice)")
                     } else {
-                        logApp("App: Data fetched ($formattedPrice)")
+                        logApp("Data fetched ($formattedPrice)")
                     }
                     val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
                     val percentage = priceData.getPercentageForInterval(selectedInterval)
@@ -249,7 +249,7 @@ class PriceViewModel @JvmOverloads constructor(
                     redrawWidgets()
                 }
                 is Resource.Error -> {
-                    logApp("App: Failed - ${resource.message}")
+                    logApp("Failed - ${resource.message}")
                     Log.e(LOG_TAG, "Network call failed: ${resource.message}")
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,

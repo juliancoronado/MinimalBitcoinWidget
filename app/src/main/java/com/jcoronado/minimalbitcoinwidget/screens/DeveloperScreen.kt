@@ -445,12 +445,11 @@ fun LogsScreen(onBack: () -> Unit) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
                 ) {
-                    val showBadge = selectedFilter == LogFilter.ALL
                     itemsIndexed(filteredLogs) { index, log ->
                         if (index != filteredLogs.size - 1) {
-                            LogItem(index, log, filteredLogs.size, showCategoryBadge = showBadge)
+                            LogItem(index, log, filteredLogs.size)
                         } else {
-                            LogItem(index, log, filteredLogs.size, showCategoryBadge = showBadge)
+                            LogItem(index, log, filteredLogs.size)
                             Spacer(
                                 Modifier.height(
                                     WindowInsets.systemBars.asPaddingValues()
@@ -471,59 +470,42 @@ fun LogItem(
     index: Int,
     log: DebugLog,
     length: Int,
-    showCategoryBadge: Boolean = true
 ) {
     val colors =
         ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
+    val isApp = log.type == DebugLog.TYPE_APP
+    val displayMessage = log.message
+        .removePrefix("App: ")
+        .removePrefix("PriceWorker: ")
+
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         SegmentedListItem(
             colors = colors,
             shapes = ListItemDefaults.segmentedShapes(
                 index = index, count = length
             ),
+            verticalAlignment = Alignment.CenterVertically,
+            leadingContent = {
+                Icon(
+                    painter = painterResource(
+                        if (isApp) R.drawable.rounded_smartphone_24 else R.drawable.rounded_widgets_24
+                    ),
+                    contentDescription = if (isApp) stringResource(R.string.logs_filter_app) else stringResource(R.string.logs_filter_widget),
+                    tint = if (isApp) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+                )
+            },
             content = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text(
-                        text = log.timestamp,
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    if (showCategoryBadge) {
-                        Text(
-                            text = "・",
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        val isApp = log.type == DebugLog.TYPE_APP
-                        Surface(
-                            shape = RoundedCornerShape(4.dp),
-                            color = if (isApp) {
-                                MaterialTheme.colorScheme.primaryContainer
-                            } else {
-                                MaterialTheme.colorScheme.secondaryContainer
-                            }
-                        ) {
-                            Text(
-                                text = if (isApp) stringResource(R.string.logs_filter_app) else stringResource(R.string.logs_filter_widget),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = if (isApp) {
-                                    MaterialTheme.colorScheme.onPrimaryContainer
-                                } else {
-                                    MaterialTheme.colorScheme.onSecondaryContainer
-                                },
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
-                    }
-                }
+                Text(
+                    text = displayMessage,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium
+                )
             },
             supportingContent = {
                 Text(
-                    text = log.message, fontSize = 16.sp
+                    text = log.timestamp,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             onClick = {},

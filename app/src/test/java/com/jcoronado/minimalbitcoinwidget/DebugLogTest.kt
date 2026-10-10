@@ -7,15 +7,15 @@ class DebugLogTest {
 
     @Test
     fun debugLog_defaultType_isWidget() {
-        val log = DebugLog(message = "PriceWorker: Fetching Data")
+        val log = DebugLog(message = "Fetching data")
         assertEquals(DebugLog.TYPE_WIDGET, log.type)
-        assertEquals("PriceWorker: Fetching Data", log.message)
+        assertEquals("Fetching data", log.message)
     }
 
     @Test
     fun debugLog_customType_isApp() {
-        val log = DebugLog(message = "App: Manual refresh requested", type = DebugLog.TYPE_APP)
+        val log = DebugLog(message = "Manual refresh requested", type = DebugLog.TYPE_APP)
         assertEquals(DebugLog.TYPE_APP, log.type)
-        assertEquals("App: Manual refresh requested", log.message)
+        assertEquals("Manual refresh requested", log.message)
     }
 }
