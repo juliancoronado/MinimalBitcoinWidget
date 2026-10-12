@@ -7,7 +7,6 @@ import android.view.ContextThemeWrapper
 import android.view.HapticFeedbackConstants
 import android.widget.FrameLayout
 import android.widget.RemoteViews
-import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -94,10 +93,6 @@ fun CustomizeWidgetScreen(
     var selectedPriceSize by remember(currentPriceSize) { mutableStateOf(currentPriceSize) }
     var selectedColorStyle by remember(currentColorStyle) { mutableStateOf(currentColorStyle) }
     var selectedTheme by remember(currentTheme) { mutableStateOf(currentTheme) }
-
-    BackHandler {
-        onBack()
-    }
 
     val isDefault = selectedFont == WidgetFont.DEFAULT &&
         selectedPriceSize == WidgetPriceSize.DEFAULT &&
