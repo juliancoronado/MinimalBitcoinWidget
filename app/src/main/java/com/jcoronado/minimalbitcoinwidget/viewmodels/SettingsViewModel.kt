@@ -7,7 +7,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
 import com.jcoronado.minimalbitcoinwidget.workers.PriceUpdateWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +24,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
     private val _theme = MutableStateFlow(getSavedTheme())
     private val _widgetFont = MutableStateFlow(getSavedWidgetFont())
+    private val _widgetPriceSize = MutableStateFlow(getSavedWidgetPriceSize())
+    private val _widgetColorStyle = MutableStateFlow(getSavedWidgetColorStyle())
+    private val _widgetTheme = MutableStateFlow(getSavedWidgetTheme())
     private val _dynamicColors = MutableStateFlow(getDynamicColorsFlag())
     private val _refreshInterval = MutableStateFlow(getSavedRefreshInterval())
     private val _changePercentageInterval = MutableStateFlow(getSavedChangePercentageInterval())
@@ -29,6 +35,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     val theme: StateFlow<AppTheme> = _theme.asStateFlow()
     val widgetFont: StateFlow<WidgetFont> = _widgetFont.asStateFlow()
+    val widgetPriceSize: StateFlow<WidgetPriceSize> = _widgetPriceSize.asStateFlow()
+    val widgetColorStyle: StateFlow<WidgetColorStyle> = _widgetColorStyle.asStateFlow()
+    val widgetTheme: StateFlow<WidgetTheme> = _widgetTheme.asStateFlow()
     val dynamicColors: StateFlow<Boolean> = _dynamicColors.asStateFlow()
     val refreshInterval: StateFlow<Int> = _refreshInterval.asStateFlow()
     val changePercentageInterval: StateFlow<Int> = _changePercentageInterval.asStateFlow()
@@ -60,9 +69,44 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         return WidgetFont.fromKey(fontKey)
     }
 
+    private fun getSavedWidgetPriceSize(): WidgetPriceSize {
+        val key = prefs.getString(Prefs.WIDGET_PRICE_SIZE, WidgetPriceSize.DEFAULT.key)
+        return WidgetPriceSize.fromKey(key)
+    }
+
+    private fun getSavedWidgetColorStyle(): WidgetColorStyle {
+        val key = prefs.getString(Prefs.WIDGET_COLOR_STYLE, WidgetColorStyle.DYNAMIC.key)
+        return WidgetColorStyle.fromKey(key)
+    }
+
+    private fun getSavedWidgetTheme(): WidgetTheme {
+        val key = prefs.getString(Prefs.WIDGET_THEME, WidgetTheme.SYSTEM.key)
+        return WidgetTheme.fromKey(key)
+    }
+
     fun setWidgetFont(newFont: WidgetFont) {
         _widgetFont.value = newFont
         prefs.edit(commit = true) { putString(Prefs.SELECTED_WIDGET_FONT, newFont.key) }
+        PriceViewModel.refreshWidgetsFromCache(getApplication())
+    }
+
+    fun saveWidgetCustomization(
+        newFont: WidgetFont,
+        newPriceSize: WidgetPriceSize,
+        newColorStyle: WidgetColorStyle,
+        newTheme: WidgetTheme
+    ) {
+        _widgetFont.value = newFont
+        _widgetPriceSize.value = newPriceSize
+        _widgetColorStyle.value = newColorStyle
+        _widgetTheme.value = newTheme
+
+        prefs.edit(commit = true) {
+            putString(Prefs.SELECTED_WIDGET_FONT, newFont.key)
+            putString(Prefs.WIDGET_PRICE_SIZE, newPriceSize.key)
+            putString(Prefs.WIDGET_COLOR_STYLE, newColorStyle.key)
+            putString(Prefs.WIDGET_THEME, newTheme.key)
+        }
         PriceViewModel.refreshWidgetsFromCache(getApplication())
     }
 
@@ -86,7 +130,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun getSavedChangePercentageInterval(): Int {
-        return prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+        return prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
     }
 
     fun setChangePercentageInterval(index: Int) {

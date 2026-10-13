@@ -22,6 +22,9 @@ object Prefs {
     const val SELECTED_CHANGE_PERCENTAGE = "selected_change_percentage"
     const val SHOW_SPARKLINE = "show_sparkline"
     const val SELECTED_WIDGET_FONT = "selected_widget_font"
+    const val WIDGET_PRICE_SIZE = "widget_price_size"
+    const val WIDGET_COLOR_STYLE = "widget_color_style"
+    const val WIDGET_THEME = "widget_theme"
     const val DEVELOPER_MODE_ENABLED = "developer_mode_enabled"
     /** Key for storing the app version code to detect updates. */
     const val LAST_VERSION_CODE = "last_version_code"
@@ -71,11 +74,11 @@ object AppConstants {
     private const val CACHE_DURATION_MINUTES = 30L
     /** Duration in milliseconds for which the cached price data is considered valid. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
-    const val WIDGET_DEBUG_MODE = false
-
     const val DEBUG_MOCK_PRICE_DEFAULT = "52849.10"
     const val DEBUG_MOCK_PERCENT_CHANGE_DEFAULT = "2.03"
-    const val DEBUG_MOCK_CURRENCY_DEFAULT = "GBP"
+    const val DEBUG_MOCK_CURRENCY_DEFAULT = "EUR"
+    /** Default change percentage interval index (1 for 7D). */
+    const val CHANGE_PERCENTAGE_DEFAULT = 1
 }
 
 /**

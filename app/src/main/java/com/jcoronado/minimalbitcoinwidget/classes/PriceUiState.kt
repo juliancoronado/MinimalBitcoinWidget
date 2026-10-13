@@ -16,7 +16,7 @@ import com.jcoronado.minimalbitcoinwidget.R
 data class PriceUiState(
     val price: Double = 0.0,
     val percentageChange: Double = 0.0,
-    val changeIntervalLabelResId: Int = R.string.interval_24h, // default value
+    val changeIntervalLabelResId: Int = R.string.interval_7d, // default value
     val selectedCurrency : String = AppConstants.CURRENCY_DEFAULT,
     val lastUpdated: Long = 0L,
     val isLoading: Boolean = false,

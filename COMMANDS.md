@@ -111,9 +111,66 @@ android docs fetch "kb://..."
 
 ## 3. Release: Package Native Debug Symbols
 
-When preparing a release bundle for Google Play Console submission, package the unstripped native debug symbols into a `.zip` archive containing the current app version (`versionName`) and build number (`versionCode`) in the filename:
+Google Play Console displays a warning when uploading an App Bundle (`.aab`):
+> *"This App Bundle contains native code, and you haven't uploaded debug symbols. We recommend you upload a symbol file to make your crashes and ANRs easier to analyze and debug."*
+
+This warning is triggered by pre-compiled native libraries in Android Jetpack dependencies (specifically `libandroidx.graphics.path.so` from `androidx.graphics:graphics-path`). Because the library is pre-compiled, the Android Gradle Plugin (AGP) does not automatically generate a standalone debug symbols `.zip` when compiling release bundles.
+
+### Expected Google Play Format
+
+Google Play Console requires a `.zip` archive whose root contains the ABI folders directly:
+```text
+native-debug-symbols-v<versionName>-<versionCode>.zip
+├── arm64-v8a/libandroidx.graphics.path.so
+├── armeabi-v7a/libandroidx.graphics.path.so
+├── x86/libandroidx.graphics.path.so
+└── x86_64/libandroidx.graphics.path.so
+```
+
+### One-Step Automated Command / Helper
+
+Run this function from the repository root. It reads `versionName` and `versionCode` from `app/build.gradle.kts`, packages the unstripped symbols directly into the base of the repository folder (`MinimalBitcoinWidget/`), and verifies the archive layout:
 
 ```bash
-# Example for v3.3.0 (build 19)
-cd app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib && zip -r ../../../../../../../native-debug-symbols-v3.3.0-19.zip arm64-v8a armeabi-v7a x86 x86_64 && cd -
+package-mbw-symbols() {
+  local LIB_DIR="app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib"
+
+  if [ ! -d "$LIB_DIR" ]; then
+    echo "Native libs folder not found. Running mergeReleaseNativeLibs task..."
+    ./gradlew mergeReleaseNativeLibs
+  fi
+
+  local VERSION_NAME=$(grep 'versionName =' app/build.gradle.kts | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+  local VERSION_CODE=$(grep 'versionCode =' app/build.gradle.kts | head -1 | tr -dc '0-9')
+  local ZIP_NAME="native-debug-symbols-v${VERSION_NAME}-${VERSION_CODE}.zip"
+
+  echo "Packaging native debug symbols for v${VERSION_NAME} (build ${VERSION_CODE}) into base repo folder..."
+  (cd "$LIB_DIR" && zip -r "$OLDPWD/$ZIP_NAME" arm64-v8a armeabi-v7a x86 x86_64 -x "*.DS_Store*")
+
+  echo "Successfully generated: $ZIP_NAME in MinimalBitcoinWidget/"
+  unzip -l "$ZIP_NAME"
+}
 ```
+
+### Manual Command
+
+If running manual steps from the base of `MinimalBitcoinWidget/` (substitute the version name and build number):
+
+```bash
+# 1. Ensure release native libs are merged
+./gradlew mergeReleaseNativeLibs
+
+# 2. Package from out/lib directly into the base repo directory (MinimalBitcoinWidget/)
+(cd app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib && zip -r "$OLDPWD/native-debug-symbols-v3.5.0-25.zip" arm64-v8a armeabi-v7a x86 x86_64 -x "*.DS_Store*")
+
+# 3. Verify archive structure
+unzip -l native-debug-symbols-v3.5.0-25.zip
+```
+
+### Uploading to Google Play Console
+
+1. Open **Google Play Console** &rarr; select **Minimal Bitcoin Widget**.
+2. Go to **Release** &rarr; **App bundle explorer**.
+3. Under **Releases**, select the newly uploaded version.
+4. Open the **Downloads** tab.
+5. In the **Native debug symbols** section, click **Upload** and select the `.zip` file.

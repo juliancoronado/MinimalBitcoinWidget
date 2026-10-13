@@ -1,32 +1,50 @@
 // Release notes for the Google Play Store listing
 // translations provided by Gemini AI
 
-// v3.4.1
+// v3.5.0
 
 <en-US>
-Small UI and readability improvements.
+• New Widget Styles: Customize price text size and choose between light, dark, or system themes.
+• Faster Access: Jump straight to widget customization from the main screen.
+• Bug fixes and UI improvements for a smoother experience.
 </en-US>
 <es-ES>
-Pequeñas mejoras de interfaz y legibilidad.
+• Nuevos estilos de widget: Personaliza el tamaño del precio y elige entre tema claro, oscuro o del sistema.
+• Acceso más rápido: Accede a la personalización del widget directamente desde la pantalla principal.
+• Correcciones de errores y mejoras en la interfaz para una experiencia más fluida.
 </es-ES>
 <es-419>
-Pequeñas mejoras de interfaz y legibilidad.
+• Nuevos estilos de widget: Personaliza el tamaño del precio y elige entre el tema claro, oscuro o del sistema.
+• Acceso más rápido: Accede a la personalización del widget directamente desde la pantalla principal.
+• Correcciones de errores y mejoras en la interfaz para una experiencia más fluida.
 </es-419>
 <de-DE>
-Kleine Verbesserungen an der Benutzeroberfläche und Lesbarkeit.
+• Neue Widget-Stile: Passen Sie die Preisgröße an und wählen Sie zwischen hellem, dunklem oder Systemdesign.
+• Schnellerer Zugriff: Widget-Anpassung direkt über den Hauptbildschirm aufrufen.
+• Fehlerbehebungen und UI-Verbesserungen für ein flüssigeres Nutzungserlebnis.
 </de-DE>
 <fr-FR>
-Petites améliorations de l'interface et de la lisibilité.
+• Nouveaux styles de widget : Personnalisez la taille du prix et choisissez entre le thème clair, sombre ou système.
+• Accès plus rapide : Accédez directement à la personnalisation du widget depuis l'écran principal.
+• Corrections de bugs et améliorations de l'interface pour une expérience plus fluide.
 </fr-FR>
 <it-IT>
-Piccoli miglioramenti all'interfaccia e alla leggibilità.
+• Nuovi stili per il widget: Personalizza la dimensione del prezzo e scegli tra i temi chiaro, scuro o di sistema.
+• Accesso più rapido: Accedi alla personalizzazione del widget direttamente dalla schermata principale.
+• Correzioni di bug e miglioramenti dell'interfaccia per un'esperienza più fluida.
 </it-IT>
 <pt-PT>
-Pequenas melhorias na interface e na legibilidade.
+• Novos estilos de widget: Personaliza o tamanho do preço e escolhe entre o tema claro, escuro ou do sistema.
+• Acesso mais rápido: Acede diretamente à personalização do widget a partir do ecrã principal.
+• Correções de erros e melhorias na interface para uma experiência mais fluida.
 </pt-PT>
 <pt-BR>
-Pequenas melhorias na interface e na legibilidade.
+• Novos estilos de widget: Personalize o tamanho do preço e escolha entre o tema claro, escuro ou do sistema.
+• Acesse a personalização do widget diretamente da tela principal.
+• Correções de erros e melhorias na interface para uma experiência mais fluida.
 </pt-BR>
 <tr-TR>
-Küçük kullanıcı arayüzü ve okunabilirlik iyileştirmeleri.
+• Yeni Widget Stilleri: Fiyat metni boyutunu özelleştirin ve açık, koyu veya sistem temaları arasında seçim yapın.
+• Daha Hızlı Erişim: Ana ekrandan doğrudan widget özelleştirmesine geçin.
+• Daha akıcı bir deneyim için hata düzeltmeleri ve arayüz iyileştirmeleri.
 </tr-TR>

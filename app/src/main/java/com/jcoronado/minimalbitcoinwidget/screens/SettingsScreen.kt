@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -50,6 +52,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -60,10 +68,12 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.jcoronado.minimalbitcoinwidget.BuildConfig
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
 import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
@@ -75,12 +85,12 @@ fun SettingsScreen(
     onCurrencySelected: (String) -> Unit = {},
     currentTheme: AppTheme,
     onThemeSelected: (AppTheme) -> Unit = {},
-    onNavigateToWidgetFont: () -> Unit = {},
+    onRateAppClick: () -> Unit = {},
     dynamicColors: Boolean,
     onDynamicColorsSelected: (Boolean) -> Unit = {},
     refreshInterval: Int = 1,
     onRefreshIntervalSelected: (Int) -> Unit = {},
-    changePercentage: Int = 0,
+    changePercentage: Int = AppConstants.CHANGE_PERCENTAGE_DEFAULT,
     onChangePercentageSelected: (Int) -> Unit = {},
     showSparkline: Boolean = true,
     onShowSparklineSelected: (Boolean) -> Unit = {},
@@ -105,12 +115,20 @@ fun SettingsScreen(
     val mailError = stringResource(R.string.mail_error)
 
     if (showCurrencyDialog.value) {
+        val currencyListScrollState = rememberScrollState()
+        val dialogContainerColor = AlertDialogDefaults.containerColor
+        val outlineVariantColor = MaterialTheme.colorScheme.outlineVariant
+        val thumbColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+        val trackColor = outlineVariantColor.copy(alpha = 0.25f)
+
         BasicAlertDialog(
             modifier = Modifier.heightIn(min = 200.dp, max = 400.dp),
             onDismissRequest = { showCurrencyDialog.value = false }) {
             Surface(
-                shape = MaterialTheme.shapes.large,
-                tonalElevation = AlertDialogDefaults.TonalElevation,
+                shape = AlertDialogDefaults.shape,
+                color = dialogContainerColor,
+                tonalElevation = 0.dp,
+                border = BorderStroke(1.dp, outlineVariantColor.copy(alpha = 0.5f)),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth()
@@ -118,14 +136,18 @@ fun SettingsScreen(
                     Text(
                         stringResource(R.string.update_currency),
                         style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.padding(all = 16.dp)
+                        modifier = Modifier.padding(start = 24.dp, top = 20.dp, end = 24.dp, bottom = 8.dp)
                     )
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 0.dp))
                     Column(
                         Modifier
                             .fillMaxWidth()
                             .weight(weight = 1.0F)
-                            .verticalScroll(rememberScrollState())
+                            .drawVerticalScrollbar(
+                                scrollState = currencyListScrollState,
+                                color = thumbColor,
+                                trackColor = trackColor
+                            )
+                            .verticalScroll(currencyListScrollState)
                     ) {
                         currencyCodes.forEachIndexed { index, currency ->
                             Row(
@@ -154,10 +176,9 @@ fun SettingsScreen(
                             }
                         }
                     }
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 0.dp))
                     Row(
                         modifier = Modifier
-                            .padding(all = 16.dp)
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
@@ -212,6 +233,7 @@ fun SettingsScreen(
                     shapes = ListItemDefaults.segmentedShapes(
                         index = 0, count = 3
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_price_change_24),
@@ -341,7 +363,7 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 0, count = 4
+                            index = 0, count = 3
                         ),
                         leadingContent = {
                             Icon(
@@ -401,36 +423,9 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 1, count = 4
+                        index = 1, count = 3
                     ),
-                    leadingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_widgets_24),
-                            stringResource(R.string.widget_font_icon_description)
-                        )
-                    },
-                    content = {
-                        Text(
-                            stringResource(R.string.customize_widget),
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                    trailingContent = {
-                        Icon(
-                            painterResource(R.drawable.rounded_chevron_forward_24),
-                            stringResource(R.string.open_arrow_icon_description)
-                        )
-                    },
-                    onClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        onNavigateToWidgetFont()
-                    },
-                )
-                SegmentedListItem(
-                    colors = colors,
-                    shapes = ListItemDefaults.segmentedShapes(
-                        index = 2, count = 4
-                    ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_palette_24),
@@ -465,8 +460,9 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 3, count = 4
+                        index = 2, count = 3
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_show_chart_24),
@@ -500,8 +496,9 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 0, count = if (developerModeEnabled) 7 else 6
+                        index = 0, count = if (developerModeEnabled) 8 else 7
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_chart_data_24),
@@ -530,8 +527,9 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 1, count = if (developerModeEnabled) 7 else 6
+                        index = 1, count = if (developerModeEnabled) 8 else 7
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_folder_code_24),
@@ -564,8 +562,9 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 2, count = if (developerModeEnabled) 7 else 6
+                            index = 2, count = if (developerModeEnabled) 8 else 7
                         ),
+                        verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_license_24),
@@ -584,8 +583,9 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 3, count = if (developerModeEnabled) 7 else 6
+                        index = 3, count = if (developerModeEnabled) 8 else 7
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_mail_24),
@@ -616,12 +616,45 @@ fun SettingsScreen(
                         }
                     },
                 )
+                SegmentedListItem(
+                    colors = colors,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        index = 4, count = if (developerModeEnabled) 8 else 7
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    leadingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_star_24),
+                            stringResource(R.string.star_icon_description)
+                        )
+                    },
+                    content = {
+                        Text(
+                            stringResource(R.string.rate_app_shortcut_title),
+                            fontWeight = FontWeight.Medium
+                        )
+                    },
+                    supportingContent = {
+                        Text(stringResource(R.string.rate_app_shortcut_description))
+                    },
+                    trailingContent = {
+                        Icon(
+                            painterResource(R.drawable.rounded_arrow_outward_24),
+                            stringResource(R.string.open_arrow_icon_description)
+                        )
+                    },
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        onRateAppClick()
+                    },
+                )
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 4, count = if (developerModeEnabled) 7 else 6
+                            index = 5, count = if (developerModeEnabled) 8 else 7
                         ),
+                        verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_info_24),
@@ -648,8 +681,9 @@ fun SettingsScreen(
                 SegmentedListItem(
                     colors = colors,
                     shapes = ListItemDefaults.segmentedShapes(
-                        index = 5, count = if (developerModeEnabled) 7 else 6
+                        index = 6, count = if (developerModeEnabled) 8 else 7
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         Icon(
                             painterResource(R.drawable.rounded_build_24),
@@ -690,8 +724,9 @@ fun SettingsScreen(
                     SegmentedListItem(
                         colors = colors,
                         shapes = ListItemDefaults.segmentedShapes(
-                            index = 6, count = 7
+                            index = 7, count = 8
                         ),
+                        verticalAlignment = Alignment.CenterVertically,
                         leadingContent = {
                             Icon(
                                 painterResource(R.drawable.rounded_code_24),
@@ -750,6 +785,48 @@ fun SettingsPreview() {
             currentTheme = AppTheme.LIGHT,
             dynamicColors = true,
             refreshInterval = 1
+        )
+    }
+}
+
+private fun Modifier.drawVerticalScrollbar(
+    scrollState: ScrollState,
+    color: Color,
+    trackColor: Color,
+    width: Dp = 4.dp,
+    paddingEnd: Dp = 6.dp,
+    paddingVertical: Dp = 4.dp,
+    minThumbHeight: Dp = 32.dp
+): Modifier = this.drawWithContent {
+    drawContent()
+    if (scrollState.maxValue > 0) {
+        val padVertPx = paddingVertical.toPx()
+        val trackHeight = (size.height - padVertPx * 2).coerceAtLeast(0f)
+        val viewportHeight = size.height
+        val totalHeight = viewportHeight + scrollState.maxValue
+        val thumbHeight = ((viewportHeight / totalHeight) * trackHeight)
+            .coerceIn(minThumbHeight.toPx(), trackHeight)
+        val scrollProgress = scrollState.value.toFloat() / scrollState.maxValue
+        val thumbOffsetY = padVertPx + scrollProgress * (trackHeight - thumbHeight)
+
+        val thumbWidthPx = width.toPx()
+        val paddingEndPx = paddingEnd.toPx()
+        val left = size.width - thumbWidthPx - paddingEndPx
+
+        // Track
+        drawRoundRect(
+            color = trackColor,
+            topLeft = Offset(left, padVertPx),
+            size = Size(thumbWidthPx, trackHeight),
+            cornerRadius = CornerRadius(thumbWidthPx / 2f, thumbWidthPx / 2f)
+        )
+
+        // Thumb
+        drawRoundRect(
+            color = color,
+            topLeft = Offset(left, thumbOffsetY),
+            size = Size(thumbWidthPx, thumbHeight),
+            cornerRadius = CornerRadius(thumbWidthPx / 2f, thumbWidthPx / 2f)
         )
     }
 }

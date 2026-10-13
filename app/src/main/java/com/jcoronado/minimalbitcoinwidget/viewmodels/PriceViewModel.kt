@@ -4,6 +4,7 @@ import android.app.Application
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -20,6 +21,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.PriceUiState
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.data.Resource
+import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetReceiver
@@ -35,12 +37,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+import com.jcoronado.minimalbitcoinwidget.AppDatabase
+import com.jcoronado.minimalbitcoinwidget.DebugDao
+import com.jcoronado.minimalbitcoinwidget.DebugLog
+
 private const val LOG_TAG = "PriceViewModel"
 
 class PriceViewModel @JvmOverloads constructor(
     application: Application,
-    private val repository: PriceRepository = PriceRepository(application)
+    private val repository: PriceRepository = PriceRepository(application),
+    private val debugDao: DebugDao = AppDatabase.getInstance(application).debugDao()
 ) : AndroidViewModel(application) {
+
+    private fun logApp(message: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            debugDao.insert(DebugLog(message = message, type = DebugLog.TYPE_APP))
+        }
+    }
 
     private val _uiState = MutableStateFlow(PriceUiState(isLoading = true))
 
@@ -56,6 +69,9 @@ class PriceViewModel @JvmOverloads constructor(
         // is fully populated in _uiState before starting any network calls.
         loadInitialData()
         
+        // Publish or refresh Glance widget preview for the system widget picker on Android 15+
+        updateWidgetPreview(application)
+
         // Trigger a fresh price fetch using the newly loaded currency preference.
         fetchPrice(fromInit = true)
     }
@@ -67,15 +83,17 @@ class PriceViewModel @JvmOverloads constructor(
         if (repository.isMockUiEnabled()) {
             val mockData = repository.getMockPriceData()
             val mockCurrency = repository.getMockCurrency()
+            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+            val interval = TimeInterval.fromValue(selectedInterval)
 
             _uiState.value = PriceUiState(
                 price = mockData.currentPrice,
-                percentageChange = mockData.priceChangePercentage24h,
+                percentageChange = mockData.getPercentageForInterval(selectedInterval),
                 isLoading = false,
                 selectedCurrency = mockCurrency,
-                changeIntervalLabelResId = R.string.interval_24h,
+                changeIntervalLabelResId = interval.labelResId,
                 lastUpdated = 0L,
-                sparklinePrices = mockData.getSparklineForInterval(0),
+                sparklinePrices = mockData.getSparklineForInterval(selectedInterval),
                 showSparkline = showSparkline
             )
             return
@@ -86,7 +104,7 @@ class PriceViewModel @JvmOverloads constructor(
         if (cachedData != null) {
             try {
                 val lastUpdated = repository.getLastApiCallTimestamp()
-                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
                 val percentage = cachedData.getPercentageForInterval(selectedInterval)
 
                 val interval = TimeInterval.fromValue(selectedInterval)
@@ -135,6 +153,9 @@ class PriceViewModel @JvmOverloads constructor(
             )
 
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+            val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
+            val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
+            val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
 
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
@@ -145,7 +166,10 @@ class PriceViewModel @JvmOverloads constructor(
                         changePercentage = currentState.percentageChange,
                         intervalLabelResId = currentState.changeIntervalLabelResId,
                         currency = currentState.selectedCurrency,
-                        fontKey = fontKey
+                        fontKey = fontKey,
+                        priceSizeKey = priceSizeKey,
+                        colorStyleKey = colorStyleKey,
+                        themeKey = themeKey
                     )
                 )
             } catch (e: Exception) {
@@ -159,6 +183,7 @@ class PriceViewModel @JvmOverloads constructor(
         if (_uiState.value.selectedCurrency == newCurrency) return
 
         Log.i(LOG_TAG, "Updating currency to: $newCurrency")
+        logApp("Currency changed to $newCurrency")
 
         _uiState.value = _uiState.value.copy(selectedCurrency = newCurrency)
         repository.updateSelectedCurrency(newCurrency)
@@ -166,8 +191,15 @@ class PriceViewModel @JvmOverloads constructor(
     }
 
     /** Fetch data via Repository. */
-    fun fetchPrice(force: Boolean = false, fromInit: Boolean = false) {
+    fun fetchPrice(force: Boolean = false, fromInit: Boolean = false, isManual: Boolean = false) {
+        if (isManual) {
+            logApp("Manual refresh requested")
+        } else if (fromInit) {
+            logApp("Initial fetch requested")
+        }
+
         if (repository.isMockUiEnabled()) {
+            logApp("Mock UI enabled, bypassing fetch")
             viewModelScope.launch {
                 _uiState.value = _uiState.value.copy(isLoading = true)
                 delay(750)
@@ -185,6 +217,7 @@ class PriceViewModel @JvmOverloads constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = _uiState.value.copy(isLoading = true)
 
+            val isCacheHit = !force && repository.isCacheFresh() && repository.getCachedPriceData() != null
             val currency = _uiState.value.selectedCurrency
             val resource = repository.fetchPrice(currency, force = force)
 
@@ -193,7 +226,13 @@ class PriceViewModel @JvmOverloads constructor(
             when (resource) {
                 is Resource.Success -> {
                     val priceData = resource.data
-                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+                    val formattedPrice = FormatUtils.formatPrice(priceData.currentPrice, currency)
+                    if (isCacheHit) {
+                        logApp("Loaded from cache ($formattedPrice)")
+                    } else {
+                        logApp("Data fetched ($formattedPrice)")
+                    }
+                    val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
                     val percentage = priceData.getPercentageForInterval(selectedInterval)
                     val interval = TimeInterval.fromValue(selectedInterval)
                     val lastUpdated = repository.getLastApiCallTimestamp()
@@ -210,6 +249,7 @@ class PriceViewModel @JvmOverloads constructor(
                     redrawWidgets()
                 }
                 is Resource.Error -> {
+                    logApp("Failed - ${resource.message}")
                     Log.e(LOG_TAG, "Network call failed: ${resource.message}")
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
@@ -241,33 +281,45 @@ class PriceViewModel @JvmOverloads constructor(
             val repository = PriceRepository(context)
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+            val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
+            val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
+            val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
 
             if (repository.isMockUiEnabled()) {
                 val mockData = repository.getMockPriceData()
                 val mockCurrency = repository.getMockCurrency()
+                val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+                val interval = TimeInterval.fromValue(selectedInterval)
 
                 val glanceState = PriceWidgetState.Available(
                     price = mockData.currentPrice,
-                    changePercentage = mockData.priceChangePercentage24h,
-                    intervalLabelResId = R.string.interval_24h,
+                    changePercentage = mockData.getPercentageForInterval(selectedInterval),
+                    intervalLabelResId = interval.labelResId,
                     currency = mockCurrency,
-                    fontKey = fontKey
+                    fontKey = fontKey,
+                    priceSizeKey = priceSizeKey,
+                    colorStyleKey = colorStyleKey,
+                    themeKey = themeKey
                 )
 
                 // update glance widgets
                 CoroutineScope(Dispatchers.IO).launch {
                     updateGlanceWidgets(context, glanceState)
                 }
+                updateWidgetPreview(context)
 
                 // update legacy widgets
                 updateLegacyWidgets(context, mockData, mockCurrency)
                 return
             }
 
-            val priceData = repository.getCachedPriceData() ?: return
+            val priceData = repository.getCachedPriceData() ?: run {
+                updateWidgetPreview(context)
+                return
+            }
             val currencyCode = repository.getSelectedCurrency()
 
-            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, 0)
+            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
             val percentage = priceData.getPercentageForInterval(selectedInterval)
             val interval = TimeInterval.fromValue(selectedInterval)
 
@@ -276,16 +328,42 @@ class PriceViewModel @JvmOverloads constructor(
                 changePercentage = percentage,
                 intervalLabelResId = interval.labelResId,
                 currency = currencyCode,
-                fontKey = fontKey
+                fontKey = fontKey,
+                priceSizeKey = priceSizeKey,
+                colorStyleKey = colorStyleKey,
+                themeKey = themeKey
             )
 
             // update glance widgets
             CoroutineScope(Dispatchers.IO).launch {
                 updateGlanceWidgets(context, glanceState)
             }
+            updateWidgetPreview(context)
 
             // update legacy widgets
             updateLegacyWidgets(context, priceData)
+        }
+
+        /**
+         * Generates and publishes the Glance widget preview for the system widget picker
+         * on Android 15+ (API 35+).
+         */
+        fun updateWidgetPreview(context: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val manager = GlanceAppWidgetManager(context)
+                        val result = manager.setWidgetPreviews(PriceWidgetReceiver::class)
+                        if (result == GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_RATE_LIMITED) {
+                            Log.d(LOG_TAG, "setWidgetPreviews was rate-limited by the system")
+                        } else {
+                            Log.d(LOG_TAG, "setWidgetPreviews updated successfully")
+                        }
+                    } catch (e: Exception) {
+                        Log.w(LOG_TAG, "Failed to update widget preview: $e")
+                    }
+                }
+            }
         }
 
         /**

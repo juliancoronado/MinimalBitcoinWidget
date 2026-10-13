@@ -52,8 +52,20 @@
     <string name="widget_font_preview_header">Preview</string>
     <string name="widget_font_options_header">Available Fonts</string>
     <string name="widget_font_icon_description">Widget font icon</string>
+    <string name="customize_widget_icon_description">Customize widget icon</string>
     <string name="font_app_default">App Default</string>
     <string name="font_system_default">System Default</string>
+    <string name="widget_price_size">Price</string>
+    <string name="widget_size_small">Small</string>
+    <string name="widget_size_default">Default</string>
+    <string name="widget_size_large">Large</string>
+    <string name="widget_colors">Colors</string>
+    <string name="widget_colors_dynamic">Dynamic</string>
+    <string name="widget_colors_solid">Solid</string>
+    <string name="widget_theme">Theme</string>
+    <string name="widget_theme_system">System default</string>
+    <string name="widget_theme_light">Light</string>
+    <string name="widget_theme_dark">Dark</string>
     <string name="dynamic_colors">Dynamic Colors</string>
     <string name="dynamic_colors_subtitle">Follow colors from your device theme</string>
     <string name="show_price_graph">Price Graph</string>
@@ -75,13 +87,21 @@
     <string name="license_subtitle" translatable="false">GNU General Public License v3.0</string>
 
     <!-- Developer Options Screen - don't translate these for now -->
-    <string name="widget_logs" translatable="false">Widget Logs</string>
-    <string name="widget_logs_description" translatable="false">View logs for the widget update worker</string>
+    <string name="widget_logs" translatable="false">Logs</string>
+    <string name="widget_logs_description" translatable="false">View app and widget activity logs</string>
+    <string name="logs_filter_all" translatable="false">All</string>
+    <string name="logs_filter_widget" translatable="false">Widget</string>
+    <string name="logs_filter_app" translatable="false">App</string>
+    <string name="logs_empty" translatable="false">No logs stored.</string>
 
     <!-- Shortcuts -->
-    <string name="shortcuts_header">Shortcuts</string>
+    <string name="widget_header">Widget</string>
+    <string name="customize_shortcut_title">Customize</string>
+    <string name="customize_widget_shortcut_description">Font, color, size and theme</string>
     <string name="add_widget_shortcut_title">Add to Home Screen</string>
-    <string name="add_widget_shortcut_description">Tap here to add a widget to your home screen</string>
+    <string name="add_widget_shortcut_description">Place widget on home screen</string>
+    <string name="rate_app_shortcut_title">Rate on Google Play</string>
+    <string name="rate_app_shortcut_description">Support the app by leaving a review</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Currency icon</string>
@@ -93,6 +113,9 @@
     <string name="build_icon_description">Build icon</string>
     <string name="contact_icon_description">Contact icon</string>
     <string name="open_arrow_icon_description">Open arrow icon</string>
+    <string name="add_icon_description">Add icon</string>
+    <string name="widgets_icon_description">Widgets icon</string>
+    <string name="star_icon_description">Star icon</string>
     <string name="chart_data_icon_description">Chart data icon</string>
     <string name="developer_mode_icon_description">Developer Mode icon</string>
     <string name="bitcoin_icon_description">Bitcoin icon</string>
@@ -108,6 +131,7 @@
     <string name="cancel">Cancel</string>
     <string name="clear">Clear</string>
     <string name="error">Error</string>
+    <string name="reset_to_default">Reset to default</string>
 
     <!-- Email / Contact -->
     <string name="mail_to" translatable="false">mailto:contact@jcoronado.dev</string>

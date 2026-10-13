@@ -12,4 +12,61 @@
 
     <color name="widget_preview_background_light">#FAFAFF</color>
 
+    <!-- Dynamic Light fallback tokens -->
+    <color name="widget_dynamic_light_primary">#00875A</color>
+    <color name="widget_dynamic_light_on_primary">#FFFFFF</color>
+    <color name="widget_dynamic_light_primary_container">#A3F2C7</color>
+    <color name="widget_dynamic_light_on_primary_container">#002113</color>
+    <color name="widget_dynamic_light_secondary">#44474E</color>
+    <color name="widget_dynamic_light_on_secondary">#FFFFFF</color>
+    <color name="widget_dynamic_light_secondary_container">#DDE2EC</color>
+    <color name="widget_dynamic_light_on_secondary_container">#151C24</color>
+    <color name="widget_dynamic_light_tertiary">#006399</color>
+    <color name="widget_dynamic_light_on_tertiary">#FFFFFF</color>
+    <color name="widget_dynamic_light_tertiary_container">#CEE5FF</color>
+    <color name="widget_dynamic_light_on_tertiary_container">#001D32</color>
+    <color name="widget_dynamic_light_error">#B3261E</color>
+    <color name="widget_dynamic_light_error_container">#F9DEDC</color>
+    <color name="widget_dynamic_light_on_error">#FFFFFF</color>
+    <color name="widget_dynamic_light_on_error_container">#410E0B</color>
+    <color name="widget_dynamic_light_background">#F8F9FF</color>
+    <color name="widget_dynamic_light_on_background">#191C20</color>
+    <color name="widget_dynamic_light_surface">#F8F9FF</color>
+    <color name="widget_dynamic_light_on_surface">#191C20</color>
+    <color name="widget_dynamic_light_surface_variant">#E0E2EC</color>
+    <color name="widget_dynamic_light_on_surface_variant">#44474E</color>
+    <color name="widget_dynamic_light_outline">#74777F</color>
+    <color name="widget_dynamic_light_inverse_on_surface">#F0F0F7</color>
+    <color name="widget_dynamic_light_inverse_surface">#2E3135</color>
+    <color name="widget_dynamic_light_inverse_primary">#85D6A5</color>
+    <color name="widget_dynamic_light_widget_background">#EBEFF8</color>
+
+    <!-- Dynamic Dark fallback tokens -->
+    <color name="widget_dynamic_dark_primary">#36B37E</color>
+    <color name="widget_dynamic_dark_on_primary">#003822</color>
+    <color name="widget_dynamic_dark_primary_container">#005234</color>
+    <color name="widget_dynamic_dark_on_primary_container">#A3F2C7</color>
+    <color name="widget_dynamic_dark_secondary">#C4C6D0</color>
+    <color name="widget_dynamic_dark_on_secondary">#2D3138</color>
+    <color name="widget_dynamic_dark_secondary_container">#44474E</color>
+    <color name="widget_dynamic_dark_on_secondary_container">#DDE2EC</color>
+    <color name="widget_dynamic_dark_tertiary">#96CCFF</color>
+    <color name="widget_dynamic_dark_on_tertiary">#003353</color>
+    <color name="widget_dynamic_dark_tertiary_container">#004A75</color>
+    <color name="widget_dynamic_dark_on_tertiary_container">#CEE5FF</color>
+    <color name="widget_dynamic_dark_error">#F2B8B5</color>
+    <color name="widget_dynamic_dark_error_container">#8C1D18</color>
+    <color name="widget_dynamic_dark_on_error">#601410</color>
+    <color name="widget_dynamic_dark_on_error_container">#F2B8B5</color>
+    <color name="widget_dynamic_dark_background">#111418</color>
+    <color name="widget_dynamic_dark_on_background">#E2E2E9</color>
+    <color name="widget_dynamic_dark_surface">#111418</color>
+    <color name="widget_dynamic_dark_on_surface">#E2E2E9</color>
+    <color name="widget_dynamic_dark_surface_variant">#44474E</color>
+    <color name="widget_dynamic_dark_on_surface_variant">#C4C6D0</color>
+    <color name="widget_dynamic_dark_outline">#8E9099</color>
+    <color name="widget_dynamic_dark_inverse_on_surface">#191C20</color>
+    <color name="widget_dynamic_dark_inverse_surface">#E2E2E9</color>
+    <color name="widget_dynamic_dark_inverse_primary">#00875A</color>
+    <color name="widget_dynamic_dark_widget_background">#272A2E</color>
 </resources>

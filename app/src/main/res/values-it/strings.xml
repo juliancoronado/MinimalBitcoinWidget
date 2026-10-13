@@ -27,8 +27,20 @@
     <string name="widget_font_preview_header">Anteprima</string>
     <string name="widget_font_options_header">Caratteri disponibili</string>
     <string name="widget_font_icon_description">Icona carattere widget</string>
+    <string name="customize_widget_icon_description">Icona personalizza widget</string>
     <string name="font_app_default">Predefinito dell\'app</string>
     <string name="font_system_default">Predefinito di sistema</string>
+    <string name="widget_price_size">Prezzo</string>
+    <string name="widget_size_small">Piccolo</string>
+    <string name="widget_size_default">Predefinito</string>
+    <string name="widget_size_large">Grande</string>
+    <string name="widget_colors">Colori</string>
+    <string name="widget_colors_dynamic">Dinamico</string>
+    <string name="widget_colors_solid">Tinta unita</string>
+    <string name="widget_theme">Tema</string>
+    <string name="widget_theme_system">Predefinito di sistema</string>
+    <string name="widget_theme_light">Chiaro</string>
+    <string name="widget_theme_dark">Scuro</string>
     <string name="dynamic_colors">Colori dinamici</string>
     <string name="dynamic_colors_subtitle">Segui i colori del tema del tuo dispositivo</string>
     <string name="show_price_graph">Grafico del prezzo</string>
@@ -49,9 +61,13 @@
     <string name="developer_taps">Ora sei a %1$d tocchi dal diventare uno sviluppatore</string>
 
     <!-- Shortcuts -->
-    <string name="shortcuts_header">Scorciatoie</string>
+    <string name="widget_header">Widget</string>
+    <string name="customize_shortcut_title">Personalizza</string>
+    <string name="customize_widget_shortcut_description">Carattere, colore, dimensione e tema</string>
     <string name="add_widget_shortcut_title">Aggiungi alla schermata iniziale</string>
-    <string name="add_widget_shortcut_description">Tocca qui per aggiungere un widget alla tua schermata iniziale</string>
+    <string name="add_widget_shortcut_description">Aggiungi widget alla schermata iniziale</string>
+    <string name="rate_app_shortcut_title">Valuta su Google Play</string>
+    <string name="rate_app_shortcut_description">Supporta l\'app lasciando una recensione</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Icona valuta</string>
@@ -63,6 +79,9 @@
     <string name="build_icon_description">Icona build</string>
     <string name="contact_icon_description">Icona contatti</string>
     <string name="open_arrow_icon_description">Icona freccia di apertura</string>
+    <string name="add_icon_description">Icona aggiungi</string>
+    <string name="widgets_icon_description">Icona widget</string>
+    <string name="star_icon_description">Icona stella</string>
     <string name="chart_data_icon_description">Icona dati grafico</string>
     <string name="developer_mode_icon_description">Icona modalità sviluppatore</string>
     <string name="bitcoin_icon_description">Icona Bitcoin</string>
@@ -78,6 +97,7 @@
     <string name="cancel">Annulla</string>
     <string name="clear">Cancella</string>
     <string name="error">Errore</string>
+    <string name="reset_to_default">Ripristina impostazioni predefinite</string>
 
     <string name="mail_error">Nessuna app di posta trovata</string>
 

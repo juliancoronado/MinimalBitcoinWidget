@@ -31,33 +31,43 @@ object WidgetBitmapUtils {
 
     /**
      * Calculates the optimal font size (in SP) for the price and currency symbol
-     * based on the total visual character length of the rendered price and symbol.
+     * based on the total visual character length of the rendered price and symbol,
+     * scaled by an optional scale factor.
      */
-    fun getWidgetPriceFontSize(formattedPrice: FormattedPrice): Pair<Float, Float> {
-        return getWidgetPriceFontSize(formattedPrice.price, formattedPrice.symbol)
+    fun getWidgetPriceFontSize(formattedPrice: FormattedPrice, scaleFactor: Float = 1.0f): Pair<Float, Float> {
+        return getWidgetPriceFontSize(formattedPrice.price, formattedPrice.symbol, scaleFactor)
     }
 
     /**
      * Calculates the optimal font size (in SP) for the price and currency symbol
-     * based on the total character length of the price text and symbol.
+     * based on the total character length of the price text and symbol,
+     * scaled by an optional scale factor.
      */
-    fun getWidgetPriceFontSize(priceText: String, symbolText: String): Pair<Float, Float> {
+    fun getWidgetPriceFontSize(
+        priceText: String,
+        symbolText: String,
+        scaleFactor: Float = 1.0f
+    ): Pair<Float, Float> {
         val totalLength = priceText.length + symbolText.length
-        val (priceSp, symbolSp) = when {
+        val (basePriceSp, baseSymbolSp) = when {
             totalLength <= 11 -> Pair(24f, 16f)
             totalLength <= 13 -> Pair(21f, 15f)
             totalLength <= 15 -> Pair(18f, 14f)
             else -> Pair(15f, 12f)
         }
-        return Pair(priceSp, symbolSp)
+        return Pair(basePriceSp * scaleFactor, baseSymbolSp * scaleFactor)
     }
 
     /**
      * Overload calculating optimal font size (in SP) given a raw price and currency code.
      */
-    fun getWidgetPriceFontSize(price: Double, currencyCode: String = "USD"): Pair<Float, Float> {
+    fun getWidgetPriceFontSize(
+        price: Double,
+        currencyCode: String = "USD",
+        scaleFactor: Float = 1.0f
+    ): Pair<Float, Float> {
         val formatted = FormatUtils.formatPriceSeparated(price, currencyCode)
-        return getWidgetPriceFontSize(formatted)
+        return getWidgetPriceFontSize(formatted, scaleFactor)
     }
 
     /**

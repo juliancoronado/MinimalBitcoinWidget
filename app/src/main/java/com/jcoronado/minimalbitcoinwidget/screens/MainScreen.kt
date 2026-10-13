@@ -57,7 +57,12 @@ import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: () -> Unit) {
+fun MainScreen(
+    uiState: PriceUiState,
+    onRefresh: () -> Unit,
+    onCustomizeWidgetClick: () -> Unit,
+    onAddWidgetClick: () -> Unit,
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -82,13 +87,14 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: (
             verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
         ) {
             PriceCard(uiState, onRefresh = onRefresh)
-            // TODO - shortcuts section - put this into a separate component later
+            // TODO - widget section - put this into a separate component later
             Text(
-                text = stringResource(R.string.shortcuts_header),
+                text = stringResource(R.string.widget_header),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
+            CustomizeWidgetShortcut(onClick = onCustomizeWidgetClick)
             AddWidgetShortcut(onClick = onAddWidgetClick)
         }
     }
@@ -96,14 +102,57 @@ fun MainScreen(uiState: PriceUiState, onRefresh: () -> Unit, onAddWidgetClick: (
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun AddWidgetShortcut(onClick: () -> Unit) {
+fun CustomizeWidgetShortcut(onClick: () -> Unit) {
     val view = LocalView.current
     SegmentedListItem(
-        // since there's only 1 item in this section, round the corner manually
-        shapes = ListItemDefaults.shapes(shape = RoundedCornerShape(16.dp)),
+        shapes = ListItemDefaults.segmentedShapes(index = 0, count = 2),
+        verticalAlignment = Alignment.CenterVertically,
         onClick = {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             onClick()
+        },
+        leadingContent = {
+            Icon(
+                painterResource(R.drawable.rounded_tune_24),
+                stringResource(R.string.customize_widget_icon_description)
+            )
+        },
+        content = {
+            Text(
+                text = stringResource(R.string.customize_shortcut_title),
+                fontWeight = FontWeight.Medium
+            )
+        },
+        supportingContent = {
+            Text(
+                text = stringResource(R.string.customize_widget_shortcut_description),
+            )
+        },
+        trailingContent = {
+            Icon(
+                painterResource(R.drawable.rounded_chevron_forward_24),
+                stringResource(R.string.open_arrow_icon_description)
+            )
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun AddWidgetShortcut(onClick: () -> Unit) {
+    val view = LocalView.current
+    SegmentedListItem(
+        shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2),
+        verticalAlignment = Alignment.CenterVertically,
+        onClick = {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            onClick()
+        },
+        leadingContent = {
+            Icon(
+                painterResource(R.drawable.rounded_widgets_24),
+                stringResource(R.string.widgets_icon_description)
+            )
         },
         content = {
             Text(
@@ -115,7 +164,14 @@ fun AddWidgetShortcut(onClick: () -> Unit) {
             Text(
                 text = stringResource(R.string.add_widget_shortcut_description),
             )
-        })
+        },
+        trailingContent = {
+            Icon(
+                painterResource(R.drawable.rounded_add_24),
+                stringResource(R.string.add_icon_description)
+            )
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -315,6 +371,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
         },
         colors = colors,
         shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2),
+        verticalAlignment = Alignment.CenterVertically,
         content = {
             Text(stringResource(R.string.last_updated, defaultFormattedTime))
         },
@@ -340,7 +397,11 @@ fun MainScreenPreview() {
         MainScreen(
             uiState = PriceUiState(
                 price = 52849.10, percentageChange = 2.03, isLoading = false
-            ), onRefresh = { }, onAddWidgetClick = { })
+            ),
+            onRefresh = { },
+            onCustomizeWidgetClick = { },
+            onAddWidgetClick = { }
+        )
     }
 }
 

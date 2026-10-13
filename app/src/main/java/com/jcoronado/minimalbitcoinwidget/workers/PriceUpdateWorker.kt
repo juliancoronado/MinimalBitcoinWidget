@@ -22,6 +22,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.data.Resource
+import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
@@ -44,18 +45,18 @@ class PriceUpdateWorker(
         val db = AppDatabase.getInstance(applicationContext)
         val dao = db.debugDao()
 
-        dao.insert(DebugLog(message = "PriceWorker: Fetching Data"))
+        dao.insert(DebugLog(message = "Fetching data"))
 
         val repository = PriceRepository(applicationContext)
 
         if (repository.isMockUiEnabled()) {
-            dao.insert(DebugLog(message = "PriceWorker: Mock UI enabled, bypassing fetch"))
+            dao.insert(DebugLog(message = "Mock UI enabled, bypassing fetch"))
             PriceViewModel.refreshWidgetsFromCache(applicationContext)
             return@withContext Result.success()
         }
 
         if (repository.isCacheFresh()) {
-            dao.insert(DebugLog(message = "PriceWorker: Skipping Data Fetch (< 15 mins)"))
+            dao.insert(DebugLog(message = "Skipping fetch (< 15 mins)"))
             Log.d(LOG_TAG, "Data is fresh, skipping fetch")
             PriceViewModel.refreshWidgetsFromCache(applicationContext)
             return@withContext Result.success()
@@ -67,12 +68,13 @@ class PriceUpdateWorker(
         when (resource) {
             is Resource.Success -> {
                 PriceViewModel.refreshWidgetsFromCache(applicationContext)
-                dao.insert(DebugLog(message = "PriceWorker: Data Fetched"))
+                val priceString = FormatUtils.formatPrice(resource.data.currentPrice, currencyCode)
+                dao.insert(DebugLog(message = "Data fetched ($priceString)"))
                 Result.success()
             }
             is Resource.Error -> {
                 val exception = resource.cause as? Exception ?: Exception(resource.message)
-                dao.insert(DebugLog(message = "PriceWorker: Failed - ${resource.message}"))
+                dao.insert(DebugLog(message = "Failed - ${resource.message}"))
                 Log.e(LOG_TAG, "Worker fetch error: ${resource.message}", exception)
                 handleError(exception)
             }

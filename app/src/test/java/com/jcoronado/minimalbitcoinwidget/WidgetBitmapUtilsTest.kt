@@ -116,4 +116,42 @@ class WidgetBitmapUtilsTest {
         assertEquals(24f, priceSp, 0.0f)
         assertEquals(16f, symbolSp, 0.0f)
     }
+
+    @Test
+    fun `getWidgetPriceFontSize with scaleFactor correctly scales output`() {
+        // Base is 24sp / 16sp for 7 chars
+        val (smallPriceSp, smallSymbolSp) = WidgetBitmapUtils.getWidgetPriceFontSize("500.00", "$", 0.85f)
+        assertEquals(24f * 0.85f, smallPriceSp, 0.001f)
+        assertEquals(16f * 0.85f, smallSymbolSp, 0.001f)
+
+        val (largePriceSp, largeSymbolSp) = WidgetBitmapUtils.getWidgetPriceFontSize("500.00", "$", 1.15f)
+        assertEquals(24f * 1.15f, largePriceSp, 0.001f)
+        assertEquals(16f * 1.15f, largeSymbolSp, 0.001f)
+    }
+
+    @Test
+    fun `WidgetPriceSize fromKey returns expected values and fallback`() {
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.SMALL, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey("small"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.DEFAULT, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey("default"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.LARGE, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey("large"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.DEFAULT, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey("unknown"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.DEFAULT, com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize.fromKey(null))
+    }
+
+    @Test
+    fun `WidgetColorStyle fromKey returns expected values and fallback`() {
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.DYNAMIC, com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.fromKey("dynamic"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.SOLID, com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.fromKey("solid"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.DYNAMIC, com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.fromKey("unknown"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.DYNAMIC, com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle.fromKey(null))
+    }
+
+    @Test
+    fun `WidgetTheme fromKey returns expected values and fallback`() {
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.SYSTEM, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey("system"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.LIGHT, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey("light"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.DARK, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey("dark"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.SYSTEM, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey("unknown"))
+        assertEquals(com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.SYSTEM, com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme.fromKey(null))
+    }
 }

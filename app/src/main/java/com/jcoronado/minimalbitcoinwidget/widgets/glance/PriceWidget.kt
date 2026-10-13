@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.graphics.Typeface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.ColorFilter
@@ -23,6 +24,7 @@ import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.color.ColorProvider
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
@@ -42,9 +44,15 @@ import androidx.glance.text.TextStyle
 import androidx.preference.PreferenceManager
 import com.jcoronado.minimalbitcoinwidget.MainActivity
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
+import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
+import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 
 class PriceWidget : GlanceAppWidget() {
 
@@ -52,18 +60,69 @@ class PriceWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            GlanceTheme(
-                colors = if (Build.VERSION.SDK_INT >= 31) {
-                    GlanceTheme.colors
-                } else {
-                    GlanceColorScheme.colors
-                }
-            ) {
-                val state = currentState<PriceWidgetState>()
-                WidgetContent(state)
-            }
+            val state = currentState<PriceWidgetState>()
+            WidgetContent(state)
         }
     }
+
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        val repository = PriceRepository(context)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+        val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
+        val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
+        val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
+        val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+        val interval = TimeInterval.fromValue(selectedInterval)
+
+        val previewState: PriceWidgetState.Available = when {
+            repository.isMockUiEnabled() -> {
+                val mockData = repository.getMockPriceData()
+                PriceWidgetState.Available(
+                    price = mockData.currentPrice,
+                    changePercentage = mockData.getPercentageForInterval(selectedInterval),
+                    intervalLabelResId = interval.labelResId,
+                    currency = repository.getMockCurrency(),
+                    fontKey = fontKey,
+                    priceSizeKey = priceSizeKey,
+                    colorStyleKey = colorStyleKey,
+                    themeKey = themeKey
+                )
+            }
+            else -> {
+                val cachedData = repository.getCachedPriceData()
+                if (cachedData != null) {
+                    PriceWidgetState.Available(
+                        price = cachedData.currentPrice,
+                        changePercentage = cachedData.getPercentageForInterval(selectedInterval),
+                        intervalLabelResId = interval.labelResId,
+                        currency = repository.getSelectedCurrency(),
+                        fontKey = fontKey,
+                        priceSizeKey = priceSizeKey,
+                        colorStyleKey = colorStyleKey,
+                        themeKey = themeKey
+                    )
+                } else {
+                    PriceWidgetState.Available(
+                        price = 52849.10,
+                        changePercentage = 2.45,
+                        intervalLabelResId = interval.labelResId,
+                        currency = repository.getSelectedCurrency(),
+                        fontKey = fontKey,
+                        priceSizeKey = priceSizeKey,
+                        colorStyleKey = colorStyleKey,
+                        themeKey = themeKey
+                    )
+                }
+            }
+        }
+
+        provideContent {
+            WidgetContent(previewState)
+        }
+    }
+
 
     @SuppressLint("DiscouragedApi")
     @Composable
@@ -80,48 +139,75 @@ class PriceWidget : GlanceAppWidget() {
         val widgetFont = WidgetFont.fromKey(fontKey)
         val typeface = WidgetBitmapUtils.getTypeface(context, widgetFont)
 
-        var backgroundModifier = GlanceModifier.fillMaxSize()
-        val systemCornerRadiusDefined = LocalContext.current.resources
-            .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
-
-        backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
-            backgroundModifier
-                .background(GlanceTheme.colors.widgetBackground)
-                .appWidgetBackground()
-                .cornerRadius(android.R.dimen.system_app_widget_background_radius)
-        } else {
-            backgroundModifier
-                .background(ImageProvider(R.drawable.glance_widget_bg))
-                .appWidgetBackground()
+        val colorStyleKey = when (state) {
+            is PriceWidgetState.Available -> state.colorStyleKey
+            is PriceWidgetState.Error -> state.colorStyleKey
+            is PriceWidgetState.Loading -> {
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+                prefs.getString(Prefs.WIDGET_COLOR_STYLE, WidgetColorStyle.DYNAMIC.key) ?: WidgetColorStyle.DYNAMIC.key
+            }
         }
+        val themeKey = when (state) {
+            is PriceWidgetState.Available -> state.themeKey
+            is PriceWidgetState.Error -> state.themeKey
+            is PriceWidgetState.Loading -> {
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+                prefs.getString(Prefs.WIDGET_THEME, WidgetTheme.SYSTEM.key) ?: WidgetTheme.SYSTEM.key
+            }
+        }
+        val colorStyle = WidgetColorStyle.fromKey(colorStyleKey)
+        val widgetTheme = WidgetTheme.fromKey(themeKey)
 
-        Box(modifier = backgroundModifier) {
-            Column(
-                modifier = GlanceModifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp)
-                    .clickable(actionStartActivity(Intent(context, MainActivity::class.java))),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                when (state) {
-                    is PriceWidgetState.Available -> {
-                        AvailableUI(state, GlanceModifier.defaultWeight(), typeface)
-                    }
+        val colorProviders = GlanceColorScheme.colorsFor(context, colorStyle, widgetTheme)
 
-                    is PriceWidgetState.Error -> {
-                        if (state.lastValidState != null) {
-                            AvailableUI(
-                                state.lastValidState,
-                                GlanceModifier.defaultWeight(),
-                                typeface,
-                                error = true
-                            )
-                        } else {
-                            ErrorUI(state, typeface)
+        GlanceTheme(colors = colorProviders) {
+            val systemCornerRadiusDefined = LocalContext.current.resources
+                .getIdentifier("system_app_widget_background_radius", "dimen", "android") != 0
+
+            var backgroundModifier = GlanceModifier.fillMaxSize()
+            backgroundModifier = GlanceColorScheme.applyBackground(
+                modifier = backgroundModifier,
+                colorStyle = colorStyle,
+                widgetTheme = widgetTheme,
+                systemCornerRadiusDefined = systemCornerRadiusDefined
+            )
+
+            backgroundModifier = if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
+                backgroundModifier
+                    .appWidgetBackground()
+                    .cornerRadius(android.R.dimen.system_app_widget_background_radius)
+            } else {
+                backgroundModifier.appWidgetBackground()
+            }
+
+            Box(modifier = backgroundModifier) {
+                Column(
+                    modifier = GlanceModifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp)
+                        .clickable(actionStartActivity(Intent(context, MainActivity::class.java))),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    when (state) {
+                        is PriceWidgetState.Available -> {
+                            AvailableUI(state, GlanceModifier.defaultWeight(), typeface)
                         }
-                    }
 
-                    is PriceWidgetState.Loading -> {
-                        CircularProgressIndicator()
+                        is PriceWidgetState.Error -> {
+                            if (state.lastValidState != null) {
+                                AvailableUI(
+                                    state.lastValidState,
+                                    GlanceModifier.defaultWeight(),
+                                    typeface,
+                                    error = true
+                                )
+                            } else {
+                                ErrorUI(state, typeface)
+                            }
+                        }
+
+                        is PriceWidgetState.Loading -> {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             }
@@ -192,7 +278,11 @@ class PriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun Header(currency: String, intervalLabel: Int, typeface: Typeface?) {
+    private fun Header(
+        currency: String,
+        intervalLabel: Int,
+        typeface: Typeface?
+    ) {
         val context = LocalContext.current
         val headerText = "/ ${currency.uppercase()} ・ ${context.getString(intervalLabel)}"
         val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
@@ -235,7 +325,8 @@ class PriceWidget : GlanceAppWidget() {
     private fun PriceValue(state: PriceWidgetState.Available, typeface: Typeface?) {
         val context = LocalContext.current
         val priceData = FormatUtils.formatPriceSeparated(state.price, state.currency)
-        val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(priceData)
+        val priceSize = WidgetPriceSize.fromKey(state.priceSizeKey)
+        val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(priceData, priceSize.scaleFactor)
 
         Row(
             verticalAlignment = Alignment.CenterVertically

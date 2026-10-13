@@ -1,14 +1,15 @@
 package com.jcoronado.minimalbitcoinwidget.screens
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
@@ -54,11 +55,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.core.net.toUri
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
@@ -66,7 +69,6 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.metadata
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.jcoronado.minimalbitcoinwidget.R
@@ -167,11 +169,13 @@ fun AppNavigation() {
                     entry<Screen.Dashboard> {
                         MainScreen(
                             uiState = uiState,
-                            onRefresh = { priceViewModel.fetchPrice() },
+                            onRefresh = { priceViewModel.fetchPrice(isManual = true) },
+                            onCustomizeWidgetClick = { backStack.add(Screen.WidgetFont) },
                             onAddWidgetClick = { priceViewModel.requestPinWidget() }
                         )
                     }
                     entry<Screen.Settings> {
+                        val context = LocalContext.current
                         val currentTheme by settingsViewModel.theme.collectAsStateWithLifecycle()
                         val dynamicColors by settingsViewModel.dynamicColors.collectAsStateWithLifecycle()
                         val refreshInterval by settingsViewModel.refreshInterval.collectAsStateWithLifecycle()
@@ -187,7 +191,7 @@ fun AppNavigation() {
                             },
                             currentTheme = currentTheme,
                             onThemeSelected = { newTheme -> settingsViewModel.setTheme(newTheme) },
-                            onNavigateToWidgetFont = { backStack.add(Screen.WidgetFont) },
+                            onRateAppClick = { openPlayStore(context) },
                             dynamicColors = dynamicColors,
                             onDynamicColorsSelected = { newDynamicColors ->
                                 settingsViewModel.updateDynamicColorsFlag(
@@ -215,14 +219,26 @@ fun AppNavigation() {
                     }
                     entry<Screen.WidgetFont> {
                         val currentWidgetFont by settingsViewModel.widgetFont.collectAsStateWithLifecycle()
+                        val currentPriceSize by settingsViewModel.widgetPriceSize.collectAsStateWithLifecycle()
+                        val currentColorStyle by settingsViewModel.widgetColorStyle.collectAsStateWithLifecycle()
+                        val currentTheme by settingsViewModel.widgetTheme.collectAsStateWithLifecycle()
+
                         CustomizeWidgetScreen(
                             currentFont = currentWidgetFont,
+                            currentPriceSize = currentPriceSize,
+                            currentColorStyle = currentColorStyle,
+                            currentTheme = currentTheme,
                             price = uiState.price,
                             percentageChange = uiState.percentageChange,
                             currency = uiState.selectedCurrency,
                             intervalLabelResId = uiState.changeIntervalLabelResId,
-                            onSave = { selectedFont ->
-                                settingsViewModel.setWidgetFont(selectedFont)
+                            onSave = { selectedFont, selectedPriceSize, selectedColorStyle, selectedTheme ->
+                                settingsViewModel.saveWidgetCustomization(
+                                    selectedFont,
+                                    selectedPriceSize,
+                                    selectedColorStyle,
+                                    selectedTheme
+                                )
                                 backStack.removeLastOrNull()
                             },
                             onBack = {
@@ -308,7 +324,7 @@ fun AppNavigation() {
                                                 backStack.add(item.route)
                                             }
                                         }
-                                    }, colors = ToggleButtonDefaults.toggleButtonColors(
+                                    }, colors = ToggleButtonDefaults.colors(
                                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                                         checkedContainerColor = MaterialTheme.colorScheme.primary,
@@ -345,6 +361,30 @@ fun AppNavigation() {
             }
 
 
+        }
+    }
+}
+
+private fun openPlayStore(context: Context) {
+    val packageName = context.packageName
+    val marketIntent = Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()).apply {
+        addFlags(
+            Intent.FLAG_ACTIVITY_NO_HISTORY or
+            Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+            Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+        )
+    }
+    try {
+        context.startActivity(marketIntent)
+    } catch (_: ActivityNotFoundException) {
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            "https://play.google.com/store/apps/details?id=$packageName".toUri()
+        )
+        try {
+            context.startActivity(webIntent)
+        } catch (_: ActivityNotFoundException) {
+            // Fail gracefully
         }
     }
 }

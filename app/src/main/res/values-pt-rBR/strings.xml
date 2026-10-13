@@ -27,8 +27,20 @@
     <string name="widget_font_preview_header">Pré-visualização</string>
     <string name="widget_font_options_header">Fontes disponíveis</string>
     <string name="widget_font_icon_description">Ícone de fonte do widget</string>
+    <string name="customize_widget_icon_description">Ícone de personalizar widget</string>
     <string name="font_app_default">Padrão do app</string>
     <string name="font_system_default">Padrão do sistema</string>
+    <string name="widget_price_size">Preço</string>
+    <string name="widget_size_small">Pequeno</string>
+    <string name="widget_size_default">Padrão</string>
+    <string name="widget_size_large">Grande</string>
+    <string name="widget_colors">Cores</string>
+    <string name="widget_colors_dynamic">Dinâmico</string>
+    <string name="widget_colors_solid">Sólido</string>
+    <string name="widget_theme">Tema</string>
+    <string name="widget_theme_system">Padrão do sistema</string>
+    <string name="widget_theme_light">Claro</string>
+    <string name="widget_theme_dark">Escuro</string>
     <string name="dynamic_colors">Cores dinâmicas</string>
     <string name="dynamic_colors_subtitle">Seguir cores do tema do dispositivo</string>
     <string name="show_price_graph">Gráfico de preço</string>
@@ -49,9 +61,13 @@
     <string name="developer_taps">Você está agora a %1$d toques de ser um desenvolvedor</string>
 
     <!-- Shortcuts -->
-    <string name="shortcuts_header">Atalhos</string>
+    <string name="widget_header">Widget</string>
+    <string name="customize_shortcut_title">Personalizar</string>
+    <string name="customize_widget_shortcut_description">Fonte, cor, tamanho e tema</string>
     <string name="add_widget_shortcut_title">Adicionar à tela inicial</string>
-    <string name="add_widget_shortcut_description">Toque aqui para adicionar um widget à sua tela inicial</string>
+    <string name="add_widget_shortcut_description">Adicionar widget à tela inicial</string>
+    <string name="rate_app_shortcut_title">Avaliar no Google Play</string>
+    <string name="rate_app_shortcut_description">Apoie o app deixando uma avaliação</string>
 
     <!-- Accessibility Descriptions -->
     <string name="update_currency_icon_description">Ícone de moeda</string>
@@ -63,6 +79,9 @@
     <string name="build_icon_description">Ícone de versão</string>
     <string name="contact_icon_description">Ícone de contato</string>
     <string name="open_arrow_icon_description">Ícone de seta de abertura</string>
+    <string name="add_icon_description">Ícone de adicionar</string>
+    <string name="widgets_icon_description">Ícone de widgets</string>
+    <string name="star_icon_description">Ícone de estrela</string>
     <string name="chart_data_icon_description">Ícone de dados do gráfico</string>
     <string name="developer_mode_icon_description">Ícone de modo de desenvolvedor</string>
     <string name="bitcoin_icon_description">Ícone do Bitcoin</string>
@@ -78,6 +97,7 @@
     <string name="cancel">Cancelar</string>
     <string name="clear">Limpar</string>
     <string name="error">Erro</string>
+    <string name="reset_to_default">Redefinir para o padrão</string>
 
     <string name="mail_error">Nenhum aplicativo de e-mail encontrado</string>
 

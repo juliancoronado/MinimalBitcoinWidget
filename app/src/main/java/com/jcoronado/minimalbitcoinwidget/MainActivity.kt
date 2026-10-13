@@ -13,6 +13,7 @@ import com.jcoronado.minimalbitcoinwidget.classes.Prefs
 import com.jcoronado.minimalbitcoinwidget.screens.AppNavigation
 import com.jcoronado.minimalbitcoinwidget.ui.theme.AppTheme
 import com.jcoronado.minimalbitcoinwidget.viewmodels.AppTheme
+import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.viewmodels.SettingsViewModel
 
 class MainActivity : ComponentActivity() {
@@ -24,6 +25,9 @@ class MainActivity : ComponentActivity() {
         // invalidate last fetch api timestamp if app was updated from old version
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         Prefs.checkAppUpdateAndInvalidateCache(prefs)
+
+        // Ensure Glance widget preview is published on Android 15+
+        PriceViewModel.updateWidgetPreview(this)
 
         setContent {
             val settingsViewModel : SettingsViewModel =  viewModel()

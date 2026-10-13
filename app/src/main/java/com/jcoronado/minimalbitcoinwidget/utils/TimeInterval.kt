@@ -8,9 +8,9 @@ enum class TimeInterval(val value: Int, val labelResId: Int) {
     DAYS_30(value = 2, labelResId = R.string.interval_30d);
 
     companion object {
-        // default to 24H if no matching value is found
+        // default to 7D if no matching value is found
         fun fromValue(value: Int): TimeInterval {
-            return entries.find { it.value == value } ?: HOURS_24
+            return entries.find { it.value == value } ?: DAYS_7
         }
     }
 }
