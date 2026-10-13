@@ -41,6 +41,20 @@
                 android:resource="@xml/price_widget_info" />
         </receiver>
 
+        <!-- Glance Trendline Price Widget Code (Expressive) -->
+        <receiver
+            android:name=".widgets.glance.TrendlinePriceWidgetReceiver"
+            android:label="@string/trendline_widget_picker_name"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/trendline_price_widget_info" />
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"

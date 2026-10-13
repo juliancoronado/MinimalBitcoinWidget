@@ -2,6 +2,7 @@
 <resources>
     <string name="settings">Ayarlar</string>
     <string name="last_updated">Son Güncelleme: %1$s</string>
+    <string name="trendline_widget_picker_description">Trend çizgisiyle güncel Bitcoin fiyatını hızla görüntüleyin</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Veri</string>

@@ -6,6 +6,8 @@
     <string name="legacy_widget_picker_description" translatable="false">Quickly view the current BTC price</string>
     <string name="glance_widget_picker_name" translatable="false">Price Widget (Beta)</string>
     <string name="glance_widget_picker_description" translatable="false">Quickly view the current Bitcoin price</string>
+    <string name="trendline_widget_picker_name" translatable="false">Trendline Widget (Beta)</string>
+    <string name="trendline_widget_picker_description">Quickly view the current Bitcoin price with trendline</string>
 
     <!-- Navigation Pages -->
     <string name="dashboard" translatable="false">Dashboard</string>

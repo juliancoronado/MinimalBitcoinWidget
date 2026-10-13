@@ -27,7 +27,7 @@ Key directories and files:
 - **`data/`**: Data layer containing `PriceRepository.kt` for centralizing API requests (OkHttp/Gson), caching, and mock UI data logic, and `Resource.kt` for standardized API result state management (`Success`, `Error`, `Loading`).
 - **`screens/` & `ui/`**: Jetpack Compose UI screens, theming, and reusable components.
 - **`viewmodels/`**: ViewModels (e.g., `PriceViewModel`) that handle business logic, UI state, and bridge the data to the widgets.
-- **`widgets/`**: Contains widget implementations. Divided into Glance widgets (`PriceWidget`) and legacy implementations (`LegacyPriceWidget`).
+- **`widgets/`**: Contains widget implementations. Divided into Glance widgets (`PriceWidget`, `TrendlinePriceWidget`) and legacy implementations (`LegacyPriceWidget`).
 - **`workers/`**: Contains `PriceUpdateWorker.kt` which uses WorkManager to periodically fetch Bitcoin prices in the background via `PriceRepository`.
 - **`utils/`**: Utility functions such as `FormatUtils.kt` for centralized price, currency symbol disambiguation, and percentage change formatting.
 - **`classes/`**: Data models, constants (`AppConstants`), preference keys (`Prefs`), and API configuration (`Api`).

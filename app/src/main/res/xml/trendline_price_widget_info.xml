@@ -1,0 +1,10 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:description="@string/trendline_widget_picker_description"
+    android:previewImage="@drawable/glance_widget_preview"
+    android:minWidth="140dp"
+    android:minHeight="60dp"
+    android:resizeMode="horizontal|vertical"
+    android:minResizeWidth="140dp"
+    android:minResizeHeight="60dp"
+    android:widgetCategory="home_screen" />

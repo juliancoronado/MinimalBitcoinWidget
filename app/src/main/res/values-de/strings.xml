@@ -2,6 +2,7 @@
 <resources>
     <string name="settings">Einstellungen</string>
     <string name="last_updated">Zuletzt aktualisiert: %1$s</string>
+    <string name="trendline_widget_picker_description">Bitcoin-Preis mit Trendlinie und prozentualer Veränderung schnell anzeigen</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Daten</string>

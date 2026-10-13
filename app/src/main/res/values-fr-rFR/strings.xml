@@ -2,6 +2,7 @@
 <resources>
     <string name="settings">Paramètres</string>
     <string name="last_updated">Dernière mise à jour : %1$s</string>
+    <string name="trendline_widget_picker_description">Consultez rapidement le prix du Bitcoin avec courbe de tendance</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Données</string>

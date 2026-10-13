@@ -27,6 +27,8 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetReceiver
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidgetReceiver
 import com.jcoronado.minimalbitcoinwidget.widgets.legacy.getCurrencyInfo
 import com.jcoronado.minimalbitcoinwidget.widgets.legacy.setWidgetViews
 import kotlinx.coroutines.CoroutineScope
@@ -299,7 +301,8 @@ class PriceViewModel @JvmOverloads constructor(
                     fontKey = fontKey,
                     priceSizeKey = priceSizeKey,
                     colorStyleKey = colorStyleKey,
-                    themeKey = themeKey
+                    themeKey = themeKey,
+                    sparklinePrices = mockData.getSparklineForInterval(selectedInterval)
                 )
 
                 // update glance widgets
@@ -331,7 +334,8 @@ class PriceViewModel @JvmOverloads constructor(
                 fontKey = fontKey,
                 priceSizeKey = priceSizeKey,
                 colorStyleKey = colorStyleKey,
-                themeKey = themeKey
+                themeKey = themeKey,
+                sparklinePrices = priceData.getSparklineForInterval(selectedInterval)
             )
 
             // update glance widgets
@@ -353,12 +357,8 @@ class PriceViewModel @JvmOverloads constructor(
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         val manager = GlanceAppWidgetManager(context)
-                        val result = manager.setWidgetPreviews(PriceWidgetReceiver::class)
-                        if (result == GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_RATE_LIMITED) {
-                            Log.d(LOG_TAG, "setWidgetPreviews was rate-limited by the system")
-                        } else {
-                            Log.d(LOG_TAG, "setWidgetPreviews updated successfully")
-                        }
+                        manager.setWidgetPreviews(PriceWidgetReceiver::class)
+                        manager.setWidgetPreviews(TrendlinePriceWidgetReceiver::class)
                     } catch (e: Exception) {
                         Log.w(LOG_TAG, "Failed to update widget preview: $e")
                     }
@@ -371,13 +371,24 @@ class PriceViewModel @JvmOverloads constructor(
          */
         suspend fun updateGlanceWidgets(context: Context, state: PriceWidgetState) {
             val manager = GlanceAppWidgetManager(context)
-            val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
-            glanceIds.forEach { glanceId ->
+
+            // PriceWidget
+            val priceGlanceIds = manager.getGlanceIds(PriceWidget::class.java)
+            priceGlanceIds.forEach { glanceId ->
                 updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
                     state
                 }
             }
             PriceWidget().updateAll(context)
+
+            // Trendline Widget
+            val trendlineGlanceIds = manager.getGlanceIds(TrendlinePriceWidget::class.java)
+            trendlineGlanceIds.forEach { glanceId ->
+                updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
+                    state
+                }
+            }
+            TrendlinePriceWidget().updateAll(context)
         }
 
         /**
