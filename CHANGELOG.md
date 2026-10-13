@@ -11,14 +11,20 @@ Date Format: YYYY-MM-DD
 
 ### Added
 
+### Changed
+
+---
+
+## [3.5.0] - 2026-10-12
+
+### Added
+
 - Added widget customization options: Price Size (Small, Default, Large), Colors (Dynamic, Solid), and Theme (System, Light, Dark).
 
 ### Changed
 
 - Harmonized dynamic widget theme colors across Light, Dark, and System modes.
 - Centralized Glance widget color palettes and background providers into `GlanceColorScheme`, eliminating inline allocations on widget composition passes.
-
----
 
 ## [3.4.1] - 2026-10-05
 
