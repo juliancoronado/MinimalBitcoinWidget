@@ -1,5 +1,9 @@
 # Trendline Widget Implementation Specification
 
+This is a temporary file and should not remain in the repo for long.
+
+Created: Oct. 13th, 2026
+
 > **Purpose for AI Agent (Antigravity)**:  
 > This specification contains the complete architecture, visual design parameters, and verbatim source code required to re-implement the **Trendline Glance Widget (Expressive)** in Minimal Bitcoin Widget (`MinimalBitcoinWidget`).
 >
@@ -13,6 +17,7 @@
 The **Trendline Glance Widget** is a Material 3 Expressive Android home screen widget built with Jetpack Glance that displays the live Bitcoin price, percentage change, and a smooth 7-day sparkline trendline curve.
 
 ### Key Visual & UX Design Elements
+
 1. **Hero Price Micro-Typography**:
    - The price separates the integer portion and decimal cents into distinct font sizes (cents are scaled down by ~32%).
    - Clean native currency symbol placement (prefix or suffix) according to the user's active locale.
@@ -48,27 +53,28 @@ The **Trendline Glance Widget** is a Material 3 Expressive Android home screen w
 
 The feature consists of **6 new files** and modifications to **8 existing areas**:
 
-| Action | Path | Description |
-| :--- | :--- | :--- |
-| **CREATE** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlinePriceWidget.kt` | Glance AppWidget UI layout & responsive sizes |
-| **CREATE** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlinePriceWidgetReceiver.kt` | BroadcastReceiver for Glance widget lifecycle |
-| **CREATE** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlineBitmapRenderer.kt` | Off-screen Bitmap renderer (Catmull-Rom spline, dashed baseline, live dot) |
-| **CREATE** | `app/src/main/res/xml/trendline_price_widget_info.xml` | AppWidgetProvider XML metadata |
-| **CREATE** | `app/src/main/res/xml-v31/trendline_price_widget_info.xml` | AppWidgetProvider XML metadata for Android 12+ (API 31+) |
-| **CREATE** | `app/src/test/java/com/jcoronado/minimalbitcoinwidget/TrendlineBitmapRendererTest.kt` | Unit tests for responsive breakpoints, serialization, and formatting |
-| **MODIFY** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/utils/FormatUtils.kt` | Added `FormattedPriceParts` and `formatPriceParts(...)` |
-| **MODIFY** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/PriceWidgetState.kt` | Added `sparklinePrices: List<Double> = emptyList()` to `Available` state |
-| **MODIFY** | `app/src/main/AndroidManifest.xml` | Registered `TrendlinePriceWidgetReceiver` |
-| **MODIFY** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/viewmodels/PriceViewModel.kt` | Added widget preview publication and widget instance updates |
-| **MODIFY** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/workers/PriceUpdateWorker.kt` | Added widget error handling and cancellation checks |
-| **MODIFY** | `app/src/main/res/values*/strings.xml` (9 locales) | Added widget picker name and localized descriptions |
-| **MODIFY** | `AGENTS.md` | Added `TrendlinePriceWidget` to Glance widgets directory list |
+| Action     | Path                                                                                                  | Description                                                                |
+| :--------- | :---------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
+| **CREATE** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlinePriceWidget.kt`         | Glance AppWidget UI layout & responsive sizes                              |
+| **CREATE** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlinePriceWidgetReceiver.kt` | BroadcastReceiver for Glance widget lifecycle                              |
+| **CREATE** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlineBitmapRenderer.kt`      | Off-screen Bitmap renderer (Catmull-Rom spline, dashed baseline, live dot) |
+| **CREATE** | `app/src/main/res/xml/trendline_price_widget_info.xml`                                                | AppWidgetProvider XML metadata                                             |
+| **CREATE** | `app/src/main/res/xml-v31/trendline_price_widget_info.xml`                                            | AppWidgetProvider XML metadata for Android 12+ (API 31+)                   |
+| **CREATE** | `app/src/test/java/com/jcoronado/minimalbitcoinwidget/TrendlineBitmapRendererTest.kt`                 | Unit tests for responsive breakpoints, serialization, and formatting       |
+| **MODIFY** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/utils/FormatUtils.kt`                           | Added `FormattedPriceParts` and `formatPriceParts(...)`                    |
+| **MODIFY** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/PriceWidgetState.kt`             | Added `sparklinePrices: List<Double> = emptyList()` to `Available` state   |
+| **MODIFY** | `app/src/main/AndroidManifest.xml`                                                                    | Registered `TrendlinePriceWidgetReceiver`                                  |
+| **MODIFY** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/viewmodels/PriceViewModel.kt`                   | Added widget preview publication and widget instance updates               |
+| **MODIFY** | `app/src/main/java/com/jcoronado/minimalbitcoinwidget/workers/PriceUpdateWorker.kt`                   | Added widget error handling and cancellation checks                        |
+| **MODIFY** | `app/src/main/res/values*/strings.xml` (9 locales)                                                    | Added widget picker name and localized descriptions                        |
+| **MODIFY** | `AGENTS.md`                                                                                           | Added `TrendlinePriceWidget` to Glance widgets directory list              |
 
 ---
 
 ## 3. Verbatim Source Code for New Files
 
 ### File 1: `TrendlinePriceWidget.kt`
+
 Path: `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlinePriceWidget.kt`
 
 ```kotlin
@@ -826,6 +832,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
 ---
 
 ### File 2: `TrendlinePriceWidgetReceiver.kt`
+
 Path: `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlinePriceWidgetReceiver.kt`
 
 ```kotlin
@@ -875,6 +882,7 @@ class TrendlinePriceWidgetReceiver : GlanceAppWidgetReceiver() {
 ---
 
 ### File 3: `TrendlineBitmapRenderer.kt`
+
 Path: `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/TrendlineBitmapRenderer.kt`
 
 ```kotlin
@@ -1190,6 +1198,7 @@ object TrendlineBitmapRenderer {
 ---
 
 ### File 4: `trendline_price_widget_info.xml`
+
 Path: `app/src/main/res/xml/trendline_price_widget_info.xml`
 
 ```xml
@@ -1208,6 +1217,7 @@ Path: `app/src/main/res/xml/trendline_price_widget_info.xml`
 ---
 
 ### File 5: `trendline_price_widget_info.xml` (API 31+)
+
 Path: `app/src/main/res/xml-v31/trendline_price_widget_info.xml`
 
 ```xml
@@ -1230,6 +1240,7 @@ Path: `app/src/main/res/xml-v31/trendline_price_widget_info.xml`
 ---
 
 ### File 6: `TrendlineBitmapRendererTest.kt`
+
 Path: `app/src/test/java/com/jcoronado/minimalbitcoinwidget/TrendlineBitmapRendererTest.kt`
 
 ```kotlin
@@ -1361,9 +1372,11 @@ class TrendlineBitmapRendererTest {
 ## 4. Modifications to Existing Files
 
 ### 4.1. `FormatUtils.kt`
+
 Path: `app/src/main/java/com/jcoronado/minimalbitcoinwidget/utils/FormatUtils.kt`
 
 Add data class:
+
 ```kotlin
 data class FormattedPriceParts(
     val symbol: String,
@@ -1374,6 +1387,7 @@ data class FormattedPriceParts(
 ```
 
 Add method to `FormatUtils` object:
+
 ```kotlin
     /**
      * Splits price into integer and decimal parts along with currency symbol,
@@ -1431,9 +1445,11 @@ Add method to `FormatUtils` object:
 ---
 
 ### 4.2. `PriceWidgetState.kt`
+
 Path: `app/src/main/java/com/jcoronado/minimalbitcoinwidget/widgets/glance/PriceWidgetState.kt`
 
 Add `sparklinePrices: List<Double> = emptyList()` to `PriceWidgetState.Available`:
+
 ```kotlin
     @Serializable
     data class Available(
@@ -1452,9 +1468,11 @@ Add `sparklinePrices: List<Double> = emptyList()` to `PriceWidgetState.Available
 ---
 
 ### 4.3. `AndroidManifest.xml`
+
 Path: `app/src/main/AndroidManifest.xml`
 
 Declare `TrendlinePriceWidgetReceiver` inside `<application>`:
+
 ```xml
         <!-- Glance Trendline Price Widget Code (Expressive) -->
         <receiver
@@ -1474,30 +1492,37 @@ Declare `TrendlinePriceWidgetReceiver` inside `<application>`:
 ---
 
 ### 4.4. `PriceViewModel.kt`
+
 Path: `app/src/main/java/com/jcoronado/minimalbitcoinwidget/viewmodels/PriceViewModel.kt`
 
 1. Import:
+
 ```kotlin
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidgetReceiver
 ```
 
 2. When instantiating `PriceWidgetState.Available` in `loadInitialData()`:
+
 ```kotlin
 sparklinePrices = mockData.getSparklineForInterval(selectedInterval)
 ```
+
 and
+
 ```kotlin
 sparklinePrices = priceData.getSparklineForInterval(selectedInterval)
 ```
 
 3. In `updateWidgetPreview(context: Context)`:
+
 ```kotlin
 manager.setWidgetPreviews(PriceWidgetReceiver::class)
 manager.setWidgetPreviews(TrendlinePriceWidgetReceiver::class)
 ```
 
 4. In `updateGlanceWidgets(context: Context, state: PriceWidgetState)`:
+
 ```kotlin
     // Trendline Widget
     val trendlineGlanceIds = manager.getGlanceIds(TrendlinePriceWidget::class.java)
@@ -1512,14 +1537,17 @@ manager.setWidgetPreviews(TrendlinePriceWidgetReceiver::class)
 ---
 
 ### 4.5. `PriceUpdateWorker.kt`
+
 Path: `app/src/main/java/com/jcoronado/minimalbitcoinwidget/workers/PriceUpdateWorker.kt`
 
 1. Import:
+
 ```kotlin
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 ```
 
 2. In `handleError(e: Exception)`:
+
 ```kotlin
         val trendlineIds = manager.getGlanceIds(TrendlinePriceWidget::class.java)
         ...
@@ -1534,6 +1562,7 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 ```
 
 3. In `cancel(context: Context)`:
+
 ```kotlin
         val trendlineIds = glanceManager.getGlanceIds(TrendlinePriceWidget::class.java)
         ...
@@ -1548,47 +1577,56 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 ### 4.6. Localization Across All 9 `strings.xml` Files
 
 1. **`app/src/main/res/values/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_name" translatable="false">Trendline Widget (Beta)</string>
     <string name="trendline_widget_picker_description">Quickly view the current Bitcoin price with trendline</string>
 ```
 
 2. **`app/src/main/res/values-de/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_description">Bitcoin-Preis mit Trendlinie und prozentualer Veränderung schnell anzeigen</string>
 ```
 
 3. **`app/src/main/res/values-es/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_description">Consulta rápidamente el precio de Bitcoin con línea de tendencia</string>
 ```
 
 4. **`app/src/main/res/values-fr/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_description">Consultez rapidement le prix du Bitcoin avec courbe de tendance</string>
 ```
 
 5. **`app/src/main/res/values-fr-rFR/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_description">Consultez rapidement le prix du Bitcoin avec courbe de tendance</string>
 ```
 
 6. **`app/src/main/res/values-it/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_description">Visualizza rapidamente il prezzo di Bitcoin con linea di tendenza</string>
 ```
 
 7. **`app/src/main/res/values-pt/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_description">Veja rapidamente o preço do Bitcoin com linha de tendência</string>
 ```
 
 8. **`app/src/main/res/values-pt-rBR/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_description">Veja rapidamente o preço do Bitcoin com linha de tendência</string>
 ```
 
 9. **`app/src/main/res/values-tr/strings.xml`**:
+
 ```xml
     <string name="trendline_widget_picker_description">Trend çizgisiyle güncel Bitcoin fiyatını hızla görüntüleyin</string>
 ```
@@ -1596,9 +1634,11 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 ---
 
 ### 4.7. `AGENTS.md`
+
 Path: `AGENTS.md`
 
 Update the widgets directory note under Project Structure:
+
 ```markdown
 - **`widgets/`**: Contains widget implementations. Divided into Glance widgets (`PriceWidget`, `TrendlinePriceWidget`) and legacy implementations (`LegacyPriceWidget`).
 ```
@@ -1608,7 +1648,9 @@ Update the widgets directory note under Project Structure:
 ## 5. Verification Commands
 
 Run unit tests and assemble the debug build:
+
 ```bash
 ./gradlew test assembleDebug
 ```
+
 Ensure 100% test pass rate with 0 compilation errors.
