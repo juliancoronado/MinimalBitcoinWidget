@@ -232,6 +232,7 @@ fun AppNavigation() {
                             percentageChange = uiState.percentageChange,
                             currency = uiState.selectedCurrency,
                             intervalLabelResId = uiState.changeIntervalLabelResId,
+                            sparklinePrices = uiState.sparklinePrices,
                             onSave = { selectedFont, selectedPriceSize, selectedColorStyle, selectedTheme ->
                                 settingsViewModel.saveWidgetCustomization(
                                     selectedFont,

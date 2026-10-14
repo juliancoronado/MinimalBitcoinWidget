@@ -39,7 +39,10 @@ import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SegmentedListItem
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -70,8 +73,15 @@ import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
+import com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PRICES
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
+
+enum class PreviewWidgetType(@StringRes val labelResId: Int) {
+    MINIMAL(R.string.widget_preview_minimal),
+    TRENDLINE(R.string.widget_preview_trendline)
+}
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -84,6 +94,7 @@ fun CustomizeWidgetScreen(
     percentageChange: Double,
     currency: String,
     @StringRes intervalLabelResId: Int,
+    sparklinePrices: List<Double> = emptyList(),
     onSave: (WidgetFont, WidgetPriceSize, WidgetColorStyle, WidgetTheme) -> Unit,
     onBack: () -> Unit
 ) {
@@ -93,6 +104,7 @@ fun CustomizeWidgetScreen(
     var selectedPriceSize by remember(currentPriceSize) { mutableStateOf(currentPriceSize) }
     var selectedColorStyle by remember(currentColorStyle) { mutableStateOf(currentColorStyle) }
     var selectedTheme by remember(currentTheme) { mutableStateOf(currentTheme) }
+    var selectedWidgetType by remember { mutableStateOf(PreviewWidgetType.MINIMAL) }
 
     val isDefault = selectedFont == WidgetFont.DEFAULT &&
         selectedPriceSize == WidgetPriceSize.DEFAULT &&
@@ -164,6 +176,30 @@ fun CustomizeWidgetScreen(
                     top = true
                 )
 
+                SingleChoiceSegmentedButtonRow(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    PreviewWidgetType.entries.forEachIndexed { index, type ->
+                        SegmentedButton(
+                            selected = selectedWidgetType == type,
+                            onClick = {
+                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                                selectedWidgetType = type
+                            },
+                            shape = SegmentedButtonDefaults.itemShape(
+                                index = index,
+                                count = PreviewWidgetType.entries.size
+                            ),
+                            label = {
+                                Text(
+                                    text = stringResource(type.labelResId),
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                        )
+                    }
+                }
+
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     SegmentedListItem(
                         onClick = {},
@@ -182,6 +218,7 @@ fun CustomizeWidgetScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             GlanceWidgetPreviewCard(
+                                selectedWidgetType = selectedWidgetType,
                                 selectedFont = selectedFont,
                                 selectedPriceSize = selectedPriceSize,
                                 selectedColorStyle = selectedColorStyle,
@@ -189,7 +226,8 @@ fun CustomizeWidgetScreen(
                                 price = if (price > 0.0) price else 62884.21,
                                 percentageChange = if (price > 0.0) percentageChange else 2.03,
                                 currency = if (currency.isNotBlank()) currency else "USD",
-                                intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_7d
+                                intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_7d,
+                                sparklinePrices = sparklinePrices
                             )
                         }
                     }
@@ -388,6 +426,7 @@ private val PREVIEW_HEIGHT = 108.dp
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
 @Composable
 private fun GlanceWidgetPreviewCard(
+    selectedWidgetType: PreviewWidgetType,
     selectedFont: WidgetFont,
     selectedPriceSize: WidgetPriceSize,
     selectedColorStyle: WidgetColorStyle,
@@ -395,7 +434,8 @@ private fun GlanceWidgetPreviewCard(
     price: Double,
     percentageChange: Double,
     currency: String,
-    @StringRes intervalLabelResId: Int
+    @StringRes intervalLabelResId: Int,
+    sparklinePrices: List<Double>
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -441,7 +481,8 @@ private fun GlanceWidgetPreviewCard(
         price,
         percentageChange,
         currency,
-        intervalLabelResId
+        intervalLabelResId,
+        sparklinePrices
     ) {
         PriceWidgetState.Available(
             price = price,
@@ -451,17 +492,29 @@ private fun GlanceWidgetPreviewCard(
             fontKey = selectedFont.key,
             priceSizeKey = selectedPriceSize.key,
             colorStyleKey = selectedColorStyle.key,
-            themeKey = selectedTheme.key
+            themeKey = selectedTheme.key,
+            sparklinePrices = if (sparklinePrices.isNotEmpty()) sparklinePrices else PLACEHOLDER_SPARKLINE_PRICES
         )
     }
 
-    val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState, themedContext) {
+    val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState, themedContext, selectedWidgetType) {
         value = try {
-            PriceWidget().compose(
-                context = themedContext,
-                size = DpSize(PREVIEW_WIDTH, PREVIEW_HEIGHT),
-                state = widgetState
-            )
+            when (selectedWidgetType) {
+                PreviewWidgetType.MINIMAL -> {
+                    PriceWidget().compose(
+                        context = themedContext,
+                        size = DpSize(PREVIEW_WIDTH, PREVIEW_HEIGHT),
+                        state = widgetState
+                    )
+                }
+                PreviewWidgetType.TRENDLINE -> {
+                    TrendlinePriceWidget().compose(
+                        context = themedContext,
+                        size = DpSize(PREVIEW_WIDTH, PREVIEW_HEIGHT),
+                        state = widgetState
+                    )
+                }
+            }
         } catch (e: Exception) {
             null
         }
@@ -477,7 +530,7 @@ private fun GlanceWidgetPreviewCard(
                     .width(PREVIEW_WIDTH)
                     .height(PREVIEW_HEIGHT)
             ) {
-                key(isPreviewDark) {
+                key(isPreviewDark, selectedWidgetType) {
                     AndroidView(
                         modifier = Modifier
                             .fillMaxSize()

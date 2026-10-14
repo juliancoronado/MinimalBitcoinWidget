@@ -26,6 +26,8 @@
     <string name="customize_widget">Personalizza widget</string>
     <string name="widget_font">Carattere</string>
     <string name="widget_font_preview_header">Anteprima</string>
+    <string name="widget_preview_minimal">Minimale</string>
+    <string name="widget_preview_trendline">Trendline</string>
     <string name="widget_font_options_header">Caratteri disponibili</string>
     <string name="widget_font_icon_description">Icona carattere widget</string>
     <string name="customize_widget_icon_description">Icona personalizza widget</string>

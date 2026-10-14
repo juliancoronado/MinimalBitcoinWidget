@@ -118,4 +118,12 @@ class TrendlineBitmapRendererTest {
         val expressive = com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget()
         assertNotNull(expressive)
     }
+
+    @Test
+    fun `PreviewWidgetType entries contain valid string resources for Minimal and Trendline`() {
+        val entries = com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.entries
+        assertEquals(2, entries.size)
+        assertEquals(R.string.widget_preview_minimal, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.MINIMAL.labelResId)
+        assertEquals(R.string.widget_preview_trendline, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.TRENDLINE.labelResId)
+    }
 }
