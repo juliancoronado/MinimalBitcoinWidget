@@ -450,8 +450,8 @@ fun CustomizeWidgetScreen(
 private val MINIMAL_PREVIEW_WIDTH = 208.dp
 private val MINIMAL_PREVIEW_HEIGHT = 108.dp
 
-private val TRENDLINE_PREVIEW_WIDTH = 220.dp
-private val TRENDLINE_PREVIEW_HEIGHT = 136.dp
+private val TRENDLINE_PREVIEW_WIDTH = 180.dp
+private val TRENDLINE_PREVIEW_HEIGHT = 184.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
