@@ -8,7 +8,7 @@ Created: Oct. 13th, 2026
 > This specification contains the complete architecture, visual design parameters, and verbatim source code required to re-implement the **Trendline Glance Widget (Expressive)** in Minimal Bitcoin Widget (`MinimalBitcoinWidget`).
 >
 > An exact working commit of this implementation is also preserved on the git branch:
-> `feature/expressive-glance-trendline-widget`
+> `feature/trendline-widget`
 
 ---
 
