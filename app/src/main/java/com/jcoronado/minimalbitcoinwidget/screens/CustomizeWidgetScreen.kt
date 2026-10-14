@@ -8,11 +8,15 @@ import android.view.HapticFeedbackConstants
 import android.widget.FrameLayout
 import android.widget.RemoteViews
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +26,10 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -39,10 +46,7 @@ import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SegmentedListItem
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -52,7 +56,9 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -99,12 +105,13 @@ fun CustomizeWidgetScreen(
     onBack: () -> Unit
 ) {
     val view = LocalView.current
+    val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val pagerState = rememberPagerState(pageCount = { PreviewWidgetType.entries.size })
     var selectedFont by remember(currentFont) { mutableStateOf(currentFont) }
     var selectedPriceSize by remember(currentPriceSize) { mutableStateOf(currentPriceSize) }
     var selectedColorStyle by remember(currentColorStyle) { mutableStateOf(currentColorStyle) }
     var selectedTheme by remember(currentTheme) { mutableStateOf(currentTheme) }
-    var selectedWidgetType by remember { mutableStateOf(PreviewWidgetType.MINIMAL) }
 
     val isDefault = selectedFont == WidgetFont.DEFAULT &&
         selectedPriceSize == WidgetPriceSize.DEFAULT &&
@@ -176,30 +183,6 @@ fun CustomizeWidgetScreen(
                     top = true
                 )
 
-                SingleChoiceSegmentedButtonRow(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    PreviewWidgetType.entries.forEachIndexed { index, type ->
-                        SegmentedButton(
-                            selected = selectedWidgetType == type,
-                            onClick = {
-                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                                selectedWidgetType = type
-                            },
-                            shape = SegmentedButtonDefaults.itemShape(
-                                index = index,
-                                count = PreviewWidgetType.entries.size
-                            ),
-                            label = {
-                                Text(
-                                    text = stringResource(type.labelResId),
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                        )
-                    }
-                }
-
                 CompositionLocalProvider(LocalRippleConfiguration provides null) {
                     SegmentedListItem(
                         onClick = {},
@@ -211,24 +194,67 @@ fun CustomizeWidgetScreen(
                             count = 1
                         )
                     ) {
-                        Box(
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp),
-                            contentAlignment = Alignment.Center
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            GlanceWidgetPreviewCard(
-                                selectedWidgetType = selectedWidgetType,
-                                selectedFont = selectedFont,
-                                selectedPriceSize = selectedPriceSize,
-                                selectedColorStyle = selectedColorStyle,
-                                selectedTheme = selectedTheme,
-                                price = if (price > 0.0) price else 62884.21,
-                                percentageChange = if (price > 0.0) percentageChange else 2.03,
-                                currency = if (currency.isNotBlank()) currency else "USD",
-                                intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_7d,
-                                sparklinePrices = sparklinePrices
-                            )
+                            HorizontalPager(
+                                state = pagerState,
+                                modifier = Modifier.fillMaxWidth()
+                            ) { page ->
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    val widgetType = PreviewWidgetType.entries[page]
+                                    GlanceWidgetPreviewCard(
+                                        selectedWidgetType = widgetType,
+                                        selectedFont = selectedFont,
+                                        selectedPriceSize = selectedPriceSize,
+                                        selectedColorStyle = selectedColorStyle,
+                                        selectedTheme = selectedTheme,
+                                        price = if (price > 0.0) price else 62884.21,
+                                        percentageChange = if (price > 0.0) percentageChange else 2.03,
+                                        currency = if (currency.isNotBlank()) currency else "USD",
+                                        intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_7d,
+                                        sparklinePrices = sparklinePrices
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            // Indicator Dots
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                repeat(PreviewWidgetType.entries.size) { pageIndex ->
+                                    val isSelected = pagerState.currentPage == pageIndex
+                                    val dotColor = if (isSelected) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f)
+                                    }
+                                    val dotWidth = if (isSelected) 12.dp else 6.dp
+                                    val dotHeight = 6.dp
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(horizontal = 3.dp)
+                                            .size(width = dotWidth, height = dotHeight)
+                                            .clip(CircleShape)
+                                            .background(dotColor)
+                                            .clickable {
+                                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                                                coroutineScope.launch {
+                                                    pagerState.animateScrollToPage(pageIndex)
+                                                }
+                                            }
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -419,8 +445,8 @@ fun CustomizeWidgetScreen(
     }
 }
 
-private val PREVIEW_WIDTH = 208.dp
-private val PREVIEW_HEIGHT = 108.dp
+private val PREVIEW_WIDTH = 220.dp
+private val PREVIEW_HEIGHT = 136.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
@@ -560,7 +586,11 @@ private fun GlanceWidgetPreviewCard(
                             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                             shape = widgetShape
                         )
-                        .pointerInput(Unit) {}
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {}
+                        )
                 )
             }
         } else {
