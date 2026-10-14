@@ -530,32 +530,22 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         scaleFactor: Float = 1.0f
     ) {
         val context = LocalContext.current
-        val parts = FormatUtils.formatPriceParts(state.price, state.currency)
+        val priceData = FormatUtils.formatPriceSeparated(state.price, state.currency)
         val priceSize = WidgetPriceSize.fromKey(state.priceSizeKey)
-        val (basePriceSp, baseSymbolSp) = WidgetBitmapUtils.getWidgetPriceFontSize(
-            parts.integerPart + parts.decimalPart,
-            parts.symbol,
+        val (priceFontSize, symbolFontSize) = WidgetBitmapUtils.getWidgetPriceFontSize(
+            priceData,
             priceSize.scaleFactor * scaleFactor
         )
-        val integerFontSize = basePriceSp * 1.08f
-        val decimalFontSize = basePriceSp * 0.68f
-        val symbolFontSize = baseSymbolSp * 0.92f
 
-        Row(verticalAlignment = Alignment.Bottom) {
-            if (parts.symbolAtStart) {
-                RenderPriceText(context, parts.symbol, symbolFontSize, typeface)
-                Spacer(modifier = GlanceModifier.width(1.5.dp))
-                RenderPriceText(context, parts.integerPart, integerFontSize, typeface)
-                if (parts.decimalPart.isNotEmpty()) {
-                    RenderPriceText(context, parts.decimalPart, decimalFontSize, typeface)
-                }
-            } else {
-                RenderPriceText(context, parts.integerPart, integerFontSize, typeface)
-                if (parts.decimalPart.isNotEmpty()) {
-                    RenderPriceText(context, parts.decimalPart, decimalFontSize, typeface)
-                }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (priceData.symbolAtStart) {
+                RenderPriceText(context, priceData.symbol, symbolFontSize, typeface)
                 Spacer(modifier = GlanceModifier.width(2.dp))
-                RenderPriceText(context, parts.symbol, symbolFontSize, typeface)
+                RenderPriceText(context, priceData.price, priceFontSize, typeface)
+            } else {
+                RenderPriceText(context, priceData.price, priceFontSize, typeface)
+                Spacer(modifier = GlanceModifier.width(2.dp))
+                RenderPriceText(context, priceData.symbol, symbolFontSize, typeface)
             }
         }
     }
