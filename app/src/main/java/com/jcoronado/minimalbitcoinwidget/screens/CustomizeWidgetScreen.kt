@@ -8,6 +8,8 @@ import android.view.HapticFeedbackConstants
 import android.widget.FrameLayout
 import android.widget.RemoteViews
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -108,6 +110,11 @@ fun CustomizeWidgetScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val pagerState = rememberPagerState(pageCount = { PreviewWidgetType.entries.size })
+    val currentPreviewHeight by animateDpAsState(
+        targetValue = if (pagerState.targetPage == 0) MINIMAL_PREVIEW_HEIGHT else TRENDLINE_PREVIEW_HEIGHT,
+        animationSpec = tween(durationMillis = 250),
+        label = "previewHeight"
+    )
     var selectedFont by remember(currentFont) { mutableStateOf(currentFont) }
     var selectedPriceSize by remember(currentPriceSize) { mutableStateOf(currentPriceSize) }
     var selectedColorStyle by remember(currentColorStyle) { mutableStateOf(currentColorStyle) }
@@ -202,10 +209,12 @@ fun CustomizeWidgetScreen(
                         ) {
                             HorizontalPager(
                                 state = pagerState,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(currentPreviewHeight)
                             ) { page ->
                                 Box(
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     val widgetType = PreviewWidgetType.entries[page]
@@ -445,8 +454,11 @@ fun CustomizeWidgetScreen(
     }
 }
 
-private val PREVIEW_WIDTH = 220.dp
-private val PREVIEW_HEIGHT = 136.dp
+private val MINIMAL_PREVIEW_WIDTH = 208.dp
+private val MINIMAL_PREVIEW_HEIGHT = 108.dp
+
+private val TRENDLINE_PREVIEW_WIDTH = 220.dp
+private val TRENDLINE_PREVIEW_HEIGHT = 136.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
@@ -523,20 +535,25 @@ private fun GlanceWidgetPreviewCard(
         )
     }
 
+    val (previewWidth, previewHeight) = when (selectedWidgetType) {
+        PreviewWidgetType.MINIMAL -> Pair(MINIMAL_PREVIEW_WIDTH, MINIMAL_PREVIEW_HEIGHT)
+        PreviewWidgetType.TRENDLINE -> Pair(TRENDLINE_PREVIEW_WIDTH, TRENDLINE_PREVIEW_HEIGHT)
+    }
+
     val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState, themedContext, selectedWidgetType) {
         value = try {
             when (selectedWidgetType) {
                 PreviewWidgetType.MINIMAL -> {
                     PriceWidget().compose(
                         context = themedContext,
-                        size = DpSize(PREVIEW_WIDTH, PREVIEW_HEIGHT),
+                        size = DpSize(previewWidth, previewHeight),
                         state = widgetState
                     )
                 }
                 PreviewWidgetType.TRENDLINE -> {
                     TrendlinePriceWidget().compose(
                         context = themedContext,
-                        size = DpSize(PREVIEW_WIDTH, PREVIEW_HEIGHT),
+                        size = DpSize(previewWidth, previewHeight),
                         state = widgetState
                     )
                 }
@@ -553,8 +570,8 @@ private fun GlanceWidgetPreviewCard(
         if (currentViews != null) {
             Box(
                 modifier = Modifier
-                    .width(PREVIEW_WIDTH)
-                    .height(PREVIEW_HEIGHT)
+                    .width(previewWidth)
+                    .height(previewHeight)
             ) {
                 key(isPreviewDark, selectedWidgetType) {
                     AndroidView(
@@ -596,8 +613,8 @@ private fun GlanceWidgetPreviewCard(
         } else {
             Box(
                 modifier = Modifier
-                    .width(PREVIEW_WIDTH)
-                    .height(PREVIEW_HEIGHT),
+                    .width(previewWidth)
+                    .height(previewHeight),
                 contentAlignment = Alignment.Center
             ) {
                 LoadingIndicator(
