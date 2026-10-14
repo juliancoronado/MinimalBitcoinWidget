@@ -8,8 +8,6 @@ import android.view.HapticFeedbackConstants
 import android.widget.FrameLayout
 import android.widget.RemoteViews
 import androidx.annotation.StringRes
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -110,11 +108,6 @@ fun CustomizeWidgetScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val pagerState = rememberPagerState(pageCount = { PreviewWidgetType.entries.size })
-    val currentPreviewHeight by animateDpAsState(
-        targetValue = if (pagerState.targetPage == 0) MINIMAL_PREVIEW_HEIGHT else TRENDLINE_PREVIEW_HEIGHT,
-        animationSpec = tween(durationMillis = 250),
-        label = "previewHeight"
-    )
     var selectedFont by remember(currentFont) { mutableStateOf(currentFont) }
     var selectedPriceSize by remember(currentPriceSize) { mutableStateOf(currentPriceSize) }
     var selectedColorStyle by remember(currentColorStyle) { mutableStateOf(currentColorStyle) }
@@ -211,7 +204,7 @@ fun CustomizeWidgetScreen(
                                 state = pagerState,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(currentPreviewHeight)
+                                    .height(TRENDLINE_PREVIEW_HEIGHT)
                             ) { page ->
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
