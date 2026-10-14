@@ -103,7 +103,9 @@
     <string name="customize_shortcut_title">Customize</string>
     <string name="customize_widget_shortcut_description">Font, color, size and theme</string>
     <string name="add_widget_shortcut_title">Add to Home Screen</string>
-    <string name="add_widget_shortcut_description">Place widget on home screen</string>
+    <string name="add_widget_shortcut_description">Pick a widget for your homescreen</string>
+    <string name="add_widget_minimal_desc">Compact price &amp; change percentage</string>
+    <string name="add_widget_trendline_desc">Price with sparkline trend chart</string>
     <string name="rate_app_shortcut_title">Rate on Google Play</string>
     <string name="rate_app_shortcut_description">Support the app by leaving a review</string>
 

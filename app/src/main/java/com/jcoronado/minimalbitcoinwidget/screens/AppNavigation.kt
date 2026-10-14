@@ -171,7 +171,8 @@ fun AppNavigation() {
                             uiState = uiState,
                             onRefresh = { priceViewModel.fetchPrice(isManual = true) },
                             onCustomizeWidgetClick = { backStack.add(Screen.WidgetFont) },
-                            onAddWidgetClick = { priceViewModel.requestPinWidget() }
+                            onAddMinimalWidgetClick = { priceViewModel.requestPinMinimalWidget() },
+                            onAddTrendlineWidgetClick = { priceViewModel.requestPinTrendlineWidget() }
                         )
                     }
                     entry<Screen.Settings> {

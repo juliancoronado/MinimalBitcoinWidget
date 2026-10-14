@@ -68,7 +68,9 @@
     <string name="customize_shortcut_title">Anpassen</string>
     <string name="customize_widget_shortcut_description">Schriftart, Farbe, Größe und Design</string>
     <string name="add_widget_shortcut_title">Zum Startbildschirm hinzufügen</string>
-    <string name="add_widget_shortcut_description">Widget zum Startbildschirm hinzufügen</string>
+    <string name="add_widget_shortcut_description">Wählen Sie ein Widget für Ihren Startbildschirm</string>
+    <string name="add_widget_minimal_desc">Kompakter Preis &amp; prozentuale Änderung</string>
+    <string name="add_widget_trendline_desc">Preis mit Sparkline-Trendgrafik</string>
     <string name="rate_app_shortcut_title">Im Google Play Store bewerten</string>
     <string name="rate_app_shortcut_description">Unterstützen Sie die App mit einer Bewertung</string>
 

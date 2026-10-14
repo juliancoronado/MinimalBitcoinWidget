@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:fontFamily="@font/google_sans_flex_rounded"
-            android:text="52,849.10"
+            android:text="81,460.55"
             android:textColor="#191C20"
             android:textSize="22sp"
             tools:ignore="HardcodedText" />

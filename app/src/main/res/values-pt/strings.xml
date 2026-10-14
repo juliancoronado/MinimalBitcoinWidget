@@ -68,7 +68,9 @@
     <string name="customize_shortcut_title">Personalizar</string>
     <string name="customize_widget_shortcut_description">Fonte, cor, tamanho e tema</string>
     <string name="add_widget_shortcut_title">Adicionar ao ecrã principal</string>
-    <string name="add_widget_shortcut_description">Adicionar widget ao ecrã principal</string>
+    <string name="add_widget_shortcut_description">Escolha um widget para o seu ecrã principal</string>
+    <string name="add_widget_minimal_desc">Preço compacto e percentagem de variação</string>
+    <string name="add_widget_trendline_desc">Preço com gráfico de tendência sparkline</string>
     <string name="rate_app_shortcut_title">Avaliar no Google Play</string>
     <string name="rate_app_shortcut_description">Apoie a aplicação deixando uma avaliação</string>
 

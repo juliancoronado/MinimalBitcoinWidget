@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="200dp"
+    android:height="80dp"
+    android:viewportWidth="200"
+    android:viewportHeight="80">
+
+    <!-- Gradient Area Fill -->
+    <path
+        android:pathData="M0,52 C25,48 40,65 65,42 C85,25 105,45 130,30 C155,18 175,32 200,16 L200,80 L0,80 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startY="16"
+                android:endY="80"
+                android:startColor="#332E7D32"
+                android:endColor="#002E7D32"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+
+    <!-- Trendline Stroke -->
+    <path
+        android:pathData="M0,52 C25,48 40,65 65,42 C85,25 105,45 130,30 C155,18 175,32 200,16"
+        android:strokeColor="#2E7D32"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

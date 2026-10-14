@@ -73,6 +73,10 @@ class TrendlinePriceWidget : GlanceAppWidget() {
 
     override val sizeMode = SizeMode.Exact
 
+    override val previewSizeMode = SizeMode.Responsive(
+        setOf(COMPACT, MEDIUM, WIDE_SLIM, LARGE)
+    )
+
     override val stateDefinition = PriceWidgetStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {

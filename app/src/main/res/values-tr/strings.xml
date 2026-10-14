@@ -68,7 +68,9 @@
     <string name="customize_shortcut_title">Özelleştir</string>
     <string name="customize_widget_shortcut_description">Yazı tipi, renk, boyut ve tema</string>
     <string name="add_widget_shortcut_title">Ana Ekrana Ekle</string>
-    <string name="add_widget_shortcut_description">Ana ekrana bir widget ekleyin</string>
+    <string name="add_widget_shortcut_description">Ana ekranınız için bir widget seçin</string>
+    <string name="add_widget_minimal_desc">Kompakt fiyat ve değişim yüzdesi</string>
+    <string name="add_widget_trendline_desc">Sparkline trend grafikli fiyat</string>
     <string name="rate_app_shortcut_title">Google Play\'de Puanlayın</string>
     <string name="rate_app_shortcut_description">Bir değerlendirme bırakarak uygulamayı destekleyin</string>
 

@@ -180,6 +180,58 @@ class PriceViewModel @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Requests the system to pin the Minimal Glance widget to the homescreen.
+     */
+    fun requestPinMinimalWidget() {
+        requestPinWidget()
+    }
+
+    /**
+     * Requests the system to pin the Trendline Glance widget to the homescreen.
+     */
+    fun requestPinTrendlineWidget() {
+        viewModelScope.launch {
+            Log.d(LOG_TAG, "Requesting to pin Trendline Glance widget")
+            var currentState = uiState.value
+
+            currentState = PriceUiState(
+                isLoading = false,
+                changeIntervalLabelResId = currentState.changeIntervalLabelResId,
+                percentageChange = if (currentState.percentageChange == 0.0) 2.03 else currentState.percentageChange,
+                price = if (currentState.price == 0.0) 52849.10 else currentState.price,
+                errorMessage = null,
+                selectedCurrency = currentState.selectedCurrency,
+                sparklinePrices = if (currentState.sparklinePrices.isNotEmpty()) currentState.sparklinePrices else com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PRICES
+            )
+
+            val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+            val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
+            val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
+            val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
+
+            try {
+                GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
+                    receiver = TrendlinePriceWidgetReceiver::class.java,
+                    preview = TrendlinePriceWidget(),
+                    previewState = PriceWidgetState.Available(
+                        price = currentState.price,
+                        changePercentage = currentState.percentageChange,
+                        intervalLabelResId = currentState.changeIntervalLabelResId,
+                        currency = currentState.selectedCurrency,
+                        fontKey = fontKey,
+                        priceSizeKey = priceSizeKey,
+                        colorStyleKey = colorStyleKey,
+                        themeKey = themeKey,
+                        sparklinePrices = currentState.sparklinePrices
+                    )
+                )
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Failed to request pin trendline widget: $e")
+            }
+        }
+    }
+
     /** Update the selected currency and persist it via Repository. */
     fun updateCurrency(newCurrency: String) {
         if (_uiState.value.selectedCurrency == newCurrency) return
@@ -270,6 +322,7 @@ class PriceViewModel @JvmOverloads constructor(
      */
     fun redrawWidgets() {
         refreshWidgetsFromCache(getApplication())
+        updateWidgetPreview(getApplication())
     }
 
     companion object {
@@ -309,17 +362,13 @@ class PriceViewModel @JvmOverloads constructor(
                 CoroutineScope(Dispatchers.IO).launch {
                     updateGlanceWidgets(context, glanceState)
                 }
-                updateWidgetPreview(context)
 
                 // update legacy widgets
                 updateLegacyWidgets(context, mockData, mockCurrency)
                 return
             }
 
-            val priceData = repository.getCachedPriceData() ?: run {
-                updateWidgetPreview(context)
-                return
-            }
+            val priceData = repository.getCachedPriceData() ?: return
             val currencyCode = repository.getSelectedCurrency()
 
             val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
@@ -342,23 +391,50 @@ class PriceViewModel @JvmOverloads constructor(
             CoroutineScope(Dispatchers.IO).launch {
                 updateGlanceWidgets(context, glanceState)
             }
-            updateWidgetPreview(context)
 
             // update legacy widgets
             updateLegacyWidgets(context, priceData)
         }
 
+        private var lastPreviewUpdateTime = 0L
+        private var lastPreviewFingerprint: String? = null
+        private const val PREVIEW_UPDATE_COOLDOWN_MS = 60 * 60 * 1000L // 1 hour cooldown to respect Android's ~2 calls/hour rate limit
+
         /**
          * Generates and publishes the Glance widget preview for the system widget picker
          * on Android 15+ (API 35+).
+         * Strictly throttled to 1 hour and skips when styling fingerprint has not changed,
+         * ensuring the OS rate limit (~2 calls/hour) is never exceeded.
          */
         fun updateWidgetPreview(context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                val now = System.currentTimeMillis()
+                if ((now - lastPreviewUpdateTime) < PREVIEW_UPDATE_COOLDOWN_MS) {
+                    val remainingSeconds = (PREVIEW_UPDATE_COOLDOWN_MS - (now - lastPreviewUpdateTime)) / 1000
+                    Log.d(LOG_TAG, "Skipping widget preview update (throttled, cooldown active: ${remainingSeconds}s remaining)")
+                    return
+                }
+
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+                val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
+                val priceSizeKey = prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default") ?: "default"
+                val colorStyleKey = prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic") ?: "dynamic"
+                val themeKey = prefs.getString(Prefs.WIDGET_THEME, "system") ?: "system"
+                val currentFingerprint = "$fontKey:$priceSizeKey:$colorStyleKey:$themeKey"
+
+                if (currentFingerprint == lastPreviewFingerprint && lastPreviewUpdateTime > 0L) {
+                    Log.d(LOG_TAG, "Skipping widget preview update (styling fingerprint unchanged)")
+                    return
+                }
+
+                lastPreviewUpdateTime = now
+                lastPreviewFingerprint = currentFingerprint
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         val manager = GlanceAppWidgetManager(context)
-                        manager.setWidgetPreviews(PriceWidgetReceiver::class)
-                        manager.setWidgetPreviews(TrendlinePriceWidgetReceiver::class)
+                        val pResult = manager.setWidgetPreviews(PriceWidgetReceiver::class)
+                        val tResult = manager.setWidgetPreviews(TrendlinePriceWidgetReceiver::class)
+                        Log.d(LOG_TAG, "setWidgetPreviews PriceWidget: $pResult, Trendline: $tResult")
                     } catch (e: Exception) {
                         Log.w(LOG_TAG, "Failed to update widget preview: $e")
                     }
