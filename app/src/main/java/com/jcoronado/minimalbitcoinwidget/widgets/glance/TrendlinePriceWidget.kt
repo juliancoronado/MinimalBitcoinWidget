@@ -570,8 +570,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 text = text,
                 style = TextStyle(
                     color = GlanceTheme.colors.onSurface,
-                    fontSize = fontSizeSp.sp,
-                    fontWeight = androidx.glance.text.FontWeight.Bold
+                    fontSize = fontSizeSp.sp
                 )
             )
         }
@@ -616,8 +615,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                     text = changeText,
                     style = TextStyle(
                         color = contentColor,
-                        fontSize = 11.5.sp,
-                        fontWeight = androidx.glance.text.FontWeight.Bold
+                        fontSize = 11.5.sp
                     )
                 )
             }
