@@ -579,45 +579,71 @@ class TrendlinePriceWidget : GlanceAppWidget() {
     @SuppressLint("DefaultLocale")
     @Composable
     private fun PriceChange(changePercentage: Double, error: Boolean, typeface: Typeface?) {
-        val (containerColor, contentColor, arrowSymbol) = if (changePercentage > 0) {
-            Triple(GlanceTheme.colors.primaryContainer, GlanceTheme.colors.onPrimaryContainer, "↑")
+        val context = LocalContext.current
+        val (containerColor, contentColor) = if (changePercentage > 0) {
+            Pair(GlanceTheme.colors.primaryContainer, GlanceTheme.colors.onPrimaryContainer)
         } else if (changePercentage < 0) {
-            Triple(GlanceTheme.colors.errorContainer, GlanceTheme.colors.onErrorContainer, "↓")
+            Pair(GlanceTheme.colors.errorContainer, GlanceTheme.colors.onErrorContainer)
         } else {
-            Triple(GlanceTheme.colors.surfaceVariant, GlanceTheme.colors.onSurfaceVariant, "•")
+            Pair(GlanceTheme.colors.surfaceVariant, GlanceTheme.colors.onSurfaceVariant)
+        }
+
+        val (iconRes, iconDesc) = if (changePercentage > 0) {
+            Pair(
+                R.drawable.rounded_trending_up_24,
+                context.getString(R.string.trending_up_icon_description)
+            )
+        } else if (changePercentage < 0) {
+            Pair(
+                R.drawable.rounded_trending_down_24,
+                context.getString(R.string.trending_down_icon_description)
+            )
+        } else {
+            Pair(
+                R.drawable.rounded_trending_flat_24,
+                context.getString(R.string.trending_flat_icon_description)
+            )
         }
 
         val formatPattern = "%.2f%%"
-        val changeText = "$arrowSymbol " + String.format(java.util.Locale.ROOT, formatPattern, kotlin.math.abs(changePercentage))
+        val changeText = String.format(formatPattern, changePercentage)
 
         Box(
             modifier = GlanceModifier
                 .background(containerColor)
                 .cornerRadius(10.dp)
-                .padding(horizontal = 7.dp, vertical = 2.5.dp),
+                .padding(horizontal = 6.dp, vertical = 2.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (typeface != null) {
-                val context = LocalContext.current
-                val textBitmap = WidgetBitmapUtils.createTextBitmap(
-                    context = context,
-                    text = changeText,
-                    fontSizeSp = 11.5f,
-                    typeface = typeface
-                )
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    provider = ImageProvider(textBitmap),
-                    contentDescription = changeText,
-                    colorFilter = ColorFilter.tint(contentColor)
+                    provider = ImageProvider(iconRes),
+                    contentDescription = iconDesc,
+                    colorFilter = ColorFilter.tint(contentColor),
+                    modifier = GlanceModifier.size(13.dp).padding(top = 1.dp)
                 )
-            } else {
-                Text(
-                    text = changeText,
-                    style = TextStyle(
-                        color = contentColor,
-                        fontSize = 11.5.sp
+                Spacer(modifier = GlanceModifier.width(3.dp))
+                if (typeface != null) {
+                    val textBitmap = WidgetBitmapUtils.createTextBitmap(
+                        context = context,
+                        text = changeText,
+                        fontSizeSp = 11.5f,
+                        typeface = typeface
                     )
-                )
+                    Image(
+                        provider = ImageProvider(textBitmap),
+                        contentDescription = changeText,
+                        colorFilter = ColorFilter.tint(contentColor)
+                    )
+                } else {
+                    Text(
+                        text = changeText,
+                        style = TextStyle(
+                            color = contentColor,
+                            fontSize = 11.5.sp
+                        )
+                    )
+                }
             }
         }
     }
