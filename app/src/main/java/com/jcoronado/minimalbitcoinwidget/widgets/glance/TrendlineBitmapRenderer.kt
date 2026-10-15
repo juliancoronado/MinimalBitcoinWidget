@@ -150,42 +150,53 @@ object TrendlineBitmapRenderer {
         }
 
         val strokeWidthPx = dpToPx(context, strokeWidthDp)
-        val verticalPadding = strokeWidthPx * 1.6f
-        val usableHeight = (h.toFloat() - (verticalPadding * 2f)).coerceAtLeast(1f)
+        val haloRadius = if (neonGlow) dpToPx(context, 8.0f) else dpToPx(context, 6.0f)
+
+        // When drawLiveDot is enabled (as in widgets), provide generous right and bottom insets
+        // so the glowing endpoint dot and halo never clip into the widget's rounded corner curves (16-24dp)
+        // during steep negative price trends.
+        val leftPaddingPx = strokeWidthPx * 1.5f
+        val rightPaddingPx = if (drawLiveDot) dpToPx(context, 18f) else strokeWidthPx
+        val topPaddingPx = strokeWidthPx * 1.6f
+        val bottomPaddingPx = if (drawLiveDot) dpToPx(context, 18f) else (strokeWidthPx * 1.6f)
+
+        val usableWidth = (w.toFloat() - leftPaddingPx - rightPaddingPx).coerceAtLeast(1f)
+        val usableHeight = (h.toFloat() - topPaddingPx - bottomPaddingPx).coerceAtLeast(1f)
 
         val minPrice = smoothPrices.minOrNull() ?: 0.0
         val maxPrice = smoothPrices.maxOrNull() ?: 1.0
 
         val points = smoothPrices.indices.map { i ->
-            val x = (i.toFloat() / (smoothPrices.size - 1)) * w.toFloat()
+            val x = leftPaddingPx + ((i.toFloat() / (smoothPrices.size - 1)) * usableWidth)
             val yFraction = SparklineScaleCalculator.calculateYFraction(
                 price = smoothPrices[i],
                 minPrice = minPrice,
                 maxPrice = maxPrice,
                 verticalPaddingFraction = SparklineScaleCalculator.DEFAULT_VERTICAL_PADDING_FRACTION
             )
-            val y = h.toFloat() - verticalPadding - (yFraction * usableHeight)
+            val y = h.toFloat() - bottomPaddingPx - (yFraction * usableHeight)
             PointF(x, y)
         }
 
-        // 1. Draw dashed opening reference baseline if requested
+        // 1. Draw dotted opening reference baseline if requested (all the way to the edges)
         if (drawDashedBaseline && points.isNotEmpty()) {
             val baselineY = points.first().y
-            val dashPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.STROKE
-                strokeWidth = dpToPx(context, 1.2f)
+            val dotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.FILL
                 color = Color.argb(
                     (Color.alpha(strokeColor) * 0.40f).toInt(),
                     Color.red(strokeColor),
                     Color.green(strokeColor),
                     Color.blue(strokeColor)
                 )
-                pathEffect = DashPathEffect(
-                    floatArrayOf(dpToPx(context, 4.5f), dpToPx(context, 3.5f)),
-                    0f
-                )
             }
-            canvas.drawLine(0f, baselineY, w.toFloat(), baselineY, dashPaint)
+            val dotRadius = dpToPx(context, 1.1f)
+            val dotSpacing = dpToPx(context, 7.5f)
+            var currentX = 0f
+            while (currentX <= w.toFloat()) {
+                canvas.drawCircle(currentX, baselineY, dotRadius, dotPaint)
+                currentX += dotSpacing
+            }
         }
 
         // 2. Build Catmull-Rom cubic spline path
@@ -215,8 +226,8 @@ object TrendlineBitmapRenderer {
         // 3. Draw gradient fill under trendline
         if (fillStyle != TrendlineFillStyle.NONE && points.size >= 2) {
             val fillPath = Path(linePath).apply {
-                lineTo(w.toFloat(), h.toFloat())
-                lineTo(0f, h.toFloat())
+                lineTo(points.last().x, h.toFloat())
+                lineTo(points.first().x, h.toFloat())
                 close()
             }
 
@@ -268,8 +279,7 @@ object TrendlineBitmapRenderer {
         // 6. Draw glowing live endpoint dot if requested
         if (drawLiveDot && points.isNotEmpty()) {
             val lastPoint = points.last()
-            // Pull in slightly from right border to avoid edge-clipping
-            val dotX = (lastPoint.x - dpToPx(context, 3.5f)).coerceAtLeast(0f)
+            val dotX = lastPoint.x
             val dotY = lastPoint.y
 
             // Outer halo

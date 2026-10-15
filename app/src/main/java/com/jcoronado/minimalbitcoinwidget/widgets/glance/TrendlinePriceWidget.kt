@@ -347,7 +347,8 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
                 includeGradient = true,
-                strokeWidthDp = 2.2f
+                strokeWidthDp = 2.2f,
+                modifier = GlanceModifier.width(size.width * 0.52f)
             )
         }
     }
@@ -441,7 +442,8 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         colorStyle: WidgetColorStyle,
         widgetTheme: WidgetTheme,
         includeGradient: Boolean = true,
-        strokeWidthDp: Float = 2.6f
+        strokeWidthDp: Float = 2.6f,
+        modifier: GlanceModifier = GlanceModifier.fillMaxWidth()
     ) {
         val context = LocalContext.current
         val widthPx = TrendlineBitmapRenderer.dpToPx(context, widthDp.value).toInt().coerceAtLeast(10)
@@ -471,7 +473,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
             provider = ImageProvider(bitmap),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
-            modifier = GlanceModifier.fillMaxWidth().height(heightDp)
+            modifier = modifier.height(heightDp)
         )
     }
 
