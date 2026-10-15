@@ -7,6 +7,10 @@ import android.util.Log
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.workers.PriceUpdateWorker
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 private const val TAG = "PackageUpdateReceiver"
 
 /**
@@ -26,8 +30,15 @@ class PackageUpdateReceiver : BroadcastReceiver() {
 
         Log.i(TAG, "Application package replaced. Refreshing widgets from cache.")
 
-        // Immediately repaint all widgets using the new build's compiled resource IDs from disk cache (0 API calls)
-        PriceViewModel.refreshWidgetsFromCache(context)
+        val pendingResult = goAsync()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Immediately repaint all widgets using the new build's compiled resource IDs from disk cache (0 API calls)
+                PriceViewModel.refreshWidgetsFromCacheSuspend(context)
+            } finally {
+                pendingResult.finish()
+            }
+        }
 
         // Ensure background WorkManager sync remains scheduled
         PriceUpdateWorker.enqueue(context)

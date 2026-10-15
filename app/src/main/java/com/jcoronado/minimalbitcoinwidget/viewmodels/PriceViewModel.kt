@@ -331,9 +331,9 @@ class PriceViewModel @JvmOverloads constructor(
 
         /**
          * Re-reads the cached price data and updates all widget instances (Glance and Legacy).
-         * This is useful for UI-only updates when settings like currency or interval change.
+         * This suspend function allows callers to await full widget dispatch before finishing background tasks.
          */
-        fun refreshWidgetsFromCache(context: Context) {
+        suspend fun refreshWidgetsFromCacheSuspend(context: Context) {
             val repository = PriceRepository(context)
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key
@@ -359,12 +359,7 @@ class PriceViewModel @JvmOverloads constructor(
                     sparklinePrices = mockData.getSparklineForInterval(selectedInterval)
                 )
 
-                // update glance widgets
-                CoroutineScope(Dispatchers.IO).launch {
-                    updateGlanceWidgets(context, glanceState)
-                }
-
-                // update legacy widgets
+                updateGlanceWidgets(context, glanceState)
                 updateLegacyWidgets(context, mockData, mockCurrency)
                 return
             }
@@ -388,13 +383,17 @@ class PriceViewModel @JvmOverloads constructor(
                 sparklinePrices = priceData.getSparklineForInterval(selectedInterval)
             )
 
-            // update glance widgets
-            CoroutineScope(Dispatchers.IO).launch {
-                updateGlanceWidgets(context, glanceState)
-            }
-
-            // update legacy widgets
+            updateGlanceWidgets(context, glanceState)
             updateLegacyWidgets(context, priceData)
+        }
+
+        /**
+         * Fire-and-forget version of refreshWidgetsFromCache for standard UI callers.
+         */
+        fun refreshWidgetsFromCache(context: Context) {
+            CoroutineScope(Dispatchers.IO).launch {
+                refreshWidgetsFromCacheSuspend(context)
+            }
         }
 
         private var lastPreviewUpdateTime = 0L
