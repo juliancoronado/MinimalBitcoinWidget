@@ -55,6 +55,15 @@
                 android:resource="@xml/trendline_price_widget_info" />
         </receiver>
 
+        <!-- Package Update Receiver (re-renders widgets from cache on app update) -->
+        <receiver
+            android:name=".receivers.PackageUpdateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
