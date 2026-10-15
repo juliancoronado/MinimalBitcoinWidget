@@ -295,21 +295,16 @@ class TrendlinePriceWidget : GlanceAppWidget() {
             ) {
                 Header(state.currency, state.intervalLabelResId, typeface)
                 Spacer(modifier = GlanceModifier.height(2.dp))
-                Row(
-                    modifier = GlanceModifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    PriceValue(state, typeface, scaleFactor = 0.95f)
-                    Spacer(modifier = GlanceModifier.width(6.dp))
-                    PriceChange(state.changePercentage, error, typeface)
-                }
+                PriceValue(state, typeface, scaleFactor = 0.95f)
+                Spacer(modifier = GlanceModifier.height(2.dp))
+                PriceChange(state.changePercentage, error, typeface)
             }
             Spacer(modifier = GlanceModifier.height(2.dp))
             TrendlineImage(
                 prices = state.sparklinePrices,
                 isPositive = state.changePercentage >= 0,
                 widthDp = size.width,
-                heightDp = (size.height - 48.dp).coerceAtLeast(24.dp),
+                heightDp = (size.height - 68.dp).coerceAtLeast(20.dp),
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
                 includeGradient = true,
@@ -417,14 +412,9 @@ class TrendlinePriceWidget : GlanceAppWidget() {
             ) {
                 Header(state.currency, state.intervalLabelResId, typeface)
                 Spacer(modifier = GlanceModifier.height(4.dp))
-                Row(
-                    modifier = GlanceModifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    PriceValue(state, typeface, scaleFactor = 1.25f)
-                    Spacer(modifier = GlanceModifier.defaultWeight())
-                    PriceChange(state.changePercentage, error, typeface)
-                }
+                PriceValue(state, typeface, scaleFactor = 1.20f)
+                Spacer(modifier = GlanceModifier.height(4.dp))
+                PriceChange(state.changePercentage, error, typeface)
             }
 
             Spacer(modifier = GlanceModifier.height(4.dp))
@@ -433,7 +423,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 prices = state.sparklinePrices,
                 isPositive = state.changePercentage >= 0,
                 widthDp = size.width,
-                heightDp = (size.height - 66.dp).coerceAtLeast(60.dp),
+                heightDp = (size.height - 84.dp).coerceAtLeast(48.dp),
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
                 includeGradient = true,
