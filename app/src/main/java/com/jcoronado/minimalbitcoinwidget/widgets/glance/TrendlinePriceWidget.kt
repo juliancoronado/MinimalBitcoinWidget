@@ -394,7 +394,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
     }
 
     /**
-     * Large (4x2) layout: Full dashboard with header, bold price & change pill, and edge-to-edge sparkline.
+     * Large (4x2) layout: Full dashboard with header & pill row, large price, and edge-to-edge sparkline.
      */
     @Composable
     private fun LargeLayout(
@@ -411,11 +411,16 @@ class TrendlinePriceWidget : GlanceAppWidget() {
             Column(
                 modifier = GlanceModifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 14.dp)
             ) {
-                Header(state.currency, state.intervalLabelResId, typeface)
+                Row(
+                    modifier = GlanceModifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Header(state.currency, state.intervalLabelResId, typeface)
+                    Spacer(modifier = GlanceModifier.defaultWeight())
+                    PriceChange(state.changePercentage, error, typeface)
+                }
                 Spacer(modifier = GlanceModifier.height(4.dp))
                 PriceValue(state, typeface, scaleFactor = 1.20f)
-                Spacer(modifier = GlanceModifier.height(4.dp))
-                PriceChange(state.changePercentage, error, typeface)
             }
 
             Spacer(modifier = GlanceModifier.height(4.dp))
@@ -424,7 +429,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 prices = state.sparklinePrices,
                 isPositive = state.changePercentage >= 0,
                 widthDp = size.width,
-                heightDp = (size.height - 84.dp).coerceAtLeast(48.dp),
+                heightDp = (size.height - 64.dp).coerceAtLeast(48.dp),
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
                 includeGradient = true,

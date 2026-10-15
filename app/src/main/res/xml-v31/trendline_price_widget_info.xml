@@ -8,7 +8,5 @@
     android:targetCellWidth="2"
     android:targetCellHeight="2"
     android:minResizeWidth="140dp"
-    android:minResizeHeight="60dp"
-    android:maxResizeWidth="500dp"
-    android:maxResizeHeight="300dp"
+    android:minResizeHeight="120dp"
     android:widgetCategory="home_screen" />
