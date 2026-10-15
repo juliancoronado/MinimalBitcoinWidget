@@ -214,6 +214,7 @@ class PriceViewModel @JvmOverloads constructor(
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
                     receiver = TrendlinePriceWidgetReceiver::class.java,
                     preview = TrendlinePriceWidget(),
+                    previewSize = TrendlinePriceWidget.MEDIUM,
                     previewState = PriceWidgetState.Available(
                         price = currentState.price,
                         changePercentage = currentState.percentageChange,
