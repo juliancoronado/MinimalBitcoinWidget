@@ -10,10 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,8 +21,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -70,7 +64,6 @@ fun SparklineGraph(
     isUnavailable: Boolean = false,
     showOverlay: Boolean = isUnavailable,
     showDottedBaseline: Boolean = true,
-    showLiveDot: Boolean = true,
     animationKey: Any? = null,
     unavailableMessage: String = stringResource(R.string.chart_unavailable_30d),
     onScrub: (scrubbedPrice: Double?, scrubbedTimestamp: Long?) -> Unit = { _, _ -> }
@@ -114,69 +107,17 @@ fun SparklineGraph(
 
     // Trend line entrance animation state (draws left-to-right on display / data updates)
     val animationProgress = remember { Animatable(0f) }
-    val dotEntranceScale = remember { Animatable(0f) }
-    val dotEntranceAlpha = remember { Animatable(0f) }
-    val dotGlowFlare = remember { Animatable(0f) }
 
     LaunchedEffect(effectivePrices, lastUpdatedTimestamp, animationKey) {
-        dotEntranceScale.snapTo(0f)
-        dotEntranceAlpha.snapTo(0f)
-        dotGlowFlare.snapTo(0f)
         animationProgress.snapTo(0f)
-        launch {
-            animationProgress.animateTo(
-                targetValue = 1f,
-                animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-            )
-        }
-        // As the line reaches the endpoint (~480ms), bloom the dot into existence with a one-time glow flare
-        delay(480)
-        launch {
-            dotEntranceAlpha.animateTo(
-                targetValue = 1f,
-                animationSpec = tween(durationMillis = 240, easing = LinearEasing)
-            )
-        }
-        launch {
-            dotGlowFlare.animateTo(
-                targetValue = 1f,
-                animationSpec = keyframes {
-                    durationMillis = 650
-                    0f at 0 using FastOutSlowInEasing
-                    1.35f at 220 using FastOutSlowInEasing // radiant entrance glow peak
-                    1.0f at 650 using FastOutSlowInEasing  // settles to calm steady resting state
-                }
-            )
-        }
-        dotEntranceScale.animateTo(
+        animationProgress.animateTo(
             targetValue = 1f,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
-            )
+            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
         )
     }
 
     var isScrubbing by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(-1) }
-
-    LaunchedEffect(isScrubbing) {
-        if (!isScrubbing && animationProgress.value >= 1f) {
-            dotEntranceScale.snapTo(0.7f)
-            dotEntranceAlpha.snapTo(0.3f)
-            dotGlowFlare.snapTo(1f) // Keep halo calm at normal 1.0f, no flare on scrub release
-            launch {
-                dotEntranceAlpha.animateTo(1f, tween(160, easing = LinearEasing))
-            }
-            dotEntranceScale.animateTo(
-                targetValue = 1f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessMedium
-                )
-            )
-        }
-    }
 
     val handleTouch: (Offset, Float) -> Unit = { offset, width ->
         if (width > 0f && !isUnavailable) {
@@ -355,39 +296,6 @@ fun SparklineGraph(
                     color = Color.White,
                     radius = 2.5.dp.toPx(),
                     center = point
-                )
-            }
-
-            // 3. Draw real-time live price dot at the endpoint when resting (not scrubbing)
-            if (showLiveDot && !isUnavailable && !isScrubbing && points.isNotEmpty() && dotEntranceAlpha.value > 0f) {
-                val endpoint = points.last()
-                val entranceScale = dotEntranceScale.value
-                val entranceAlpha = dotEntranceAlpha.value
-                val flare = dotGlowFlare.value
-
-                // Outer halo: flares on entrance (up to ~16.2dp radius, ~0.42 alpha) and relaxes to steady 12dp, 0.30 alpha
-                val baseHaloRadius = 12.dp.toPx()
-                val haloRadius = baseHaloRadius * flare * entranceScale
-                val haloAlpha = (0.30f * flare).coerceIn(0f, 0.45f) * entranceAlpha
-
-                drawCircle(
-                    color = normalLineColor.copy(alpha = haloAlpha),
-                    radius = haloRadius,
-                    center = endpoint
-                )
-
-                // Inner solid dot
-                drawCircle(
-                    color = normalLineColor.copy(alpha = entranceAlpha),
-                    radius = 5.dp.toPx() * entranceScale,
-                    center = endpoint
-                )
-
-                // Center white pupil
-                drawCircle(
-                    color = Color.White.copy(alpha = entranceAlpha),
-                    radius = 2.5.dp.toPx() * entranceScale,
-                    center = endpoint
                 )
             }
         }

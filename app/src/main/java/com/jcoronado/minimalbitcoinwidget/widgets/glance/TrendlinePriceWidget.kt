@@ -470,7 +470,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
             fillStyle = if (includeGradient) TrendlineFillStyle.SUBTLE else TrendlineFillStyle.NONE,
             strokeWidthDp = strokeWidthDp,
             drawDashedBaseline = true,
-            drawLiveDot = true,
+            drawLiveDot = false,
             neonGlow = false
         )
 
