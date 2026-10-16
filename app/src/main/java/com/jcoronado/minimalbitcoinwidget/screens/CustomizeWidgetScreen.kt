@@ -8,6 +8,9 @@ import android.view.HapticFeedbackConstants
 import android.widget.FrameLayout
 import android.widget.RemoteViews
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -51,6 +54,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -228,7 +232,26 @@ fun CustomizeWidgetScreen(
 
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            // Pixel-style Interactive Indicator Dots
+                            // Pixel-style Interactive Indicator Dots with M3E Over-Bounce
+                            val bounceOvershoot = remember { Animatable(0f) }
+                            var hasSettledInitialPage by remember { mutableStateOf(false) }
+
+                            LaunchedEffect(pagerState.settledPage) {
+                                if (!hasSettledInitialPage) {
+                                    hasSettledInitialPage = true
+                                    return@LaunchedEffect
+                                }
+                                bounceOvershoot.snapTo(0f)
+                                bounceOvershoot.animateTo(
+                                    targetValue = 0f,
+                                    initialVelocity = 70f,
+                                    animationSpec = spring(
+                                        dampingRatio = 0.65f,
+                                        stiffness = Spring.StiffnessMediumLow
+                                    )
+                                )
+                            }
+
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                                 verticalAlignment = Alignment.CenterVertically
@@ -241,7 +264,9 @@ fun CustomizeWidgetScreen(
                                     val distance = kotlin.math.abs(scrollPosition - pageIndex)
                                     val progress = (1f - distance).coerceIn(0f, 1f)
 
-                                    val dotWidth = androidx.compose.ui.unit.lerp(6.dp, 18.dp, progress)
+                                    val activeBounce = if (pageIndex == pagerState.settledPage) bounceOvershoot.value.dp else 0.dp
+                                    val dotWidth = (androidx.compose.ui.unit.lerp(6.dp, 18.dp, progress) + activeBounce).coerceAtLeast(6.dp)
+                                    val dotHeight = (6.dp - (activeBounce * 0.25f)).coerceIn(4.dp, 6.dp)
                                     val dotColor = androidx.compose.ui.graphics.lerp(inactiveColor, activeColor, progress)
 
                                     Box(
@@ -261,7 +286,7 @@ fun CustomizeWidgetScreen(
                                     ) {
                                         Box(
                                             modifier = Modifier
-                                                .size(width = dotWidth, height = 6.dp)
+                                                .size(width = dotWidth, height = dotHeight)
                                                 .clip(CircleShape)
                                                 .background(dotColor)
                                         )
