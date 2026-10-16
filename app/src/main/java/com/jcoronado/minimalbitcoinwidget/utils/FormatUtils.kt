@@ -10,6 +10,13 @@ data class FormattedPrice(
     val symbolAtStart: Boolean
 )
 
+data class FormattedPriceParts(
+    val symbol: String,
+    val integerPart: String,
+    val decimalPart: String,
+    val symbolAtStart: Boolean
+)
+
 object FormatUtils {
 
     /**
@@ -58,6 +65,58 @@ object FormatUtils {
             price = priceOnly,
             symbolAtStart = isSymbolAtStart
         )
+    }
+
+    /**
+     * Splits price into integer and decimal parts along with currency symbol,
+     * respecting locale-specific grouping and decimal separators.
+     */
+    fun formatPriceParts(price: Double, currencyCode: String): FormattedPriceParts {
+        val currency = try {
+            Currency.getInstance(currencyCode.uppercase(Locale.ROOT))
+        } catch (_: Exception) {
+            Currency.getInstance("USD")
+        }
+
+        val nativeSymbol = getNativeSymbol(currency)
+        val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
+        var separator = "."
+
+        if (formatter is DecimalFormat) {
+            val symbols = formatter.decimalFormatSymbols
+            symbols.currencySymbol = nativeSymbol
+            formatter.decimalFormatSymbols = symbols
+
+            val fractionDigits = if (currency.defaultFractionDigits >= 0) {
+                currency.defaultFractionDigits
+            } else {
+                2
+            }
+            formatter.minimumFractionDigits = fractionDigits
+            formatter.maximumFractionDigits = fractionDigits
+            separator = symbols.decimalSeparator.toString()
+        }
+
+        val fullFormattedString = formatter.format(price)
+        val isSymbolAtStart = fullFormattedString.trim().startsWith(nativeSymbol)
+        val priceOnly = fullFormattedString.replace(nativeSymbol, "").trim()
+
+        val lastSepIndex = priceOnly.lastIndexOf(separator)
+        return if (lastSepIndex != -1) {
+            FormattedPriceParts(
+                symbol = nativeSymbol,
+                integerPart = priceOnly.substring(0, lastSepIndex),
+                decimalPart = priceOnly.substring(lastSepIndex),
+                symbolAtStart = isSymbolAtStart
+            )
+        } else {
+            FormattedPriceParts(
+                symbol = nativeSymbol,
+                integerPart = priceOnly,
+                decimalPart = "",
+                symbolAtStart = isSymbolAtStart
+            )
+        }
     }
 
     /**

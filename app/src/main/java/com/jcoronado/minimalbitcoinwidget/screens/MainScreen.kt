@@ -26,10 +26,12 @@ import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -61,8 +63,11 @@ fun MainScreen(
     uiState: PriceUiState,
     onRefresh: () -> Unit,
     onCustomizeWidgetClick: () -> Unit,
-    onAddWidgetClick: () -> Unit,
+    onAddMinimalWidgetClick: () -> Unit,
+    onAddTrendlineWidgetClick: () -> Unit,
 ) {
+    var showAddWidgetSheet by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -95,7 +100,15 @@ fun MainScreen(
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
             CustomizeWidgetShortcut(onClick = onCustomizeWidgetClick)
-            AddWidgetShortcut(onClick = onAddWidgetClick)
+            AddWidgetShortcut(onClick = { showAddWidgetSheet = true })
+        }
+
+        if (showAddWidgetSheet) {
+            AddWidgetBottomSheet(
+                onDismissRequest = { showAddWidgetSheet = false },
+                onPinMinimal = onAddMinimalWidgetClick,
+                onPinTrendline = onAddTrendlineWidgetClick
+            )
         }
     }
 }
@@ -174,6 +187,83 @@ fun AddWidgetShortcut(onClick: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun AddWidgetBottomSheet(
+    onDismissRequest: () -> Unit,
+    onPinMinimal: () -> Unit,
+    onPinTrendline: () -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val view = LocalView.current
+
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        sheetState = sheetState,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
+        ) {
+            SegmentedListItem(
+                shapes = ListItemDefaults.segmentedShapes(index = 0, count = 2),
+                verticalAlignment = Alignment.CenterVertically,
+                onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    onDismissRequest()
+                    onPinMinimal()
+                },
+                leadingContent = {
+                    Icon(
+                        painterResource(R.drawable.rounded_attach_money_24),
+                        contentDescription = stringResource(R.string.update_currency_icon_description)
+                    )
+                },
+                content = {
+                    Text(
+                        text = stringResource(R.string.widget_preview_price),
+                        fontWeight = FontWeight.Medium
+                    )
+                },
+                supportingContent = {
+                    Text(
+                        text = stringResource(R.string.add_widget_minimal_desc),
+                    )
+                }
+            )
+            SegmentedListItem(
+                shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2),
+                verticalAlignment = Alignment.CenterVertically,
+                onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    onDismissRequest()
+                    onPinTrendline()
+                },
+                leadingContent = {
+                    Icon(
+                        painterResource(R.drawable.rounded_show_chart_24),
+                        contentDescription = stringResource(R.string.chart_data_icon_description)
+                    )
+                },
+                content = {
+                    Text(
+                        text = stringResource(R.string.widget_preview_trendline),
+                        fontWeight = FontWeight.Medium
+                    )
+                },
+                supportingContent = {
+                    Text(
+                        text = stringResource(R.string.add_widget_trendline_desc),
+                    )
+                }
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
@@ -183,6 +273,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
     var scrubbedPrice by remember { mutableStateOf<Double?>(null) }
     var scrubbedTimestamp by remember { mutableStateOf<Long?>(null) }
+    var animationTrigger by remember { mutableStateOf(0) }
 
     val displayPrice = scrubbedPrice ?: uiState.price
     val isScrubbing = scrubbedPrice != null
@@ -200,7 +291,10 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         SegmentedListItem(
-            onClick = {}, colors = colors, shapes = ListItemDefaults.segmentedShapes(
+            onClick = {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                animationTrigger++
+            }, colors = colors, shapes = ListItemDefaults.segmentedShapes(
                 index = 0, count = 2
             )
         ) {
@@ -338,6 +432,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                             isPositive = uiState.percentageChange >= 0,
                             isUnavailable = isChartUnavailable,
                             showOverlay = showChartOverlay,
+                            animationKey = animationTrigger,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(90.dp)
@@ -400,7 +495,8 @@ fun MainScreenPreview() {
             ),
             onRefresh = { },
             onCustomizeWidgetClick = { },
-            onAddWidgetClick = { }
+            onAddMinimalWidgetClick = { },
+            onAddTrendlineWidgetClick = { }
         )
     }
 }

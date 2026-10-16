@@ -496,7 +496,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = 1.23,
-            intervalLabelResId = R.string.interval_24h,
+            intervalLabelResId = R.string.interval_7d,
             currency = "USD",
         )
         WidgetContent(state)

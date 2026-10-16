@@ -56,7 +56,7 @@ This document serves as a structured technical specification for an AI agent to 
 
 ### Task 4: Widget Consolidation
 
-- **Goal:** Deprecate Legacy widget logic at a future date (2027).
+- **Goal:** Deprecate Legacy widget logic at a future date (2027) alongside the `v4.0.0` release (see Task 7).
 - **Instructions:**
   1. Evaluate if Glance covers all necessary features.
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
@@ -74,5 +74,42 @@ This document serves as a structured technical specification for an AI agent to 
   2. In `onReceive`, call `Prefs.checkAppUpdateAndInvalidateCache(prefs)` to sync version tracking.
   3. Immediately invoke `PriceViewModel.refreshWidgetsFromCache(context)` to redraw both Glance and Legacy widgets with fresh resource IDs.
   4. Ensure `PriceUpdateWorker.enqueue(context)` is re-verified so background polling schedules persist seamlessly after updates.
+
+---
+
+## Phase 4: Android OS Lifecycle & Versioning Roadmap (2027)
+
+### Task 6: Early 2027 — Drop Android 9 & 10 (Minor Release: `v3.7.0`)
+
+- **Goal:** Modernize baseline OS support by dropping Android 9 (API 28) and Android 10 (API 29).
+- **Impact Analysis (Oct 2026 data):**
+  - Android 9: 1 active user (~0.2%)
+  - Android 10: 6 active users (~1.2%)
+  - Total audience retained: **~98.6%** (Android 11+).
+- **Target Files:**
+  - `app/build.gradle.kts` (`minSdk = 30`)
+  - `AGENTS.md` (Update Tech Stack: `Min SDK 30`)
+- **Instructions:**
+  1. Bump `minSdk` from 28 to 30 in `app/build.gradle.kts`.
+  2. Treat as a **Minor** version bump (e.g., `3.7.0`) since this is routine maintenance with minimal audience impact.
+  3. Existing installations on Android 9/10 continue running without breaking; they simply remain on the last compatible APK.
+
+### Task 7: Later in 2027 — Android 12 Baseline & Major Milestone (`v4.0.0`)
+
+- **Goal:** Advance `minSdk` to 31 (Android 12), remove all legacy XML widget code, and bundle with new UI features for a major `v4.0.0` release.
+- **Context & Synergy with Task 4 (Widget Consolidation):**
+  - Android 12 (API 31) is the architectural dividing line for modern widgets (`system_app_widget_background_radius`, Material You dynamic colors).
+  - Bumping `minSdk` to 31 allows full retirement of `LegacyPriceWidget` and backwards-compatible `RemoteViews` layouts.
+- **Target Files:**
+  - `app/build.gradle.kts` (`minSdk = 31`, `versionName = "4.0.0"`)
+  - `AGENTS.md` (Update Tech Stack: `Min SDK 31`)
+  - Remove: `com.jcoronado.minimalbitcoinwidget.widgets.legacy` package and XML widget layouts.
+  - Modify: `PriceWidget.kt`, `TrendlinePriceWidget.kt`, `GlanceColorScheme.kt`, `SettingsScreen.kt`, `PriceViewModel.kt`.
+- **Instructions:**
+  1. Bump `minSdk` to 31 in `app/build.gradle.kts`.
+  2. Execute **Task 4 (Widget Consolidation)**: Delete `widgets.legacy` package, XML layout resources (`legacy_price_widget.xml`), and dual-update logic in `PriceViewModel`.
+  3. Strip out `Build.VERSION.SDK_INT >= 31` and `Build.VERSION_CODES.S` branching across the app.
+  4. Pair with new UI changes and feature additions to deliver a comprehensive, user-facing `v4.0.0` release.
+
 
 

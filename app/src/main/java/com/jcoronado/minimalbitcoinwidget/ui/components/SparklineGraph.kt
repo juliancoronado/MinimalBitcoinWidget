@@ -63,6 +63,8 @@ fun SparklineGraph(
     lastUpdatedTimestamp: Long = System.currentTimeMillis(),
     isUnavailable: Boolean = false,
     showOverlay: Boolean = isUnavailable,
+    showDottedBaseline: Boolean = true,
+    animationKey: Any? = null,
     unavailableMessage: String = stringResource(R.string.chart_unavailable_30d),
     onScrub: (scrubbedPrice: Double?, scrubbedTimestamp: Long?) -> Unit = { _, _ -> }
 ) {
@@ -106,7 +108,7 @@ fun SparklineGraph(
     // Trend line entrance animation state (draws left-to-right on display / data updates)
     val animationProgress = remember { Animatable(0f) }
 
-    LaunchedEffect(effectivePrices) {
+    LaunchedEffect(effectivePrices, lastUpdatedTimestamp, animationKey) {
         animationProgress.snapTo(0f)
         animationProgress.animateTo(
             targetValue = 1f,
@@ -199,7 +201,24 @@ fun SparklineGraph(
                 Offset(x, y)
             }
 
-            // Construct smooth Catmull-Rom Spline Path
+            // 1. Draw dotted opening reference baseline (matching trendline widget)
+            if (showDottedBaseline && !isUnavailable && points.isNotEmpty()) {
+                val baselineY = points.first().y
+                val baselineDotColor = normalLineColor.copy(alpha = 0.40f)
+                val dotRadius = 1.1.dp.toPx()
+                val dotSpacing = 7.5.dp.toPx()
+                var currentX = 0f
+                while (currentX <= width) {
+                    drawCircle(
+                        color = baselineDotColor,
+                        radius = dotRadius,
+                        center = Offset(currentX, baselineY)
+                    )
+                    currentX += dotSpacing
+                }
+            }
+
+            // 2. Construct smooth Catmull-Rom Spline Path
             val path = Path().apply {
                 if (points.size >= 2) {
                     moveTo(points[0].x, points[0].y)

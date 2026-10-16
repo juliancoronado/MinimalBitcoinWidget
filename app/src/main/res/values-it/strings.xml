@@ -2,6 +2,9 @@
 <resources>
     <string name="settings">Impostazioni</string>
     <string name="last_updated">Ultimo aggiornamento: %1$s</string>
+    <string name="legacy_widget_picker_description">Presto ritirato - usa il widget del prezzo</string>
+    <string name="glance_widget_picker_description">Visualizza il prezzo attuale di Bitcoin</string>
+    <string name="trendline_widget_picker_description">Visualizza il prezzo attuale di Bitcoin con una linea di tendenza</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Dati</string>
@@ -25,6 +28,8 @@
     <string name="customize_widget">Personalizza widget</string>
     <string name="widget_font">Carattere</string>
     <string name="widget_font_preview_header">Anteprima</string>
+    <string name="widget_preview_price">Prezzo</string>
+    <string name="widget_preview_trendline">Trendline</string>
     <string name="widget_font_options_header">Caratteri disponibili</string>
     <string name="widget_font_icon_description">Icona carattere widget</string>
     <string name="customize_widget_icon_description">Icona personalizza widget</string>
@@ -65,7 +70,9 @@
     <string name="customize_shortcut_title">Personalizza</string>
     <string name="customize_widget_shortcut_description">Carattere, colore, dimensione e tema</string>
     <string name="add_widget_shortcut_title">Aggiungi alla schermata iniziale</string>
-    <string name="add_widget_shortcut_description">Aggiungi widget alla schermata iniziale</string>
+    <string name="add_widget_shortcut_description">Scegli un widget per la schermata iniziale</string>
+    <string name="add_widget_minimal_desc">Prezzo compatto e variazione percentuale</string>
+    <string name="add_widget_trendline_desc">Prezzo con grafico di tendenza sparkline</string>
     <string name="rate_app_shortcut_title">Valuta su Google Play</string>
     <string name="rate_app_shortcut_description">Supporta l\'app lasciando una recensione</string>
 

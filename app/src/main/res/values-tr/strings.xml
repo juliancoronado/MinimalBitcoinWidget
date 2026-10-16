@@ -2,6 +2,9 @@
 <resources>
     <string name="settings">Ayarlar</string>
     <string name="last_updated">Son Güncelleme: %1$s</string>
+    <string name="legacy_widget_picker_description">Yakında kaldırılacak - Fiyat widget\'ını kullanın</string>
+    <string name="glance_widget_picker_description">Güncel Bitcoin fiyatını görüntüleyin</string>
+    <string name="trendline_widget_picker_description">Bir trend çizgisiyle güncel Bitcoin fiyatını görüntüleyin</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Veri</string>
@@ -25,6 +28,8 @@
     <string name="customize_widget">Widget\'ı Özelleştir</string>
     <string name="widget_font">Yazı Tipi</string>
     <string name="widget_font_preview_header">Önizleme</string>
+    <string name="widget_preview_price">Fiyat</string>
+    <string name="widget_preview_trendline">Trend çizgisi</string>
     <string name="widget_font_options_header">Kullanılabilir Yazı Tipleri</string>
     <string name="widget_font_icon_description">Widget yazı tipi simgesi</string>
     <string name="customize_widget_icon_description">Widget özelleştirme simgesi</string>
@@ -65,7 +70,9 @@
     <string name="customize_shortcut_title">Özelleştir</string>
     <string name="customize_widget_shortcut_description">Yazı tipi, renk, boyut ve tema</string>
     <string name="add_widget_shortcut_title">Ana Ekrana Ekle</string>
-    <string name="add_widget_shortcut_description">Ana ekrana bir widget ekleyin</string>
+    <string name="add_widget_shortcut_description">Ana ekranınız için bir widget seçin</string>
+    <string name="add_widget_minimal_desc">Kompakt fiyat ve değişim yüzdesi</string>
+    <string name="add_widget_trendline_desc">Sparkline trend grafikli fiyat</string>
     <string name="rate_app_shortcut_title">Google Play\'de Puanlayın</string>
     <string name="rate_app_shortcut_description">Bir değerlendirme bırakarak uygulamayı destekleyin</string>
 

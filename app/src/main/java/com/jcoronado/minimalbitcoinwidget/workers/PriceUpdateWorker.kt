@@ -26,6 +26,7 @@ import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
 import com.jcoronado.minimalbitcoinwidget.viewmodels.PriceViewModel
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -86,10 +87,18 @@ class PriceUpdateWorker(
     private suspend fun handleError(e: Exception): Result {
         val manager = GlanceAppWidgetManager(context)
         val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
+        val trendlineIds = manager.getGlanceIds(TrendlinePriceWidget::class.java)
         var lastValid: PriceWidgetState.Available? = null
 
         if (glanceIds.isNotEmpty()) {
             val currentState: PriceWidgetState = PriceWidget().getAppWidgetState(context, glanceIds.first())
+            lastValid = when (currentState) {
+                is PriceWidgetState.Available -> currentState
+                is PriceWidgetState.Error -> currentState.lastValidState
+                else -> null
+            }
+        } else if (trendlineIds.isNotEmpty()) {
+            val currentState: PriceWidgetState = TrendlinePriceWidget().getAppWidgetState(context, trendlineIds.first())
             lastValid = when (currentState) {
                 is PriceWidgetState.Available -> currentState
                 is PriceWidgetState.Error -> currentState.lastValidState
@@ -137,11 +146,12 @@ class PriceUpdateWorker(
             CoroutineScope(Dispatchers.IO).launch {
                 val glanceManager = GlanceAppWidgetManager(context)
                 val glanceIds = glanceManager.getGlanceIds(PriceWidget::class.java)
+                val trendlineIds = glanceManager.getGlanceIds(TrendlinePriceWidget::class.java)
 
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 val legacyIds = appWidgetManager.getAppWidgetIds(ComponentName(context, PriceViewModel.LEGACY_WIDGET_WRAPPER_CLASS))
 
-                if (glanceIds.isEmpty() && legacyIds.isEmpty()) {
+                if (glanceIds.isEmpty() && trendlineIds.isEmpty() && legacyIds.isEmpty()) {
                     Log.d(LOG_TAG, "No widgets left. Cancelling work.")
                     WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
                 }

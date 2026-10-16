@@ -8,7 +8,7 @@ Created: Oct. 13th, 2026
 > This specification contains the complete architecture, visual design parameters, and verbatim source code required to re-implement the **Trendline Glance Widget (Expressive)** in Minimal Bitcoin Widget (`MinimalBitcoinWidget`).
 >
 > An exact working commit of this implementation is also preserved on the git branch:
-> `feature/expressive-glance-trendline-widget`
+> `feature/trendline-widget`
 
 ---
 
@@ -1207,7 +1207,7 @@ Path: `app/src/main/res/xml/trendline_price_widget_info.xml`
     android:description="@string/trendline_widget_picker_description"
     android:previewImage="@drawable/glance_widget_preview"
     android:minWidth="140dp"
-    android:minHeight="60dp"
+    android:minHeight="120dp"
     android:resizeMode="horizontal|vertical"
     android:minResizeWidth="140dp"
     android:minResizeHeight="60dp"
@@ -1224,9 +1224,9 @@ Path: `app/src/main/res/xml-v31/trendline_price_widget_info.xml`
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/glance_default_loading_layout"
     android:description="@string/trendline_widget_picker_description"
-    android:previewLayout="@layout/glance_widget_preview"
+    android:previewLayout="@layout/trendline_widget_preview"
     android:minWidth="140dp"
-    android:minHeight="60dp"
+    android:minHeight="120dp"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
     android:targetCellHeight="2"

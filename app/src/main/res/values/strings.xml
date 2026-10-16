@@ -3,9 +3,11 @@
     <string name="app_name" translatable="false">Minimal Bitcoin Widget</string>
 
     <string name="legacy_widget_picker_name" translatable="false">Legacy Price Widget</string>
-    <string name="legacy_widget_picker_description" translatable="false">Quickly view the current BTC price</string>
-    <string name="glance_widget_picker_name" translatable="false">Price Widget (Beta)</string>
-    <string name="glance_widget_picker_description" translatable="false">Quickly view the current Bitcoin price</string>
+    <string name="legacy_widget_picker_description">Retiring soon - use the Price Widget instead</string>
+    <string name="glance_widget_picker_name" translatable="false">Price Widget</string>
+    <string name="glance_widget_picker_description">View the current Bitcoin price</string>
+    <string name="trendline_widget_picker_name" translatable="false">Trendline Widget (Beta)</string>
+    <string name="trendline_widget_picker_description">View the current Bitcoin price with a trendline</string>
 
     <!-- Navigation Pages -->
     <string name="dashboard" translatable="false">Dashboard</string>
@@ -50,6 +52,8 @@
     <string name="customize_widget">Customize Widget</string>
     <string name="widget_font">Font</string>
     <string name="widget_font_preview_header">Preview</string>
+    <string name="widget_preview_price">Price</string>
+    <string name="widget_preview_trendline">Trendline</string>
     <string name="widget_font_options_header">Available Fonts</string>
     <string name="widget_font_icon_description">Widget font icon</string>
     <string name="customize_widget_icon_description">Customize widget icon</string>
@@ -99,7 +103,9 @@
     <string name="customize_shortcut_title">Customize</string>
     <string name="customize_widget_shortcut_description">Font, color, size and theme</string>
     <string name="add_widget_shortcut_title">Add to Home Screen</string>
-    <string name="add_widget_shortcut_description">Place widget on home screen</string>
+    <string name="add_widget_shortcut_description">Pick a widget for your homescreen</string>
+    <string name="add_widget_minimal_desc">Compact price &amp; change percentage</string>
+    <string name="add_widget_trendline_desc">Price with sparkline trend chart</string>
     <string name="rate_app_shortcut_title">Rate on Google Play</string>
     <string name="rate_app_shortcut_description">Support the app by leaving a review</string>
 

@@ -2,6 +2,9 @@
 <resources>
     <string name="settings">Einstellungen</string>
     <string name="last_updated">Zuletzt aktualisiert: %1$s</string>
+    <string name="legacy_widget_picker_description">Wird bald eingestellt - bitte Preis-Widget nutzen</string>
+    <string name="glance_widget_picker_description">Aktuellen Bitcoin-Preis anzeigen</string>
+    <string name="trendline_widget_picker_description">Aktuellen Bitcoin-Preis mit einer Trendlinie anzeigen</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Daten</string>
@@ -25,6 +28,8 @@
     <string name="customize_widget">Widget anpassen</string>
     <string name="widget_font">Schriftart</string>
     <string name="widget_font_preview_header">Vorschau</string>
+    <string name="widget_preview_price">Preis</string>
+    <string name="widget_preview_trendline">Trendlinie</string>
     <string name="widget_font_options_header">Verfügbare Schriftarten</string>
     <string name="widget_font_icon_description">Widget-Schriftartensymbol</string>
     <string name="customize_widget_icon_description">Widget anpassen-Symbol</string>
@@ -65,7 +70,9 @@
     <string name="customize_shortcut_title">Anpassen</string>
     <string name="customize_widget_shortcut_description">Schriftart, Farbe, Größe und Design</string>
     <string name="add_widget_shortcut_title">Zum Startbildschirm hinzufügen</string>
-    <string name="add_widget_shortcut_description">Widget zum Startbildschirm hinzufügen</string>
+    <string name="add_widget_shortcut_description">Wählen Sie ein Widget für Ihren Startbildschirm</string>
+    <string name="add_widget_minimal_desc">Kompakter Preis &amp; prozentuale Änderung</string>
+    <string name="add_widget_trendline_desc">Preis mit Sparkline-Trendgrafik</string>
     <string name="rate_app_shortcut_title">Im Google Play Store bewerten</string>
     <string name="rate_app_shortcut_description">Unterstützen Sie die App mit einer Bewertung</string>
 
