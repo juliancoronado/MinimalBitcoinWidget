@@ -2,7 +2,9 @@
 <resources>
     <string name="settings">Impostazioni</string>
     <string name="last_updated">Ultimo aggiornamento: %1$s</string>
-    <string name="trendline_widget_picker_description">Visualizza rapidamente il prezzo di Bitcoin con linea di tendenza</string>
+    <string name="legacy_widget_picker_description">Presto ritirato - usa il widget del prezzo</string>
+    <string name="glance_widget_picker_description">Visualizza il prezzo attuale di Bitcoin</string>
+    <string name="trendline_widget_picker_description">Visualizza il prezzo attuale di Bitcoin con una linea di tendenza</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Dati</string>
