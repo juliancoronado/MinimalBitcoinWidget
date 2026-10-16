@@ -228,33 +228,44 @@ fun CustomizeWidgetScreen(
 
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            // Indicator Dots
+                            // Pixel-style Interactive Indicator Dots
                             Row(
-                                horizontalArrangement = Arrangement.Center,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
+                                val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
+                                val activeColor = MaterialTheme.colorScheme.primary
+                                val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f)
+
                                 repeat(PreviewWidgetType.entries.size) { pageIndex ->
-                                    val isSelected = pagerState.currentPage == pageIndex
-                                    val dotColor = if (isSelected) {
-                                        MaterialTheme.colorScheme.primary
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f)
-                                    }
-                                    val dotWidth = if (isSelected) 12.dp else 6.dp
-                                    val dotHeight = 6.dp
+                                    val distance = kotlin.math.abs(scrollPosition - pageIndex)
+                                    val progress = (1f - distance).coerceIn(0f, 1f)
+
+                                    val dotWidth = androidx.compose.ui.unit.lerp(6.dp, 18.dp, progress)
+                                    val dotColor = androidx.compose.ui.graphics.lerp(inactiveColor, activeColor, progress)
+
                                     Box(
                                         modifier = Modifier
-                                            .padding(horizontal = 3.dp)
-                                            .size(width = dotWidth, height = dotHeight)
-                                            .clip(CircleShape)
-                                            .background(dotColor)
-                                            .clickable {
+                                            .height(36.dp)
+                                            .clickable(
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                indication = null
+                                            ) {
                                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                                                 coroutineScope.launch {
                                                     pagerState.animateScrollToPage(pageIndex)
                                                 }
                                             }
-                                    )
+                                            .padding(horizontal = 2.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(width = dotWidth, height = 6.dp)
+                                                .clip(CircleShape)
+                                                .background(dotColor)
+                                        )
+                                    }
                                 }
                             }
                         }
