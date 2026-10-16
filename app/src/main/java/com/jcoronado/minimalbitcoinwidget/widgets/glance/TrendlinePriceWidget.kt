@@ -67,8 +67,8 @@ class TrendlinePriceWidget : GlanceAppWidget() {
     companion object {
         val COMPACT = DpSize(140.dp, 60.dp)
         val WIDE_SLIM = DpSize(260.dp, 60.dp)
-        val MEDIUM = DpSize(160.dp, 140.dp)
-        val LARGE = DpSize(260.dp, 140.dp)
+        val MEDIUM = DpSize(180.dp, 184.dp)
+        val LARGE = DpSize(260.dp, 184.dp)
     }
 
     override val sizeMode = SizeMode.Exact
@@ -308,7 +308,8 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
                 includeGradient = false,
-                strokeWidthDp = 2.0f
+                strokeWidthDp = 2.0f,
+                modifier = GlanceModifier.defaultWeight().fillMaxWidth()
             )
         }
     }
@@ -348,7 +349,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 widgetTheme = widgetTheme,
                 includeGradient = false,
                 strokeWidthDp = 2.2f,
-                modifier = GlanceModifier.width(size.width * 0.52f)
+                modifier = GlanceModifier.width(size.width * 0.52f).height(size.height)
             )
         }
     }
@@ -388,7 +389,8 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
                 includeGradient = false,
-                strokeWidthDp = 2.6f
+                strokeWidthDp = 2.6f,
+                modifier = GlanceModifier.defaultWeight().fillMaxWidth()
             )
         }
     }
@@ -433,7 +435,8 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
                 includeGradient = false,
-                strokeWidthDp = 2.6f
+                strokeWidthDp = 2.6f,
+                modifier = GlanceModifier.defaultWeight().fillMaxWidth()
             )
         }
     }
@@ -448,7 +451,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         widgetTheme: WidgetTheme,
         includeGradient: Boolean = false,
         strokeWidthDp: Float = 2.6f,
-        modifier: GlanceModifier = GlanceModifier.fillMaxWidth()
+        modifier: GlanceModifier = GlanceModifier.fillMaxWidth().height(heightDp)
     ) {
         val context = LocalContext.current
         val widthPx = TrendlineBitmapRenderer.dpToPx(context, widthDp.value).toInt().coerceAtLeast(10)
@@ -478,7 +481,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
             provider = ImageProvider(bitmap),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
-            modifier = modifier.height(heightDp)
+            modifier = modifier
         )
     }
 

@@ -4,6 +4,8 @@
     android:previewImage="@drawable/glance_widget_preview"
     android:minWidth="140dp"
     android:minHeight="120dp"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
     android:resizeMode="horizontal|vertical"
     android:minResizeWidth="140dp"
     android:minResizeHeight="120dp"
