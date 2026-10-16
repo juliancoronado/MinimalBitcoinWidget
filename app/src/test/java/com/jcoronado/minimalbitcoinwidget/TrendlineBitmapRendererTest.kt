@@ -30,11 +30,11 @@ class TrendlineBitmapRendererTest {
         assertEquals(260.dp, TrendlinePriceWidget.WIDE_SLIM.width)
         assertEquals(60.dp, TrendlinePriceWidget.WIDE_SLIM.height)
 
-        assertEquals(160.dp, TrendlinePriceWidget.MEDIUM.width)
-        assertEquals(140.dp, TrendlinePriceWidget.MEDIUM.height)
+        assertEquals(180.dp, TrendlinePriceWidget.MEDIUM.width)
+        assertEquals(184.dp, TrendlinePriceWidget.MEDIUM.height)
 
         assertEquals(260.dp, TrendlinePriceWidget.LARGE.width)
-        assertEquals(140.dp, TrendlinePriceWidget.LARGE.height)
+        assertEquals(184.dp, TrendlinePriceWidget.LARGE.height)
     }
 
     @Test

@@ -163,6 +163,11 @@ object TrendlineBitmapRenderer {
         val usableWidth = (w.toFloat() - leftPaddingPx - rightPaddingPx).coerceAtLeast(1f)
         val usableHeight = (h.toFloat() - topPaddingPx - bottomPaddingPx).coerceAtLeast(1f)
 
+        // Scale vertical space occupied by the trendline to 80% with symmetric 10% top & bottom padding
+        val chartVerticalScale = 0.80f
+        val verticalInsetPx = usableHeight * ((1f - chartVerticalScale) / 2f)
+        val chartUsableHeight = usableHeight * chartVerticalScale
+
         val minPrice = smoothPrices.minOrNull() ?: 0.0
         val maxPrice = smoothPrices.maxOrNull() ?: 1.0
 
@@ -174,7 +179,7 @@ object TrendlineBitmapRenderer {
                 maxPrice = maxPrice,
                 verticalPaddingFraction = SparklineScaleCalculator.DEFAULT_VERTICAL_PADDING_FRACTION
             )
-            val y = h.toFloat() - bottomPaddingPx - (yFraction * usableHeight)
+            val y = h.toFloat() - bottomPaddingPx - verticalInsetPx - (yFraction * chartUsableHeight)
             PointF(x, y)
         }
 
