@@ -218,8 +218,8 @@ fun AddWidgetBottomSheet(
                 },
                 leadingContent = {
                     Icon(
-                        painterResource(R.drawable.rounded_widgets_24),
-                        contentDescription = stringResource(R.string.widgets_icon_description)
+                        painterResource(R.drawable.rounded_attach_money_24),
+                        contentDescription = stringResource(R.string.update_currency_icon_description)
                     )
                 },
                 content = {
@@ -231,12 +231,6 @@ fun AddWidgetBottomSheet(
                 supportingContent = {
                     Text(
                         text = stringResource(R.string.add_widget_minimal_desc),
-                    )
-                },
-                trailingContent = {
-                    Icon(
-                        painterResource(R.drawable.rounded_add_24),
-                        contentDescription = stringResource(R.string.add_icon_description)
                     )
                 }
             )
@@ -263,12 +257,6 @@ fun AddWidgetBottomSheet(
                 supportingContent = {
                     Text(
                         text = stringResource(R.string.add_widget_trendline_desc),
-                    )
-                },
-                trailingContent = {
-                    Icon(
-                        painterResource(R.drawable.rounded_add_24),
-                        contentDescription = stringResource(R.string.add_icon_description)
                     )
                 }
             )
