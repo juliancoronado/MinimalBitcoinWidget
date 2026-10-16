@@ -86,7 +86,7 @@ object TrendlineBitmapRenderer {
         strokeColor: Int,
         widthPx: Int,
         heightPx: Int,
-        includeGradient: Boolean = true,
+        includeGradient: Boolean = false,
         strokeWidthDp: Float = DEFAULT_STROKE_WIDTH_DP
     ): Bitmap {
         return createTrendlineBitmap(
@@ -117,7 +117,7 @@ object TrendlineBitmapRenderer {
         strokeColor: Int,
         widthPx: Int,
         heightPx: Int,
-        fillStyle: TrendlineFillStyle = TrendlineFillStyle.SUBTLE,
+        fillStyle: TrendlineFillStyle = TrendlineFillStyle.NONE,
         strokeWidthDp: Float = DEFAULT_STROKE_WIDTH_DP,
         drawDashedBaseline: Boolean = false,
         drawLiveDot: Boolean = false,

@@ -307,7 +307,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 heightDp = (size.height - 68.dp).coerceAtLeast(20.dp),
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
-                includeGradient = true,
+                includeGradient = false,
                 strokeWidthDp = 2.0f
             )
         }
@@ -346,7 +346,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 heightDp = size.height,
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
-                includeGradient = true,
+                includeGradient = false,
                 strokeWidthDp = 2.2f,
                 modifier = GlanceModifier.width(size.width * 0.52f)
             )
@@ -387,7 +387,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 heightDp = (size.height - 76.dp).coerceAtLeast(44.dp),
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
-                includeGradient = true,
+                includeGradient = false,
                 strokeWidthDp = 2.6f
             )
         }
@@ -432,7 +432,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 heightDp = (size.height - 64.dp).coerceAtLeast(48.dp),
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme,
-                includeGradient = true,
+                includeGradient = false,
                 strokeWidthDp = 2.6f
             )
         }
@@ -446,7 +446,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         heightDp: Dp,
         colorStyle: WidgetColorStyle,
         widgetTheme: WidgetTheme,
-        includeGradient: Boolean = true,
+        includeGradient: Boolean = false,
         strokeWidthDp: Float = 2.6f,
         modifier: GlanceModifier = GlanceModifier.fillMaxWidth()
     ) {

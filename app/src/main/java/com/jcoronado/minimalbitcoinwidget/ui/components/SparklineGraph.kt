@@ -63,6 +63,8 @@ fun SparklineGraph(
     lastUpdatedTimestamp: Long = System.currentTimeMillis(),
     isUnavailable: Boolean = false,
     showOverlay: Boolean = isUnavailable,
+    showDottedBaseline: Boolean = true,
+    showLiveDot: Boolean = true,
     unavailableMessage: String = stringResource(R.string.chart_unavailable_30d),
     onScrub: (scrubbedPrice: Double?, scrubbedTimestamp: Long?) -> Unit = { _, _ -> }
 ) {
@@ -199,7 +201,24 @@ fun SparklineGraph(
                 Offset(x, y)
             }
 
-            // Construct smooth Catmull-Rom Spline Path
+            // 1. Draw dotted opening reference baseline (matching trendline widget)
+            if (showDottedBaseline && !isUnavailable && points.isNotEmpty()) {
+                val baselineY = points.first().y
+                val baselineDotColor = normalLineColor.copy(alpha = 0.40f)
+                val dotRadius = 1.1.dp.toPx()
+                val dotSpacing = 7.5.dp.toPx()
+                var currentX = 0f
+                while (currentX <= width) {
+                    drawCircle(
+                        color = baselineDotColor,
+                        radius = dotRadius,
+                        center = Offset(currentX, baselineY)
+                    )
+                    currentX += dotSpacing
+                }
+            }
+
+            // 2. Construct smooth Catmull-Rom Spline Path
             val path = Path().apply {
                 if (points.size >= 2) {
                     moveTo(points[0].x, points[0].y)
@@ -277,6 +296,32 @@ fun SparklineGraph(
                     color = Color.White,
                     radius = 2.5.dp.toPx(),
                     center = point
+                )
+            }
+
+            // 3. Draw real-time live pulse dot at the endpoint when resting (not scrubbing)
+            if (showLiveDot && !isUnavailable && !isScrubbing && points.isNotEmpty() && currentProgress >= 1f) {
+                val endpoint = points.last()
+
+                // Outer glowing halo (matching stroke color with subtle alpha)
+                drawCircle(
+                    color = normalLineColor.copy(alpha = 0.28f),
+                    radius = 7.5.dp.toPx(),
+                    center = endpoint
+                )
+
+                // Inner solid dot
+                drawCircle(
+                    color = normalLineColor,
+                    radius = 3.2.dp.toPx(),
+                    center = endpoint
+                )
+
+                // Center white pupil
+                drawCircle(
+                    color = Color.White,
+                    radius = 1.4.dp.toPx(),
+                    center = endpoint
                 )
             }
         }
