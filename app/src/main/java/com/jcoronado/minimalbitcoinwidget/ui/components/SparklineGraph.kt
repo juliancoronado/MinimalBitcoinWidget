@@ -305,22 +305,22 @@ fun SparklineGraph(
 
                 // Outer glowing halo (matching stroke color with subtle alpha)
                 drawCircle(
-                    color = normalLineColor.copy(alpha = 0.28f),
-                    radius = 7.5.dp.toPx(),
+                    color = indicatorOuterColor,
+                    radius = 12.dp.toPx(),
                     center = endpoint
                 )
 
                 // Inner solid dot
                 drawCircle(
                     color = normalLineColor,
-                    radius = 3.2.dp.toPx(),
+                    radius = 5.dp.toPx(),
                     center = endpoint
                 )
 
                 // Center white pupil
                 drawCircle(
                     color = Color.White,
-                    radius = 1.4.dp.toPx(),
+                    radius = 2.5.dp.toPx(),
                     center = endpoint
                 )
             }
