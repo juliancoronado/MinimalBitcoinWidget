@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/google_sans_flex_rounded"
-            android:text=" ・ 24H"
+            android:text=" ・ 7D"
             android:textColor="#535F70"
             android:textSize="12sp"
             tools:ignore="HardcodedText" />
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:fontFamily="@font/google_sans_flex_rounded"
-            android:text="81,460.55"
+            android:text="52,849.10"
             android:textColor="#191C20"
             android:textSize="22sp"
             tools:ignore="HardcodedText" />
@@ -86,7 +86,7 @@
             android:layout_height="16dp"
             android:contentDescription="@string/trending_up_icon_description"
             android:src="@drawable/rounded_trending_up_24"
-            android:tint="#36618E"
+            android:tint="@color/widget_dynamic_light_primary"
             tools:ignore="UseAppTint" />
 
         <TextView

@@ -129,7 +129,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                     )
                 } else {
                     PriceWidgetState.Available(
-                        price = 95432.10,
+                        price = 52849.10,
                         changePercentage = 2.45,
                         intervalLabelResId = interval.labelResId,
                         currency = repository.getSelectedCurrency(),
@@ -711,9 +711,9 @@ class TrendlinePriceWidget : GlanceAppWidget() {
     @Composable
     private fun PreviewCompact() {
         val state = PriceWidgetState.Available(
-            price = 95432.10,
+            price = 52849.10,
             changePercentage = 2.45,
-            intervalLabelResId = R.string.interval_24h,
+            intervalLabelResId = R.string.interval_7d,
             currency = "USD",
             sparklinePrices = PLACEHOLDER_SPARKLINE_PRICES
         )

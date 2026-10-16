@@ -15,7 +15,7 @@
         android:paddingTop="12dp"
         android:paddingEnd="14dp">
 
-        <!-- Header: Bitcoin icon / USD ・ 24H -->
+        <!-- Header: Icon / USD ・ 7D -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/google_sans_flex_rounded"
-                android:text=" ・ 24H"
+                android:text=" ・ 7D"
                 android:textColor="#535F70"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText" />
@@ -73,38 +73,43 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:fontFamily="@font/google_sans_flex_rounded"
-                android:text="81,460.55"
+                android:text="52,849.10"
                 android:textColor="#191C20"
                 android:textSize="22sp"
-                android:textStyle="bold"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
-        <!-- PriceChange -->
+        <!-- PriceChange Pill Badge -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:background="@drawable/widget_preview_badge_bg"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:paddingStart="6dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="2dp"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:layout_width="14dp"
-                android:layout_height="14dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_marginTop="1dp"
                 android:contentDescription="@string/trending_up_icon_description"
                 android:src="@drawable/rounded_trending_up_24"
-                android:tint="#2E7D32"
+                android:tint="@color/widget_dynamic_light_on_primary_container"
                 tools:ignore="UseAppTint" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="3dp"
                 android:fontFamily="@font/google_sans_flex_rounded"
-                android:text="+2.45%"
-                android:textColor="#2E7D32"
-                android:textSize="12sp"
+                android:text="2.45%"
+                android:textColor="@color/widget_dynamic_light_on_primary_container"
+                android:textSize="11.5sp"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
