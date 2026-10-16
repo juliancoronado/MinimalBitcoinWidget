@@ -120,10 +120,10 @@ class TrendlineBitmapRendererTest {
     }
 
     @Test
-    fun `PreviewWidgetType entries contain valid string resources for Minimal and Trendline`() {
+    fun `PreviewWidgetType entries contain valid string resources for Price and Trendline`() {
         val entries = com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.entries
         assertEquals(2, entries.size)
-        assertEquals(R.string.widget_preview_minimal, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.MINIMAL.labelResId)
+        assertEquals(R.string.widget_preview_price, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.PRICE.labelResId)
         assertEquals(R.string.widget_preview_trendline, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.TRENDLINE.labelResId)
     }
 }

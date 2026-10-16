@@ -224,7 +224,7 @@ fun AddWidgetBottomSheet(
                 },
                 content = {
                     Text(
-                        text = stringResource(R.string.widget_preview_minimal),
+                        text = stringResource(R.string.widget_preview_price),
                         fontWeight = FontWeight.Medium
                     )
                 },

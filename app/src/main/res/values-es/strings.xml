@@ -28,7 +28,7 @@
     <string name="customize_widget">Personalizar widget</string>
     <string name="widget_font">Fuente</string>
     <string name="widget_font_preview_header">Vista previa</string>
-    <string name="widget_preview_minimal">Minimalista</string>
+    <string name="widget_preview_price">Precio</string>
     <string name="widget_preview_trendline">Tendencia</string>
     <string name="widget_font_options_header">Fuentes disponibles</string>
     <string name="widget_font_icon_description">Icono de fuente del widget</string>

@@ -28,7 +28,7 @@
     <string name="customize_widget">Personnaliser le widget</string>
     <string name="widget_font">Police</string>
     <string name="widget_font_preview_header">Aperçu</string>
-    <string name="widget_preview_minimal">Minimal</string>
+    <string name="widget_preview_price">Prix</string>
     <string name="widget_preview_trendline">Tendance</string>
     <string name="widget_font_options_header">Polices disponibles</string>
     <string name="widget_font_icon_description">Icône de police du widget</string>

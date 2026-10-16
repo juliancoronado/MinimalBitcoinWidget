@@ -85,7 +85,7 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 
 enum class PreviewWidgetType(@StringRes val labelResId: Int) {
-    MINIMAL(R.string.widget_preview_minimal),
+    PRICE(R.string.widget_preview_price),
     TRENDLINE(R.string.widget_preview_trendline)
 }
 
@@ -540,14 +540,14 @@ private fun GlanceWidgetPreviewCard(
     }
 
     val (previewWidth, previewHeight) = when (selectedWidgetType) {
-        PreviewWidgetType.MINIMAL -> Pair(MINIMAL_PREVIEW_WIDTH, MINIMAL_PREVIEW_HEIGHT)
+        PreviewWidgetType.PRICE -> Pair(MINIMAL_PREVIEW_WIDTH, MINIMAL_PREVIEW_HEIGHT)
         PreviewWidgetType.TRENDLINE -> Pair(TRENDLINE_PREVIEW_WIDTH, TRENDLINE_PREVIEW_HEIGHT)
     }
 
     val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState, themedContext, selectedWidgetType) {
         value = try {
             when (selectedWidgetType) {
-                PreviewWidgetType.MINIMAL -> {
+                PreviewWidgetType.PRICE -> {
                     PriceWidget().compose(
                         context = themedContext,
                         size = DpSize(previewWidth, previewHeight),

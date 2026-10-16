@@ -52,7 +52,7 @@
     <string name="customize_widget">Customize Widget</string>
     <string name="widget_font">Font</string>
     <string name="widget_font_preview_header">Preview</string>
-    <string name="widget_preview_minimal">Minimal</string>
+    <string name="widget_preview_price">Price</string>
     <string name="widget_preview_trendline">Trendline</string>
     <string name="widget_font_options_header">Available Fonts</string>
     <string name="widget_font_icon_description">Widget font icon</string>
