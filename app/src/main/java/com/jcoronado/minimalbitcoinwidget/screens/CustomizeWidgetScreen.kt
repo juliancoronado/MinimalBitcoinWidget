@@ -197,7 +197,7 @@ fun CustomizeWidgetScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 12.dp),
+                                .padding(top = 6.dp, bottom = 4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             HorizontalPager(
@@ -226,7 +226,7 @@ fun CustomizeWidgetScreen(
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
 
                             // Pixel-style Interactive Indicator Dots
                             Row(
@@ -246,7 +246,7 @@ fun CustomizeWidgetScreen(
 
                                     Box(
                                         modifier = Modifier
-                                            .height(36.dp)
+                                            .height(24.dp)
                                             .clickable(
                                                 interactionSource = remember { MutableInteractionSource() },
                                                 indication = null
