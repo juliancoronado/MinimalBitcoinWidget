@@ -369,7 +369,11 @@ fun AppNavigation() {
 
 private fun openPlayStore(context: Context) {
     val packageName = context.packageName
-    val marketIntent = Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()).apply {
+    val marketIntent = Intent(
+        Intent.ACTION_VIEW,
+        "market://details?id=$packageName&showAllReviews=true".toUri()
+    ).apply {
+        setPackage("com.android.vending")
         addFlags(
             Intent.FLAG_ACTIVITY_NO_HISTORY or
             Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
@@ -381,7 +385,7 @@ private fun openPlayStore(context: Context) {
     } catch (_: ActivityNotFoundException) {
         val webIntent = Intent(
             Intent.ACTION_VIEW,
-            "https://play.google.com/store/apps/details?id=$packageName".toUri()
+            "https://play.google.com/store/apps/details?id=$packageName&showAllReviews=true".toUri()
         )
         try {
             context.startActivity(webIntent)
