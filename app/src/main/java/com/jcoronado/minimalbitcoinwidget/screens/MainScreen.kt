@@ -285,6 +285,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
     var scrubbedPrice by remember { mutableStateOf<Double?>(null) }
     var scrubbedTimestamp by remember { mutableStateOf<Long?>(null) }
+    var animationTrigger by remember { mutableStateOf(0) }
 
     val displayPrice = scrubbedPrice ?: uiState.price
     val isScrubbing = scrubbedPrice != null
@@ -302,7 +303,10 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         SegmentedListItem(
-            onClick = {}, colors = colors, shapes = ListItemDefaults.segmentedShapes(
+            onClick = {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                animationTrigger++
+            }, colors = colors, shapes = ListItemDefaults.segmentedShapes(
                 index = 0, count = 2
             )
         ) {
@@ -440,6 +444,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                             isPositive = uiState.percentageChange >= 0,
                             isUnavailable = isChartUnavailable,
                             showOverlay = showChartOverlay,
+                            animationKey = animationTrigger,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(90.dp)
