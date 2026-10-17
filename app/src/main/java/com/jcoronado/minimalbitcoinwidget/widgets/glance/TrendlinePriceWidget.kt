@@ -137,7 +137,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                         priceSizeKey = priceSizeKey,
                         colorStyleKey = colorStyleKey,
                         themeKey = themeKey,
-                        sparklinePrices = PLACEHOLDER_SPARKLINE_PRICES
+                        sparklinePrices = if (selectedInterval == 2) emptyList() else PLACEHOLDER_SPARKLINE_PRICES
                     )
                 }
             }
@@ -276,7 +276,8 @@ class TrendlinePriceWidget : GlanceAppWidget() {
     }
 
     /**
-     * Compact (2x1) layout: Top metrics with edge-to-edge sparkline below.
+     * Compact (2x1) layout: Top metrics with edge-to-edge sparkline below,
+     * or centered price info when chart data is unavailable.
      */
     @Composable
     private fun CompactLayout(
@@ -287,35 +288,58 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         widgetTheme: WidgetTheme,
         error: Boolean
     ) {
-        Column(
-            modifier = GlanceModifier.fillMaxSize()
-        ) {
+        val is30d = state.intervalLabelResId == R.string.interval_30d
+        val isUnavailable = is30d || state.sparklinePrices.size < 2
+
+        if (isUnavailable) {
             Column(
-                modifier = GlanceModifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 8.dp)
+                modifier = GlanceModifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(GlanceModifier.defaultWeight())
                 Header(state.currency, state.intervalLabelResId, typeface)
-                Spacer(modifier = GlanceModifier.height(2.dp))
+                Spacer(modifier = GlanceModifier.height(3.dp))
                 PriceValue(state, typeface, scaleFactor = 0.95f)
-                Spacer(modifier = GlanceModifier.height(2.dp))
+                Spacer(modifier = GlanceModifier.height(3.dp))
                 PriceChange(state.changePercentage, error, typeface)
+                Spacer(GlanceModifier.defaultWeight())
             }
-            Spacer(modifier = GlanceModifier.height(2.dp))
-            TrendlineImage(
-                prices = state.sparklinePrices,
-                isPositive = state.changePercentage >= 0,
-                widthDp = size.width,
-                heightDp = (size.height - 68.dp).coerceAtLeast(20.dp),
-                colorStyle = colorStyle,
-                widgetTheme = widgetTheme,
-                includeGradient = false,
-                strokeWidthDp = 2.0f,
-                modifier = GlanceModifier.defaultWeight().fillMaxWidth()
-            )
+        } else {
+            Column(
+                modifier = GlanceModifier.fillMaxSize()
+            ) {
+                Column(
+                    modifier = GlanceModifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 8.dp)
+                ) {
+                    Header(state.currency, state.intervalLabelResId, typeface)
+                    Spacer(modifier = GlanceModifier.height(2.dp))
+                    PriceValue(state, typeface, scaleFactor = 0.95f)
+                    Spacer(modifier = GlanceModifier.height(2.dp))
+                    PriceChange(state.changePercentage, error, typeface)
+                }
+                Spacer(modifier = GlanceModifier.height(2.dp))
+
+                TrendlineImage(
+                    prices = state.sparklinePrices,
+                    isPositive = state.changePercentage >= 0,
+                    widthDp = size.width,
+                    heightDp = (size.height - 68.dp).coerceAtLeast(20.dp),
+                    colorStyle = colorStyle,
+                    widgetTheme = widgetTheme,
+                    includeGradient = false,
+                    strokeWidthDp = 2.0f,
+                    isUnavailable = false,
+                    typeface = typeface,
+                    modifier = GlanceModifier.defaultWeight().fillMaxWidth()
+                )
+            }
         }
     }
 
     /**
-     * Wide-Slim (4x1 / 3x1) layout: Left metrics + Right wide sparkline bleeding to edge.
+     * Wide-Slim (4x1 / 3x1) layout: Left metrics + Right wide sparkline bleeding to edge,
+     * or a balanced two-column ticker when chart data is unavailable.
      */
     @Composable
     private fun WideSlimLayout(
@@ -326,36 +350,60 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         widgetTheme: WidgetTheme,
         error: Boolean
     ) {
-        Row(
-            modifier = GlanceModifier.fillMaxSize().padding(start = 14.dp, top = 8.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = GlanceModifier.defaultWeight(),
+        val is30d = state.intervalLabelResId == R.string.interval_30d
+        val isUnavailable = is30d || state.sparklinePrices.size < 2
+
+        if (isUnavailable) {
+            Row(
+                modifier = GlanceModifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Header(state.currency, state.intervalLabelResId, typeface)
-                Spacer(modifier = GlanceModifier.height(2.dp))
-                PriceValue(state, typeface, scaleFactor = 1.0f)
-                Spacer(modifier = GlanceModifier.height(2.dp))
-                PriceChange(state.changePercentage, error, typeface)
+                Column(
+                    modifier = GlanceModifier.defaultWeight(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Header(state.currency, state.intervalLabelResId, typeface)
+                    Spacer(modifier = GlanceModifier.height(4.dp))
+                    PriceChange(state.changePercentage, error, typeface)
+                }
+                PriceValue(state, typeface, scaleFactor = 1.15f)
             }
-            TrendlineImage(
-                prices = state.sparklinePrices,
-                isPositive = state.changePercentage >= 0,
-                widthDp = size.width * 0.52f,
-                heightDp = size.height,
-                colorStyle = colorStyle,
-                widgetTheme = widgetTheme,
-                includeGradient = false,
-                strokeWidthDp = 2.2f,
-                modifier = GlanceModifier.width(size.width * 0.52f).height(size.height)
-            )
+        } else {
+            Row(
+                modifier = GlanceModifier.fillMaxSize().padding(start = 14.dp, top = 8.dp, bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = GlanceModifier.defaultWeight(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Header(state.currency, state.intervalLabelResId, typeface)
+                    Spacer(modifier = GlanceModifier.height(2.dp))
+                    PriceValue(state, typeface, scaleFactor = 1.0f)
+                    Spacer(modifier = GlanceModifier.height(2.dp))
+                    PriceChange(state.changePercentage, error, typeface)
+                }
+
+                TrendlineImage(
+                    prices = state.sparklinePrices,
+                    isPositive = state.changePercentage >= 0,
+                    widthDp = size.width * 0.52f,
+                    heightDp = size.height,
+                    colorStyle = colorStyle,
+                    widgetTheme = widgetTheme,
+                    includeGradient = false,
+                    strokeWidthDp = 2.2f,
+                    isUnavailable = false,
+                    typeface = typeface,
+                    modifier = GlanceModifier.width(size.width * 0.52f).height(size.height)
+                )
+            }
         }
     }
 
     /**
-     * Medium (2x2) layout: Stacked header, bold price, change pill, and edge-to-edge sparkline sitting directly below.
+     * Medium (2x2) layout: Stacked header, bold price, change pill, and edge-to-edge sparkline below,
+     * or centered, well-proportioned price info when chart data is unavailable.
      */
     @Composable
     private fun MediumLayout(
@@ -366,37 +414,59 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         widgetTheme: WidgetTheme,
         error: Boolean
     ) {
-        Column(
-            modifier = GlanceModifier.fillMaxSize()
-        ) {
+        val is30d = state.intervalLabelResId == R.string.interval_30d
+        val isUnavailable = is30d || state.sparklinePrices.size < 2
+
+        if (isUnavailable) {
             Column(
-                modifier = GlanceModifier.fillMaxWidth().padding(start = 14.dp, end = 14.dp, top = 12.dp)
+                modifier = GlanceModifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(GlanceModifier.defaultWeight())
                 Header(state.currency, state.intervalLabelResId, typeface)
-                Spacer(modifier = GlanceModifier.height(3.dp))
-                PriceValue(state, typeface, scaleFactor = 1.05f)
-                Spacer(modifier = GlanceModifier.height(3.dp))
+                Spacer(modifier = GlanceModifier.height(10.dp))
+                PriceValue(state, typeface, scaleFactor = 1.15f)
+                Spacer(modifier = GlanceModifier.height(10.dp))
                 PriceChange(state.changePercentage, error, typeface)
+                Spacer(GlanceModifier.defaultWeight())
             }
+        } else {
+            Column(
+                modifier = GlanceModifier.fillMaxSize()
+            ) {
+                Column(
+                    modifier = GlanceModifier.fillMaxWidth().padding(start = 14.dp, end = 14.dp, top = 12.dp)
+                ) {
+                    Header(state.currency, state.intervalLabelResId, typeface)
+                    Spacer(modifier = GlanceModifier.height(3.dp))
+                    PriceValue(state, typeface, scaleFactor = 1.05f)
+                    Spacer(modifier = GlanceModifier.height(3.dp))
+                    PriceChange(state.changePercentage, error, typeface)
+                }
 
-            Spacer(modifier = GlanceModifier.height(3.dp))
+                Spacer(modifier = GlanceModifier.height(3.dp))
 
-            TrendlineImage(
-                prices = state.sparklinePrices,
-                isPositive = state.changePercentage >= 0,
-                widthDp = size.width,
-                heightDp = (size.height - 76.dp).coerceAtLeast(44.dp),
-                colorStyle = colorStyle,
-                widgetTheme = widgetTheme,
-                includeGradient = false,
-                strokeWidthDp = 2.6f,
-                modifier = GlanceModifier.defaultWeight().fillMaxWidth()
-            )
+                TrendlineImage(
+                    prices = state.sparklinePrices,
+                    isPositive = state.changePercentage >= 0,
+                    widthDp = size.width,
+                    heightDp = (size.height - 76.dp).coerceAtLeast(44.dp),
+                    colorStyle = colorStyle,
+                    widgetTheme = widgetTheme,
+                    includeGradient = false,
+                    strokeWidthDp = 2.6f,
+                    isUnavailable = false,
+                    typeface = typeface,
+                    modifier = GlanceModifier.defaultWeight().fillMaxWidth()
+                )
+            }
         }
     }
 
     /**
-     * Large (4x2) layout: Full dashboard with header & pill row, large price, and edge-to-edge sparkline.
+     * Large (4x2) layout: Full dashboard with header & pill row, large price, and edge-to-edge sparkline,
+     * or spacious header & pill row with prominent centered price when chart data is unavailable.
      */
     @Composable
     private fun LargeLayout(
@@ -407,11 +477,14 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         widgetTheme: WidgetTheme,
         error: Boolean
     ) {
-        Column(
-            modifier = GlanceModifier.fillMaxSize()
-        ) {
+        val is30d = state.intervalLabelResId == R.string.interval_30d
+        val isUnavailable = is30d || state.sparklinePrices.size < 2
+
+        if (isUnavailable) {
             Column(
-                modifier = GlanceModifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 14.dp)
+                modifier = GlanceModifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 18.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
                     modifier = GlanceModifier.fillMaxWidth(),
@@ -421,23 +494,45 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                     Spacer(modifier = GlanceModifier.defaultWeight())
                     PriceChange(state.changePercentage, error, typeface)
                 }
-                Spacer(modifier = GlanceModifier.height(4.dp))
-                PriceValue(state, typeface, scaleFactor = 1.20f)
+                Spacer(GlanceModifier.defaultWeight())
+                PriceValue(state, typeface, scaleFactor = 1.35f)
+                Spacer(GlanceModifier.defaultWeight())
             }
+        } else {
+            Column(
+                modifier = GlanceModifier.fillMaxSize()
+            ) {
+                Column(
+                    modifier = GlanceModifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 14.dp)
+                ) {
+                    Row(
+                        modifier = GlanceModifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Header(state.currency, state.intervalLabelResId, typeface)
+                        Spacer(modifier = GlanceModifier.defaultWeight())
+                        PriceChange(state.changePercentage, error, typeface)
+                    }
+                    Spacer(modifier = GlanceModifier.height(4.dp))
+                    PriceValue(state, typeface, scaleFactor = 1.20f)
+                }
 
-            Spacer(modifier = GlanceModifier.height(4.dp))
+                Spacer(modifier = GlanceModifier.height(4.dp))
 
-            TrendlineImage(
-                prices = state.sparklinePrices,
-                isPositive = state.changePercentage >= 0,
-                widthDp = size.width,
-                heightDp = (size.height - 64.dp).coerceAtLeast(48.dp),
-                colorStyle = colorStyle,
-                widgetTheme = widgetTheme,
-                includeGradient = false,
-                strokeWidthDp = 2.6f,
-                modifier = GlanceModifier.defaultWeight().fillMaxWidth()
-            )
+                TrendlineImage(
+                    prices = state.sparklinePrices,
+                    isPositive = state.changePercentage >= 0,
+                    widthDp = size.width,
+                    heightDp = (size.height - 64.dp).coerceAtLeast(48.dp),
+                    colorStyle = colorStyle,
+                    widgetTheme = widgetTheme,
+                    includeGradient = false,
+                    strokeWidthDp = 2.6f,
+                    isUnavailable = false,
+                    typeface = typeface,
+                    modifier = GlanceModifier.defaultWeight().fillMaxWidth()
+                )
+            }
         }
     }
 
@@ -451,31 +546,47 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         widgetTheme: WidgetTheme,
         includeGradient: Boolean = false,
         strokeWidthDp: Float = 2.6f,
+        isUnavailable: Boolean = false,
+        unavailableMessage: String? = null,
+        typeface: Typeface? = null,
         modifier: GlanceModifier = GlanceModifier.fillMaxWidth().height(heightDp)
     ) {
         val context = LocalContext.current
         val widthPx = TrendlineBitmapRenderer.dpToPx(context, widthDp.value).toInt().coerceAtLeast(10)
         val heightPx = TrendlineBitmapRenderer.dpToPx(context, heightDp.value).toInt().coerceAtLeast(10)
 
-        val strokeColor = TrendlineBitmapRenderer.resolveTrendColor(
-            context = context,
-            isPositive = isPositive,
-            colorStyle = colorStyle,
-            widgetTheme = widgetTheme
-        )
+        val unavailable = isUnavailable || prices.size < 2
 
-        val bitmap = TrendlineBitmapRenderer.createTrendlineBitmap(
-            context = context,
-            prices = prices,
-            strokeColor = strokeColor,
-            widthPx = widthPx,
-            heightPx = heightPx,
-            fillStyle = if (includeGradient) TrendlineFillStyle.SUBTLE else TrendlineFillStyle.NONE,
-            strokeWidthDp = strokeWidthDp,
-            drawDashedBaseline = true,
-            drawLiveDot = false,
-            neonGlow = false
-        )
+        val bitmap = if (unavailable) {
+            TrendlineBitmapRenderer.createUnavailableTrendlineBitmap(
+                context = context,
+                widthPx = widthPx,
+                heightPx = heightPx,
+                widgetTheme = widgetTheme,
+                message = unavailableMessage ?: context.getString(R.string.chart_unavailable_30d),
+                typeface = typeface
+            )
+        } else {
+            val strokeColor = TrendlineBitmapRenderer.resolveTrendColor(
+                context = context,
+                isPositive = isPositive,
+                colorStyle = colorStyle,
+                widgetTheme = widgetTheme
+            )
+
+            TrendlineBitmapRenderer.createTrendlineBitmap(
+                context = context,
+                prices = prices,
+                strokeColor = strokeColor,
+                widthPx = widthPx,
+                heightPx = heightPx,
+                fillStyle = if (includeGradient) TrendlineFillStyle.SUBTLE else TrendlineFillStyle.NONE,
+                strokeWidthDp = strokeWidthDp,
+                drawDashedBaseline = true,
+                drawLiveDot = false,
+                neonGlow = false
+            )
+        }
 
         Image(
             provider = ImageProvider(bitmap),
@@ -763,5 +874,20 @@ class TrendlinePriceWidget : GlanceAppWidget() {
             sparklinePrices = PLACEHOLDER_SPARKLINE_PRICES
         )
         WidgetContent(state, LARGE)
+    }
+
+    @Suppress("unused")
+    @OptIn(ExperimentalGlancePreviewApi::class)
+    @Preview(widthDp = 180, heightDp = 180)
+    @Composable
+    private fun PreviewMediumUnavailable30D() {
+        val state = PriceWidgetState.Available(
+            price = 95432.10,
+            changePercentage = 5.21,
+            intervalLabelResId = R.string.interval_30d,
+            currency = "USD",
+            sparklinePrices = emptyList()
+        )
+        WidgetContent(state, MEDIUM)
     }
 }

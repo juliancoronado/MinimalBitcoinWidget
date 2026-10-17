@@ -5,6 +5,11 @@ import android.net.Uri
 import android.os.Build
 import android.view.HapticFeedbackConstants
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
@@ -286,26 +292,51 @@ fun SettingsScreen(
                                 stringResource(R.string.cp_interval2),
                                 stringResource(R.string.cp_interval3)
                             )
-                            ButtonGroup(
-                                overflowIndicator = { },
-                                modifier = Modifier.padding(top = 8.dp),
-                                expandedRatio = 0.02F,
-                                horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
-                                verticalAlignment = Alignment.Top,
-                                content = {
-                                    changePercentageOptions.forEachIndexed { index, value ->
-                                        this.toggleableItem(
-                                            checked = changePercentage == index,
-                                            label = value,
-                                            weight = if (changePercentage == index) 1F else 0.9F,
-                                            onCheckedChange = {
-                                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                                                onChangePercentageSelected(index)
-                                            },
+                            Column {
+                                ButtonGroup(
+                                    overflowIndicator = { },
+                                    modifier = Modifier.padding(top = 8.dp),
+                                    expandedRatio = 0.02F,
+                                    horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+                                    verticalAlignment = Alignment.Top,
+                                    content = {
+                                        changePercentageOptions.forEachIndexed { index, value ->
+                                            this.toggleableItem(
+                                                checked = changePercentage == index,
+                                                label = value,
+                                                weight = if (changePercentage == index) 1F else 0.9F,
+                                                onCheckedChange = {
+                                                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                                                    onChangePercentageSelected(index)
+                                                },
+                                            )
+                                        }
+                                    },
+                                )
+                                AnimatedVisibility(
+                                    visible = changePercentage == 2,
+                                    enter = fadeIn() + expandVertically(),
+                                    exit = fadeOut() + shrinkVertically()
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(top = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.rounded_info_24),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(16.dp),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                        Spacer(modifier = Modifier.width(6.dp))
+                                        Text(
+                                            text = "30 day trendline chart data is currently not available",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
-                                },
-                            )
+                                }
+                            }
                         },
                         onClick = {}, // this method is intentionally left empty
                     )

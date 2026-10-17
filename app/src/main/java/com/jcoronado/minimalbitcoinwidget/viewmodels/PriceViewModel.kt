@@ -202,7 +202,7 @@ class PriceViewModel @JvmOverloads constructor(
                 price = if (currentState.price == 0.0) 52849.10 else currentState.price,
                 errorMessage = null,
                 selectedCurrency = currentState.selectedCurrency,
-                sparklinePrices = if (currentState.sparklinePrices.isNotEmpty()) currentState.sparklinePrices else com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PRICES
+                sparklinePrices = if (currentState.changeIntervalLabelResId == com.jcoronado.minimalbitcoinwidget.R.string.interval_30d) emptyList() else if (currentState.sparklinePrices.isNotEmpty()) currentState.sparklinePrices else com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PRICES
             )
 
             val fontKey = prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key) ?: WidgetFont.DEFAULT.key

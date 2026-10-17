@@ -535,7 +535,7 @@ private fun GlanceWidgetPreviewCard(
             priceSizeKey = selectedPriceSize.key,
             colorStyleKey = selectedColorStyle.key,
             themeKey = selectedTheme.key,
-            sparklinePrices = if (sparklinePrices.isNotEmpty()) sparklinePrices else PLACEHOLDER_SPARKLINE_PRICES
+            sparklinePrices = if (intervalLabelResId == R.string.interval_30d) emptyList() else if (sparklinePrices.isNotEmpty()) sparklinePrices else PLACEHOLDER_SPARKLINE_PRICES
         )
     }
 

@@ -126,4 +126,30 @@ class TrendlineBitmapRendererTest {
         assertEquals(R.string.widget_preview_price, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.PRICE.labelResId)
         assertEquals(R.string.widget_preview_trendline, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.TRENDLINE.labelResId)
     }
+
+    @Test
+    fun `isDarkTheme correctly evaluates explicit DARK and LIGHT widget theme settings`() {
+        val darkResult = com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlineBitmapRenderer.isDarkTheme(null, WidgetTheme.DARK)
+        val lightResult = com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlineBitmapRenderer.isDarkTheme(null, WidgetTheme.LIGHT)
+        assertTrue(darkResult)
+        org.junit.Assert.assertFalse(lightResult)
+    }
+
+    @Test
+    fun `PriceWidgetState Available with 30D interval and empty sparklinePrices serializes properly`() {
+        val state30d = PriceWidgetState.Available(
+            price = 98500.0,
+            changePercentage = 14.2,
+            intervalLabelResId = R.string.interval_30d,
+            currency = "USD",
+            sparklinePrices = emptyList()
+        )
+
+        val encoded = json.encodeToString(PriceWidgetState.serializer(), state30d)
+        val decoded = json.decodeFromString(PriceWidgetState.serializer(), encoded)
+        assertTrue(decoded is PriceWidgetState.Available)
+        val available = decoded as PriceWidgetState.Available
+        assertEquals(R.string.interval_30d, available.intervalLabelResId)
+        assertTrue(available.sparklinePrices.isEmpty())
+    }
 }
