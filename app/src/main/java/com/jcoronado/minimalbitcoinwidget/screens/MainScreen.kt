@@ -286,14 +286,20 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
         SimpleDateFormat("MMM d, hh:mm a", LocalLocale.current.platformLocale).format(ts)
     }
 
+    val is30dInterval = uiState.changeIntervalLabelResId == R.string.interval_30d
+    val isChartUnavailable = is30dInterval || uiState.sparklinePrices.isEmpty()
+    val showChartOverlay = is30dInterval
+
     val cardHeight = if (uiState.showSparkline) 260.dp else 200.dp
     val rowVerticalPadding = if (uiState.showSparkline) 4.dp else 12.dp
 
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         SegmentedListItem(
             onClick = {
-                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                animationTrigger++
+                if (uiState.showSparkline && !isChartUnavailable) {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    animationTrigger++
+                }
             }, colors = colors, shapes = ListItemDefaults.segmentedShapes(
                 index = 0, count = 2
             )
@@ -422,10 +428,6 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
                     }
 
                     if (uiState.showSparkline) {
-                        val is30dInterval = uiState.changeIntervalLabelResId == R.string.interval_30d
-                        val isChartUnavailable = is30dInterval || uiState.sparklinePrices.isEmpty()
-                        val showChartOverlay = is30dInterval
-
                         Spacer(modifier = Modifier.height(16.dp))
                         SparklineGraph(
                             prices = uiState.sparklinePrices,

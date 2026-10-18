@@ -108,12 +108,16 @@ fun SparklineGraph(
     // Trend line entrance animation state (draws left-to-right on display / data updates)
     val animationProgress = remember { Animatable(0f) }
 
-    LaunchedEffect(effectivePrices, lastUpdatedTimestamp, animationKey) {
-        animationProgress.snapTo(0f)
-        animationProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-        )
+    LaunchedEffect(effectivePrices, lastUpdatedTimestamp, animationKey, isUnavailable) {
+        if (isUnavailable) {
+            animationProgress.snapTo(1f)
+        } else {
+            animationProgress.snapTo(0f)
+            animationProgress.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
+            )
+        }
     }
 
     var isScrubbing by remember { mutableStateOf(false) }
@@ -357,9 +361,9 @@ object SparklineScaleCalculator {
  * Modeled after a smooth waveform with drastic amplitude swings: a lower starting baseline, tall primary crest, deep plunge trough, sharp secondary peak, and an elevated ending curve.
  */
 val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = listOf(
-    15.0, 31.0, 36.0, 42.0, 65.0,
-    90.0, 100.0, 99.0, 88.0, 68.0,
-    38.0, 14.0, 3.0, 0.0, 8.0,
-    38.0, 72.0, 88.0, 75.0, 64.0,
-    58.0, 55.0, 58.0, 69.0, 92.0
+    18.0, 20.0, 28.0, 50.0, 75.0,
+    88.0, 90.0, 78.0, 56.0, 28.0,
+    10.0, 2.0, 0.0, 4.0, 18.0,
+    44.0, 74.0, 96.0, 100.0, 92.0,
+    60.0, 44.0, 43.0, 52.0, 70.0
 )
