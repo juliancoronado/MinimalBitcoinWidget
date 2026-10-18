@@ -3,8 +3,8 @@ package com.jcoronado.minimalbitcoinwidget
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartPriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
-import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -12,9 +12,9 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Unit tests for TrendlinePriceWidget and PriceWidgetState sparkline serialization.
+ * Unit tests for ChartPriceWidget and PriceWidgetState sparkline serialization.
  */
-class TrendlineBitmapRendererTest {
+class ChartBitmapRendererTest {
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -23,18 +23,18 @@ class TrendlineBitmapRendererTest {
     }
 
     @Test
-    fun `TrendlinePriceWidget responsive breakpoint sizes match specifications`() {
-        assertEquals(140.dp, TrendlinePriceWidget.COMPACT.width)
-        assertEquals(60.dp, TrendlinePriceWidget.COMPACT.height)
+    fun `ChartPriceWidget responsive breakpoint sizes match specifications`() {
+        assertEquals(140.dp, ChartPriceWidget.COMPACT.width)
+        assertEquals(60.dp, ChartPriceWidget.COMPACT.height)
 
-        assertEquals(260.dp, TrendlinePriceWidget.WIDE_SLIM.width)
-        assertEquals(60.dp, TrendlinePriceWidget.WIDE_SLIM.height)
+        assertEquals(260.dp, ChartPriceWidget.WIDE_SLIM.width)
+        assertEquals(60.dp, ChartPriceWidget.WIDE_SLIM.height)
 
-        assertEquals(180.dp, TrendlinePriceWidget.MEDIUM.width)
-        assertEquals(184.dp, TrendlinePriceWidget.MEDIUM.height)
+        assertEquals(180.dp, ChartPriceWidget.MEDIUM.width)
+        assertEquals(184.dp, ChartPriceWidget.MEDIUM.height)
 
-        assertEquals(260.dp, TrendlinePriceWidget.LARGE.width)
-        assertEquals(184.dp, TrendlinePriceWidget.LARGE.height)
+        assertEquals(260.dp, ChartPriceWidget.LARGE.width)
+        assertEquals(184.dp, ChartPriceWidget.LARGE.height)
     }
 
     @Test
@@ -114,23 +114,23 @@ class TrendlineBitmapRendererTest {
     }
 
     @Test
-    fun `Trendline widget classes instantiate properly`() {
-        val expressive = com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget()
+    fun `Chart widget classes instantiate properly`() {
+        val expressive = com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartPriceWidget()
         assertNotNull(expressive)
     }
 
     @Test
-    fun `PreviewWidgetType entries contain valid string resources for Price and Trendline`() {
+    fun `PreviewWidgetType entries contain valid string resources for Price and Chart`() {
         val entries = com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.entries
         assertEquals(2, entries.size)
         assertEquals(R.string.widget_preview_price, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.PRICE.labelResId)
-        assertEquals(R.string.widget_preview_trendline, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.TRENDLINE.labelResId)
+        assertEquals(R.string.widget_preview_chart, com.jcoronado.minimalbitcoinwidget.screens.PreviewWidgetType.CHART.labelResId)
     }
 
     @Test
     fun `isDarkTheme correctly evaluates explicit DARK and LIGHT widget theme settings`() {
-        val darkResult = com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlineBitmapRenderer.isDarkTheme(null, WidgetTheme.DARK)
-        val lightResult = com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlineBitmapRenderer.isDarkTheme(null, WidgetTheme.LIGHT)
+        val darkResult = com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartBitmapRenderer.isDarkTheme(null, WidgetTheme.DARK)
+        val lightResult = com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartBitmapRenderer.isDarkTheme(null, WidgetTheme.LIGHT)
         assertTrue(darkResult)
         org.junit.Assert.assertFalse(lightResult)
     }

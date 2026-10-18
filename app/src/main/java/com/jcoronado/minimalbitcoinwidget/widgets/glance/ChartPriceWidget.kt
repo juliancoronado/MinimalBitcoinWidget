@@ -60,9 +60,9 @@ import com.jcoronado.minimalbitcoinwidget.utils.TimeInterval
 
 /**
  * Material 3 Expressive Glance Widget displaying Bitcoin price, change metrics,
- * and an edge-to-edge off-screen rendered price trendline (sparkline) across responsive sizes.
+ * and an edge-to-edge off-screen rendered price chart (sparkline) across responsive sizes.
  */
-class TrendlinePriceWidget : GlanceAppWidget() {
+class ChartPriceWidget : GlanceAppWidget() {
 
     companion object {
         val COMPACT = DpSize(140.dp, 60.dp)
@@ -320,7 +320,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 }
                 Spacer(modifier = GlanceModifier.height(2.dp))
 
-                TrendlineImage(
+                ChartImage(
                     prices = state.sparklinePrices,
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
@@ -384,7 +384,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                     PriceChange(state.changePercentage, error, typeface)
                 }
 
-                TrendlineImage(
+                ChartImage(
                     prices = state.sparklinePrices,
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width * 0.52f,
@@ -447,7 +447,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
 
                 Spacer(modifier = GlanceModifier.height(3.dp))
 
-                TrendlineImage(
+                ChartImage(
                     prices = state.sparklinePrices,
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
@@ -519,7 +519,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
 
                 Spacer(modifier = GlanceModifier.height(4.dp))
 
-                TrendlineImage(
+                ChartImage(
                     prices = state.sparklinePrices,
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
@@ -537,7 +537,7 @@ class TrendlinePriceWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun TrendlineImage(
+    private fun ChartImage(
         prices: List<Double>,
         isPositive: Boolean,
         widthDp: Dp,
@@ -552,13 +552,13 @@ class TrendlinePriceWidget : GlanceAppWidget() {
         modifier: GlanceModifier = GlanceModifier.fillMaxWidth().height(heightDp)
     ) {
         val context = LocalContext.current
-        val widthPx = TrendlineBitmapRenderer.dpToPx(context, widthDp.value).toInt().coerceAtLeast(10)
-        val heightPx = TrendlineBitmapRenderer.dpToPx(context, heightDp.value).toInt().coerceAtLeast(10)
+        val widthPx = ChartBitmapRenderer.dpToPx(context, widthDp.value).toInt().coerceAtLeast(10)
+        val heightPx = ChartBitmapRenderer.dpToPx(context, heightDp.value).toInt().coerceAtLeast(10)
 
         val unavailable = isUnavailable || prices.size < 2
 
         val bitmap = if (unavailable) {
-            TrendlineBitmapRenderer.createUnavailableTrendlineBitmap(
+            ChartBitmapRenderer.createUnavailableChartBitmap(
                 context = context,
                 widthPx = widthPx,
                 heightPx = heightPx,
@@ -567,20 +567,20 @@ class TrendlinePriceWidget : GlanceAppWidget() {
                 typeface = typeface
             )
         } else {
-            val strokeColor = TrendlineBitmapRenderer.resolveTrendColor(
+            val strokeColor = ChartBitmapRenderer.resolveTrendColor(
                 context = context,
                 isPositive = isPositive,
                 colorStyle = colorStyle,
                 widgetTheme = widgetTheme
             )
 
-            TrendlineBitmapRenderer.createTrendlineBitmap(
+            ChartBitmapRenderer.createChartBitmap(
                 context = context,
                 prices = prices,
                 strokeColor = strokeColor,
                 widthPx = widthPx,
                 heightPx = heightPx,
-                fillStyle = if (includeGradient) TrendlineFillStyle.SUBTLE else TrendlineFillStyle.NONE,
+                fillStyle = if (includeGradient) ChartFillStyle.SUBTLE else ChartFillStyle.NONE,
                 strokeWidthDp = strokeWidthDp,
                 drawDashedBaseline = true,
                 drawLiveDot = false,

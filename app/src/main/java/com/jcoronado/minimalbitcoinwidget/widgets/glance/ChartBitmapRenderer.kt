@@ -24,18 +24,18 @@ import com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PR
 import com.jcoronado.minimalbitcoinwidget.ui.components.SparklineScaleCalculator
 
 /**
- * Gradient fill style for the trendline chart.
+ * Gradient fill style for the chart.
  */
-enum class TrendlineFillStyle {
+enum class ChartFillStyle {
     SUBTLE, // Soft linear gradient fade
     NONE
 }
 
 /**
- * High-performance off-screen Bitmap renderer for sparkline trendlines in Glance widgets.
+ * High-performance off-screen Bitmap renderer for sparkline charts in Glance widgets.
  * Supports smooth Catmull-Rom splines, dashed baselines, live glowing dots, and volumetric gradients.
  */
-object TrendlineBitmapRenderer {
+object ChartBitmapRenderer {
 
     const val DEFAULT_STROKE_WIDTH_DP = 2.5f
 
@@ -113,7 +113,7 @@ object TrendlineBitmapRenderer {
      * Renders a neutral, muted unavailable state with a centered dotted reference baseline
      * and an informative pill overlay (e.g. "Chart unavailable for 30D interval").
      */
-    fun createUnavailableTrendlineBitmap(
+    fun createUnavailableChartBitmap(
         context: Context,
         widthPx: Int,
         heightPx: Int,
@@ -228,7 +228,7 @@ object TrendlineBitmapRenderer {
     /**
      * Backwards-compatible overload for existing calls.
      */
-    fun createTrendlineBitmap(
+    fun createChartBitmap(
         context: Context,
         prices: List<Double>,
         strokeColor: Int,
@@ -237,13 +237,13 @@ object TrendlineBitmapRenderer {
         includeGradient: Boolean = false,
         strokeWidthDp: Float = DEFAULT_STROKE_WIDTH_DP
     ): Bitmap {
-        return createTrendlineBitmap(
+        return createChartBitmap(
             context = context,
             prices = prices,
             strokeColor = strokeColor,
             widthPx = widthPx,
             heightPx = heightPx,
-            fillStyle = if (includeGradient) TrendlineFillStyle.SUBTLE else TrendlineFillStyle.NONE,
+            fillStyle = if (includeGradient) ChartFillStyle.SUBTLE else ChartFillStyle.NONE,
             strokeWidthDp = strokeWidthDp,
             drawDashedBaseline = false,
             drawLiveDot = false,
@@ -259,13 +259,13 @@ object TrendlineBitmapRenderer {
      * - Volumetric / subtle / ambient gradient fills
      * - Neon outer stroke glow
      */
-    fun createTrendlineBitmap(
+    fun createChartBitmap(
         context: Context,
         prices: List<Double>,
         strokeColor: Int,
         widthPx: Int,
         heightPx: Int,
-        fillStyle: TrendlineFillStyle = TrendlineFillStyle.NONE,
+        fillStyle: ChartFillStyle = ChartFillStyle.NONE,
         strokeWidthDp: Float = DEFAULT_STROKE_WIDTH_DP,
         drawDashedBaseline: Boolean = false,
         drawLiveDot: Boolean = false,
@@ -276,7 +276,7 @@ object TrendlineBitmapRenderer {
         val h = heightPx.coerceAtLeast(10)
 
         if (prices.size < 2) {
-            return createUnavailableTrendlineBitmap(
+            return createUnavailableChartBitmap(
                 context = context,
                 widthPx = w,
                 heightPx = h,
@@ -386,8 +386,8 @@ object TrendlineBitmapRenderer {
             }
         }
 
-        // 3. Draw gradient fill under trendline
-        if (fillStyle != TrendlineFillStyle.NONE && points.size >= 2) {
+        // 3. Draw gradient fill under chart curve
+        if (fillStyle != ChartFillStyle.NONE && points.size >= 2) {
             val fillPath = Path(linePath).apply {
                 lineTo(points.last().x, h.toFloat())
                 lineTo(points.first().x, h.toFloat())
@@ -395,7 +395,7 @@ object TrendlineBitmapRenderer {
             }
 
             when (fillStyle) {
-                TrendlineFillStyle.SUBTLE -> {
+                ChartFillStyle.SUBTLE -> {
                     val topAlpha = (Color.alpha(strokeColor) * 0.25f).toInt().coerceIn(0, 255)
                     val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                         style = Paint.Style.FILL
@@ -408,7 +408,7 @@ object TrendlineBitmapRenderer {
                     }
                     canvas.drawPath(fillPath, fillPaint)
                 }
-                TrendlineFillStyle.NONE -> Unit
+                ChartFillStyle.NONE -> Unit
             }
         }
 

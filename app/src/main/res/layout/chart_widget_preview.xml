@@ -123,6 +123,6 @@
         android:layout_weight="1"
         android:contentDescription="@string/chart_data_icon_description"
         android:scaleType="fitXY"
-        android:src="@drawable/trendline_preview_sparkline" />
+        android:src="@drawable/chart_preview_sparkline" />
 
 </LinearLayout>

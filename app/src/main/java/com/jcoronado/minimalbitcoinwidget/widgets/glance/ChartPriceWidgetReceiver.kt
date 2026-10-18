@@ -9,12 +9,12 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.jcoronado.minimalbitcoinwidget.workers.PriceUpdateWorker
 
-class TrendlinePriceWidgetReceiver : GlanceAppWidgetReceiver() {
-    override val glanceAppWidget: GlanceAppWidget = TrendlinePriceWidget()
+class ChartPriceWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = ChartPriceWidget()
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
-        Log.d("TrendlineWidgetReceiver", "onEnabled called")
+        Log.d("ChartWidgetReceiver", "onEnabled called")
         PriceUpdateWorker.enqueue(context)
     }
 
@@ -24,7 +24,7 @@ class TrendlinePriceWidgetReceiver : GlanceAppWidgetReceiver() {
         appWidgetIds: IntArray
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        Log.d("TrendlineWidgetReceiver", "onUpdate called")
+        Log.d("ChartWidgetReceiver", "onUpdate called")
 
         PriceUpdateWorker.enqueue(context)
 
@@ -35,7 +35,7 @@ class TrendlinePriceWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
-        Log.d("TrendlineWidgetReceiver", "onDisabled called")
+        Log.d("ChartWidgetReceiver", "onDisabled called")
         PriceUpdateWorker.cancel(context)
     }
 }

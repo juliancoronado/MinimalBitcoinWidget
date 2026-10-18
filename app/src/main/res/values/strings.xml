@@ -6,8 +6,8 @@
     <string name="legacy_widget_picker_description">Retiring soon - use the Price Widget instead</string>
     <string name="glance_widget_picker_name" translatable="false">Price Widget</string>
     <string name="glance_widget_picker_description">View the current Bitcoin price</string>
-    <string name="trendline_widget_picker_name" translatable="false">Trendline Widget (Beta)</string>
-    <string name="trendline_widget_picker_description">View the current Bitcoin price with a trendline</string>
+    <string name="chart_widget_picker_name" translatable="false">Chart Widget (Beta)</string>
+    <string name="chart_widget_picker_description">View the current Bitcoin price with a chart</string>
 
     <!-- Navigation Pages -->
     <string name="dashboard" translatable="false">Dashboard</string>
@@ -53,7 +53,7 @@
     <string name="widget_font">Font</string>
     <string name="widget_font_preview_header">Preview</string>
     <string name="widget_preview_price">Price</string>
-    <string name="widget_preview_trendline">Trendline</string>
+    <string name="widget_preview_chart">Chart</string>
     <string name="widget_font_options_header">Available Fonts</string>
     <string name="widget_font_icon_description">Widget font icon</string>
     <string name="customize_widget_icon_description">Customize widget icon</string>
@@ -72,8 +72,8 @@
     <string name="widget_theme_dark">Dark</string>
     <string name="dynamic_colors">Dynamic Colors</string>
     <string name="dynamic_colors_subtitle">Follow colors from your device theme</string>
-    <string name="show_price_graph">Price Graph</string>
-    <string name="show_price_graph_subtitle">Display price graph on dashboard</string>
+    <string name="show_price_chart">Price Chart</string>
+    <string name="show_price_chart_subtitle">Display price chart on dashboard</string>
     <string name="version">Version</string>
     <string name="version_format" translatable="false">%1$s (%2$s)</string>
     <string name="build_number">Build Number</string>
@@ -105,7 +105,7 @@
     <string name="add_widget_shortcut_title">Add to Home Screen</string>
     <string name="add_widget_shortcut_description">Pick a widget for your homescreen</string>
     <string name="add_widget_minimal_desc">Compact price &amp; change percentage</string>
-    <string name="add_widget_trendline_desc">Price with sparkline trend chart</string>
+    <string name="add_widget_chart_desc">Price with trend chart</string>
     <string name="rate_app_shortcut_title">Rate on Google Play</string>
     <string name="rate_app_shortcut_description">Support the app by leaving a review</string>
 

@@ -82,11 +82,11 @@ import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
 import com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PRICES
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
-import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartPriceWidget
 
 enum class PreviewWidgetType(@StringRes val labelResId: Int) {
     PRICE(R.string.widget_preview_price),
-    TRENDLINE(R.string.widget_preview_trendline)
+    CHART(R.string.widget_preview_chart)
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -204,7 +204,7 @@ fun CustomizeWidgetScreen(
                                 state = pagerState,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(TRENDLINE_PREVIEW_HEIGHT)
+                                    .height(CHART_PREVIEW_HEIGHT)
                             ) { page ->
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
@@ -461,8 +461,8 @@ fun CustomizeWidgetScreen(
 private val MINIMAL_PREVIEW_WIDTH = 208.dp
 private val MINIMAL_PREVIEW_HEIGHT = 108.dp
 
-private val TRENDLINE_PREVIEW_WIDTH = 180.dp
-private val TRENDLINE_PREVIEW_HEIGHT = 184.dp
+private val CHART_PREVIEW_WIDTH = 180.dp
+private val CHART_PREVIEW_HEIGHT = 184.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
@@ -541,7 +541,7 @@ private fun GlanceWidgetPreviewCard(
 
     val (previewWidth, previewHeight) = when (selectedWidgetType) {
         PreviewWidgetType.PRICE -> Pair(MINIMAL_PREVIEW_WIDTH, MINIMAL_PREVIEW_HEIGHT)
-        PreviewWidgetType.TRENDLINE -> Pair(TRENDLINE_PREVIEW_WIDTH, TRENDLINE_PREVIEW_HEIGHT)
+        PreviewWidgetType.CHART -> Pair(CHART_PREVIEW_WIDTH, CHART_PREVIEW_HEIGHT)
     }
 
     val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState, themedContext, selectedWidgetType) {
@@ -554,8 +554,8 @@ private fun GlanceWidgetPreviewCard(
                         state = widgetState
                     )
                 }
-                PreviewWidgetType.TRENDLINE -> {
-                    TrendlinePriceWidget().compose(
+                PreviewWidgetType.CHART -> {
+                    ChartPriceWidget().compose(
                         context = themedContext,
                         size = DpSize(previewWidth, previewHeight),
                         state = widgetState

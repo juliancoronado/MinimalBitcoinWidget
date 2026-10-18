@@ -330,7 +330,7 @@ fun SettingsScreen(
                                         )
                                         Spacer(modifier = Modifier.width(6.dp))
                                         Text(
-                                            text = "30 day trendline chart data is currently not available",
+                                            text = stringResource(R.string.chart_unavailable_30d),
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -502,13 +502,13 @@ fun SettingsScreen(
                     },
                     content = {
                         Text(
-                            stringResource(R.string.show_price_graph),
+                            stringResource(R.string.show_price_chart),
                             fontWeight = FontWeight.Medium
                         )
                     },
                     supportingContent = {
                         Text(
-                            stringResource(R.string.show_price_graph_subtitle),
+                            stringResource(R.string.show_price_chart_subtitle),
                             modifier = Modifier.padding(top = 4.dp)
                         )
                     },

@@ -27,8 +27,8 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetReceiver
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetStateDefinition
-import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
-import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidgetReceiver
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartPriceWidget
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartPriceWidgetReceiver
 import com.jcoronado.minimalbitcoinwidget.widgets.legacy.getCurrencyInfo
 import com.jcoronado.minimalbitcoinwidget.widgets.legacy.setWidgetViews
 import kotlinx.coroutines.CoroutineScope
@@ -188,11 +188,11 @@ class PriceViewModel @JvmOverloads constructor(
     }
 
     /**
-     * Requests the system to pin the Trendline Glance widget to the homescreen.
+     * Requests the system to pin the Chart Glance widget to the homescreen.
      */
-    fun requestPinTrendlineWidget() {
+    fun requestPinChartWidget() {
         viewModelScope.launch {
-            Log.d(LOG_TAG, "Requesting to pin Trendline Glance widget")
+            Log.d(LOG_TAG, "Requesting to pin Chart Glance widget")
             var currentState = uiState.value
 
             currentState = PriceUiState(
@@ -212,9 +212,9 @@ class PriceViewModel @JvmOverloads constructor(
 
             try {
                 GlanceAppWidgetManager(getApplication()).requestPinGlanceAppWidget(
-                    receiver = TrendlinePriceWidgetReceiver::class.java,
-                    preview = TrendlinePriceWidget(),
-                    previewSize = TrendlinePriceWidget.MEDIUM,
+                    receiver = ChartPriceWidgetReceiver::class.java,
+                    preview = ChartPriceWidget(),
+                    previewSize = ChartPriceWidget.MEDIUM,
                     previewState = PriceWidgetState.Available(
                         price = currentState.price,
                         changePercentage = currentState.percentageChange,
@@ -228,7 +228,7 @@ class PriceViewModel @JvmOverloads constructor(
                     )
                 )
             } catch (e: Exception) {
-                Log.e(LOG_TAG, "Failed to request pin trendline widget: $e")
+                Log.e(LOG_TAG, "Failed to request pin chart widget: $e")
             }
         }
     }
@@ -433,8 +433,8 @@ class PriceViewModel @JvmOverloads constructor(
                     try {
                         val manager = GlanceAppWidgetManager(context)
                         val pResult = manager.setWidgetPreviews(PriceWidgetReceiver::class)
-                        val tResult = manager.setWidgetPreviews(TrendlinePriceWidgetReceiver::class)
-                        Log.d(LOG_TAG, "setWidgetPreviews PriceWidget: $pResult, Trendline: $tResult")
+                        val tResult = manager.setWidgetPreviews(ChartPriceWidgetReceiver::class)
+                        Log.d(LOG_TAG, "setWidgetPreviews PriceWidget: $pResult, Chart: $tResult")
                     } catch (e: Exception) {
                         Log.w(LOG_TAG, "Failed to update widget preview: $e")
                     }
@@ -457,14 +457,14 @@ class PriceViewModel @JvmOverloads constructor(
             }
             PriceWidget().updateAll(context)
 
-            // Trendline Widget
-            val trendlineGlanceIds = manager.getGlanceIds(TrendlinePriceWidget::class.java)
-            trendlineGlanceIds.forEach { glanceId ->
+            // Chart Widget
+            val chartGlanceIds = manager.getGlanceIds(ChartPriceWidget::class.java)
+            chartGlanceIds.forEach { glanceId ->
                 updateAppWidgetState(context, PriceWidgetStateDefinition, glanceId) {
                     state
                 }
             }
-            TrendlinePriceWidget().updateAll(context)
+            ChartPriceWidget().updateAll(context)
         }
 
         /**

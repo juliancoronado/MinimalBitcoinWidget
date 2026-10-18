@@ -64,7 +64,7 @@ fun MainScreen(
     onRefresh: () -> Unit,
     onCustomizeWidgetClick: () -> Unit,
     onAddMinimalWidgetClick: () -> Unit,
-    onAddTrendlineWidgetClick: () -> Unit,
+    onAddChartWidgetClick: () -> Unit,
 ) {
     var showAddWidgetSheet by remember { mutableStateOf(false) }
 
@@ -107,7 +107,7 @@ fun MainScreen(
             AddWidgetBottomSheet(
                 onDismissRequest = { showAddWidgetSheet = false },
                 onPinMinimal = onAddMinimalWidgetClick,
-                onPinTrendline = onAddTrendlineWidgetClick
+                onPinChart = onAddChartWidgetClick
             )
         }
     }
@@ -192,7 +192,7 @@ fun AddWidgetShortcut(onClick: () -> Unit) {
 fun AddWidgetBottomSheet(
     onDismissRequest: () -> Unit,
     onPinMinimal: () -> Unit,
-    onPinTrendline: () -> Unit,
+    onPinChart: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val view = LocalView.current
@@ -240,7 +240,7 @@ fun AddWidgetBottomSheet(
                 onClick = {
                     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                     onDismissRequest()
-                    onPinTrendline()
+                    onPinChart()
                 },
                 leadingContent = {
                     Icon(
@@ -250,13 +250,13 @@ fun AddWidgetBottomSheet(
                 },
                 content = {
                     Text(
-                        text = stringResource(R.string.widget_preview_trendline),
+                        text = stringResource(R.string.widget_preview_chart),
                         fontWeight = FontWeight.Medium
                     )
                 },
                 supportingContent = {
                     Text(
-                        text = stringResource(R.string.add_widget_trendline_desc),
+                        text = stringResource(R.string.add_widget_chart_desc),
                     )
                 }
             )
@@ -496,7 +496,7 @@ fun MainScreenPreview() {
             onRefresh = { },
             onCustomizeWidgetClick = { },
             onAddMinimalWidgetClick = { },
-            onAddTrendlineWidgetClick = { }
+            onAddChartWidgetClick = { }
         )
     }
 }

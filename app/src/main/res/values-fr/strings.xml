@@ -4,7 +4,7 @@
     <string name="last_updated">Dernière mise à jour : %1$s</string>
     <string name="legacy_widget_picker_description">Bientôt retiré - utilisez le widget de prix</string>
     <string name="glance_widget_picker_description">Consultez le prix actuel du Bitcoin</string>
-    <string name="trendline_widget_picker_description">Consultez le prix actuel du Bitcoin avec une courbe de tendance</string>
+    <string name="chart_widget_picker_description">Consultez le prix actuel du Bitcoin avec un graphique</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Données</string>
@@ -29,7 +29,7 @@
     <string name="widget_font">Police</string>
     <string name="widget_font_preview_header">Aperçu</string>
     <string name="widget_preview_price">Prix</string>
-    <string name="widget_preview_trendline">Tendance</string>
+    <string name="widget_preview_chart">Graphique</string>
     <string name="widget_font_options_header">Polices disponibles</string>
     <string name="widget_font_icon_description">Icône de police du widget</string>
     <string name="customize_widget_icon_description">Icône de personnalisation du widget</string>
@@ -48,8 +48,8 @@
     <string name="widget_theme_dark">Sombre</string>
     <string name="dynamic_colors">Couleurs dynamiques</string>
     <string name="dynamic_colors_subtitle">Suivre les couleurs du thème de votre appareil</string>
-    <string name="show_price_graph">Graphique de prix</string>
-    <string name="show_price_graph_subtitle">Afficher le graphique de prix sur le tableau de bord</string>
+    <string name="show_price_chart">Graphique de prix</string>
+    <string name="show_price_chart_subtitle">Afficher le graphique de prix sur le tableau de bord</string>
     <string name="version">Version</string>
     <string name="build_number">Numéro de build</string>
     <string name="contact">Contact</string>
@@ -72,7 +72,7 @@
     <string name="add_widget_shortcut_title">Ajouter à l\'écran d\'accueil</string>
     <string name="add_widget_shortcut_description">Choisissez un widget pour votre écran d\'accueil</string>
     <string name="add_widget_minimal_desc">Prix compact et pourcentage de variation</string>
-    <string name="add_widget_trendline_desc">Prix avec graphique de tendance sparkline</string>
+    <string name="add_widget_chart_desc">Prix avec graphique de tendance</string>
     <string name="rate_app_shortcut_title">Noter sur Google Play</string>
     <string name="rate_app_shortcut_description">Soutenez l\'application en laissant un avis</string>
 

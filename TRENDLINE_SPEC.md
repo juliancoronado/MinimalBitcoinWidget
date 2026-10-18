@@ -1204,7 +1204,7 @@ Path: `app/src/main/res/xml/trendline_price_widget_info.xml`
 ```xml
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/glance_default_loading_layout"
-    android:description="@string/trendline_widget_picker_description"
+    android:description="@string/chart_widget_picker_description"
     android:previewImage="@drawable/glance_widget_preview"
     android:minWidth="140dp"
     android:minHeight="120dp"
@@ -1223,7 +1223,7 @@ Path: `app/src/main/res/xml-v31/trendline_price_widget_info.xml`
 ```xml
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/glance_default_loading_layout"
-    android:description="@string/trendline_widget_picker_description"
+    android:description="@string/chart_widget_picker_description"
     android:previewLayout="@layout/trendline_widget_preview"
     android:minWidth="140dp"
     android:minHeight="120dp"
@@ -1477,7 +1477,7 @@ Declare `TrendlinePriceWidgetReceiver` inside `<application>`:
         <!-- Glance Trendline Price Widget Code (Expressive) -->
         <receiver
             android:name=".widgets.glance.TrendlinePriceWidgetReceiver"
-            android:label="@string/trendline_widget_picker_name"
+            android:label="@string/chart_widget_picker_name"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -1579,56 +1579,56 @@ import com.jcoronado.minimalbitcoinwidget.widgets.glance.TrendlinePriceWidget
 1. **`app/src/main/res/values/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_name" translatable="false">Trendline Widget (Beta)</string>
-    <string name="trendline_widget_picker_description">Quickly view the current Bitcoin price with trendline</string>
+    <string name="chart_widget_picker_name" translatable="false">Trendline Widget (Beta)</string>
+    <string name="chart_widget_picker_description">Quickly view the current Bitcoin price with trendline</string>
 ```
 
 2. **`app/src/main/res/values-de/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_description">Bitcoin-Preis mit Trendlinie und prozentualer Veränderung schnell anzeigen</string>
+    <string name="chart_widget_picker_description">Bitcoin-Preis mit Trendlinie und prozentualer Veränderung schnell anzeigen</string>
 ```
 
 3. **`app/src/main/res/values-es/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_description">Consulta rápidamente el precio de Bitcoin con línea de tendencia</string>
+    <string name="chart_widget_picker_description">Consulta rápidamente el precio de Bitcoin con línea de tendencia</string>
 ```
 
 4. **`app/src/main/res/values-fr/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_description">Consultez rapidement le prix du Bitcoin avec courbe de tendance</string>
+    <string name="chart_widget_picker_description">Consultez rapidement le prix du Bitcoin avec courbe de tendance</string>
 ```
 
 5. **`app/src/main/res/values-fr-rFR/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_description">Consultez rapidement le prix du Bitcoin avec courbe de tendance</string>
+    <string name="chart_widget_picker_description">Consultez rapidement le prix du Bitcoin avec courbe de tendance</string>
 ```
 
 6. **`app/src/main/res/values-it/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_description">Visualizza rapidamente il prezzo di Bitcoin con linea di tendenza</string>
+    <string name="chart_widget_picker_description">Visualizza rapidamente il prezzo di Bitcoin con linea di tendenza</string>
 ```
 
 7. **`app/src/main/res/values-pt/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_description">Veja rapidamente o preço do Bitcoin com linha de tendência</string>
+    <string name="chart_widget_picker_description">Veja rapidamente o preço do Bitcoin com linha de tendência</string>
 ```
 
 8. **`app/src/main/res/values-pt-rBR/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_description">Veja rapidamente o preço do Bitcoin com linha de tendência</string>
+    <string name="chart_widget_picker_description">Veja rapidamente o preço do Bitcoin com linha de tendência</string>
 ```
 
 9. **`app/src/main/res/values-tr/strings.xml`**:
 
 ```xml
-    <string name="trendline_widget_picker_description">Trend çizgisiyle güncel Bitcoin fiyatını hızla görüntüleyin</string>
+    <string name="chart_widget_picker_description">Trend çizgisiyle güncel Bitcoin fiyatını hızla görüntüleyin</string>
 ```
 
 ---

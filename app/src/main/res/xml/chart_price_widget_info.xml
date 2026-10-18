@@ -1,6 +1,6 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/glance_default_loading_layout"
-    android:description="@string/trendline_widget_picker_description"
+    android:description="@string/chart_widget_picker_description"
     android:previewImage="@drawable/glance_widget_preview"
     android:minWidth="140dp"
     android:minHeight="120dp"

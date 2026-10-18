@@ -4,7 +4,7 @@
     <string name="last_updated">Última actualización: %1$s</string>
     <string name="legacy_widget_picker_description">Se retirará pronto - usa el widget de precio</string>
     <string name="glance_widget_picker_description">Consulta el precio actual de Bitcoin</string>
-    <string name="trendline_widget_picker_description">Consulta el precio actual de Bitcoin con una línea de tendencia</string>
+    <string name="chart_widget_picker_description">Consulta el precio actual de Bitcoin con un gráfico</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Datos</string>
@@ -29,7 +29,7 @@
     <string name="widget_font">Fuente</string>
     <string name="widget_font_preview_header">Vista previa</string>
     <string name="widget_preview_price">Precio</string>
-    <string name="widget_preview_trendline">Tendencia</string>
+    <string name="widget_preview_chart">Gráfico</string>
     <string name="widget_font_options_header">Fuentes disponibles</string>
     <string name="widget_font_icon_description">Icono de fuente del widget</string>
     <string name="customize_widget_icon_description">Icono de personalizar widget</string>
@@ -48,8 +48,8 @@
     <string name="widget_theme_dark">Oscuro</string>
     <string name="dynamic_colors">Colores dinámicos</string>
     <string name="dynamic_colors_subtitle">Usar colores del tema del dispositivo</string>
-    <string name="show_price_graph">Gráfico de precio</string>
-    <string name="show_price_graph_subtitle">Mostrar gráfico de precio en el panel</string>
+    <string name="show_price_chart">Gráfico de precio</string>
+    <string name="show_price_chart_subtitle">Mostrar gráfico de precio en el panel</string>
     <string name="version">Versión</string>
     <string name="build_number">Número de compilación</string>
     <string name="contact">Contacto</string>
@@ -72,7 +72,7 @@
     <string name="add_widget_shortcut_title">Añadir a la pantalla de inicio</string>
     <string name="add_widget_shortcut_description">Elige un widget para tu pantalla de inicio</string>
     <string name="add_widget_minimal_desc">Precio compacto y porcentaje de cambio</string>
-    <string name="add_widget_trendline_desc">Precio con gráfico de tendencia sparkline</string>
+    <string name="add_widget_chart_desc">Precio con gráfico de tendencia</string>
     <string name="rate_app_shortcut_title">Valorar en Google Play</string>
     <string name="rate_app_shortcut_description">Apoya la app dejando una reseña</string>
 
