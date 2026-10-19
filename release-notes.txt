@@ -1,50 +1,59 @@
 // Release notes for the Google Play Store listing
-// translations provided by Gemini AI
+// translations provided by Gemini
 
-// v3.5.0
+// v3.6.0
 
 <en-US>
-• New Widget Styles: Customize price text size and choose between light, dark, or system themes.
-• Faster Access: Jump straight to widget customization from the main screen.
-• Bug fixes and UI improvements for a smoother experience.
+• New Chart Widget: Track Bitcoin price and visual trends directly on your home screen with the new 2x2 widget.
+• Widget Picker: Easily choose between the compact Price widget or Chart widget right from the dashboard.
+• Widget Previews: Swipe between widget styles to preview your changes on the Customize screen.
+• Bug fixes and other improvements.
 </en-US>
 <es-ES>
-• Nuevos estilos de widget: Personaliza el tamaño del precio y elige entre tema claro, oscuro o del sistema.
-• Acceso más rápido: Accede a la personalización del widget directamente desde la pantalla principal.
-• Correcciones de errores y mejoras en la interfaz para una experiencia más fluida.
+• Nuevo widget con gráfico: Sigue el precio y las tendencias de Bitcoin en tu pantalla de inicio con el nuevo widget 2x2.
+• Selector de widgets: Elige fácilmente entre el widget de precio compacto o el widget con gráfico desde el panel principal.
+• Vistas previas de widgets: Desliza entre estilos de widget para previsualizar tus cambios en la pantalla Personalizar.
+• Corrección de errores y otras mejoras.
 </es-ES>
 <es-419>
-• Nuevos estilos de widget: Personaliza el tamaño del precio y elige entre el tema claro, oscuro o del sistema.
-• Acceso más rápido: Accede a la personalización del widget directamente desde la pantalla principal.
-• Correcciones de errores y mejoras en la interfaz para una experiencia más fluida.
+• Nuevo widget con gráfico: Sigue el precio y las tendencias de Bitcoin en tu pantalla principal con el nuevo widget 2x2.
+• Selector de widgets: Elige fácilmente entre el widget de precio compacto o el widget con gráfico desde el panel de control.
+• Vistas previas de widgets: Desliza entre estilos de widget para previsualizar tus cambios en la pantalla Personalizar.
+• Corrección de errores y otras mejoras.
 </es-419>
 <de-DE>
-• Neue Widget-Stile: Passen Sie die Preisgröße an und wählen Sie zwischen hellem, dunklem oder Systemdesign.
-• Schnellerer Zugriff: Widget-Anpassung direkt über den Hauptbildschirm aufrufen.
-• Fehlerbehebungen und UI-Verbesserungen für ein flüssigeres Nutzungserlebnis.
+• Neues Diagramm-Widget: Verfolgen Sie Bitcoin-Preise und -Trends direkt auf Ihrem Startbildschirm mit dem neuen 2x2-Widget.
+• Widget-Auswahl: Wählen Sie im Dashboard einfach zwischen dem kompakten Preis-Widget und dem Diagramm-Widget.
+• Widget-Vorschau: Wischen Sie zwischen Widget-Stilen, um Ihre Änderungen im Anpassungsbildschirm vorab anzuzeigen.
+• Fehlerbehebungen und sonstige Verbesserungen.
 </de-DE>
 <fr-FR>
-• Nouveaux styles de widget : Personnalisez la taille du prix et choisissez entre le thème clair, sombre ou système.
-• Accès plus rapide : Accédez directement à la personnalisation du widget depuis l'écran principal.
-• Corrections de bugs et améliorations de l'interface pour une expérience plus fluide.
+• Nouveau widget graphique : Suivez le cours et les tendances de Bitcoin sur votre écran d'accueil avec le nouveau widget 2x2.
+• Sélecteur de widgets : Choisissez facilement entre le widget Prix compact ou Graphique depuis le tableau de bord.
+• Aperçus des widgets : Balayez entre les styles de widgets pour prévisualiser vos modifications dans l'écran Personnaliser.
+• Corrections de bugs et autres améliorations.
 </fr-FR>
 <it-IT>
-• Nuovi stili per il widget: Personalizza la dimensione del prezzo e scegli tra i temi chiaro, scuro o di sistema.
-• Accesso più rapido: Accedi alla personalizzazione del widget direttamente dalla schermata principale.
-• Correzioni di bug e miglioramenti dell'interfaccia per un'esperienza più fluida.
+• Nuovo widget grafico: Segui il prezzo e i trend di Bitcoin direttamente sulla schermata iniziale con il nuovo widget 2x2.
+• Selettore widget: Scegli facilmente tra il widget Prezzo compatto o Grafico direttamente dalla dashboard.
+• Anteprime widget: Scorri tra gli stili dei widget per visualizzare in anteprima le modifiche nella schermata Personalizza.
+• Correzioni di bug e altri miglioramenti.
 </it-IT>
 <pt-PT>
-• Novos estilos de widget: Personaliza o tamanho do preço e escolhe entre o tema claro, escuro ou do sistema.
-• Acesso mais rápido: Acede diretamente à personalização do widget a partir do ecrã principal.
-• Correções de erros e melhorias na interface para uma experiência mais fluida.
+• Novo widget com gráfico: Acompanha o preço e as tendências da Bitcoin no teu ecrã principal com o novo widget 2x2.
+• Seletor de widgets: Escolhe facilmente entre o widget Preço compacto ou o widget Gráfico no painel principal.
+• Pré-visualizações de widgets: Desliza entre estilos de widget para pré-visualizar as tuas alterações no ecrã Personalizar.
+• Correção de erros e outras melhorias.
 </pt-PT>
 <pt-BR>
-• Novos estilos de widget: Personalize o tamanho do preço e escolha entre o tema claro, escuro ou do sistema.
-• Acesse a personalização do widget diretamente da tela principal.
-• Correções de erros e melhorias na interface para uma experiência mais fluida.
+• Novo widget com gráfico: Acompanhe o preço e as tendências do Bitcoin na sua tela inicial com o novo widget 2x2.
+• Seletor de widgets: Escolha facilmente entre o widget de Preço compacto ou Gráfico no painel principal.
+• Pré-visualizações de widgets: Deslize entre estilos de widget para pré-visualizar suas alterações na tela Personalizar.
+• Correções de erros e outras melhorias.
 </pt-BR>
 <tr-TR>
-• Yeni Widget Stilleri: Fiyat metni boyutunu özelleştirin ve açık, koyu veya sistem temaları arasında seçim yapın.
-• Daha Hızlı Erişim: Ana ekrandan doğrudan widget özelleştirmesine geçin.
-• Daha akıcı bir deneyim için hata düzeltmeleri ve arayüz iyileştirmeleri.
+• Yeni Grafik Widget'ı: Yeni 2x2 widget ile Bitcoin fiyatını ve trendlerini doğrudan ana ekranınızdan takip edin.
+• Widget Seçici: Ana ekrandaki panelden kompakt Fiyat widget'ı veya Grafik widget'ı arasında kolayca seçim yapın.
+• Widget Önizlemeleri: Özelleştir ekranında değişikliklerinizi önizlemek için widget stilleri arasında kaydırın.
+• Hata düzeltmeleri ve diğer iyileştirmeler.
 </tr-TR>
