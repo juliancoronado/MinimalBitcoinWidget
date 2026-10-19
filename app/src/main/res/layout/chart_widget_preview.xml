@@ -122,7 +122,7 @@
         android:layout_marginTop="4dp"
         android:layout_weight="1"
         android:contentDescription="@string/chart_data_icon_description"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:src="@drawable/chart_preview_sparkline" />
 
 </LinearLayout>

@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import kotlin.math.roundToInt
 
 /**
@@ -360,10 +361,4 @@ object SparklineScaleCalculator {
  * Synthetic default sparkline curve points used when live data is unavailable (e.g. 30D interval or initial load).
  * Modeled after a smooth waveform with drastic amplitude swings: a lower starting baseline, tall primary crest, deep plunge trough, sharp secondary peak, and an elevated ending curve.
  */
-val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = listOf(
-    18.0, 20.0, 28.0, 50.0, 75.0,
-    88.0, 90.0, 78.0, 56.0, 28.0,
-    10.0, 2.0, 0.0, 4.0, 18.0,
-    44.0, 74.0, 96.0, 100.0, 92.0,
-    60.0, 44.0, 43.0, 52.0, 70.0
-)
+val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = AppConstants.PLACEHOLDER_SPARKLINE_PRICES

@@ -22,5 +22,6 @@ data class PriceUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val sparklinePrices: List<Double> = emptyList(),
-    val showSparkline: Boolean = true
+    val showSparkline: Boolean = true,
+    val isMockUi: Boolean = false
 )

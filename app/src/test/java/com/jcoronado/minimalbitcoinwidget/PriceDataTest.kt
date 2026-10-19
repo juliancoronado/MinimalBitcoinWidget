@@ -219,4 +219,23 @@ class PriceDataTest {
         val sparkline = priceData.getSparklineForInterval(0)
         assertEquals(0, sparkline.size)
     }
+
+    @Test
+    fun `getSparklineForInterval with isMock true returns mock prices for 24h and 7d and empty for 30d`() {
+        val mockPrices = listOf(10.0, 20.0, 30.0, 40.0, 50.0)
+        val mockData = PriceData(
+            currentPrice = 52849.10,
+            priceChangePercentage24h = 2.45,
+            priceChangePercentage7d = 2.45,
+            priceChangePercentage30d = 2.45,
+            sparklineIn7d = PriceData.SparklineData(prices = mockPrices),
+            isMock = true
+        )
+
+        // 24h and 7d return the intact mock prices; 30d returns empty list
+        assertEquals(mockPrices, mockData.getSparklineForInterval(0))
+        assertEquals(mockPrices, mockData.getSparklineForInterval(1))
+        assertEquals(emptyList<Double>(), mockData.getSparklineForInterval(2))
+        assertEquals(mockPrices, mockData.getSparklineForInterval(-1))
+    }
 }

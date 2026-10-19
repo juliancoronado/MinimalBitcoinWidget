@@ -79,6 +79,18 @@ object AppConstants {
     const val DEBUG_MOCK_CURRENCY_DEFAULT = "EUR"
     /** Default change percentage interval index (1 for 7D). */
     const val CHANGE_PERCENTAGE_DEFAULT = 1
+
+    /**
+     * Synthetic default sparkline curve points used when live data is unavailable (e.g. 30D interval or initial load)
+     * and for mock UI mode.
+     */
+    val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = listOf(
+        18.0, 20.0, 28.0, 50.0, 75.0,
+        88.0, 90.0, 78.0, 56.0, 28.0,
+        10.0, 2.0, 0.0, 4.0, 18.0,
+        44.0, 74.0, 96.0, 100.0, 92.0,
+        60.0, 44.0, 43.0, 52.0, 70.0
+    )
 }
 
 /**

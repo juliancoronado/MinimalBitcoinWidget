@@ -70,9 +70,6 @@ class PriceViewModel @JvmOverloads constructor(
         // Load settings and cached price synchronously to ensure the selected currency
         // is fully populated in _uiState before starting any network calls.
         loadInitialData()
-        
-        // Publish or refresh Glance widget preview for the system widget picker on Android 15+
-        updateWidgetPreview(application)
 
         // Trigger a fresh price fetch using the newly loaded currency preference.
         fetchPrice(fromInit = true)
@@ -96,7 +93,8 @@ class PriceViewModel @JvmOverloads constructor(
                 changeIntervalLabelResId = interval.labelResId,
                 lastUpdated = 0L,
                 sparklinePrices = mockData.getSparklineForInterval(selectedInterval),
-                showSparkline = showSparkline
+                showSparkline = showSparkline,
+                isMockUi = true
             )
             return
         }
@@ -403,11 +401,19 @@ class PriceViewModel @JvmOverloads constructor(
         /**
          * Generates and publishes the Glance widget preview for the system widget picker
          * on Android 15+ (API 35+).
-         * Strictly throttled to 1 hour and skips when styling fingerprint has not changed,
-         * ensuring the OS rate limit (~2 calls/hour) is never exceeded.
+         * Strictly updates only when valid price data is present, strictly throttled to 1 hour
+         * and skips when styling fingerprint has not changed, ensuring the OS rate limit
+         * (~2 calls/hour) is never exceeded.
          */
         fun updateWidgetPreview(context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                val repository = PriceRepository(context)
+                val hasValidData = repository.getCachedPriceData() != null || repository.isMockUiEnabled()
+                if (!hasValidData) {
+                    Log.d(LOG_TAG, "Skipping widget preview update (no valid data available yet)")
+                    return
+                }
+
                 val now = System.currentTimeMillis()
                 if ((now - lastPreviewUpdateTime) < PREVIEW_UPDATE_COOLDOWN_MS) {
                     val remainingSeconds = (PREVIEW_UPDATE_COOLDOWN_MS - (now - lastPreviewUpdateTime)) / 1000

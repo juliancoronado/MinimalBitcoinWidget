@@ -26,9 +26,6 @@ class MainActivity : ComponentActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         Prefs.checkAppUpdateAndInvalidateCache(prefs)
 
-        // Ensure Glance widget preview is published on Android 15+
-        PriceViewModel.updateWidgetPreview(this)
-
         setContent {
             val settingsViewModel : SettingsViewModel =  viewModel()
             val themePreference by settingsViewModel.theme.collectAsStateWithLifecycle()
