@@ -40,6 +40,20 @@ object ChartBitmapRenderer {
     const val DEFAULT_STROKE_WIDTH_DP = 2.5f
 
     /**
+     * Downsamples price series with high data density (such as 168-point 7D hourly series)
+     * to a clean, balanced point count (~35 points) to eliminate high-frequency micro-jitter
+     * and optimize off-screen rendering performance, strictly preserving opening and ending prices.
+     */
+    fun downsamplePrices(prices: List<Double>, maxPoints: Int = 42, targetPoints: Int = 35): List<Double> {
+        if (prices.size <= maxPoints) return prices
+        val targetCount = targetPoints.coerceAtLeast(2)
+        return List(targetCount) { i ->
+            val index = (i * (prices.size - 1) + (targetCount - 1) / 2) / (targetCount - 1)
+            prices[index]
+        }
+    }
+
+    /**
      * Converts DP to physical pixels for the current display metrics.
      */
     fun dpToPx(context: Context, dp: Float): Float {
@@ -288,7 +302,7 @@ object ChartBitmapRenderer {
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
-        val rawPrices = prices
+        val rawPrices = downsamplePrices(prices)
 
         // Gaussian 3-point smoothing preserving endpoints
         val smoothPrices = if (rawPrices.size < 5) {

@@ -73,9 +73,7 @@ class ChartPriceWidget : GlanceAppWidget() {
 
     override val sizeMode = SizeMode.Exact
 
-    override val previewSizeMode = SizeMode.Responsive(
-        setOf(COMPACT, MEDIUM, WIDE_SLIM, LARGE)
-    )
+    override val previewSizeMode = SizeMode.Single
 
     override val stateDefinition = PriceWidgetStateDefinition
 
@@ -144,8 +142,7 @@ class ChartPriceWidget : GlanceAppWidget() {
         }
 
         provideContent {
-            val size = LocalSize.current
-            WidgetContent(previewState, size)
+            WidgetContent(previewState, MEDIUM)
         }
     }
 
@@ -591,7 +588,7 @@ class ChartPriceWidget : GlanceAppWidget() {
         Image(
             provider = ImageProvider(bitmap),
             contentDescription = null,
-            contentScale = ContentScale.FillBounds,
+            contentScale = ContentScale.Fit,
             modifier = modifier
         )
     }

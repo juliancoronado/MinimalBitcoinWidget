@@ -152,4 +152,21 @@ class ChartBitmapRendererTest {
         assertEquals(R.string.interval_30d, available.intervalLabelResId)
         assertTrue(available.sparklinePrices.isEmpty())
     }
+
+    @Test
+    fun `downsamplePrices preserves small series without modification`() {
+        val smallList = List(25) { it * 100.0 }
+        val result = com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartBitmapRenderer.downsamplePrices(smallList)
+        assertEquals(25, result.size)
+        assertEquals(smallList, result)
+    }
+
+    @Test
+    fun `downsamplePrices downsamples 168-point 7D series to 35 points strictly preserving endpoints`() {
+        val largeList = List(168) { i -> 80000.0 + (i * 25.0) }
+        val result = com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartBitmapRenderer.downsamplePrices(largeList, maxPoints = 42, targetPoints = 35)
+        assertEquals(35, result.size)
+        assertEquals(largeList.first(), result.first(), 0.0001)
+        assertEquals(largeList.last(), result.last(), 0.0001)
+    }
 }
