@@ -696,12 +696,27 @@ class ChartPriceWidget : GlanceAppWidget() {
     @Composable
     private fun PriceChange(changePercentage: Double, error: Boolean, typeface: Typeface?) {
         val context = LocalContext.current
+        val isPreAndroid12 = Build.VERSION.SDK_INT < 31
+
         val (containerColor, contentColor) = if (changePercentage > 0) {
             Pair(GlanceTheme.colors.primaryContainer, GlanceTheme.colors.onPrimaryContainer)
         } else if (changePercentage < 0) {
             Pair(GlanceTheme.colors.errorContainer, GlanceTheme.colors.onErrorContainer)
         } else {
             Pair(GlanceTheme.colors.surfaceVariant, GlanceTheme.colors.onSurfaceVariant)
+        }
+
+        val (iconColor, textColor) = if (isPreAndroid12) {
+            val color = if (changePercentage > 0) {
+                GlanceTheme.colors.primary
+            } else if (changePercentage < 0) {
+                GlanceTheme.colors.error
+            } else {
+                GlanceTheme.colors.secondary
+            }
+            Pair(color, GlanceTheme.colors.secondary)
+        } else {
+            Pair(contentColor, contentColor)
         }
 
         val (iconRes, iconDesc) = if (changePercentage > 0) {
@@ -724,18 +739,24 @@ class ChartPriceWidget : GlanceAppWidget() {
         val formatPattern = "%.2f%%"
         val changeText = String.format(formatPattern, changePercentage)
 
-        Box(
-            modifier = GlanceModifier
+        val boxModifier = if (isPreAndroid12) {
+            GlanceModifier
+        } else {
+            GlanceModifier
                 .background(containerColor)
                 .cornerRadius(10.dp)
-                .padding(horizontal = 6.dp, vertical = 2.dp),
+                .padding(horizontal = 6.dp, vertical = 2.dp)
+        }
+
+        Box(
+            modifier = boxModifier,
             contentAlignment = Alignment.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     provider = ImageProvider(iconRes),
                     contentDescription = iconDesc,
-                    colorFilter = ColorFilter.tint(contentColor),
+                    colorFilter = ColorFilter.tint(iconColor),
                     modifier = GlanceModifier.size(13.dp).padding(top = 1.dp)
                 )
                 Spacer(modifier = GlanceModifier.width(3.dp))
@@ -749,13 +770,13 @@ class ChartPriceWidget : GlanceAppWidget() {
                     Image(
                         provider = ImageProvider(textBitmap),
                         contentDescription = changeText,
-                        colorFilter = ColorFilter.tint(contentColor)
+                        colorFilter = ColorFilter.tint(textColor)
                     )
                 } else {
                     Text(
                         text = changeText,
                         style = TextStyle(
-                            color = contentColor,
+                            color = textColor,
                             fontSize = 11.5.sp
                         )
                     )
