@@ -245,7 +245,7 @@ object ChartBitmapRenderer {
     fun createChartBitmap(
         context: Context,
         prices: List<Double>,
-        strokeColor: Int,
+        strokeColor: Int = Color.WHITE,
         widthPx: Int,
         heightPx: Int,
         includeGradient: Boolean = false,
@@ -276,7 +276,7 @@ object ChartBitmapRenderer {
     fun createChartBitmap(
         context: Context,
         prices: List<Double>,
-        strokeColor: Int,
+        strokeColor: Int = Color.WHITE,
         widthPx: Int,
         heightPx: Int,
         fillStyle: ChartFillStyle = ChartFillStyle.NONE,

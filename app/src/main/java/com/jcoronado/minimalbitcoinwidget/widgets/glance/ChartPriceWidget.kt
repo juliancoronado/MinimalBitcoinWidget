@@ -3,6 +3,7 @@ package com.jcoronado.minimalbitcoinwidget.widgets.glance
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import androidx.compose.runtime.Composable
@@ -564,17 +565,10 @@ class ChartPriceWidget : GlanceAppWidget() {
                 typeface = typeface
             )
         } else {
-            val strokeColor = ChartBitmapRenderer.resolveTrendColor(
-                context = context,
-                isPositive = isPositive,
-                colorStyle = colorStyle,
-                widgetTheme = widgetTheme
-            )
-
             ChartBitmapRenderer.createChartBitmap(
                 context = context,
                 prices = prices,
-                strokeColor = strokeColor,
+                strokeColor = Color.WHITE,
                 widthPx = widthPx,
                 heightPx = heightPx,
                 fillStyle = if (includeGradient) ChartFillStyle.SUBTLE else ChartFillStyle.NONE,
@@ -585,10 +579,18 @@ class ChartPriceWidget : GlanceAppWidget() {
             )
         }
 
+        val colorFilter = if (unavailable) {
+            null
+        } else {
+            val trendColor = if (isPositive) GlanceTheme.colors.primary else GlanceTheme.colors.error
+            ColorFilter.tint(trendColor)
+        }
+
         Image(
             provider = ImageProvider(bitmap),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
+            colorFilter = colorFilter,
             modifier = modifier
         )
     }
