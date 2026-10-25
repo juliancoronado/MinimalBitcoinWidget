@@ -423,7 +423,7 @@ class ChartPriceWidget : GlanceAppWidget() {
                 Spacer(GlanceModifier.defaultWeight())
                 Header(state.currency, state.intervalLabelResId, typeface)
                 Spacer(modifier = GlanceModifier.height(10.dp))
-                PriceValue(state, typeface, scaleFactor = 1.15f)
+                PriceValue(state, typeface, scaleFactor = 1.0f)
                 Spacer(modifier = GlanceModifier.height(10.dp))
                 PriceChange(state.changePercentage, error, typeface)
                 Spacer(GlanceModifier.defaultWeight())
@@ -437,7 +437,7 @@ class ChartPriceWidget : GlanceAppWidget() {
                 ) {
                     Header(state.currency, state.intervalLabelResId, typeface)
                     Spacer(modifier = GlanceModifier.height(3.dp))
-                    PriceValue(state, typeface, scaleFactor = 1.05f)
+                    PriceValue(state, typeface, scaleFactor = 1.0f)
                     Spacer(modifier = GlanceModifier.height(3.dp))
                     PriceChange(state.changePercentage, error, typeface)
                 }
