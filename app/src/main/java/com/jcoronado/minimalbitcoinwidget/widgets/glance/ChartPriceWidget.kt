@@ -321,7 +321,7 @@ class ChartPriceWidget : GlanceAppWidget() {
                     prices = state.sparklinePrices,
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
-                    heightDp = (size.height - 68.dp).coerceAtLeast(20.dp),
+                    heightDp = (size.height - 76.dp).coerceAtLeast(20.dp),
                     colorStyle = colorStyle,
                     widgetTheme = widgetTheme,
                     includeGradient = false,
@@ -448,7 +448,7 @@ class ChartPriceWidget : GlanceAppWidget() {
                     prices = state.sparklinePrices,
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
-                    heightDp = (size.height - 76.dp).coerceAtLeast(44.dp),
+                    heightDp = (size.height - 86.dp).coerceAtLeast(44.dp),
                     colorStyle = colorStyle,
                     widgetTheme = widgetTheme,
                     includeGradient = false,
@@ -520,7 +520,7 @@ class ChartPriceWidget : GlanceAppWidget() {
                     prices = state.sparklinePrices,
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
-                    heightDp = (size.height - 64.dp).coerceAtLeast(48.dp),
+                    heightDp = (size.height - 76.dp).coerceAtLeast(48.dp),
                     colorStyle = colorStyle,
                     widgetTheme = widgetTheme,
                     includeGradient = false,
@@ -588,7 +588,7 @@ class ChartPriceWidget : GlanceAppWidget() {
         Image(
             provider = ImageProvider(bitmap),
             contentDescription = null,
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.FillBounds,
             modifier = modifier
         )
     }
