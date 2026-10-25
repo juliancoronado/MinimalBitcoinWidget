@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -41,5 +42,15 @@ class MainActivity : ComponentActivity() {
                 AppNavigation()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        PriceViewModel.refreshWidgetsFromCache(applicationContext)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        PriceViewModel.refreshWidgetsFromCache(applicationContext)
     }
 }

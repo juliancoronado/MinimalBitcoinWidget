@@ -73,6 +73,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
+            android:configChanges="uiMode"
             android:exported="true">
 
             <intent-filter>
