@@ -73,6 +73,7 @@ Key directories and files:
 ### 8. Testing, Tooling and Running the App
 
 - For ADB emulator commands, ADB locale switching scripts, build helper functions, see [COMMANDS.md](COMMANDS.md).
+- For release procedures, signed App Bundle (`.aab`) creation, packaging native debug symbols, and Google Play Console Internal Testing deployment, see [RELEASE.md](RELEASE.md).
 
 ## General AI Instructions
 

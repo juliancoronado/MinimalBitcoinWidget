@@ -174,3 +174,39 @@ unzip -l native-debug-symbols-v3.5.0-25.zip
 3. Under **Releases**, select the newly uploaded version.
 4. Open the **Downloads** tab.
 5. In the **Native debug symbols** section, click **Upload** and select the `.zip` file.
+
+---
+
+## 4. Release: Automated Bundle Export Helper (`export-mbw-bundle`)
+
+For full pre-flight checklists, version bump guides, and Play Console rollout steps, refer to [RELEASE.md](RELEASE.md).
+
+This bash function builds the release App Bundle (`.aab`), signs it with `jarsigner` using the upload keystore, and exports it directly to Google Drive (`MBW - Drive/AAB Files/`):
+
+```bash
+export-mbw-bundle() {
+  local DRIVE_DIR="/Users/julian/My Drive/Projects/MBW - Drive/AAB Files"
+  local SECRETS_DIR="/Users/julian/My Drive/Projects/MBW - Drive/Secrets"
+
+  local VERSION=$(grep 'versionName =' app/build.gradle.kts | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+  local VERSION_CODE=$(grep 'versionCode =' app/build.gradle.kts | head -1 | tr -dc '0-9')
+  local TARGET_AAB="${DRIVE_DIR}/mbw-v${VERSION}-${VERSION_CODE}-release.aab"
+
+  mkdir -p "$DRIVE_DIR"
+
+  echo "Building release App Bundle for v${VERSION} (${VERSION_CODE})..."
+  ./gradlew :app:bundleRelease || return 1
+
+  local KS_PASS=$(grep 'Keystore Password:' "${SECRETS_DIR}/notes.txt" | awk '{print $3}')
+  echo "Signing release App Bundle with jarsigner..."
+  jarsigner -keystore "${SECRETS_DIR}/mbw-upload-keystore.jks" \
+    -storepass "$KS_PASS" \
+    -keypass "$KS_PASS" \
+    app/build/outputs/bundle/release/app-release.aab \
+    upload || return 1
+
+  cp "app/build/outputs/bundle/release/app-release.aab" "$TARGET_AAB"
+  echo "Signed AAB successfully exported to: $TARGET_AAB"
+}
+```
+
