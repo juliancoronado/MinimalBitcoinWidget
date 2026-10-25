@@ -10,13 +10,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -82,12 +87,19 @@ fun MainScreen(
                 )
             )
         },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
     ) { innerPadding ->
+        val scrollState = rememberScrollState()
+
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 12.dp)
+                .verticalScroll(
+                    state = scrollState,
+                    enabled = scrollState.maxValue > 0
+                )
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
         ) {
@@ -101,6 +113,13 @@ fun MainScreen(
             )
             CustomizeWidgetShortcut(onClick = onCustomizeWidgetClick)
             AddWidgetShortcut(onClick = { showAddWidgetSheet = true })
+
+            // Prevents widget action tiles from being covered by the floating nav bar
+            Spacer(
+                modifier = Modifier.height(
+                    WindowInsets.systemBars.asPaddingValues().calculateBottomPadding() + 100.dp
+                )
+            )
         }
 
         if (showAddWidgetSheet) {

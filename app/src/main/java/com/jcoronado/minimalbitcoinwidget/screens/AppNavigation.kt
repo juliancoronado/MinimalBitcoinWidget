@@ -51,10 +51,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
@@ -103,24 +99,9 @@ fun AppNavigation() {
         }
     }
 
-    var isNavBarVisibleByScroll by remember { mutableStateOf(true) }
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if (available.y < -1f) {
-                    isNavBarVisibleByScroll = false
-                } else if (available.y > 1f) {
-                    isNavBarVisibleByScroll = true
-                }
-                return Offset.Zero
-            }
-        }
-    }
-
     var navBarSelectedItem by remember { mutableStateOf(currentRoute) }
 
     LaunchedEffect(currentRoute) {
-        isNavBarVisibleByScroll = true
         if (showNavBar) {
             navBarSelectedItem = currentRoute
         }
@@ -145,9 +126,7 @@ fun AppNavigation() {
     }
 
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -288,7 +267,7 @@ fun AppNavigation() {
                     ), Alignment.BottomCenter
             ) {
                 AnimatedVisibility(
-                    visible = showNavBar && isNavBarVisibleByScroll,
+                    visible = showNavBar,
                     enter = fadeIn(motionScheme.defaultSpatialSpec()) + slideInVertically(
                         motionScheme.defaultSpatialSpec()
                     ) { it },

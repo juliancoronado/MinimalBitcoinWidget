@@ -145,7 +145,10 @@ fun DeveloperOptionsScreen(
                 .fillMaxSize()
         ) {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
+                verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                    bottom = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding() + 100.dp
+                )
             ) {
                 item {
                     val colors =
