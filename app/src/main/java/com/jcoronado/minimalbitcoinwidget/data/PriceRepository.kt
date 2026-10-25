@@ -110,13 +110,13 @@ class PriceRepository(private val context: Context) {
     }
 
     /**
-     * Checks whether existing cached data is fresh (fetched within [AppConstants.CACHE_DURATION_MILLIS]).
+     * Checks whether existing cached data is fresh (fetched within [durationMillis], which defaults to [AppConstants.CACHE_DURATION_MILLIS]).
      */
-    fun isCacheFresh(): Boolean {
+    fun isCacheFresh(durationMillis: Long = AppConstants.CACHE_DURATION_MILLIS): Boolean {
         val lastApiCallTime = getLastApiCallTimestamp()
         val currentTime = System.currentTimeMillis()
         val hasCache = prefs.contains(Prefs.CACHED_PRICE_DATA)
-        return hasCache && (currentTime - lastApiCallTime < AppConstants.CACHE_DURATION_MILLIS)
+        return hasCache && (currentTime - lastApiCallTime < durationMillis)
     }
 
     /**

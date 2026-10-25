@@ -56,7 +56,7 @@ class PriceUpdateWorker(
             return@withContext Result.success()
         }
 
-        if (repository.isCacheFresh()) {
+        if (repository.isCacheFresh(AppConstants.WORKER_CACHE_DURATION_MILLIS)) {
             dao.insert(DebugLog(message = "Skipping fetch (< 15 mins)"))
             Log.d(LOG_TAG, "Data is fresh, skipping fetch")
             PriceViewModel.refreshWidgetsFromCache(applicationContext)

@@ -49,7 +49,7 @@ Key directories and files:
 ### 3. Background Processing & Networking
 
 - All periodic data fetching must go through **WorkManager** (`PriceUpdateWorker`).
-- **Respect API limits:** The app fetches from a CDN-cached Bitcoin price API proxy (backed by CoinGecko). Maintain the existing caching logic (e.g., the 30-minute cache buffer via `AppConstants.CACHE_DURATION_MILLIS`) to avoid unnecessary network calls.
+- **Respect API limits:** The app fetches from a CDN-cached Bitcoin price API proxy (backed by CoinGecko). Maintain the existing caching logic (the 30-minute companion app cache buffer via `AppConstants.CACHE_DURATION_MILLIS` and the 15-minute background worker cache buffer via `AppConstants.WORKER_CACHE_DURATION_MILLIS`) to avoid unnecessary network calls.
 - Handle network failures gracefully. If a fetch fails, the widget should be updated to an error state (`PriceWidgetState.Error`) rather than crashing, and WorkManager should handle the retry backoff.
 
 ### 4. Data Storage

@@ -70,10 +70,14 @@ object Prefs {
 object AppConstants {
     /** Default currency used if none is selected. */
     const val CURRENCY_DEFAULT = "usd"
-    /** Internal cache duration in minutes. */
-    private const val CACHE_DURATION_MINUTES = 30L
-    /** Duration in milliseconds for which the cached price data is considered valid. */
+    /** Internal cache duration in minutes for the companion app. */
+    const val CACHE_DURATION_MINUTES = 30L
+    /** Duration in milliseconds for which the cached price data is considered valid in the companion app. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
+    /** Cache duration in minutes for the background widget worker. */
+    const val WORKER_CACHE_DURATION_MINUTES = 15L
+    /** Duration in milliseconds for which the background widget worker considers cached price data valid. */
+    val WORKER_CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(WORKER_CACHE_DURATION_MINUTES)
     const val DEBUG_MOCK_PRICE_DEFAULT = "52849.10"
     const val DEBUG_MOCK_PERCENT_CHANGE_DEFAULT = "2.03"
     const val DEBUG_MOCK_CURRENCY_DEFAULT = "EUR"

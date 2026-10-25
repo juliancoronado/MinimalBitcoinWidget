@@ -60,4 +60,12 @@ class PriceRepositoryTest {
         assert(error is Resource.Error && error.message == "Failed" && error.cause != null)
         assert(loading is Resource.Loading)
     }
+
+    @Test
+    fun `cache duration constants are properly defined`() {
+        assertEquals(30L, AppConstants.CACHE_DURATION_MINUTES)
+        assertEquals(30 * 60 * 1000L, AppConstants.CACHE_DURATION_MILLIS)
+        assertEquals(15L, AppConstants.WORKER_CACHE_DURATION_MINUTES)
+        assertEquals(15 * 60 * 1000L, AppConstants.WORKER_CACHE_DURATION_MILLIS)
+    }
 }
