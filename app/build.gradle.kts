@@ -18,8 +18,9 @@ android {
         minSdk = 28
         targetSdk = 37
         // last public release version = 3.5.0 (28)
-        versionCode = 34
-        versionName = "3.6.0"
+        // next pending release version = 3.6.0 (34)
+        versionCode = 35
+        versionName = "3.7.0-dev"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
