@@ -8,7 +8,6 @@ import android.view.HapticFeedbackConstants
 import android.widget.FrameLayout
 import android.widget.RemoteViews
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -29,7 +28,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -62,7 +60,10 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -70,8 +71,10 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.glance.appwidget.compose
 import com.jcoronado.minimalbitcoinwidget.R
@@ -233,17 +236,10 @@ fun CustomizeWidgetScreen(
                                 horizontalArrangement = Arrangement.spacedBy(2.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
                                 val activeColor = MaterialTheme.colorScheme.primary
                                 val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f)
 
                                 repeat(PreviewWidgetType.entries.size) { pageIndex ->
-                                    val distance = kotlin.math.abs(scrollPosition - pageIndex)
-                                    val progress = (1f - distance).coerceIn(0f, 1f)
-
-                                    val dotWidth = androidx.compose.ui.unit.lerp(6.dp, 18.dp, progress)
-                                    val dotColor = androidx.compose.ui.graphics.lerp(inactiveColor, activeColor, progress)
-
                                     Box(
                                         modifier = Modifier
                                             .height(20.dp)
@@ -261,9 +257,30 @@ fun CustomizeWidgetScreen(
                                     ) {
                                         Box(
                                             modifier = Modifier
-                                                .size(width = dotWidth, height = 6.dp)
-                                                .clip(CircleShape)
-                                                .background(dotColor)
+                                                .layout { measurable, _ ->
+                                                    val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
+                                                    val distance = kotlin.math.abs(scrollPosition - pageIndex)
+                                                    val progress = (1f - distance).coerceIn(0f, 1f)
+                                                    val widthPx = lerp(6.dp, 18.dp, progress).roundToPx()
+                                                    val heightPx = 6.dp.roundToPx()
+                                                    val placeable = measurable.measure(
+                                                        Constraints.fixed(widthPx, heightPx)
+                                                    )
+                                                    layout(widthPx, heightPx) {
+                                                        placeable.placeRelative(0, 0)
+                                                    }
+                                                }
+                                                .drawBehind {
+                                                    val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
+                                                    val distance = kotlin.math.abs(scrollPosition - pageIndex)
+                                                    val progress = (1f - distance).coerceIn(0f, 1f)
+                                                    val dotColor = lerp(inactiveColor, activeColor, progress)
+                                                    val radius = size.height / 2f
+                                                    drawRoundRect(
+                                                        color = dotColor,
+                                                        cornerRadius = CornerRadius(radius, radius)
+                                                    )
+                                                }
                                         )
                                     }
                                 }

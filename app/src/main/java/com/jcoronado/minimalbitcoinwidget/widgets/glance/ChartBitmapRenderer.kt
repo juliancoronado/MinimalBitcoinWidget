@@ -5,22 +5,13 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
-import android.graphics.Rect
-import android.graphics.RectF
 import android.graphics.Shader
-import android.graphics.Typeface
-import android.text.TextPaint
-import android.text.TextUtils
 import android.util.TypedValue
-import com.jcoronado.minimalbitcoinwidget.R
-import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
-import com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PRICES
 import com.jcoronado.minimalbitcoinwidget.ui.components.SparklineScaleCalculator
 
 /**
@@ -95,151 +86,6 @@ object ChartBitmapRenderer {
     }
 
     /**
-     * Resolves the trendline line color adhering to MBW theme settings and dynamic colors.
-     */
-    fun resolveTrendColor(
-        context: Context,
-        isPositive: Boolean,
-        colorStyle: WidgetColorStyle,
-        widgetTheme: WidgetTheme
-    ): Int {
-        val isDark = isDarkTheme(context, widgetTheme)
-
-        return if (colorStyle == WidgetColorStyle.SOLID) {
-            if (isDark) {
-                if (isPositive) 0xFF36B37E.toInt() else 0xFFFF5630.toInt()
-            } else {
-                if (isPositive) 0xFF00875A.toInt() else 0xFFDE350B.toInt()
-            }
-        } else {
-            val colorRes = if (isDark) {
-                if (isPositive) com.jcoronado.minimalbitcoinwidget.R.color.widget_dynamic_dark_primary
-                else com.jcoronado.minimalbitcoinwidget.R.color.widget_dynamic_dark_error
-            } else {
-                if (isPositive) com.jcoronado.minimalbitcoinwidget.R.color.widget_dynamic_light_primary
-                else com.jcoronado.minimalbitcoinwidget.R.color.widget_dynamic_light_error
-            }
-            androidx.core.content.ContextCompat.getColor(context, colorRes)
-        }
-    }
-
-    /**
-     * Renders a neutral, muted unavailable state with a centered dotted reference baseline
-     * and an informative pill overlay (e.g. "Chart unavailable for 30D interval").
-     */
-    fun createUnavailableChartBitmap(
-        context: Context,
-        widthPx: Int,
-        heightPx: Int,
-        widgetTheme: WidgetTheme = WidgetTheme.SYSTEM,
-        message: String = context.getString(R.string.chart_unavailable_30d),
-        typeface: Typeface? = null
-    ): Bitmap {
-        val w = widthPx.coerceAtLeast(10)
-        val h = heightPx.coerceAtLeast(10)
-
-        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-
-        val isDark = isDarkTheme(context, widgetTheme)
-        val dotColor = if (isDark) {
-            Color.argb((255 * 0.30f).toInt(), 196, 198, 208)
-        } else {
-            Color.argb((255 * 0.30f).toInt(), 68, 71, 78)
-        }
-        val pillBgColor = if (isDark) {
-            Color.rgb(39, 42, 47)
-        } else {
-            Color.rgb(230, 232, 238)
-        }
-        val pillBorderColor = if (isDark) {
-            Color.argb((255 * 0.20f).toInt(), 196, 198, 208)
-        } else {
-            Color.argb((255 * 0.20f).toInt(), 68, 71, 78)
-        }
-        val textColor = if (isDark) 0xFFC4C6D0.toInt() else 0xFF44474E.toInt()
-
-        val centerY = h / 2f
-
-        // 1. Draw horizontal dotted reference line across the full width
-        val dotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = dotColor
-        }
-        val dotRadius = dpToPx(context, 1.1f)
-        val dotSpacing = dpToPx(context, 7.5f)
-        var currentX = 0f
-        while (currentX <= w.toFloat()) {
-            canvas.drawCircle(currentX, centerY, dotRadius, dotPaint)
-            currentX += dotSpacing
-        }
-
-        // 2. Draw centered unavailable pill if vertical space permits
-        val minHeightForPill = dpToPx(context, 18f)
-        if (h >= minHeightForPill && message.isNotBlank()) {
-            val isCompactHeight = h < dpToPx(context, 32f)
-            var fontSizeSp = if (isCompactHeight) 8.0f else 9.5f
-            val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                this.color = textColor
-                this.textSize = spToPx(context, fontSizeSp)
-                this.typeface = typeface ?: Typeface.DEFAULT
-                this.textAlign = Paint.Align.CENTER
-            }
-
-            val pillPaddingH = if (isCompactHeight) dpToPx(context, 8f) else dpToPx(context, 12f)
-            val pillPaddingV = if (isCompactHeight) dpToPx(context, 2.5f) else dpToPx(context, 4.5f)
-            val maxAvailableTextWidth = (w - dpToPx(context, 16f) - (pillPaddingH * 2)).coerceAtLeast(10f)
-
-            if (textPaint.measureText(message) > maxAvailableTextWidth) {
-                fontSizeSp = if (isCompactHeight) 7.5f else 8.5f
-                textPaint.textSize = spToPx(context, fontSizeSp)
-            }
-
-            val ellipsizeText = TextUtils.ellipsize(
-                message,
-                TextPaint(textPaint),
-                maxAvailableTextWidth,
-                TextUtils.TruncateAt.END
-            ).toString()
-
-            val textBounds = Rect()
-            textPaint.getTextBounds(ellipsizeText, 0, ellipsizeText.length, textBounds)
-            val measuredTextWidth = textPaint.measureText(ellipsizeText)
-
-            val pillWidth = (measuredTextWidth + (pillPaddingH * 2)).coerceAtMost(w.toFloat() - dpToPx(context, 8f))
-            val pillHeight = (textBounds.height() + (pillPaddingV * 2)).coerceAtMost(h.toFloat() - dpToPx(context, 2f))
-            val pillRadius = pillHeight / 2f
-
-            val pillLeft = (w - pillWidth) / 2f
-            val pillTop = centerY - (pillHeight / 2f)
-            val pillRight = pillLeft + pillWidth
-            val pillBottom = pillTop + pillHeight
-            val pillRect = RectF(pillLeft, pillTop, pillRight, pillBottom)
-
-            // Pill background
-            val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.FILL
-                color = pillBgColor
-            }
-            canvas.drawRoundRect(pillRect, pillRadius, pillRadius, bgPaint)
-
-            // Pill border
-            val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.STROKE
-                strokeWidth = dpToPx(context, 0.75f)
-                color = pillBorderColor
-            }
-            canvas.drawRoundRect(pillRect, pillRadius, pillRadius, borderPaint)
-
-            // Centered text
-            val textY = centerY - textBounds.exactCenterY()
-            canvas.drawText(ellipsizeText, w / 2f, textY, textPaint)
-        }
-
-        return bitmap
-    }
-
-    /**
      * Backwards-compatible overload for existing calls.
      */
     fun createChartBitmap(
@@ -289,17 +135,11 @@ object ChartBitmapRenderer {
         val w = widthPx.coerceAtLeast(10)
         val h = heightPx.coerceAtLeast(10)
 
+        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         if (prices.size < 2) {
-            return createUnavailableChartBitmap(
-                context = context,
-                widthPx = w,
-                heightPx = h,
-                widgetTheme = WidgetTheme.SYSTEM,
-                message = context.getString(R.string.chart_unavailable_30d)
-            )
+            return bitmap
         }
 
-        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         val rawPrices = downsamplePrices(prices)

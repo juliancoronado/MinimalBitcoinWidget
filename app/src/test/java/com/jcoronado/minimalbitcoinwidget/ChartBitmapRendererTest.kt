@@ -1,7 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget
 
 import androidx.compose.ui.unit.dp
-import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartPriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
@@ -106,10 +105,9 @@ class ChartBitmapRendererTest {
     }
 
     @Test
-    fun `formatPriceParts correctly separates price integer and decimals`() {
-        val parts = com.jcoronado.minimalbitcoinwidget.utils.FormatUtils.formatPriceParts(82239.51, "USD")
-        assertTrue(parts.integerPart.contains("82"))
-        assertTrue(parts.decimalPart.contains("51"))
+    fun `formatPriceSeparated correctly separates price value and currency symbol`() {
+        val parts = com.jcoronado.minimalbitcoinwidget.utils.FormatUtils.formatPriceSeparated(82239.51, "USD")
+        assertTrue(parts.price.contains("82"))
         assertTrue(parts.symbol.isNotEmpty())
     }
 

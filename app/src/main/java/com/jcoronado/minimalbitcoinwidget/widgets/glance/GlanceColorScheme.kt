@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
-import androidx.glance.LocalContext
 import androidx.glance.background
 import androidx.glance.color.ColorProvider
 import androidx.glance.color.ColorProviders as GlanceColorProviders
@@ -57,9 +56,6 @@ object GlanceColorScheme {
     val solidLightBackground = ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))
     val solidDarkBackground = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000))
     val solidSystemBackground = ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF000000))
-
-    val fallbackLightBackground = ColorProvider(day = Color(0xFFF8F9FF), night = Color(0xFFF8F9FF))
-    val fallbackDarkBackground = ColorProvider(day = Color(0xFF1D2024), night = Color(0xFF1D2024))
 
     @SuppressLint("RestrictedApi")
     val dynamicLightColors = colorProviders(
