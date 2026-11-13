@@ -173,8 +173,6 @@ object GlanceColorScheme {
         widgetTheme: WidgetTheme,
         systemCornerRadiusDefined: Boolean
     ): GlanceModifier {
-        val context = LocalContext.current
-
         // On Android 12+ (API 31+) with system corner radius, use native dynamic theme backgrounds
         if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
             return when (colorStyle) {
@@ -187,11 +185,7 @@ object GlanceColorScheme {
                     modifier.background(solidBg)
                 }
                 WidgetColorStyle.DYNAMIC -> {
-                    when (widgetTheme) {
-                        WidgetTheme.LIGHT -> modifier.background(fallbackLightBackground)
-                        WidgetTheme.DARK -> modifier.background(fallbackDarkBackground)
-                        WidgetTheme.SYSTEM -> modifier.background(GlanceTheme.colors.widgetBackground)
-                    }
+                    modifier.background(GlanceTheme.colors.widgetBackground)
                 }
             }
         }

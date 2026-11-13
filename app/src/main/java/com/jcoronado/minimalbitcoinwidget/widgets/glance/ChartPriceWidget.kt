@@ -602,7 +602,18 @@ class ChartPriceWidget : GlanceAppWidget() {
         typeface: Typeface?
     ) {
         val context = LocalContext.current
-        val headerText = "/ ${currency.uppercase()} ・ ${context.getString(intervalLabel)}"
+        val resolvedIntervalLabel = if (
+            intervalLabel == R.string.interval_24h ||
+            intervalLabel == R.string.interval_7d ||
+            intervalLabel == R.string.interval_30d
+        ) {
+            intervalLabel
+        } else {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+            TimeInterval.fromValue(selectedInterval).labelResId
+        }
+        val headerText = "/ ${currency.uppercase()} ・ ${context.getString(resolvedIntervalLabel)}"
         val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
 
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -781,6 +792,15 @@ class ChartPriceWidget : GlanceAppWidget() {
                             color = textColor,
                             fontSize = 11.5.sp
                         )
+                    )
+                }
+                if (error) {
+                    Spacer(modifier = GlanceModifier.width(4.dp))
+                    Box(
+                        modifier = GlanceModifier.size(3.dp).background(
+                            GlanceTheme.colors.error
+                        ).cornerRadius(32.dp),
+                        content = {}
                     )
                 }
             }
