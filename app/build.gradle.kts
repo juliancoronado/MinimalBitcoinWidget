@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.jcoronado.minimalbitcoinwidget"
-        minSdk = 28
+        minSdk = 30
         targetSdk = 37
         // last public release version = 3.6.0 (37)
         versionCode = 38

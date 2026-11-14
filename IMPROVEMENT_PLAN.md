@@ -66,22 +66,7 @@ This document serves as a structured technical specification for an AI agent to 
 
 ## Phase 4: Android OS Lifecycle & Versioning Roadmap (2027)
 
-### Task 5: Early 2027 (January?) — Drop Android 9 & 10 (Minor Release: `v3.7.0`)
-
-- **Goal:** Modernize baseline OS support by dropping Android 9 (API 28) and Android 10 (API 29).
-- **Impact Analysis (Oct 2026 data):**
-  - Android 9: ~0.2% of app users
-  - Android 10: ~1.2% of app users
-  - Total audience retained: **~98.6%** (Android 11+).
-- **Target Files:**
-  - `app/build.gradle.kts` (`minSdk = 30`)
-  - `AGENTS.md` (Update Tech Stack: `Min SDK 30`)
-- **Instructions:**
-  1. Bump `minSdk` from 28 to 30 in `app/build.gradle.kts`.
-  2. Treat as a **Minor** version bump (e.g., `3.7.0` or `3.8.0`) since this is routine maintenance with minimal audience impact.
-  3. Existing installations on Android 9/10 continue running without breaking; they simply remain on the last compatible APK.
-
-### Task 6: Later in 2027 — Android 12 Baseline & Major Milestone (`v4.0.0`)
+### Task 5: 2027 — Android 12 Baseline & Major Milestone (`v4.0.0`)
 
 - **Goal:** Advance `minSdk` to 31 (Android 12), remove all legacy XML widget code, and bundle with new UI features for a major `v4.0.0` release.
 - **Context & Synergy with Task 4 (Widget Consolidation):**
