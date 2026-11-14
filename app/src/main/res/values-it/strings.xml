@@ -104,6 +104,8 @@
     <string name="cancel">Annulla</string>
     <string name="clear">Cancella</string>
     <string name="error">Errore</string>
+    <string name="error_network">Errore di connessione di rete</string>
+    <string name="error_update_price">Impossibile aggiornare il prezzo</string>
     <string name="reset_to_default">Ripristina impostazioni predefinite</string>
 
     <string name="mail_error">Nessuna app di posta trovata</string>

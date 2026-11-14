@@ -78,14 +78,14 @@ class PriceUpdateWorker(
                 val exception = resource.cause as? Exception ?: Exception(resource.message)
                 dao.insert(DebugLog(message = "Failed - ${resource.message}"))
                 Log.e(LOG_TAG, "Worker fetch error: ${resource.message}", exception)
-                handleError(exception)
+                handleError(resource.getUserFacingMessage(applicationContext))
             }
             // Included for Kotlin sealed class branch exhaustiveness. fetchPrice() runs to completion on Dispatchers.IO and only returns Success or Error.
             is Resource.Loading -> Result.retry()
         }
     }
 
-    private suspend fun handleError(e: Exception): Result {
+    private suspend fun handleError(userMessage: String): Result {
         val manager = GlanceAppWidgetManager(context)
         val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
         val chartIds = manager.getGlanceIds(ChartPriceWidget::class.java)
@@ -146,7 +146,7 @@ class PriceUpdateWorker(
         PriceViewModel.updateGlanceWidgets(
             context,
             PriceWidgetState.Error(
-                message = e.message ?: "Unknown Error",
+                message = userMessage,
                 lastValidState = lastValid,
                 fontKey = fontKey,
                 priceSizeKey = priceSizeKey,

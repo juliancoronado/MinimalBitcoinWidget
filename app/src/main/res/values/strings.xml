@@ -137,6 +137,8 @@
     <string name="cancel">Cancel</string>
     <string name="clear">Clear</string>
     <string name="error">Error</string>
+    <string name="error_network">Network connection error</string>
+    <string name="error_update_price">Unable to update price</string>
     <string name="reset_to_default">Reset to default</string>
 
     <!-- Email / Contact -->

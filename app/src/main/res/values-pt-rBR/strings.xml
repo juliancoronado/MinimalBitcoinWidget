@@ -104,6 +104,8 @@
     <string name="cancel">Cancelar</string>
     <string name="clear">Limpar</string>
     <string name="error">Erro</string>
+    <string name="error_network">Erro de conexão de rede</string>
+    <string name="error_update_price">Não foi possível atualizar o preço</string>
     <string name="reset_to_default">Redefinir para o padrão</string>
 
     <string name="mail_error">Nenhum aplicativo de e-mail encontrado</string>
