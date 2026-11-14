@@ -1,5 +1,5 @@
 [versions]
-agp = "9.4.1"
+agp = "9.5.1"
 kotlin = "2.4.21"
 coreKtx = "1.19.1"
 appcompat = "1.8.0"
@@ -15,14 +15,14 @@ gson = "2.15.0"
 androidxComposeBom = "2026.09.00"
 activityCompose = "1.13.0"
 lifecycleViewmodelCompose = "2.11.0"
-material3Expressive = "1.5.0-beta02" # beta
+material3Expressive = "1.5.0-rc01" # rc
 # glance
 glance = "1.2.0"
 # navigation3
-nav3Core = "1.2.0"
+nav3Core = "1.2.1"
 navigationEvent = "1.2.0"
 # serialization
-kotlinxSerialization = "1.12.0"
+kotlinxSerialization = "1.13.0"
 # workmanager
 workRuntimeKtx = "2.12.0"
 # room / db
