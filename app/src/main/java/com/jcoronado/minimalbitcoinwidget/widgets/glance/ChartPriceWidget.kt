@@ -213,9 +213,7 @@ class ChartPriceWidget : GlanceAppWidget() {
                         ResponsiveAvailableUI(
                             state = state,
                             size = size,
-                            typeface = typeface,
-                            colorStyle = colorStyle,
-                            widgetTheme = widgetTheme
+                            typeface = typeface
                         )
                     }
                     is PriceWidgetState.Error -> {
@@ -224,8 +222,6 @@ class ChartPriceWidget : GlanceAppWidget() {
                                 state = state.lastValidState,
                                 size = size,
                                 typeface = typeface,
-                                colorStyle = colorStyle,
-                                widgetTheme = widgetTheme,
                                 error = true
                             )
                         } else {
@@ -250,8 +246,6 @@ class ChartPriceWidget : GlanceAppWidget() {
         state: PriceWidgetState.Available,
         size: DpSize,
         typeface: Typeface?,
-        colorStyle: WidgetColorStyle,
-        widgetTheme: WidgetTheme,
         error: Boolean = false
     ) {
         val width = size.width
@@ -259,16 +253,16 @@ class ChartPriceWidget : GlanceAppWidget() {
 
         when {
             width >= 240.dp && height >= 120.dp -> {
-                LargeLayout(state, size, typeface, colorStyle, widgetTheme, error)
+                LargeLayout(state, size, typeface, error)
             }
             height >= 120.dp -> {
-                MediumLayout(state, size, typeface, colorStyle, widgetTheme, error)
+                MediumLayout(state, size, typeface, error)
             }
             width >= 240.dp -> {
-                WideSlimLayout(state, size, typeface, colorStyle, widgetTheme, error)
+                WideSlimLayout(state, size, typeface, error)
             }
             else -> {
-                CompactLayout(state, size, typeface, colorStyle, widgetTheme, error)
+                CompactLayout(state, size, typeface, error)
             }
         }
     }
@@ -282,8 +276,6 @@ class ChartPriceWidget : GlanceAppWidget() {
         state: PriceWidgetState.Available,
         size: DpSize,
         typeface: Typeface?,
-        colorStyle: WidgetColorStyle,
-        widgetTheme: WidgetTheme,
         error: Boolean
     ) {
         val is30d = state.intervalLabelResId == R.string.interval_30d
@@ -323,12 +315,8 @@ class ChartPriceWidget : GlanceAppWidget() {
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
                     heightDp = (size.height - 76.dp).coerceAtLeast(20.dp),
-                    colorStyle = colorStyle,
-                    widgetTheme = widgetTheme,
                     includeGradient = false,
                     strokeWidthDp = 2.0f,
-                    isUnavailable = false,
-                    typeface = typeface,
                     modifier = GlanceModifier.defaultWeight().fillMaxWidth()
                 )
             }
@@ -344,8 +332,6 @@ class ChartPriceWidget : GlanceAppWidget() {
         state: PriceWidgetState.Available,
         size: DpSize,
         typeface: Typeface?,
-        colorStyle: WidgetColorStyle,
-        widgetTheme: WidgetTheme,
         error: Boolean
     ) {
         val is30d = state.intervalLabelResId == R.string.interval_30d
@@ -387,12 +373,8 @@ class ChartPriceWidget : GlanceAppWidget() {
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width * 0.52f,
                     heightDp = size.height,
-                    colorStyle = colorStyle,
-                    widgetTheme = widgetTheme,
                     includeGradient = false,
                     strokeWidthDp = 2.2f,
-                    isUnavailable = false,
-                    typeface = typeface,
                     modifier = GlanceModifier.width(size.width * 0.52f).height(size.height)
                 )
             }
@@ -408,8 +390,6 @@ class ChartPriceWidget : GlanceAppWidget() {
         state: PriceWidgetState.Available,
         size: DpSize,
         typeface: Typeface?,
-        colorStyle: WidgetColorStyle,
-        widgetTheme: WidgetTheme,
         error: Boolean
     ) {
         val is30d = state.intervalLabelResId == R.string.interval_30d
@@ -450,12 +430,8 @@ class ChartPriceWidget : GlanceAppWidget() {
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
                     heightDp = (size.height - 86.dp).coerceAtLeast(44.dp),
-                    colorStyle = colorStyle,
-                    widgetTheme = widgetTheme,
                     includeGradient = false,
                     strokeWidthDp = 2.6f,
-                    isUnavailable = false,
-                    typeface = typeface,
                     modifier = GlanceModifier.defaultWeight().fillMaxWidth()
                 )
             }
@@ -471,8 +447,6 @@ class ChartPriceWidget : GlanceAppWidget() {
         state: PriceWidgetState.Available,
         size: DpSize,
         typeface: Typeface?,
-        colorStyle: WidgetColorStyle,
-        widgetTheme: WidgetTheme,
         error: Boolean
     ) {
         val is30d = state.intervalLabelResId == R.string.interval_30d
@@ -522,12 +496,8 @@ class ChartPriceWidget : GlanceAppWidget() {
                     isPositive = state.changePercentage >= 0,
                     widthDp = size.width,
                     heightDp = (size.height - 76.dp).coerceAtLeast(48.dp),
-                    colorStyle = colorStyle,
-                    widgetTheme = widgetTheme,
                     includeGradient = false,
                     strokeWidthDp = 2.6f,
-                    isUnavailable = false,
-                    typeface = typeface,
                     modifier = GlanceModifier.defaultWeight().fillMaxWidth()
                 )
             }
@@ -540,51 +510,29 @@ class ChartPriceWidget : GlanceAppWidget() {
         isPositive: Boolean,
         widthDp: Dp,
         heightDp: Dp,
-        colorStyle: WidgetColorStyle,
-        widgetTheme: WidgetTheme,
         includeGradient: Boolean = false,
         strokeWidthDp: Float = 2.6f,
-        isUnavailable: Boolean = false,
-        unavailableMessage: String? = null,
-        typeface: Typeface? = null,
         modifier: GlanceModifier = GlanceModifier.fillMaxWidth().height(heightDp)
     ) {
         val context = LocalContext.current
         val widthPx = ChartBitmapRenderer.dpToPx(context, widthDp.value).toInt().coerceAtLeast(10)
         val heightPx = ChartBitmapRenderer.dpToPx(context, heightDp.value).toInt().coerceAtLeast(10)
 
-        val unavailable = isUnavailable || prices.size < 2
+        val bitmap = ChartBitmapRenderer.createChartBitmap(
+            context = context,
+            prices = prices,
+            strokeColor = Color.WHITE,
+            widthPx = widthPx,
+            heightPx = heightPx,
+            fillStyle = if (includeGradient) ChartFillStyle.SUBTLE else ChartFillStyle.NONE,
+            strokeWidthDp = strokeWidthDp,
+            drawDashedBaseline = true,
+            drawLiveDot = false,
+            neonGlow = false
+        )
 
-        val bitmap = if (unavailable) {
-            ChartBitmapRenderer.createUnavailableChartBitmap(
-                context = context,
-                widthPx = widthPx,
-                heightPx = heightPx,
-                widgetTheme = widgetTheme,
-                message = unavailableMessage ?: context.getString(R.string.chart_unavailable_30d),
-                typeface = typeface
-            )
-        } else {
-            ChartBitmapRenderer.createChartBitmap(
-                context = context,
-                prices = prices,
-                strokeColor = Color.WHITE,
-                widthPx = widthPx,
-                heightPx = heightPx,
-                fillStyle = if (includeGradient) ChartFillStyle.SUBTLE else ChartFillStyle.NONE,
-                strokeWidthDp = strokeWidthDp,
-                drawDashedBaseline = true,
-                drawLiveDot = false,
-                neonGlow = false
-            )
-        }
-
-        val colorFilter = if (unavailable) {
-            null
-        } else {
-            val trendColor = if (isPositive) GlanceTheme.colors.primary else GlanceTheme.colors.error
-            ColorFilter.tint(trendColor)
-        }
+        val trendColor = if (isPositive) GlanceTheme.colors.primary else GlanceTheme.colors.error
+        val colorFilter = ColorFilter.tint(trendColor)
 
         Image(
             provider = ImageProvider(bitmap),
@@ -602,7 +550,18 @@ class ChartPriceWidget : GlanceAppWidget() {
         typeface: Typeface?
     ) {
         val context = LocalContext.current
-        val headerText = "/ ${currency.uppercase()} ・ ${context.getString(intervalLabel)}"
+        val resolvedIntervalLabel = if (
+            intervalLabel == R.string.interval_24h ||
+            intervalLabel == R.string.interval_7d ||
+            intervalLabel == R.string.interval_30d
+        ) {
+            intervalLabel
+        } else {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+            TimeInterval.fromValue(selectedInterval).labelResId
+        }
+        val headerText = "/ ${currency.uppercase()} ・ ${context.getString(resolvedIntervalLabel)}"
         val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
 
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -781,6 +740,15 @@ class ChartPriceWidget : GlanceAppWidget() {
                             color = textColor,
                             fontSize = 11.5.sp
                         )
+                    )
+                }
+                if (error) {
+                    Spacer(modifier = GlanceModifier.width(4.dp))
+                    Box(
+                        modifier = GlanceModifier.size(3.dp).background(
+                            GlanceTheme.colors.error
+                        ).cornerRadius(32.dp),
+                        content = {}
                     )
                 }
             }

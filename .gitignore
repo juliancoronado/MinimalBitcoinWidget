@@ -13,3 +13,4 @@ local.properties
 notes.txt
 *upload-keystore.jks
 native-debug-symbols*.zip
+artifacts/

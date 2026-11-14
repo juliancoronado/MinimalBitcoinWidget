@@ -20,6 +20,7 @@ import com.jcoronado.minimalbitcoinwidget.AppDatabase
 import com.jcoronado.minimalbitcoinwidget.DebugLog
 import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import com.jcoronado.minimalbitcoinwidget.classes.Prefs
+import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.data.PriceRepository
 import com.jcoronado.minimalbitcoinwidget.data.Resource
 import com.jcoronado.minimalbitcoinwidget.utils.FormatUtils
@@ -52,14 +53,14 @@ class PriceUpdateWorker(
 
         if (repository.isMockUiEnabled()) {
             dao.insert(DebugLog(message = "Mock UI enabled, bypassing fetch"))
-            PriceViewModel.refreshWidgetsFromCache(applicationContext)
+            PriceViewModel.refreshWidgetsFromCacheSuspend(applicationContext)
             return@withContext Result.success()
         }
 
         if (repository.isCacheFresh(AppConstants.WORKER_CACHE_DURATION_MILLIS)) {
             dao.insert(DebugLog(message = "Skipping fetch (< 15 mins)"))
             Log.d(LOG_TAG, "Data is fresh, skipping fetch")
-            PriceViewModel.refreshWidgetsFromCache(applicationContext)
+            PriceViewModel.refreshWidgetsFromCacheSuspend(applicationContext)
             return@withContext Result.success()
         }
 
@@ -68,7 +69,7 @@ class PriceUpdateWorker(
 
         when (resource) {
             is Resource.Success -> {
-                PriceViewModel.refreshWidgetsFromCache(applicationContext)
+                PriceViewModel.refreshWidgetsFromCacheSuspend(applicationContext)
                 val priceString = FormatUtils.formatPrice(resource.data.currentPrice, currencyCode)
                 dao.insert(DebugLog(message = "Data fetched ($priceString)"))
                 Result.success()
@@ -77,37 +78,82 @@ class PriceUpdateWorker(
                 val exception = resource.cause as? Exception ?: Exception(resource.message)
                 dao.insert(DebugLog(message = "Failed - ${resource.message}"))
                 Log.e(LOG_TAG, "Worker fetch error: ${resource.message}", exception)
-                handleError(exception)
+                handleError(resource.getUserFacingMessage(applicationContext))
             }
             // Included for Kotlin sealed class branch exhaustiveness. fetchPrice() runs to completion on Dispatchers.IO and only returns Success or Error.
             is Resource.Loading -> Result.retry()
         }
     }
 
-    private suspend fun handleError(e: Exception): Result {
+    private suspend fun handleError(userMessage: String): Result {
         val manager = GlanceAppWidgetManager(context)
         val glanceIds = manager.getGlanceIds(PriceWidget::class.java)
         val chartIds = manager.getGlanceIds(ChartPriceWidget::class.java)
         var lastValid: PriceWidgetState.Available? = null
 
-        if (glanceIds.isNotEmpty()) {
-            val currentState: PriceWidgetState = PriceWidget().getAppWidgetState(context, glanceIds.first())
-            lastValid = when (currentState) {
+        for (id in chartIds) {
+            val currentState: PriceWidgetState = ChartPriceWidget().getAppWidgetState(context, id)
+            val candidate = when (currentState) {
                 is PriceWidgetState.Available -> currentState
                 is PriceWidgetState.Error -> currentState.lastValidState
                 else -> null
             }
-        } else if (chartIds.isNotEmpty()) {
-            val currentState: PriceWidgetState = ChartPriceWidget().getAppWidgetState(context, chartIds.first())
-            lastValid = when (currentState) {
-                is PriceWidgetState.Available -> currentState
-                is PriceWidgetState.Error -> currentState.lastValidState
-                else -> null
+            if (candidate != null) {
+                lastValid = candidate
+                break
+            }
+        }
+
+        if (lastValid == null) {
+            for (id in glanceIds) {
+                val currentState: PriceWidgetState = PriceWidget().getAppWidgetState(context, id)
+                val candidate = when (currentState) {
+                    is PriceWidgetState.Available -> currentState
+                    is PriceWidgetState.Error -> currentState.lastValidState
+                    else -> null
+                }
+                if (candidate != null) {
+                    lastValid = candidate
+                    break
+                }
+            }
+        }
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val fontKey = lastValid?.fontKey
+            ?: prefs.getString(Prefs.SELECTED_WIDGET_FONT, WidgetFont.DEFAULT.key)
+            ?: WidgetFont.DEFAULT.key
+        val priceSizeKey = lastValid?.priceSizeKey
+            ?: prefs.getString(Prefs.WIDGET_PRICE_SIZE, "default")
+            ?: "default"
+        val colorStyleKey = lastValid?.colorStyleKey
+            ?: prefs.getString(Prefs.WIDGET_COLOR_STYLE, "dynamic")
+            ?: "dynamic"
+        val themeKey = lastValid?.themeKey
+            ?: prefs.getString(Prefs.WIDGET_THEME, "system")
+            ?: "system"
+
+        if (lastValid != null && lastValid.sparklinePrices.isEmpty()) {
+            val repository = PriceRepository(context)
+            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+            val cachedSparkline = repository.getCachedPriceData()?.getSparklineForInterval(selectedInterval).orEmpty()
+            if (cachedSparkline.isNotEmpty()) {
+                lastValid = lastValid.copy(sparklinePrices = cachedSparkline)
             }
         }
 
         // update glance widgets to error state
-        PriceViewModel.updateGlanceWidgets(context, PriceWidgetState.Error(e.message ?: "Unknown Error", lastValid))
+        PriceViewModel.updateGlanceWidgets(
+            context,
+            PriceWidgetState.Error(
+                message = userMessage,
+                lastValidState = lastValid,
+                fontKey = fontKey,
+                priceSizeKey = priceSizeKey,
+                colorStyleKey = colorStyleKey,
+                themeKey = themeKey
+            )
+        )
         return Result.retry()
     }
 

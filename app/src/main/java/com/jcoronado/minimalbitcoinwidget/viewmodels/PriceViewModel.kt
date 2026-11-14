@@ -268,7 +268,7 @@ class PriceViewModel @JvmOverloads constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
 
             val isCacheHit = !force && repository.isCacheFresh() && repository.getCachedPriceData() != null
             val currency = _uiState.value.selectedCurrency
@@ -306,7 +306,7 @@ class PriceViewModel @JvmOverloads constructor(
                     Log.e(LOG_TAG, "Network call failed: ${resource.message}")
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = resource.message
+                        errorMessage = resource.getUserFacingMessage(getApplication())
                     )
                 }
                 is Resource.Loading -> {

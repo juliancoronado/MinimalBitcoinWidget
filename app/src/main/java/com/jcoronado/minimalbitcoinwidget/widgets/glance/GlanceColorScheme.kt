@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
-import androidx.glance.LocalContext
 import androidx.glance.background
 import androidx.glance.color.ColorProvider
 import androidx.glance.color.ColorProviders as GlanceColorProviders
@@ -57,9 +56,6 @@ object GlanceColorScheme {
     val solidLightBackground = ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))
     val solidDarkBackground = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000))
     val solidSystemBackground = ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF000000))
-
-    val fallbackLightBackground = ColorProvider(day = Color(0xFFF8F9FF), night = Color(0xFFF8F9FF))
-    val fallbackDarkBackground = ColorProvider(day = Color(0xFF1D2024), night = Color(0xFF1D2024))
 
     @SuppressLint("RestrictedApi")
     val dynamicLightColors = colorProviders(
@@ -173,8 +169,6 @@ object GlanceColorScheme {
         widgetTheme: WidgetTheme,
         systemCornerRadiusDefined: Boolean
     ): GlanceModifier {
-        val context = LocalContext.current
-
         // On Android 12+ (API 31+) with system corner radius, use native dynamic theme backgrounds
         if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
             return when (colorStyle) {
@@ -187,11 +181,7 @@ object GlanceColorScheme {
                     modifier.background(solidBg)
                 }
                 WidgetColorStyle.DYNAMIC -> {
-                    when (widgetTheme) {
-                        WidgetTheme.LIGHT -> modifier.background(fallbackLightBackground)
-                        WidgetTheme.DARK -> modifier.background(fallbackDarkBackground)
-                        WidgetTheme.SYSTEM -> modifier.background(GlanceTheme.colors.widgetBackground)
-                    }
+                    modifier.background(GlanceTheme.colors.widgetBackground)
                 }
             }
         }
