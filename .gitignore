@@ -14,3 +14,9 @@ notes.txt
 *upload-keystore.jks
 native-debug-symbols*.zip
 artifacts/
+scripts/
+__pycache__/
+*.py[cod]
+.env
+.env.local
+*play*key*.json
