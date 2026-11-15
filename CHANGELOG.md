@@ -15,7 +15,7 @@ Date Format: YYYY-MM-DD
 
 ---
 
-## [3.6.0] - PENDING
+## [3.6.0] - 2026-11-23
 
 ### Added
 
@@ -23,7 +23,6 @@ Date Format: YYYY-MM-DD
 - Added "Add to Home Screen" bottom sheet on the Dashboard to easily choose between pinning the Price Widget or Chart Widget.
 - Added swipeable pager with Pixel-style indicator dots to the Customize Widget screen to preview both Price and Chart widgets in real time.
 - Added `PackageUpdateReceiver` to immediately refresh and repaint homescreen widgets from local cache on app update without making network requests.
-- Added interactive tap animation to replay sparkline chart entrance on the Dashboard.
 
 ### Changed
 
@@ -31,7 +30,7 @@ Date Format: YYYY-MM-DD
 - Added informative notice in Settings when 30-day interval is selected regarding chart availability.
 - Updated widget picker descriptions and marked Legacy Price Widget as retiring soon.
 - Declared productivity `appCategory` in app manifest for improved launcher widget discovery.
-- Updated dependencies including Kotlin 2.4.21, Material 3 Expressive 1.5.0-beta01, and NavigationEvent 1.2.0.
+- Updated dependencies including Kotlin, Material 3 Expressive, and NavigationEvent.
 
 ### Fixed
 

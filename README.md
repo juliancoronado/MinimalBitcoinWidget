@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-A minimal, open-source Bitcoin price widget for your Android home screen. Track the price of Bitcoin in your preferred currency with a clean and modern widget .
+A minimal, open-source Bitcoin price widget for your Android home screen. Track the price of Bitcoin in your preferred currency with clean, customizable widgets and price trend charts.
 
 <a href='https://play.google.com/store/apps/details?id=com.jcoronado.minimalbitcoinwidget&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="250"/></a>
 
@@ -10,27 +10,28 @@ _Google Play and the Google Play logo are trademarks of Google LLC._
 
 ## Features
 
-- **Real-time Price Tracking**: High-speed, CDN-cached Bitcoin price updates powered by CoinGecko.
-- **Interactive Sparkline Chart**: Clean trend visualization on the dashboard with smooth curves, dynamic scaling, and toggleable display.
-- **Widget Customization**: Dedicated customization screen to personalize widget typography (Google Sans Flex Rounded vs. System Default) and a live in-app widget preview matching your theme.
-- **Homescreen Widgets**: Modern widgets built with Jetpack Compose Glance, plus a legacy widget option for broader device compatibility.
-- **Quick Widget Pinning**: In-app shortcut to pin the widget directly to your home screen with a single tap.
-- **Animated Price Updates**: Engaging per-digit slide animations indicating directional price movements.
+- **Price Tracking**: CDN-cached Bitcoin price updates powered by CoinGecko. Prices are updated periodically rather than in real time. Responses are cached for up to 30 minutes on the backend proxy and locally in the app to respect API rate limits.
+- **Homescreen Widgets**: Two modern widgets built with Jetpack Glance—a compact **Price Widget** and a 2x2 **Chart Widget** featuring a sparkline trendline and dashed reference baseline—plus a legacy widget option for broader device compatibility (retiring soon), with automatic cache-backed refreshes on app updates.
+- **Interactive Sparkline Chart**: Clean trend visualization on the dashboard with smooth curves, dynamic scaling, touch scrubbing with haptic feedback to inspect historical prices and timestamps, tap-to-replay entrance animation, and a toggleable display.
+- **Widget Customization**: Dedicated customization screen with live swipeable previews for both Price and Chart widgets. Personalize widget font (Google Sans Flex vs. System Default), price size (Small, Default, Large), color style (Dynamic vs. Solid), and theme (System, Light, or Dark).
+- **Quick Widget Pinning**: In-app "Add to Home Screen" bottom sheet picker to choose and pin either the Price Widget or Chart Widget with a single tap.
+- **Animated Price Updates**: Engaging per-digit directional slide animations on price updates and while scrubbing the chart.
 - **Multiple Currencies**: Track prices in USD, GBP, JPY, EUR, CAD, MXN, AUD, and BRL with locale-aware currency symbol formatting.
 - **Customizable Timeframes**: Choose to display price change percentages for 24 hours, 7 days, or 30 days.
 - **Configurable Refresh Rates**: Tailor background update frequency with 1, 4, or 8-hour refresh intervals.
 - **Material Design 3 Expressive**: Clean and modern UI using the latest Material 3 Expressive components and Material You dynamic theming (Android 12+).
-- **Multi-Language Localization**: Full translation support across 9 languages (English, Spanish, German, French, Italian, Portuguese, Turkish, and more).
-- **Developer Tools**: Integrated developer options with a Mock UI simulator to preview custom prices, currencies, and widget layouts without hitting network limits.
+- **Multi-Language Localization**: Localized across 9 language and regional variants (English, Spanish, German, French, Italian, Portuguese (PT & BR), and Turkish).
+- **Developer Tools**: Integrated developer options with a Mock UI simulator to preview custom prices, currencies, and widget layouts without hitting network limits, plus local activity logs.
 - **Privacy-Focused**: 100% open-source, no ads, no trackers, and no unnecessary permissions.
 
 ## Screenshots
 
 <p align="center">
-  <img src="images/listing1-en.webp" width="20%" alt="listing 1 image">
-  <img src="images/listing2-en.webp" width="20%" alt="listing 2 image">
-  <img src="images/listing3-en.webp" width="20%" alt="listing 3 image">
-  <img src="images/listing4-en.webp" width="20%" alt="listing 4 image">
+  <img src="images/listing1-en.webp" width="18%" alt="listing 1 image">
+  <img src="images/listing2-en.webp" width="18%" alt="listing 2 image">
+  <img src="images/listing3-en.webp" width="18%" alt="listing 3 image">
+  <img src="images/listing4-en.webp" width="18%" alt="listing 4 image">
+  <img src="images/listing5-en.webp" width="18%" alt="listing 5 image">
 </p>
 
 ## Getting Started
