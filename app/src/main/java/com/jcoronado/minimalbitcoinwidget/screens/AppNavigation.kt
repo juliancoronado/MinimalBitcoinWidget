@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
@@ -88,6 +89,11 @@ fun AppNavigation() {
     val settingsViewModel: SettingsViewModel = viewModel()
     val uiState by priceViewModel.uiState.collectAsStateWithLifecycle()
     val developerModeEnabled by settingsViewModel.developerModeEnabled.collectAsStateWithLifecycle()
+
+    LifecycleResumeEffect(priceViewModel) {
+        priceViewModel.syncFromCache()
+        onPauseOrDispose { }
+    }
 
     val currentRoute by remember(backStack.size) {
         derivedStateOf { backStack.lastOrNull() }

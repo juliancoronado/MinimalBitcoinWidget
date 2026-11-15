@@ -56,7 +56,7 @@ This document serves as a structured technical specification for an AI agent to 
 
 ### Task 4: Widget Consolidation
 
-- **Goal:** Deprecate Legacy widget logic at a future date (2027) alongside the `v4.0.0` release (see Task 7).
+- **Goal:** Deprecate Legacy widget logic at a future date in 2027 alongside the `v4.0.0` release (paired with Task 7).
 - **Instructions:**
   1. Evaluate if Glance covers all necessary features.
   2. If so, remove `widgets.legacy` package and `PriceWidget.kt` (Legacy wrapper).
