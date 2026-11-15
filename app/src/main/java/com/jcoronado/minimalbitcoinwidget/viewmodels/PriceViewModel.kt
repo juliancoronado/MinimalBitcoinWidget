@@ -128,6 +128,14 @@ class PriceViewModel @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Syncs the in-memory UI state with the latest cached price data without
+     * making network requests or redundantly redrawing homescreen widgets.
+     */
+    fun syncFromCache() {
+        loadInitialData()
+    }
+
     fun refreshFromCache() {
         loadInitialData()
         redrawWidgets()
