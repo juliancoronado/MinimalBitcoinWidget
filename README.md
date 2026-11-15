@@ -27,10 +27,11 @@ _Google Play and the Google Play logo are trademarks of Google LLC._
 ## Screenshots
 
 <p align="center">
-  <img src="images/listing1-en.webp" width="20%" alt="listing 1 image">
-  <img src="images/listing2-en.webp" width="20%" alt="listing 2 image">
-  <img src="images/listing3-en.webp" width="20%" alt="listing 3 image">
-  <img src="images/listing4-en.webp" width="20%" alt="listing 4 image">
+  <img src="images/listing1-en.webp" width="18%" alt="listing 1 image">
+  <img src="images/listing2-en.webp" width="18%" alt="listing 2 image">
+  <img src="images/listing3-en.webp" width="18%" alt="listing 3 image">
+  <img src="images/listing4-en.webp" width="18%" alt="listing 4 image">
+  <img src="images/listing5-en.webp" width="18%" alt="listing 5 image">
 </p>
 
 ## Getting Started
