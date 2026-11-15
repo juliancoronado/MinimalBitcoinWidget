@@ -10,7 +10,7 @@ _Google Play and the Google Play logo are trademarks of Google LLC._
 
 ## Features
 
-- **Real-time Price Tracking**: High-speed, CDN-cached Bitcoin price updates powered by CoinGecko.
+- **Price Tracking**: CDN-cached Bitcoin price updates powered by CoinGecko. Prices are updated periodically rather than in real time. Responses are cached for up to 30 minutes on the backend proxy and locally in the app to respect API rate limits.
 - **Homescreen Widgets**: Two modern widgets built with Jetpack Glance—a compact **Price Widget** and a 2x2 **Chart Widget** featuring a sparkline trendline and dashed reference baseline—plus a legacy widget option for broader device compatibility (retiring soon), with automatic cache-backed refreshes on app updates.
 - **Interactive Sparkline Chart**: Clean trend visualization on the dashboard with smooth curves, dynamic scaling, touch scrubbing with haptic feedback to inspect historical prices and timestamps, tap-to-replay entrance animation, and a toggleable display.
 - **Widget Customization**: Dedicated customization screen with live swipeable previews for both Price and Chart widgets. Personalize widget font (Google Sans Flex vs. System Default), price size (Small, Default, Large), color style (Dynamic vs. Solid), and theme (System, Light, or Dark).
