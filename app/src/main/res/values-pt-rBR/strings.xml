@@ -2,6 +2,9 @@
 <resources>
     <string name="settings">Configurações</string>
     <string name="last_updated">Última atualização: %1$s</string>
+    <string name="legacy_widget_picker_description">Em breve descontinuado - use o widget de preço</string>
+    <string name="glance_widget_picker_description">Veja o preço atual do Bitcoin</string>
+    <string name="chart_widget_picker_description">Veja o preço atual do Bitcoin com um gráfico</string>
 
     <!-- Setting Section Headers -->
     <string name="data_header">Dados</string>
@@ -25,6 +28,8 @@
     <string name="customize_widget">Personalizar widget</string>
     <string name="widget_font">Fonte</string>
     <string name="widget_font_preview_header">Pré-visualização</string>
+    <string name="widget_preview_price">Preço</string>
+    <string name="widget_preview_chart">Gráfico</string>
     <string name="widget_font_options_header">Fontes disponíveis</string>
     <string name="widget_font_icon_description">Ícone de fonte do widget</string>
     <string name="customize_widget_icon_description">Ícone de personalizar widget</string>
@@ -43,8 +48,8 @@
     <string name="widget_theme_dark">Escuro</string>
     <string name="dynamic_colors">Cores dinâmicas</string>
     <string name="dynamic_colors_subtitle">Seguir cores do tema do dispositivo</string>
-    <string name="show_price_graph">Gráfico de preço</string>
-    <string name="show_price_graph_subtitle">Exibir gráfico de preço no painel</string>
+    <string name="show_price_chart">Gráfico de preço</string>
+    <string name="show_price_chart_subtitle">Exibir gráfico de preço no painel</string>
     <string name="version">Versão</string>
     <string name="build_number">Número da versão</string>
     <string name="contact">Contato</string>
@@ -65,7 +70,9 @@
     <string name="customize_shortcut_title">Personalizar</string>
     <string name="customize_widget_shortcut_description">Fonte, cor, tamanho e tema</string>
     <string name="add_widget_shortcut_title">Adicionar à tela inicial</string>
-    <string name="add_widget_shortcut_description">Adicionar widget à tela inicial</string>
+    <string name="add_widget_shortcut_description">Escolha um widget para a sua tela inicial</string>
+    <string name="add_widget_minimal_desc">Preço compacto e porcentagem de variação</string>
+    <string name="add_widget_chart_desc">Preço com gráfico de tendência</string>
     <string name="rate_app_shortcut_title">Avaliar no Google Play</string>
     <string name="rate_app_shortcut_description">Apoie o app deixando uma avaliação</string>
 
@@ -97,6 +104,8 @@
     <string name="cancel">Cancelar</string>
     <string name="clear">Limpar</string>
     <string name="error">Erro</string>
+    <string name="error_network">Erro de conexão de rede</string>
+    <string name="error_update_price">Não foi possível atualizar o preço</string>
     <string name="reset_to_default">Redefinir para o padrão</string>
 
     <string name="mail_error">Nenhum aplicativo de e-mail encontrado</string>

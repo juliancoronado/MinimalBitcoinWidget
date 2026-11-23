@@ -9,10 +9,13 @@ import android.widget.FrameLayout
 import android.widget.RemoteViews
 import androidx.annotation.StringRes
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +25,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -49,11 +54,16 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -61,8 +71,10 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.glance.appwidget.compose
 import com.jcoronado.minimalbitcoinwidget.R
@@ -70,8 +82,15 @@ import com.jcoronado.minimalbitcoinwidget.classes.WidgetColorStyle
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetFont
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetPriceSize
 import com.jcoronado.minimalbitcoinwidget.classes.WidgetTheme
+import com.jcoronado.minimalbitcoinwidget.ui.components.PLACEHOLDER_SPARKLINE_PRICES
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidget
 import com.jcoronado.minimalbitcoinwidget.widgets.glance.PriceWidgetState
+import com.jcoronado.minimalbitcoinwidget.widgets.glance.ChartPriceWidget
+
+enum class PreviewWidgetType(@StringRes val labelResId: Int) {
+    PRICE(R.string.widget_preview_price),
+    CHART(R.string.widget_preview_chart)
+}
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -84,11 +103,14 @@ fun CustomizeWidgetScreen(
     percentageChange: Double,
     currency: String,
     @StringRes intervalLabelResId: Int,
+    sparklinePrices: List<Double> = emptyList(),
     onSave: (WidgetFont, WidgetPriceSize, WidgetColorStyle, WidgetTheme) -> Unit,
     onBack: () -> Unit
 ) {
     val view = LocalView.current
+    val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val pagerState = rememberPagerState(pageCount = { PreviewWidgetType.entries.size })
     var selectedFont by remember(currentFont) { mutableStateOf(currentFont) }
     var selectedPriceSize by remember(currentPriceSize) { mutableStateOf(currentPriceSize) }
     var selectedColorStyle by remember(currentColorStyle) { mutableStateOf(currentColorStyle) }
@@ -175,22 +197,94 @@ fun CustomizeWidgetScreen(
                             count = 1
                         )
                     ) {
-                        Box(
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 12.dp),
-                            contentAlignment = Alignment.Center
+                                .padding(vertical = 2.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            GlanceWidgetPreviewCard(
-                                selectedFont = selectedFont,
-                                selectedPriceSize = selectedPriceSize,
-                                selectedColorStyle = selectedColorStyle,
-                                selectedTheme = selectedTheme,
-                                price = if (price > 0.0) price else 62884.21,
-                                percentageChange = if (price > 0.0) percentageChange else 2.03,
-                                currency = if (currency.isNotBlank()) currency else "USD",
-                                intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_7d
-                            )
+                            HorizontalPager(
+                                state = pagerState,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(CHART_PREVIEW_HEIGHT)
+                            ) { page ->
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    val widgetType = PreviewWidgetType.entries[page]
+                                    GlanceWidgetPreviewCard(
+                                        selectedWidgetType = widgetType,
+                                        selectedFont = selectedFont,
+                                        selectedPriceSize = selectedPriceSize,
+                                        selectedColorStyle = selectedColorStyle,
+                                        selectedTheme = selectedTheme,
+                                        price = if (price > 0.0) price else 62884.21,
+                                        percentageChange = if (price > 0.0) percentageChange else 2.03,
+                                        currency = if (currency.isNotBlank()) currency else "USD",
+                                        intervalLabelResId = if (intervalLabelResId != 0) intervalLabelResId else R.string.interval_7d,
+                                        sparklinePrices = sparklinePrices
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            // Pixel-style Interactive Indicator Dots
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val activeColor = MaterialTheme.colorScheme.primary
+                                val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f)
+
+                                repeat(PreviewWidgetType.entries.size) { pageIndex ->
+                                    Box(
+                                        modifier = Modifier
+                                            .height(20.dp)
+                                            .clickable(
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                indication = null
+                                            ) {
+                                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                                                coroutineScope.launch {
+                                                    pagerState.animateScrollToPage(pageIndex)
+                                                }
+                                            }
+                                            .padding(horizontal = 2.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .layout { measurable, _ ->
+                                                    val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
+                                                    val distance = kotlin.math.abs(scrollPosition - pageIndex)
+                                                    val progress = (1f - distance).coerceIn(0f, 1f)
+                                                    val widthPx = lerp(6.dp, 18.dp, progress).roundToPx()
+                                                    val heightPx = 6.dp.roundToPx()
+                                                    val placeable = measurable.measure(
+                                                        Constraints.fixed(widthPx, heightPx)
+                                                    )
+                                                    layout(widthPx, heightPx) {
+                                                        placeable.placeRelative(0, 0)
+                                                    }
+                                                }
+                                                .drawBehind {
+                                                    val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
+                                                    val distance = kotlin.math.abs(scrollPosition - pageIndex)
+                                                    val progress = (1f - distance).coerceIn(0f, 1f)
+                                                    val dotColor = lerp(inactiveColor, activeColor, progress)
+                                                    val radius = size.height / 2f
+                                                    drawRoundRect(
+                                                        color = dotColor,
+                                                        cornerRadius = CornerRadius(radius, radius)
+                                                    )
+                                                }
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -381,13 +475,17 @@ fun CustomizeWidgetScreen(
     }
 }
 
-private val PREVIEW_WIDTH = 208.dp
-private val PREVIEW_HEIGHT = 108.dp
+private val MINIMAL_PREVIEW_WIDTH = 208.dp
+private val MINIMAL_PREVIEW_HEIGHT = 108.dp
+
+private val CHART_PREVIEW_WIDTH = 180.dp
+private val CHART_PREVIEW_HEIGHT = 184.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
 @Composable
 private fun GlanceWidgetPreviewCard(
+    selectedWidgetType: PreviewWidgetType,
     selectedFont: WidgetFont,
     selectedPriceSize: WidgetPriceSize,
     selectedColorStyle: WidgetColorStyle,
@@ -395,7 +493,8 @@ private fun GlanceWidgetPreviewCard(
     price: Double,
     percentageChange: Double,
     currency: String,
-    @StringRes intervalLabelResId: Int
+    @StringRes intervalLabelResId: Int,
+    sparklinePrices: List<Double>
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -441,7 +540,8 @@ private fun GlanceWidgetPreviewCard(
         price,
         percentageChange,
         currency,
-        intervalLabelResId
+        intervalLabelResId,
+        sparklinePrices
     ) {
         PriceWidgetState.Available(
             price = price,
@@ -451,17 +551,34 @@ private fun GlanceWidgetPreviewCard(
             fontKey = selectedFont.key,
             priceSizeKey = selectedPriceSize.key,
             colorStyleKey = selectedColorStyle.key,
-            themeKey = selectedTheme.key
+            themeKey = selectedTheme.key,
+            sparklinePrices = if (intervalLabelResId == R.string.interval_30d) emptyList() else if (sparklinePrices.isNotEmpty()) sparklinePrices else PLACEHOLDER_SPARKLINE_PRICES
         )
     }
 
-    val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState, themedContext) {
+    val (previewWidth, previewHeight) = when (selectedWidgetType) {
+        PreviewWidgetType.PRICE -> Pair(MINIMAL_PREVIEW_WIDTH, MINIMAL_PREVIEW_HEIGHT)
+        PreviewWidgetType.CHART -> Pair(CHART_PREVIEW_WIDTH, CHART_PREVIEW_HEIGHT)
+    }
+
+    val remoteViews by produceState<RemoteViews?>(initialValue = null, widgetState, themedContext, selectedWidgetType) {
         value = try {
-            PriceWidget().compose(
-                context = themedContext,
-                size = DpSize(PREVIEW_WIDTH, PREVIEW_HEIGHT),
-                state = widgetState
-            )
+            when (selectedWidgetType) {
+                PreviewWidgetType.PRICE -> {
+                    PriceWidget().compose(
+                        context = themedContext,
+                        size = DpSize(previewWidth, previewHeight),
+                        state = widgetState
+                    )
+                }
+                PreviewWidgetType.CHART -> {
+                    ChartPriceWidget().compose(
+                        context = themedContext,
+                        size = DpSize(previewWidth, previewHeight),
+                        state = widgetState
+                    )
+                }
+            }
         } catch (e: Exception) {
             null
         }
@@ -474,10 +591,10 @@ private fun GlanceWidgetPreviewCard(
         if (currentViews != null) {
             Box(
                 modifier = Modifier
-                    .width(PREVIEW_WIDTH)
-                    .height(PREVIEW_HEIGHT)
+                    .width(previewWidth)
+                    .height(previewHeight)
             ) {
-                key(isPreviewDark) {
+                key(isPreviewDark, selectedWidgetType) {
                     AndroidView(
                         modifier = Modifier
                             .fillMaxSize()
@@ -507,14 +624,18 @@ private fun GlanceWidgetPreviewCard(
                             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                             shape = widgetShape
                         )
-                        .pointerInput(Unit) {}
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {}
+                        )
                 )
             }
         } else {
             Box(
                 modifier = Modifier
-                    .width(PREVIEW_WIDTH)
-                    .height(PREVIEW_HEIGHT),
+                    .width(previewWidth)
+                    .height(previewHeight),
                 contentAlignment = Alignment.Center
             ) {
                 LoadingIndicator(

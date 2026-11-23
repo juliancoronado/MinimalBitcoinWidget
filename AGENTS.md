@@ -27,7 +27,7 @@ Key directories and files:
 - **`data/`**: Data layer containing `PriceRepository.kt` for centralizing API requests (OkHttp/Gson), caching, and mock UI data logic, and `Resource.kt` for standardized API result state management (`Success`, `Error`, `Loading`).
 - **`screens/` & `ui/`**: Jetpack Compose UI screens, theming, and reusable components.
 - **`viewmodels/`**: ViewModels (e.g., `PriceViewModel`) that handle business logic, UI state, and bridge the data to the widgets.
-- **`widgets/`**: Contains widget implementations. Divided into Glance widgets (`PriceWidget`) and legacy implementations (`LegacyPriceWidget`).
+- **`widgets/`**: Contains widget implementations. Divided into Glance widgets (`PriceWidget`, `ChartPriceWidget`) and legacy implementations (`LegacyPriceWidget`).
 - **`workers/`**: Contains `PriceUpdateWorker.kt` which uses WorkManager to periodically fetch Bitcoin prices in the background via `PriceRepository`.
 - **`utils/`**: Utility functions such as `FormatUtils.kt` for centralized price, currency symbol disambiguation, and percentage change formatting.
 - **`classes/`**: Data models, constants (`AppConstants`), preference keys (`Prefs`), and API configuration (`Api`).
@@ -49,7 +49,7 @@ Key directories and files:
 ### 3. Background Processing & Networking
 
 - All periodic data fetching must go through **WorkManager** (`PriceUpdateWorker`).
-- **Respect API limits:** The app fetches from a CDN-cached Bitcoin price API proxy (backed by CoinGecko). Maintain the existing caching logic (e.g., the 30-minute cache buffer via `AppConstants.CACHE_DURATION_MILLIS`) to avoid unnecessary network calls.
+- **Respect API limits:** The app fetches from a CDN-cached Bitcoin price API proxy (backed by CoinGecko). Maintain the existing caching logic (the 30-minute companion app cache buffer via `AppConstants.CACHE_DURATION_MILLIS` and the 15-minute background worker cache buffer via `AppConstants.WORKER_CACHE_DURATION_MILLIS`) to avoid unnecessary network calls.
 - Handle network failures gracefully. If a fetch fails, the widget should be updated to an error state (`PriceWidgetState.Error`) rather than crashing, and WorkManager should handle the retry backoff.
 
 ### 4. Data Storage
@@ -73,6 +73,7 @@ Key directories and files:
 ### 8. Testing, Tooling and Running the App
 
 - For ADB emulator commands, ADB locale switching scripts, build helper functions, see [COMMANDS.md](COMMANDS.md).
+- For release procedures, signed App Bundle (`.aab`) creation, packaging native debug symbols, and Google Play Console Internal Testing deployment, see [RELEASE.md](RELEASE.md).
 
 ## General AI Instructions
 

@@ -1,5 +1,6 @@
 package com.jcoronado.minimalbitcoinwidget
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,9 +27,6 @@ class MainActivity : ComponentActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         Prefs.checkAppUpdateAndInvalidateCache(prefs)
 
-        // Ensure Glance widget preview is published on Android 15+
-        PriceViewModel.updateWidgetPreview(this)
-
         setContent {
             val settingsViewModel : SettingsViewModel =  viewModel()
             val themePreference by settingsViewModel.theme.collectAsStateWithLifecycle()
@@ -44,5 +42,15 @@ class MainActivity : ComponentActivity() {
                 AppNavigation()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        PriceViewModel.refreshWidgetsFromCache(applicationContext)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        PriceViewModel.refreshWidgetsFromCache(applicationContext)
     }
 }

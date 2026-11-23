@@ -2,6 +2,8 @@ package com.jcoronado.minimalbitcoinwidget.widgets.glance
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Build
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
@@ -54,9 +56,6 @@ object GlanceColorScheme {
     val solidLightBackground = ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))
     val solidDarkBackground = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000))
     val solidSystemBackground = ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF000000))
-
-    val fallbackLightBackground = ColorProvider(day = Color(0xFFF8F9FF), night = Color(0xFFF8F9FF))
-    val fallbackDarkBackground = ColorProvider(day = Color(0xFF1D2024), night = Color(0xFF1D2024))
 
     @SuppressLint("RestrictedApi")
     val dynamicLightColors = colorProviders(
@@ -129,7 +128,14 @@ object GlanceColorScheme {
             WidgetColorStyle.SOLID -> when (widgetTheme) {
                 WidgetTheme.LIGHT -> solidLightColors
                 WidgetTheme.DARK -> solidDarkColors
-                WidgetTheme.SYSTEM -> solidSystemColors
+                WidgetTheme.SYSTEM -> {
+                    if (Build.VERSION.SDK_INT >= 31) {
+                        solidSystemColors
+                    } else {
+                        val sysUiMode = Resources.getSystem().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                        if (sysUiMode == Configuration.UI_MODE_NIGHT_YES) solidDarkColors else solidLightColors
+                    }
+                }
             }
             WidgetColorStyle.DYNAMIC -> {
                 if (Build.VERSION.SDK_INT >= 31) {
@@ -142,7 +148,10 @@ object GlanceColorScheme {
                     when (widgetTheme) {
                         WidgetTheme.LIGHT -> defaultLightColors
                         WidgetTheme.DARK -> defaultDarkColors
-                        WidgetTheme.SYSTEM -> colors
+                        WidgetTheme.SYSTEM -> {
+                            val sysUiMode = Resources.getSystem().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                            if (sysUiMode == Configuration.UI_MODE_NIGHT_YES) defaultDarkColors else defaultLightColors
+                        }
                     }
                 }
             }
@@ -160,26 +169,43 @@ object GlanceColorScheme {
         widgetTheme: WidgetTheme,
         systemCornerRadiusDefined: Boolean
     ): GlanceModifier {
-        return when (colorStyle) {
-            WidgetColorStyle.SOLID -> {
-                val solidBg = when (widgetTheme) {
-                    WidgetTheme.LIGHT -> solidLightBackground
-                    WidgetTheme.DARK -> solidDarkBackground
-                    WidgetTheme.SYSTEM -> solidSystemBackground
-                }
-                modifier.background(solidBg)
-            }
-            WidgetColorStyle.DYNAMIC -> {
-                if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
-                    modifier.background(GlanceTheme.colors.widgetBackground)
-                } else {
-                    when (widgetTheme) {
-                        WidgetTheme.LIGHT -> modifier.background(fallbackLightBackground)
-                        WidgetTheme.DARK -> modifier.background(fallbackDarkBackground)
-                        WidgetTheme.SYSTEM -> modifier.background(ImageProvider(R.drawable.glance_widget_bg))
+        // On Android 12+ (API 31+) with system corner radius, use native dynamic theme backgrounds
+        if (Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
+            return when (colorStyle) {
+                WidgetColorStyle.SOLID -> {
+                    val solidBg = when (widgetTheme) {
+                        WidgetTheme.LIGHT -> solidLightBackground
+                        WidgetTheme.DARK -> solidDarkBackground
+                        WidgetTheme.SYSTEM -> solidSystemBackground
                     }
+                    modifier.background(solidBg)
+                }
+                WidgetColorStyle.DYNAMIC -> {
+                    modifier.background(GlanceTheme.colors.widgetBackground)
                 }
             }
         }
+
+        // On API < 31, determine night mode at composition time so background, text, and sparkline
+        // stay in lockstep without contrast clashes when the system theme changes.
+        val isNight = when (widgetTheme) {
+            WidgetTheme.DARK -> true
+            WidgetTheme.LIGHT -> false
+            WidgetTheme.SYSTEM -> {
+                val sysUiMode = Resources.getSystem().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                sysUiMode == Configuration.UI_MODE_NIGHT_YES
+            }
+        }
+
+        val bgDrawable = when (colorStyle) {
+            WidgetColorStyle.SOLID -> {
+                if (isNight) R.drawable.glance_widget_bg_solid_dark else R.drawable.glance_widget_bg_solid_light
+            }
+            WidgetColorStyle.DYNAMIC -> {
+                if (isNight) R.drawable.glance_widget_bg_dynamic_dark else R.drawable.glance_widget_bg_dynamic_light
+            }
+        }
+
+        return modifier.background(ImageProvider(bgDrawable))
     }
 }

@@ -10,7 +10,7 @@
     <color name="positive_green">#26BF2C</color>
     <color name="negative_red">#DC2323</color>
 
-    <color name="widget_preview_background_light">#FAFAFF</color>
+    <color name="widget_preview_background_light">#EBEFF8</color>
 
     <!-- Dynamic Light fallback tokens -->
     <color name="widget_dynamic_light_primary">#00875A</color>

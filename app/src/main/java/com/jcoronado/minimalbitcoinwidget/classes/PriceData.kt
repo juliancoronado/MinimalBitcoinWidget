@@ -15,7 +15,8 @@ data class PriceData(
     @SerializedName("price_change_percentage_30d_in_currency")
     val priceChangePercentage30d: Double,
     @SerializedName("sparkline_in_7d")
-    val sparklineIn7d: SparklineData? = null
+    val sparklineIn7d: SparklineData? = null,
+    val isMock: Boolean = false
 ) {
     data class SparklineData(
         @SerializedName("price")
@@ -47,6 +48,12 @@ data class PriceData(
     fun getSparklineForInterval(index: Int): List<Double> {
         val rawPrices = sparklineIn7d?.prices ?: return emptyList()
         if (rawPrices.isEmpty()) return emptyList()
+
+        if (index == 2) return emptyList()
+
+        if (isMock) {
+            return rawPrices
+        }
 
         val slice = when (index) {
             0 -> if (rawPrices.size >= 25) rawPrices.takeLast(25) else rawPrices

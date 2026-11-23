@@ -284,7 +284,18 @@ class PriceWidget : GlanceAppWidget() {
         typeface: Typeface?
     ) {
         val context = LocalContext.current
-        val headerText = "/ ${currency.uppercase()} ・ ${context.getString(intervalLabel)}"
+        val resolvedIntervalLabel = if (
+            intervalLabel == R.string.interval_24h ||
+            intervalLabel == R.string.interval_7d ||
+            intervalLabel == R.string.interval_30d
+        ) {
+            intervalLabel
+        } else {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val selectedInterval = prefs.getInt(Prefs.SELECTED_CHANGE_PERCENTAGE, AppConstants.CHANGE_PERCENTAGE_DEFAULT)
+            TimeInterval.fromValue(selectedInterval).labelResId
+        }
+        val headerText = "/ ${currency.uppercase()} ・ ${context.getString(resolvedIntervalLabel)}"
         val fontSize = WidgetBitmapUtils.getWidgetSecondaryFontSize()
 
         Row(
@@ -496,7 +507,7 @@ class PriceWidget : GlanceAppWidget() {
         val state = PriceWidgetState.Available(
             price = 123456.78,
             changePercentage = 1.23,
-            intervalLabelResId = R.string.interval_24h,
+            intervalLabelResId = R.string.interval_7d,
             currency = "USD",
         )
         WidgetContent(state)

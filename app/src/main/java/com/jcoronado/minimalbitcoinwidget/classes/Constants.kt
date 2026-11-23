@@ -70,15 +70,31 @@ object Prefs {
 object AppConstants {
     /** Default currency used if none is selected. */
     const val CURRENCY_DEFAULT = "usd"
-    /** Internal cache duration in minutes. */
-    private const val CACHE_DURATION_MINUTES = 30L
-    /** Duration in milliseconds for which the cached price data is considered valid. */
+    /** Internal cache duration in minutes for the companion app. */
+    const val CACHE_DURATION_MINUTES = 30L
+    /** Duration in milliseconds for which the cached price data is considered valid in the companion app. */
     val CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(CACHE_DURATION_MINUTES)
+    /** Cache duration in minutes for the background widget worker. */
+    const val WORKER_CACHE_DURATION_MINUTES = 15L
+    /** Duration in milliseconds for which the background widget worker considers cached price data valid. */
+    val WORKER_CACHE_DURATION_MILLIS = TimeUnit.MINUTES.toMillis(WORKER_CACHE_DURATION_MINUTES)
     const val DEBUG_MOCK_PRICE_DEFAULT = "52849.10"
     const val DEBUG_MOCK_PERCENT_CHANGE_DEFAULT = "2.03"
     const val DEBUG_MOCK_CURRENCY_DEFAULT = "EUR"
     /** Default change percentage interval index (1 for 7D). */
     const val CHANGE_PERCENTAGE_DEFAULT = 1
+
+    /**
+     * Synthetic default sparkline curve points used when live data is unavailable (e.g. 30D interval or initial load)
+     * and for mock UI mode.
+     */
+    val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = listOf(
+        18.0, 20.0, 28.0, 50.0, 75.0,
+        88.0, 90.0, 78.0, 56.0, 28.0,
+        10.0, 2.0, 0.0, 4.0, 18.0,
+        44.0, 74.0, 96.0, 100.0, 92.0,
+        60.0, 44.0, 43.0, 52.0, 70.0
+    )
 }
 
 /**

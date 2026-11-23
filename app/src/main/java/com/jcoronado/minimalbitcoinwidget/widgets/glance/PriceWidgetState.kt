@@ -16,7 +16,8 @@ sealed class PriceWidgetState {
         val fontKey: String = "app_default",
         val priceSizeKey: String = "default",
         val colorStyleKey: String = "dynamic",
-        val themeKey: String = "system"
+        val themeKey: String = "system",
+        val sparklinePrices: List<Double> = emptyList()
     ) : PriceWidgetState()
 
     @Serializable

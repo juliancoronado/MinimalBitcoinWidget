@@ -3,20 +3,27 @@ package com.jcoronado.minimalbitcoinwidget.screens
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -26,10 +33,12 @@ import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -61,8 +70,11 @@ fun MainScreen(
     uiState: PriceUiState,
     onRefresh: () -> Unit,
     onCustomizeWidgetClick: () -> Unit,
-    onAddWidgetClick: () -> Unit,
+    onAddMinimalWidgetClick: () -> Unit,
+    onAddChartWidgetClick: () -> Unit,
 ) {
+    var showAddWidgetSheet by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -77,12 +89,19 @@ fun MainScreen(
                 )
             )
         },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
     ) { innerPadding ->
+        val scrollState = rememberScrollState()
+
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 12.dp)
+                .verticalScroll(
+                    state = scrollState,
+                    enabled = scrollState.maxValue > 0
+                )
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
         ) {
@@ -95,7 +114,22 @@ fun MainScreen(
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
             CustomizeWidgetShortcut(onClick = onCustomizeWidgetClick)
-            AddWidgetShortcut(onClick = onAddWidgetClick)
+            AddWidgetShortcut(onClick = { showAddWidgetSheet = true })
+
+            // Prevents widget action tiles from being covered by the floating nav bar
+            Spacer(
+                modifier = Modifier.height(
+                    WindowInsets.systemBars.asPaddingValues().calculateBottomPadding() + 100.dp
+                )
+            )
+        }
+
+        if (showAddWidgetSheet) {
+            AddWidgetBottomSheet(
+                onDismissRequest = { showAddWidgetSheet = false },
+                onPinMinimal = onAddMinimalWidgetClick,
+                onPinChart = onAddChartWidgetClick
+            )
         }
     }
 }
@@ -174,6 +208,83 @@ fun AddWidgetShortcut(onClick: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun AddWidgetBottomSheet(
+    onDismissRequest: () -> Unit,
+    onPinMinimal: () -> Unit,
+    onPinChart: () -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val view = LocalView.current
+
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        sheetState = sheetState,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
+        ) {
+            SegmentedListItem(
+                shapes = ListItemDefaults.segmentedShapes(index = 0, count = 2),
+                verticalAlignment = Alignment.CenterVertically,
+                onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    onDismissRequest()
+                    onPinMinimal()
+                },
+                leadingContent = {
+                    Icon(
+                        painterResource(R.drawable.rounded_attach_money_24),
+                        contentDescription = stringResource(R.string.update_currency_icon_description)
+                    )
+                },
+                content = {
+                    Text(
+                        text = stringResource(R.string.widget_preview_price),
+                        fontWeight = FontWeight.Medium
+                    )
+                },
+                supportingContent = {
+                    Text(
+                        text = stringResource(R.string.add_widget_minimal_desc),
+                    )
+                }
+            )
+            SegmentedListItem(
+                shapes = ListItemDefaults.segmentedShapes(index = 1, count = 2),
+                verticalAlignment = Alignment.CenterVertically,
+                onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    onDismissRequest()
+                    onPinChart()
+                },
+                leadingContent = {
+                    Icon(
+                        painterResource(R.drawable.rounded_show_chart_24),
+                        contentDescription = stringResource(R.string.chart_data_icon_description)
+                    )
+                },
+                content = {
+                    Text(
+                        text = stringResource(R.string.widget_preview_chart),
+                        fontWeight = FontWeight.Medium
+                    )
+                },
+                supportingContent = {
+                    Text(
+                        text = stringResource(R.string.add_widget_chart_desc),
+                    )
+                }
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
@@ -183,6 +294,7 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
 
     var scrubbedPrice by remember { mutableStateOf<Double?>(null) }
     var scrubbedTimestamp by remember { mutableStateOf<Long?>(null) }
+    var animationTrigger by remember { mutableStateOf(0) }
 
     val displayPrice = scrubbedPrice ?: uiState.price
     val isScrubbing = scrubbedPrice != null
@@ -195,170 +307,190 @@ fun PriceCard(uiState: PriceUiState, onRefresh: () -> Unit) {
         SimpleDateFormat("MMM d, hh:mm a", LocalLocale.current.platformLocale).format(ts)
     }
 
+    val is30dInterval = uiState.changeIntervalLabelResId == R.string.interval_30d
+    val isChartUnavailable = is30dInterval || uiState.sparklinePrices.isEmpty()
+    val showChartOverlay = is30dInterval
+
     val cardHeight = if (uiState.showSparkline) 260.dp else 200.dp
     val rowVerticalPadding = if (uiState.showSparkline) 4.dp else 12.dp
+    var lastErrorMessage by remember { mutableStateOf(uiState.errorMessage) }
+    if (uiState.errorMessage != null) {
+        lastErrorMessage = uiState.errorMessage
+    }
 
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         SegmentedListItem(
-            onClick = {}, colors = colors, shapes = ListItemDefaults.segmentedShapes(
+            onClick = {
+                if (uiState.showSparkline && !isChartUnavailable) {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    animationTrigger++
+                }
+            }, colors = colors, shapes = ListItemDefaults.segmentedShapes(
                 index = 0, count = 2
             )
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(cardHeight),
-                contentAlignment = Alignment.Center
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(cardHeight),
+                    contentAlignment = Alignment.Center
                 ) {
-                    val priceData =
-                        FormatUtils.formatPriceSeparated(displayPrice, uiState.selectedCurrency)
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        val priceData =
+                            FormatUtils.formatPriceSeparated(displayPrice, uiState.selectedCurrency)
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = rowVerticalPadding)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.rounded_currency_bitcoin_24),
-                            contentDescription = stringResource(R.string.bitcoin_icon_description),
-                            tint = MaterialTheme.colorScheme.secondary
-                        )
-                        Spacer(modifier = Modifier.width(2.dp))
-                        Text(
-                            text = "/",
-                            style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
-                            color = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.padding(end = 6.dp)
-                        )
-                        Text(
-                            text = uiState.selectedCurrency.uppercase(),
-                            style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                        Text(
-                            text = "・",
-                            style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                        Text(
-                            text = stringResource(uiState.changeIntervalLabelResId),
-                            style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val priceStyle = MaterialTheme.typography.headlineMedium.copy(
-                            fontFamily = googleSansCodeFontFamily
-                        )
-                        val symbolStyle = MaterialTheme.typography.headlineSmall.copy(
-                            fontFamily = googleSansCodeFontFamily,
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-
-                        if (priceData.symbolAtStart) {
-                            // SYMBOL LEFT (e.g. $ 95,000)
-                            Text(
-                                text = priceData.symbol,
-                                style = symbolStyle,
-                                modifier = Modifier.padding(end = 4.dp)
-                            )
-                            AnimatedPriceText(
-                                priceText = priceData.price,
-                                rawPrice = displayPrice,
-                                style = priceStyle,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                animate = !isScrubbing
-                            )
-                        } else {
-                            // SYMBOL RIGHT (e.g. 95.000 €)
-                            AnimatedPriceText(
-                                priceText = priceData.price,
-                                rawPrice = displayPrice,
-                                style = priceStyle,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                animate = !isScrubbing
-                            )
-                            Text(
-                                text = priceData.symbol,
-                                style = symbolStyle,
-                                modifier = Modifier.padding(start = 4.dp)
-                            )
-                        }
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = rowVerticalPadding)
-                    ) {
-                        if (!isScrubbing) {
-                            if (uiState.percentageChange > 0) Icon(
-                                painter = painterResource(id = R.drawable.rounded_trending_up_24),
-                                contentDescription = stringResource(R.string.trending_up_icon_description),
-                                tint = MaterialTheme.colorScheme.primary
-                            ) else if (uiState.percentageChange < 0) Icon(
-                                painter = painterResource(id = R.drawable.rounded_trending_down_24),
-                                contentDescription = stringResource(R.string.trending_down_icon_description),
-                                tint = MaterialTheme.colorScheme.error
-                            ) else Icon(
-                                painter = painterResource(id = R.drawable.rounded_trending_flat_24),
-                                contentDescription = stringResource(R.string.trending_flat_icon_description),
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = rowVerticalPadding)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.rounded_currency_bitcoin_24),
+                                contentDescription = stringResource(R.string.bitcoin_icon_description),
                                 tint = MaterialTheme.colorScheme.secondary
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
+                            Spacer(modifier = Modifier.width(2.dp))
                             Text(
-                                text = FormatUtils.formatChange(uiState.percentageChange),
-                                style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
+                                text = "/",
+                                style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
                                 color = MaterialTheme.colorScheme.secondary,
-                                textAlign = TextAlign.Center
+                                modifier = Modifier.padding(end = 6.dp)
                             )
-                        } else {
                             Text(
-                                text = scrubbedFormattedTime ?: "",
-                                style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
-                                color = MaterialTheme.colorScheme.primary,
-                                textAlign = TextAlign.Center
+                                text = uiState.selectedCurrency.uppercase(),
+                                style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                            Text(
+                                text = "・",
+                                style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                            Text(
+                                text = stringResource(uiState.changeIntervalLabelResId),
+                                style = MaterialTheme.typography.titleLarge.copy(fontFamily = googleSansCodeFontFamily),
+                                color = MaterialTheme.colorScheme.secondary
                             )
                         }
-                    }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val priceStyle = MaterialTheme.typography.headlineMedium.copy(
+                                fontFamily = googleSansCodeFontFamily
+                            )
+                            val symbolStyle = MaterialTheme.typography.headlineSmall.copy(
+                                fontFamily = googleSansCodeFontFamily,
+                                color = MaterialTheme.colorScheme.secondary
+                            )
 
-                    if (uiState.showSparkline) {
-                        val is30dInterval = uiState.changeIntervalLabelResId == R.string.interval_30d
-                        val isChartUnavailable = is30dInterval || uiState.sparklinePrices.isEmpty()
-                        val showChartOverlay = is30dInterval
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                        SparklineGraph(
-                            prices = uiState.sparklinePrices,
-                            isPositive = uiState.percentageChange >= 0,
-                            isUnavailable = isChartUnavailable,
-                            showOverlay = showChartOverlay,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(90.dp)
-                                .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 0.dp),
-                            lastUpdatedTimestamp = uiState.lastUpdated,
-                            onScrub = { price, timestamp ->
-                                scrubbedPrice = price
-                                scrubbedTimestamp = timestamp
+                            if (priceData.symbolAtStart) {
+                                // SYMBOL LEFT (e.g. $ 95,000)
+                                Text(
+                                    text = priceData.symbol,
+                                    style = symbolStyle,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                                AnimatedPriceText(
+                                    priceText = priceData.price,
+                                    rawPrice = displayPrice,
+                                    style = priceStyle,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    animate = !isScrubbing
+                                )
+                            } else {
+                                // SYMBOL RIGHT (e.g. 95.000 €)
+                                AnimatedPriceText(
+                                    priceText = priceData.price,
+                                    rawPrice = displayPrice,
+                                    style = priceStyle,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    animate = !isScrubbing
+                                )
+                                Text(
+                                    text = priceData.symbol,
+                                    style = symbolStyle,
+                                    modifier = Modifier.padding(start = 4.dp)
+                                )
                             }
-                        )
+                        }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = rowVerticalPadding)
+                        ) {
+                            if (!isScrubbing) {
+                                if (uiState.percentageChange > 0) Icon(
+                                    painter = painterResource(id = R.drawable.rounded_trending_up_24),
+                                    contentDescription = stringResource(R.string.trending_up_icon_description),
+                                    tint = MaterialTheme.colorScheme.primary
+                                ) else if (uiState.percentageChange < 0) Icon(
+                                    painter = painterResource(id = R.drawable.rounded_trending_down_24),
+                                    contentDescription = stringResource(R.string.trending_down_icon_description),
+                                    tint = MaterialTheme.colorScheme.error
+                                ) else Icon(
+                                    painter = painterResource(id = R.drawable.rounded_trending_flat_24),
+                                    contentDescription = stringResource(R.string.trending_flat_icon_description),
+                                    tint = MaterialTheme.colorScheme.secondary
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = FormatUtils.formatChange(uiState.percentageChange),
+                                    style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    textAlign = TextAlign.Center
+                                )
+                            } else {
+                                Text(
+                                    text = scrubbedFormattedTime ?: "",
+                                    style = MaterialTheme.typography.titleMedium.copy(fontFamily = googleSansCodeFontFamily),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+
+                        if (uiState.showSparkline) {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            SparklineGraph(
+                                prices = uiState.sparklinePrices,
+                                isPositive = uiState.percentageChange >= 0,
+                                isUnavailable = isChartUnavailable,
+                                showOverlay = showChartOverlay,
+                                animationKey = animationTrigger,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(90.dp)
+                                    .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = 0.dp),
+                                lastUpdatedTimestamp = uiState.lastUpdated,
+                                onScrub = { price, timestamp ->
+                                    scrubbedPrice = price
+                                    scrubbedTimestamp = timestamp
+                                }
+                            )
+                        }
                     }
                 }
 
-                if (uiState.errorMessage != null) {
+                AnimatedVisibility(
+                    visible = !uiState.isLoading && uiState.errorMessage != null,
+                    enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
+                    exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut()
+                ) {
                     Text(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 12.dp),
-                        text = uiState.errorMessage,
+                        text = uiState.errorMessage ?: lastErrorMessage.orEmpty(),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp, start = 16.dp, end = 16.dp)
                     )
                 }
             }
@@ -400,7 +532,8 @@ fun MainScreenPreview() {
             ),
             onRefresh = { },
             onCustomizeWidgetClick = { },
-            onAddWidgetClick = { }
+            onAddMinimalWidgetClick = { },
+            onAddChartWidgetClick = { }
         )
     }
 }

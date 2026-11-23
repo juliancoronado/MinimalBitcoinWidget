@@ -88,6 +88,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         _widgetFont.value = newFont
         prefs.edit(commit = true) { putString(Prefs.SELECTED_WIDGET_FONT, newFont.key) }
         PriceViewModel.refreshWidgetsFromCache(getApplication())
+        PriceViewModel.updateWidgetPreview(getApplication())
     }
 
     fun saveWidgetCustomization(
@@ -108,6 +109,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             putString(Prefs.WIDGET_THEME, newTheme.key)
         }
         PriceViewModel.refreshWidgetsFromCache(getApplication())
+        PriceViewModel.updateWidgetPreview(getApplication())
     }
 
     private fun getDynamicColorsFlag(): Boolean {

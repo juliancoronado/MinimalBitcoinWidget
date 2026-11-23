@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jcoronado.minimalbitcoinwidget.R
+import com.jcoronado.minimalbitcoinwidget.classes.AppConstants
 import kotlin.math.roundToInt
 
 /**
@@ -63,6 +64,8 @@ fun SparklineGraph(
     lastUpdatedTimestamp: Long = System.currentTimeMillis(),
     isUnavailable: Boolean = false,
     showOverlay: Boolean = isUnavailable,
+    showDottedBaseline: Boolean = true,
+    animationKey: Any? = null,
     unavailableMessage: String = stringResource(R.string.chart_unavailable_30d),
     onScrub: (scrubbedPrice: Double?, scrubbedTimestamp: Long?) -> Unit = { _, _ -> }
 ) {
@@ -106,12 +109,16 @@ fun SparklineGraph(
     // Trend line entrance animation state (draws left-to-right on display / data updates)
     val animationProgress = remember { Animatable(0f) }
 
-    LaunchedEffect(effectivePrices) {
-        animationProgress.snapTo(0f)
-        animationProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-        )
+    LaunchedEffect(effectivePrices, lastUpdatedTimestamp, animationKey, isUnavailable) {
+        if (isUnavailable) {
+            animationProgress.snapTo(1f)
+        } else {
+            animationProgress.snapTo(0f)
+            animationProgress.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
+            )
+        }
     }
 
     var isScrubbing by remember { mutableStateOf(false) }
@@ -199,7 +206,24 @@ fun SparklineGraph(
                 Offset(x, y)
             }
 
-            // Construct smooth Catmull-Rom Spline Path
+            // 1. Draw dotted opening reference baseline (matching trendline widget)
+            if (showDottedBaseline && !isUnavailable && points.isNotEmpty()) {
+                val baselineY = points.first().y
+                val baselineDotColor = normalLineColor.copy(alpha = 0.40f)
+                val dotRadius = 1.1.dp.toPx()
+                val dotSpacing = 7.5.dp.toPx()
+                var currentX = 0f
+                while (currentX <= width) {
+                    drawCircle(
+                        color = baselineDotColor,
+                        radius = dotRadius,
+                        center = Offset(currentX, baselineY)
+                    )
+                    currentX += dotSpacing
+                }
+            }
+
+            // 2. Construct smooth Catmull-Rom Spline Path
             val path = Path().apply {
                 if (points.size >= 2) {
                     moveTo(points[0].x, points[0].y)
@@ -337,10 +361,4 @@ object SparklineScaleCalculator {
  * Synthetic default sparkline curve points used when live data is unavailable (e.g. 30D interval or initial load).
  * Modeled after a smooth waveform with drastic amplitude swings: a lower starting baseline, tall primary crest, deep plunge trough, sharp secondary peak, and an elevated ending curve.
  */
-val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = listOf(
-    15.0, 31.0, 36.0, 42.0, 65.0,
-    90.0, 100.0, 99.0, 88.0, 68.0,
-    38.0, 14.0, 3.0, 0.0, 8.0,
-    38.0, 72.0, 88.0, 75.0, 64.0,
-    58.0, 55.0, 58.0, 69.0, 92.0
-)
+val PLACEHOLDER_SPARKLINE_PRICES: List<Double> = AppConstants.PLACEHOLDER_SPARKLINE_PRICES

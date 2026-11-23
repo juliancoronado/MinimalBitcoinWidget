@@ -4,8 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <queries>
+        <package android:name="com.android.vending" />
+    </queries>
+
     <application
         android:allowBackup="true"
+        android:appCategory="productivity"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_icon_round"
@@ -41,10 +46,34 @@
                 android:resource="@xml/price_widget_info" />
         </receiver>
 
+        <!-- Glance Chart Price Widget Code (Expressive) -->
+        <receiver
+            android:name=".widgets.glance.ChartPriceWidgetReceiver"
+            android:label="@string/chart_widget_picker_name"
+            android:exported="true">
+            <intent-filter>
+                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/chart_price_widget_info" />
+        </receiver>
+
+        <!-- Package Update Receiver (re-renders widgets from cache on app update) -->
+        <receiver
+            android:name=".receivers.PackageUpdateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
+            android:configChanges="uiMode"
             android:exported="true">
 
             <intent-filter>
