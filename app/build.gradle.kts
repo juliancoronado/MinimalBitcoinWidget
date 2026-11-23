@@ -17,7 +17,7 @@ android {
         applicationId = "com.jcoronado.minimalbitcoinwidget"
         minSdk = 28
         targetSdk = 37
-        // last public release version = 3.5.0 (28)
+        // last public release version = 3.6.0 (37)
         versionCode = 37
         versionName = "3.6.0"
 
